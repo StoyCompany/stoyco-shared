@@ -4,3 +4,6 @@
 
 ## 0.0.2
 - Added reactive forms
+
+## 0.0.3
+- Added stepper
