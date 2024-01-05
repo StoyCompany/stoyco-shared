@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:intl_phone_field/countries.dart';
 
 import 'package:reactive_forms/reactive_forms.dart';
-import 'package:stoyco_shared/form/fields/country_icon_fiel.dart';
+import 'package:stoyco_shared/form/fields/country_icon_field.dart';
 import 'package:stoyco_shared/form/models/phone_number.dart';
 
 class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {

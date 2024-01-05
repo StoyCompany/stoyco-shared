@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:reactive_forms/reactive_forms.dart';
-import 'package:stoyco_shared/form/fields/text_field.dart';
 import 'package:stoyco_shared/form/forms.dart';
+import 'package:stoyco_shared/form/fields/text_field.dart';
 
 class StoycoDatePicker extends StatelessWidget {
   final String labelText;
