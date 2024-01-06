@@ -30,3 +30,7 @@
 ## 0.0.8
 
 - Add phone number field and update country icon field
+
+## 0.0.9
+
+- Add 'touched' flag to ReactiveNewPhoneNumberInput

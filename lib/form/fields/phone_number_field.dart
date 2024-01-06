@@ -19,12 +19,14 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
 
   /// The current value of the phone number.
   PhoneNumber currentValue = PhoneNumber();
+  late bool touched;
 
   /// Creates a [ReactiveNewPhoneNumberInput].
   ///
   /// The [controller], [formControlName], [onTap], [onSubmitted], [onEditingComplete],
   /// [onChanged], [formControl], [originalValidators], [decoration], [showErrors],
   /// and [labelText] arguments are optional.
+  ///
   ReactiveNewPhoneNumberInput({
     Key? key,
     TextEditingController? controller,
@@ -48,13 +50,17 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
             'invalid': (_) => 'Número de celular inválido',
             'requiredCountry': (error) => 'Debe seleccionar un país',
           },
+          showErrors: (value) {
+            return value.invalid;
+          },
+          focusNode: FocusNode(),
           builder: (ReactiveFormFieldState<T, PhoneNumber> field) {
             final state = field as _NewPhoneNumberInputState<T>;
             final effectiveDecoration = decoration
                 .applyDefaults(Theme.of(state.context).inputDecorationTheme);
 
             return SizedBox(
-              height: 80,
+              height: !field.control.invalid ? 70 : 85,
               child: Stack(
                 children: [
                   Positioned(
@@ -63,10 +69,14 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
                     left: 0,
                     right: 0,
                     child: TextField(
+                      autofocus: false,
                       controller: field._textController,
                       onTap: onTap != null ? () => onTap(field.control) : null,
                       decoration: effectiveDecoration.copyWith(
-                        errorText: state.errorText,
+                        errorText: state.wasTouched ? field.errorText : null,
+                        errorBorder: !state.wasTouched
+                            ? effectiveDecoration.enabledBorder
+                            : null,
                         prefixIcon: StoycoCountryPrefixIcon(
                           onCountryChanged: (Country country) {
                             field.didChangeCountryValue(country);
@@ -143,11 +153,13 @@ class _NewPhoneNumberInputState<T>
 
   /// Original validators for the form field.
   late List<Validator<dynamic>> originalValidators;
+  late bool wasTouched;
 
   /// Initialize the state.
   @override
   void initState() {
     super.initState();
+    wasTouched = false;
     _initializeTextController();
   }
 
@@ -179,6 +191,7 @@ class _NewPhoneNumberInputState<T>
 
   /// Called when the phone value changes.
   void didChangePhoneValue(String? value) {
+    wasTouched = true;
     if (value != null) {
       currentValue = currentValue.copyWith(phoneNumber: value);
       didChange(currentValue);
@@ -188,6 +201,7 @@ class _NewPhoneNumberInputState<T>
 
   /// Called when the country value changes.
   void didChangeCountryValue(Country? country) {
+    wasTouched = true;
     if (country != null) {
       currentValue = currentValue.copyWith(selectedCountry: country);
       didChange(currentValue);
@@ -197,25 +211,27 @@ class _NewPhoneNumberInputState<T>
 
   /// Analyzes the errors of the form field.
   void analyzeErrors() {
-    if (!currentValue.isValid) {
-      control.setErrors({
-        'invalid': true,
-      });
-    }
+    if (wasTouched) {
+      if (!currentValue.isValid) {
+        control.setErrors({
+          'invalid': true,
+        });
+      }
 
-    if (currentValue.numberIsEmpty) {
-      control.setErrors({
-        'required': true,
-      });
-    }
+      if (currentValue.numberIsEmpty) {
+        control.setErrors({
+          'required': true,
+        });
+      }
 
-    if (currentValue.countryIsEmpty && !currentValue.numberIsEmpty) {
-      control.setErrors({
-        'requiredCountry': true,
-      });
-    }
+      if (currentValue.countryIsEmpty && !currentValue.numberIsEmpty) {
+        control.setErrors({
+          'requiredCountry': true,
+        });
+      }
 
-    control.markAsUntouched();
+      control.markAsUntouched();
+    }
   }
 
   /// Sets the original validators of the form field.
