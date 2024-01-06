@@ -31,8 +31,8 @@ class PhoneNumber {
   ///
   /// A phone number is valid if it has a country and a number.
   bool get isValid {
-    if (number == null || selectedCountry == null) {
-      return true;
+    if (isValidCountry && number == null) {
+      return false;
     } else if (number!.isEmpty) {
       return false;
     } else if (number!.length < selectedCountry!.minLength) {
@@ -50,7 +50,9 @@ class PhoneNumber {
 
   /// Returns true if the number of the phone number is valid.
   bool get isValidNumber {
-    if (number!.isEmpty) {
+    if (number == null) {
+      return true;
+    } else if (number!.isEmpty) {
       return false;
     } else if (number!.length < selectedCountry!.minLength) {
       return false;

@@ -1,6 +1,7 @@
-import 'package:example/form/password/password.dart';
 import 'package:example/themes.dart';
 import 'package:flutter/material.dart';
+
+import 'form/phone_number/phone_number.dart';
 
 void main() {
   runApp(const MainApp());
@@ -15,7 +16,8 @@ class MainApp extends StatelessWidget {
       theme: Themes.stoycoTheme,
       home: const Scaffold(
         body: SafeArea(
-            minimum: EdgeInsets.all(30), child: Center(child: Password())),
+            minimum: EdgeInsets.all(30),
+            child: Center(child: PhoneNumberView())),
       ),
     );
   }

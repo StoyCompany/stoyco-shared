@@ -26,3 +26,7 @@
 ## 0.0.7
 
 - Add password and checkbox fields to form library
+
+## 0.0.8
+
+- Add phone number field and update country icon field

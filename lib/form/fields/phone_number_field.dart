@@ -53,7 +53,7 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
             final effectiveDecoration = decoration
                 .applyDefaults(Theme.of(state.context).inputDecorationTheme);
 
-            return Container(
+            return SizedBox(
               height: 80,
               child: Stack(
                 children: [
@@ -87,6 +87,7 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.digitsOnly
                       ],
+                      keyboardType: TextInputType.phone,
                     ),
                   ),
                   Positioned(

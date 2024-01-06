@@ -25,6 +25,18 @@ class _StoycoCountryPrefixIconState extends State<StoycoCountryPrefixIcon> {
   /// The selected country.
   ValueNotifier<Country?> seletectedCountry = ValueNotifier(null);
 
+  //obtener padding con mediaquery
+  double getPadding() {
+    final size = MediaQuery.of(context).size;
+    if (size.width < 400) {
+      return 8;
+    } else if (size.width < 600) {
+      return 16;
+    } else {
+      return size.width * 0.3;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -38,7 +50,7 @@ class _StoycoCountryPrefixIconState extends State<StoycoCountryPrefixIcon> {
             builder: (context) => StatefulBuilder(
               builder: (ctx, setState) => Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: size.width * 0.3, vertical: size.height * 0.1),
+                    horizontal: getPadding(), vertical: size.height * 0.1),
                 child: CountryPickerDialog(
                   languageCode: 'es',
                   style: PickerDialogStyle(
