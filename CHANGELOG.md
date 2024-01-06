@@ -22,3 +22,7 @@
 ## 0.0.6
 
 - Update file paths for icons
+
+## 0.0.7
+
+- Add password and checkbox fields to form library
