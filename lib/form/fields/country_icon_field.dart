@@ -102,7 +102,7 @@ class _StoycoCountryPrefixIconState extends State<StoycoCountryPrefixIcon> {
                   Padding(
                       padding: const EdgeInsets.only(bottom: 3.0),
                       child: SvgPicture.asset(
-                        'assets/icons/keyboard_arrow_down_white_18dp.svg',
+                        'packages/stoyco_shared/lib/assets/icons/keyboard_arrow_down_white_18dp.svg',
                         height: 8,
                         width: 8,
                         colorFilter: const ColorFilter.mode(

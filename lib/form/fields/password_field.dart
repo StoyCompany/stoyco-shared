@@ -228,8 +228,8 @@ class VerificationWidgetWithMessage extends StatelessWidget {
         children: [
           SvgPicture.asset(
             isValid
-                ? 'assets/icons/check_icon.svg'
-                : 'assets/icons/close_icon.svg',
+                ? 'packages/stoyco_shared/lib/assets/icons/check_icon.svg'
+                : 'packages/stoyco_shared/lib/assets/icons/close_icon.svg',
             width: 12,
             height: 12,
           ),

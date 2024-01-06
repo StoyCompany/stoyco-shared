@@ -18,3 +18,7 @@
 ## 0.0.5
 
 - Refactor form fields, add custom widgets, and update assets
+
+## 0.0.6
+
+- Update file paths for icons
