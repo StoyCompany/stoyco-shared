@@ -3,9 +3,18 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl_phone_field/countries.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
 
+/// A custom widget for selecting a country prefix.
+///
+/// This widget extends [StatefulWidget]. It displays a list of countries and allows
+/// the user to select a country. The selected country's flag and code are displayed.
 class StoycoCountryPrefixIcon extends StatefulWidget {
-  final void Function(Country) onCountryChanged;
+  /// Creates a [StoycoCountryPrefixIcon].
+  ///
+  /// The [onCountryChanged] argument is required.
   const StoycoCountryPrefixIcon({super.key, required this.onCountryChanged});
+
+  /// The callback function that is called when the selected country changes.
+  final void Function(Country) onCountryChanged;
 
   @override
   State<StoycoCountryPrefixIcon> createState() =>
@@ -13,7 +22,9 @@ class StoycoCountryPrefixIcon extends StatefulWidget {
 }
 
 class _StoycoCountryPrefixIconState extends State<StoycoCountryPrefixIcon> {
+  /// The selected country.
   ValueNotifier<Country?> seletectedCountry = ValueNotifier(null);
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;

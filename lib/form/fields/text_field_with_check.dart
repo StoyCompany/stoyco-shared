@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:reactive_forms/reactive_forms.dart';
-import 'package:stoyco_shared/form/fields/text_field.dart';
 import 'package:stoyco_shared/form/forms.dart';
 
+/// A custom text field widget with a check mark.
+///
+/// This widget extends [StatefulWidget]. It displays a text field with a check mark
+/// when the input is valid according to the provided validation function.
 class StoycoTextFieldWithCheck extends StatefulWidget {
+  /// Creates a [StoycoTextFieldWithCheck].
+  ///
+  /// The [formControlName] and [validate] arguments are required.
   const StoycoTextFieldWithCheck({
     super.key,
     this.labelText,
@@ -17,12 +23,25 @@ class StoycoTextFieldWithCheck extends StatefulWidget {
     this.onChanged,
   });
 
+  /// The label text of the text field.
   final String? labelText;
+
+  /// The hint text of the text field.
   final String? hintText;
+
+  /// The name of the form control.
   final String? formControlName;
+
+  /// The input formatters for the text field.
   final List<TextInputFormatter>? inputFormatters;
+
+  /// The callback function that is called when the text field value changes.
   final void Function(FormControl<dynamic>)? onChanged;
+
+  /// The validation messages for the text field.
   final Map<String, String Function(Object)>? validationMessages;
+
+  /// The validation function for the text field.
   final bool Function(String?) validate;
 
   @override
@@ -31,9 +50,13 @@ class StoycoTextFieldWithCheck extends StatefulWidget {
 }
 
 class _StoycoTextFieldWithCheckState extends State<StoycoTextFieldWithCheck> {
+  /// The validity of the text field value.
   bool isValid = false;
+
+  /// The value of the text field.
   String value = '';
 
+  /// Sets the value of the text field.
   set setValue(String value) {
     setState(() {
       this.value = value;

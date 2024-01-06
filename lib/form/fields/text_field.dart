@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
+/// A custom text form field widget for StoyCo.
+///
+/// This widget extends the [ReactiveTextField] widget and provides additional customization options.
+/// It includes properties for setting the label text, hint text, decoration, and more.
+
 class StoyCoTextFormField extends ReactiveTextField {
   final String? labelText;
   final String? hintText;
@@ -22,6 +27,8 @@ class StoyCoTextFormField extends ReactiveTextField {
     super.showErrors,
     super.formControl,
     super.keyboardType,
+    super.obscureText,
+    super.obscuringCharacter,
   }) : super(
           style: const TextStyle(
             color: Color(0xFFF2F2FA),

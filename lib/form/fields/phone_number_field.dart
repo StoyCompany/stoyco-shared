@@ -8,28 +8,41 @@ import 'package:reactive_forms/reactive_forms.dart';
 import 'package:stoyco_shared/form/fields/country_icon_field.dart';
 import 'package:stoyco_shared/form/models/phone_number.dart';
 
+/// A custom reactive form field for phone number input.
+///
+/// This widget extends [ReactiveFormField]. It displays a text field that allows
+/// the user to input a phone number. The phone number is then validated and the
+/// result is stored in a [PhoneNumber] object.
 class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
+  /// The controller for the text field.
   final TextEditingController? _textController;
 
+  /// The current value of the phone number.
   PhoneNumber currentValue = PhoneNumber();
+
+  /// Creates a [ReactiveNewPhoneNumberInput].
+  ///
+  /// The [controller], [formControlName], [onTap], [onSubmitted], [onEditingComplete],
+  /// [onChanged], [formControl], [originalValidators], [decoration], [showErrors],
+  /// and [labelText] arguments are optional.
   ReactiveNewPhoneNumberInput({
-    super.key,
+    Key? key,
     TextEditingController? controller,
     String? formControlName,
     ReactiveFormFieldCallback<T>? onTap,
     ReactiveFormFieldCallback<T>? onSubmitted,
     ReactiveFormFieldCallback<T>? onEditingComplete,
     ReactiveFormFieldCallback<T>? onChanged,
-    super.formControl,
+    FormControl<T>? formControl,
     List<Validator<dynamic>>? originalValidators,
     InputDecoration decoration = const InputDecoration(),
     ShowErrorsFunction<T>? showErrors,
     String? labelText,
   })  : _textController = controller,
         super(
-          showErrors: (value) {
-            return value.value != null && value.invalid;
-          },
+          key: key,
+          formControl: formControl,
+          formControlName: formControlName,
           validationMessages: {
             ValidationMessage.required: (_) => 'Requerido',
             'invalid': (_) => 'Número de celular inválido',
@@ -111,35 +124,33 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
             );
           },
         );
+
   @override
   ReactiveFormFieldState<T, PhoneNumber> createState() =>
       _NewPhoneNumberInputState<T>();
 }
 
+/// [_NewPhoneNumberInputState] is a state object for [ReactiveNewPhoneNumberInput].
+/// It extends [ReactiveFocusableFormFieldState] with a generic type [T] and a [PhoneNumber].
 class _NewPhoneNumberInputState<T>
     extends ReactiveFocusableFormFieldState<T, PhoneNumber> {
+  /// Controller for the text field.
   late TextEditingController _textController;
+
+  /// Current value of the phone number.
   late PhoneNumber currentValue = PhoneNumber();
+
+  /// Original validators for the form field.
   late List<Validator<dynamic>> originalValidators;
 
+  /// Initialize the state.
   @override
   void initState() {
     super.initState();
     _initializeTextController();
   }
 
-  @override
-  void onControlValueChanged(dynamic value) {
-    final effectiveValue = (value == null) ? '' : value.toString();
-    _textController.value = _textController.value.copyWith(
-      text: effectiveValue,
-      selection: TextSelection.collapsed(offset: effectiveValue.length),
-      composing: TextRange.empty,
-    );
-    analyzeErrors();
-    super.onControlValueChanged(value);
-  }
-
+  /// Called when the control's value changes.
   @override
   ControlValueAccessor<T, PhoneNumber> selectValueAccessor() {
     if (control is FormControl<int>) {
@@ -155,6 +166,7 @@ class _NewPhoneNumberInputState<T>
     return super.selectValueAccessor();
   }
 
+  /// Initializes the text controller.
   void _initializeTextController() {
     final initialValue = value;
     final currentWidget = widget as ReactiveNewPhoneNumberInput<T>;
@@ -164,6 +176,7 @@ class _NewPhoneNumberInputState<T>
     _textController.text = initialValue == null ? '' : initialValue.toString();
   }
 
+  /// Called when the phone value changes.
   void didChangePhoneValue(String? value) {
     if (value != null) {
       currentValue = currentValue.copyWith(phoneNumber: value);
@@ -172,6 +185,7 @@ class _NewPhoneNumberInputState<T>
     }
   }
 
+  /// Called when the country value changes.
   void didChangeCountryValue(Country? country) {
     if (country != null) {
       currentValue = currentValue.copyWith(selectedCountry: country);
@@ -180,6 +194,7 @@ class _NewPhoneNumberInputState<T>
     }
   }
 
+  /// Analyzes the errors of the form field.
   void analyzeErrors() {
     if (!currentValue.isValid) {
       control.setErrors({
@@ -202,18 +217,23 @@ class _NewPhoneNumberInputState<T>
     control.markAsUntouched();
   }
 
+  /// Sets the original validators of the form field.
   void setOriginalValidators(List<Validator<dynamic>> validators) {
     originalValidators = validators;
   }
 }
 
+/// [PhoneNumberValueAccessor] is a value accessor for [PhoneNumber].
+/// It extends [ControlValueAccessor] with a [PhoneNumber] and a [String].
 class PhoneNumberValueAccessor
     extends ControlValueAccessor<PhoneNumber, String> {
+  /// Converts the model value to view value.
   @override
   String modelToViewValue(PhoneNumber? modelValue) {
     return modelValue == null ? '' : modelValue.toString();
   }
 
+  /// Converts the view value to model value.
   @override
   PhoneNumber? viewToModelValue(String? viewValue) {
     return (viewValue == '' || viewValue == null)
