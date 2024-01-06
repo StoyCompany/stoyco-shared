@@ -64,7 +64,7 @@ class _StoycoCheckBoxFieldState extends State<StoycoCheckBoxField> {
       ),
       child: value
           ? SvgPicture.asset(
-              'packages/stoyco_shared/lib/assets/icons/general/done_white_18dp.svg',
+              'packages/stoyco_shared/lib/assets/icons/done_white_18dp.svg',
               color: const Color(0xFFFAFAFA),
               width: 16,
               height: 16,
