@@ -14,3 +14,7 @@
 
 - Refactor form fields and add custom widgets
 - Add PasswordField
+
+## 0.0.5
+
+- Refactor form fields, add custom widgets, and update assets

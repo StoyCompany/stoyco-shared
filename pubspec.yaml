@@ -21,7 +21,8 @@ dev_dependencies:
 
 flutter:
   assets:
-    - assets/icons/
+    - lib/assets/
+    - lib/assets/icons/
 
   # For more details about assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages

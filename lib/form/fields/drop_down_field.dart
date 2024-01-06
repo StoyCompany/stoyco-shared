@@ -2,15 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:stoyco_shared/form/forms.dart';
 import 'package:reactive_forms/reactive_forms.dart';
+import 'package:stoyco_shared/form/fields/text_field.dart';
 
-/// A custom dropdown widget.
-///
-/// This widget extends [StatefulWidget]. It displays a dropdown that allows
-/// the user to select an option. The selected option is displayed in a text field.
 class StoycoDropdown extends StatefulWidget {
-  /// Creates a [StoycoDropdown].
-  ///
-  /// The [formControl] and [options] arguments are required.
   const StoycoDropdown({
     Key? key,
     this.labelText,
@@ -23,28 +17,13 @@ class StoycoDropdown extends StatefulWidget {
     required this.options,
   }) : super(key: key);
 
-  /// The label text of the dropdown.
   final String? labelText;
-
-  /// The hint text of the dropdown.
   final String? hintText;
-
-  /// The name of the form control.
   final String? formControlName;
-
-  /// The form control of the dropdown.
   final FormControl<dynamic> formControl;
-
-  /// The options of the dropdown.
   final List<String> options;
-
-  /// The input formatters for the dropdown.
   final List<TextInputFormatter>? inputFormatters;
-
-  /// The callback function that is called when the selected option changes.
   final void Function(FormControl<dynamic>)? onChanged;
-
-  /// The validation messages for the dropdown.
   final Map<String, String Function(Object)>? validationMessages;
 
   @override
@@ -70,21 +49,18 @@ class _MyCustomDropdownState extends State<StoycoDropdown>
     );
   }
 
-  /// Toggles the dropdown.
   Future<void> _toggleDropdown() async {
     _clearErrorMessage();
     await _startAnimation();
     _updateErrorMessageVisibility();
   }
 
-  /// Clears the error message.
   void _clearErrorMessage() {
     setState(() {
       _isListViewClosed = true;
     });
   }
 
-  /// Starts the animation.
   Future<void> _startAnimation() async {
     setState(() {
       _isDropdownOpen = !_isDropdownOpen;
@@ -102,7 +78,6 @@ class _MyCustomDropdownState extends State<StoycoDropdown>
     });
   }
 
-  /// Updates the visibility of the error message.
   void _updateErrorMessageVisibility() {
     setState(() {
       showErrorMessage = !_isDropdownOpen && _isInvalid;
@@ -113,7 +88,6 @@ class _MyCustomDropdownState extends State<StoycoDropdown>
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // The text field that displays the selected option.
         StoyCoTextFormField(
           formControlName: widget.formControlName,
           labelText: widget.labelText,
@@ -211,7 +185,6 @@ class _MyCustomDropdownState extends State<StoycoDropdown>
                   ),
           ),
         ),
-        // The dropdown that displays the options.
         AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           height: _isDropdownOpen ? 200.0 : 0.0,
