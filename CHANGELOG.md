@@ -34,3 +34,6 @@
 ## 0.0.9
 
 - Add 'touched' flag to ReactiveNewPhoneNumberInput
+
+## 0.0.10
+- Add AppBar Auth Widget
