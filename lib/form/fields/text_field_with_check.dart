@@ -92,7 +92,7 @@ class _StoycoTextFieldWithCheckState extends State<StoycoTextFieldWithCheck> {
         suffixIcon: isValid
             ? UnconstrainedBox(
                 child: SvgPicture.asset(
-                  'packages/stoyco_shared/lib/assets/icons/check_outline.svg',
+                  'packages/stoyco_shared/lib/assets/icons/check_icon.svg',
                   width: 20,
                   height: 20,
                 ),
@@ -100,7 +100,7 @@ class _StoycoTextFieldWithCheckState extends State<StoycoTextFieldWithCheck> {
             : value.isNotEmpty
                 ? UnconstrainedBox(
                     child: SvgPicture.asset(
-                      'packages/stoyco_shared/lib/assets/icons/close.svg',
+                      'packages/stoyco_shared/lib/assets/icons/close_icon.svg',
                       width: 20,
                       height: 20,
                     ),
