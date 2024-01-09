@@ -10,6 +10,8 @@ class StoyCoTextFormField extends ReactiveTextField {
   final String? labelText;
   final String? hintText;
   final InputDecoration? decoration;
+  final Widget? suffixIcon;
+  final Widget? prefixIcon;
   StoyCoTextFormField({
     super.key,
     super.onChanged,
@@ -29,6 +31,8 @@ class StoyCoTextFormField extends ReactiveTextField {
     super.keyboardType,
     super.obscureText,
     super.obscuringCharacter,
+    this.suffixIcon,
+    this.prefixIcon,
   }) : super(
           style: const TextStyle(
             color: Color(0xFFF2F2FA),
@@ -39,6 +43,8 @@ class StoyCoTextFormField extends ReactiveTextField {
           decoration: decoration ??
               InputDecoration(
                 floatingLabelBehavior: FloatingLabelBehavior.always,
+                suffixIcon: suffixIcon,
+                prefixIcon: prefixIcon,
                 label: Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 3),

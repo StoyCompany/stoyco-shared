@@ -18,7 +18,7 @@ class StoycoTextFieldWithCheck extends StatefulWidget {
     this.hintText,
     this.validationMessages,
     required this.formControlName,
-    required this.validate,
+    required this.asyncValidate,
     this.inputFormatters,
     this.onChanged,
   });
@@ -42,7 +42,7 @@ class StoycoTextFieldWithCheck extends StatefulWidget {
   final Map<String, String Function(Object)>? validationMessages;
 
   /// The validation function for the text field.
-  final bool Function(String?) validate;
+  final Future<bool> Function(String?) asyncValidate;
 
   @override
   State<StoycoTextFieldWithCheck> createState() =>
@@ -72,13 +72,14 @@ class _StoycoTextFieldWithCheckState extends State<StoycoTextFieldWithCheck> {
       inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.allow(RegExp("[A-zÀ-ú]")),
       ],
-      onChanged: (formControl) {
+      onChanged: (formControl) async {
         widget.onChanged?.call(formControl);
+        final valueIsValid = await widget.asyncValidate(formControl.value);
         setState(() {
           setValue = formControl.value;
 
           if (!formControl.invalid) {
-            isValid = widget.validate(formControl.value);
+            isValid = valueIsValid;
           } else {
             isValid = false;
           }

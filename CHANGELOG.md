@@ -36,7 +36,14 @@
 - Add 'touched' flag to ReactiveNewPhoneNumberInput
 
 ## 0.0.10
+
 - Add AppBar Auth Widget
 
 ## 0.0.11
+
 - Update file paths for icon assets
+
+## 0.0.12
+
+- Add suffix icon to StoyCoTextFormField
+- Add asyncValidate to StoycoTextFieldWithCheck
