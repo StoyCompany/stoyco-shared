@@ -37,3 +37,6 @@
 
 ## 0.0.10
 - Add AppBar Auth Widget
+
+## 0.0.11
+- Update file paths for icon assets
