@@ -3,15 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class StepInfo extends StatelessWidget {
-  const StepInfo({super.key, required this.title, required this.description});
+  const StepInfo({
+    super.key,
+    this.descriptionWidth,
+    required this.title,
+    required this.description,
+  });
 
   final String title;
   final String description;
+  final double? descriptionWidth;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       constraints: const BoxConstraints(minHeight: 80),
+      width: descriptionWidth,
       child: Column(
         children: [
           StepTitleWidget(
