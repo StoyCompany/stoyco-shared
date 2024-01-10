@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
 import 'package:intl_phone_field/countries.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
 
@@ -80,49 +81,59 @@ class _StoycoCountryPrefixIconState extends State<StoycoCountryPrefixIcon> {
         },
         borderRadius: BorderRadius.circular(16),
         child: ValueListenableBuilder(
-            valueListenable: seletectedCountry,
-            builder: (BuildContext context, Country? value, Widget? child) {
-              return Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    width: 4,
+          valueListenable: seletectedCountry,
+          builder: (BuildContext context, Country? value, Widget? child) {
+            return Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Gap(4),
+                Text(
+                  value?.flag ?? '',
+                  style: const TextStyle(
+                    fontSize: 20,
                   ),
-                  Text(
-                    value?.flag ?? '',
-                    style: const TextStyle(
-                      fontSize: 20,
+                ),
+                Visibility(
+                  visible: value == null,
+                  child: Container(
+                    width: 22,
+                    height: 19,
+                    decoration: ShapeDecoration(
+                      color: const Color(0xFF92929D),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 4,
+                ),
+                const Gap(4),
+                Text(
+                  value?.code ?? '__',
+                  style: const TextStyle(
+                    color: Color(0xFFF2F2FA),
+                    fontSize: 16,
+                    fontFamily: 'Akkurat Pro',
+                    fontWeight: FontWeight.w700,
                   ),
-                  Text(
-                    value?.code ?? '__',
-                    style: const TextStyle(
-                      color: Color(0xFFF2F2FA),
-                      fontSize: 16,
-                      fontFamily: 'Akkurat Pro',
-                      fontWeight: FontWeight.w700,
-                    ),
+                ),
+                const Gap(4),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 3.0),
+                  child: SvgPicture.asset(
+                    'packages/stoyco_shared/lib/assets/icons/arrow-down-icon.svg',
+                    height: 16,
+                    width: 16,
+                    colorFilter: const ColorFilter.mode(
+                        Color(0xFFF2F2FA), BlendMode.srcIn),
                   ),
-                  const SizedBox(
-                    width: 4,
-                  ),
-                  Padding(
-                      padding: const EdgeInsets.only(bottom: 3.0),
-                      child: SvgPicture.asset(
-                        'packages/stoyco_shared/lib/assets/icons/keyboard_arrow_down_white_18dp.svg',
-                        height: 8,
-                        width: 8,
-                        colorFilter: const ColorFilter.mode(
-                            Color(0xFFF2F2FA), BlendMode.srcIn),
-                      )),
-                ],
-              );
-            }),
+                ),
+                const Gap(4),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

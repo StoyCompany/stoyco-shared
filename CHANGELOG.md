@@ -51,3 +51,7 @@
 ## 0.0.13
 
 - Add DatePickerView to example and update sufixIcon StoycoDatePicker
+
+## 0.0.14
+
+- Add 'gap' package for better spacing in country icon field
