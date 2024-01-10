@@ -50,18 +50,21 @@ class StoycoDatePicker extends StatelessWidget {
         locale: const Locale('es'),
         builder: (BuildContext context, picker, child) {
           return StoyCoTextFormField(
-            labelText: labelText,
-            hintText: hintText,
-            formControlName: 'birthDate',
-            validationMessages:
-                validationMessages ?? StoycoForms.validationMessages(),
-            onTap: (value) {
-              picker.showPicker();
-            },
-            suffixIcon: SvgPicture.asset(
-              'packages/stoyco_shared/lib/assets/icons/calendar.svg',
-            )
-          );
+              labelText: labelText,
+              hintText: hintText,
+              formControlName: 'birthDate',
+              validationMessages:
+                  validationMessages ?? StoycoForms.validationMessages(),
+              onTap: (value) {
+                picker.showPicker();
+              },
+              suffixIcon: UnconstrainedBox(
+                child: SvgPicture.asset(
+                  'packages/stoyco_shared/lib/assets/icons/calendar.svg',
+                  height: 20,
+                  width: 20,
+                ),
+              ));
         },
       ),
     );

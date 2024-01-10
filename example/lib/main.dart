@@ -1,3 +1,4 @@
+import 'package:example/form/date_picker/date_picker.dart';
 import 'package:example/themes.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class MainApp extends StatelessWidget {
       home: const Scaffold(
         body: SafeArea(
             minimum: EdgeInsets.all(30),
-            child: Center(child: PhoneNumberView())),
+            child: Center(child: DatePickerView())),
       ),
     );
   }

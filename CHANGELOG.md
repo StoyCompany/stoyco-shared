@@ -47,3 +47,7 @@
 
 - Add suffix icon to StoyCoTextFormField
 - Add asyncValidate to StoycoTextFieldWithCheck
+
+## 0.0.13
+
+- Add DatePickerView to example and update sufixIcon StoycoDatePicker
