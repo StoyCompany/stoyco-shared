@@ -69,9 +69,10 @@ class _StoycoTextFieldWithCheckState extends State<StoycoTextFieldWithCheck> {
       formControlName: widget.formControlName,
       labelText: widget.labelText,
       hintText: widget.hintText,
-      inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp("[A-zÀ-ú]")),
-      ],
+      inputFormatters: widget.inputFormatters ??
+          <TextInputFormatter>[
+            FilteringTextInputFormatter.allow(RegExp("[A-zÀ-ú]")),
+          ],
       onChanged: (formControl) async {
         widget.onChanged?.call(formControl);
         final valueIsValid = await widget.asyncValidate(formControl.value);

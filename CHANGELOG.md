@@ -55,3 +55,7 @@
 ## 0.0.14
 
 - Add 'gap' package for better spacing in country icon field
+
+## 0.0.15
+
+- Refactor inputFormatters in StoycoTextFieldWithCheck
