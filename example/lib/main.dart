@@ -18,7 +18,7 @@ class MainApp extends StatelessWidget {
       home: const Scaffold(
         body: SafeArea(
             minimum: EdgeInsets.all(30),
-            child: Center(child: DatePickerView())),
+            child: Center(child: PhoneNumberView())),
       ),
     );
   }

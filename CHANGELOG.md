@@ -63,3 +63,7 @@
 ## 0.0.16
 
 - Add minHeight and maxHeight properties to ReactiveNewPhoneNumberInput
+
+## 0.0.17
+
+- Update main.dart and SVG files, and modify date picker and country icon field

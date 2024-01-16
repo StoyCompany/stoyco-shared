@@ -93,9 +93,9 @@ class _StoycoCountryPrefixIconState extends State<StoycoCountryPrefixIcon> {
                 value != null
                     ? CountryFlag.fromCountryCode(
                         value.code,
-                        height: 20,
-                        width: 20,
-                        borderRadius: 8,
+                        borderRadius: 4,
+                        width: 22,
+                        height: 19,
                       )
                     : Container(
                         width: 22,
@@ -109,7 +109,7 @@ class _StoycoCountryPrefixIconState extends State<StoycoCountryPrefixIcon> {
                       ),
                 const Gap(4),
                 Text(
-                  value?.code ?? '__',
+                  value != null ? '+${value.dialCode}' : '__',
                   style: const TextStyle(
                     color: Color(0xFFF2F2FA),
                     fontSize: 16,

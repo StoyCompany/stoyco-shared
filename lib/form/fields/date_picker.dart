@@ -67,7 +67,7 @@ class StoycoDatePicker extends StatelessWidget {
                     FocusScope.of(context).requestFocus(FocusNode());
                     final pickedDate = await showWebDatePicker(
                       context: context,
-                      initialDate: DateTime.now(),
+                      initialDate: value.value ?? lastDate ?? DateTime.now(),
                       firstDate: firstDate,
                       lastDate: lastDate ?? DateTime.now(),
                       withoutActionButtons: true,

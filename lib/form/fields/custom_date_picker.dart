@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:stoyco_shared/form/extensions/datetime_extension.dart';
 import 'package:vph_common_widgets/vph_common_widgets.dart';
 
@@ -78,7 +79,8 @@ class _WebDatePickerState extends State<_WebDatePicker> {
   }
 
   List<Widget> _buildDaysOfMonthCells(ThemeData theme) {
-    final textStyle = theme.textTheme.bodySmall?.copyWith(color: Colors.black);
+    final textStyle =
+        theme.textTheme.bodySmall?.copyWith(color: const Color(0xff1C197F));
     final now = DateTime.now();
     final monthDateRange =
         _startDate.monthDateTimeRange(includeTrailingAndLeadingDates: true);
@@ -108,10 +110,10 @@ class _WebDatePickerState extends State<_WebDatePicker> {
         final isWeekend = date.weekday == DateTime.saturday ||
             date.weekday == DateTime.sunday;
         final color = isEnabled
-            ? theme.colorScheme.primary
-            : theme.colorScheme.primary.withOpacity(0.5);
+            ? const Color(0xff1C197F)
+            : const Color(0xff1C197F).withOpacity(0.5);
         final cellTextStyle = isSelected
-            ? textStyle?.copyWith(color: theme.colorScheme.onPrimary)
+            ? textStyle?.copyWith(color: Colors.white)
             : isEnabled
                 ? isWeekend && widget.weekendDaysColor != null
                     ? textStyle?.copyWith(color: widget.weekendDaysColor)
@@ -119,7 +121,7 @@ class _WebDatePickerState extends State<_WebDatePicker> {
                 : textStyle?.copyWith(
                     color: isWeekend && widget.weekendDaysColor != null
                         ? widget.weekendDaysColor?.withOpacity(0.5)
-                        : theme.disabledColor);
+                        : Colors.black.withOpacity(0.3));
         Widget child = Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
@@ -145,7 +147,8 @@ class _WebDatePickerState extends State<_WebDatePicker> {
   }
 
   List<Widget> _buildMonthsOfYearCells(ThemeData theme) {
-    final textStyle = theme.textTheme.bodySmall?.copyWith(color: Colors.black);
+    final textStyle =
+        theme.textTheme.bodySmall?.copyWith(color: const Color(0xff1C197F));
     final borderRadius = BorderRadius.circular(_childSize!.height / 4 - 32);
     final children = <Widget>[];
     final now = DateTime.now();
@@ -161,17 +164,19 @@ class _WebDatePickerState extends State<_WebDatePicker> {
       Widget child = Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: isSelected ? color : null,
-          border: isNow && !isSelected ? Border.all(color: color) : null,
+          color: isSelected ? const Color(0xff1C197F).withOpacity(0.6) : null,
+          border: isNow && !isSelected
+              ? Border.all(color: const Color(0xff1C197F))
+              : null,
           borderRadius: borderRadius,
         ),
         child: Text(
           kMonthShortNames[i - 1],
           style: isSelected
-              ? textStyle?.copyWith(color: theme.colorScheme.onPrimary)
+              ? textStyle?.copyWith(color: Colors.white)
               : isEnabled
                   ? textStyle
-                  : textStyle?.copyWith(color: theme.disabledColor),
+                  : textStyle?.copyWith(color: const Color(0xff1C197F)),
         ),
       );
       if (isEnabled) {
@@ -192,7 +197,8 @@ class _WebDatePickerState extends State<_WebDatePicker> {
   }
 
   List<Widget> _buildYearsCells(ThemeData theme) {
-    final textStyle = theme.textTheme.bodySmall?.copyWith(color: Colors.black);
+    final textStyle =
+        theme.textTheme.bodySmall?.copyWith(color: const Color(0xff1C197F));
     final borderRadius = BorderRadius.circular(_childSize!.height / 5 - 16);
     final children = <Widget>[];
     final now = DateTime.now();
@@ -209,17 +215,17 @@ class _WebDatePickerState extends State<_WebDatePicker> {
       Widget child = Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: isSelected ? color : null,
+          color: isSelected ? const Color(0xff1C197F).withOpacity(0.6) : null,
           border: isNow && !isSelected ? Border.all(color: color) : null,
           borderRadius: borderRadius,
         ),
         child: Text(
           (year + i).toString(),
           style: isSelected
-              ? textStyle?.copyWith(color: theme.colorScheme.onPrimary)
+              ? textStyle?.copyWith(color: Colors.white)
               : isEnabled
                   ? textStyle
-                  : textStyle?.copyWith(color: theme.disabledColor),
+                  : textStyle?.copyWith(color: Colors.black.withOpacity(0.3)),
         ),
       );
       if (isEnabled) {
@@ -260,17 +266,17 @@ class _WebDatePickerState extends State<_WebDatePicker> {
       Widget child = Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: isSelected ? color : null,
+          color: isSelected ? Color(0xff1C197F).withOpacity(0.6) : null,
           border: isNow && !isSelected ? Border.all(color: color) : null,
           borderRadius: borderRadius,
         ),
         child: Text(
           "${date.year} - ${date.year + 19}",
           style: isSelected
-              ? textStyle?.copyWith(color: theme.colorScheme.onPrimary)
+              ? textStyle?.copyWith(color: Colors.white)
               : isEnabled
                   ? textStyle
-                  : textStyle?.copyWith(color: theme.disabledColor),
+                  : textStyle?.copyWith(color: Colors.black.withOpacity(0.3)),
         ),
       );
       if (isEnabled) {
@@ -339,8 +345,8 @@ class _WebDatePickerState extends State<_WebDatePicker> {
           alignment: Alignment.center,
           child: Text(
             "${kMonthNames[_startDate.month - 1]} ${_startDate.year}",
-            style: theme.textTheme.bodyLarge
-                ?.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+            style: theme.textTheme.bodyLarge?.copyWith(
+                color: const Color(0xff1C197F), fontWeight: FontWeight.bold),
           ),
         );
         final monthDateRange = _startDate.monthDateTimeRange(
@@ -387,8 +393,8 @@ class _WebDatePickerState extends State<_WebDatePicker> {
           alignment: Alignment.center,
           child: Text(
             "$year - ${year + 199}",
-            style: theme.textTheme.bodyLarge
-                ?.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+            style: theme.textTheme.bodyLarge?.copyWith(
+                color: const Color(0xff1C197F), fontWeight: FontWeight.bold),
           ),
         );
         nextView = false;
@@ -398,6 +404,7 @@ class _WebDatePickerState extends State<_WebDatePicker> {
       margin:
           const EdgeInsets.only(left: 1.0, top: 4.0, right: 1.0, bottom: 2.0),
       elevation: 1.0,
+      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -406,10 +413,21 @@ class _WebDatePickerState extends State<_WebDatePicker> {
             Row(
               children: [
                 isFirst
-                    ? _iconWidget(Icons.keyboard_arrow_left,
-                        color: theme.disabledColor)
-                    : _iconWidget(Icons.keyboard_arrow_left,
-                        onTap: () => _onStartDateChanged(next: false)),
+                    ? SvgPicture.asset(
+                        'packages/stoyco_shared/lib/assets/icons/arrow_back.svg',
+                        height: 24,
+                        width: 24,
+                        color: Colors.black.withOpacity(0.3),
+                      )
+                    : GestureDetector(
+                        onTap: () => _onStartDateChanged(next: false),
+                        child: SvgPicture.asset(
+                          'packages/stoyco_shared/lib/assets/icons/arrow_back.svg',
+                          height: 24,
+                          width: 24,
+                          color: Colors.black,
+                        ),
+                      ),
                 nextView
                     ? Expanded(
                         child: InkWell(
@@ -420,10 +438,27 @@ class _WebDatePickerState extends State<_WebDatePicker> {
                       )
                     : Expanded(child: navTitle),
                 isLast
-                    ? _iconWidget(Icons.keyboard_arrow_right,
-                        color: theme.disabledColor)
-                    : _iconWidget(Icons.keyboard_arrow_right,
-                        onTap: () => _onStartDateChanged(next: true)),
+                    ? RotatedBox(
+                        quarterTurns: 2,
+                        child: SvgPicture.asset(
+                          'packages/stoyco_shared/lib/assets/icons/arrow_back.svg',
+                          height: 24,
+                          width: 24,
+                          color: Colors.black.withOpacity(0.3),
+                        ),
+                      )
+                    : GestureDetector(
+                        onTap: () => _onStartDateChanged(next: true),
+                        child: RotatedBox(
+                          quarterTurns: 2,
+                          child: SvgPicture.asset(
+                            'packages/stoyco_shared/lib/assets/icons/arrow_back.svg',
+                            height: 24,
+                            width: 24,
+                            color: Colors.black,
+                          ),
+                        ),
+                      )
               ],
             ),
 
@@ -472,7 +507,10 @@ class _WebDatePickerState extends State<_WebDatePicker> {
                 /// CANCEL
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("Cancelar"),
+                  child: const Text(
+                    "Cancelar",
+                    style: TextStyle(color: const Color(0xff1C197F)),
+                  ),
                 ),
 
                 /// OK
@@ -480,7 +518,10 @@ class _WebDatePickerState extends State<_WebDatePicker> {
                   const SizedBox(width: 4.0),
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(_selectedDate),
-                    child: const Text("Aceptar"),
+                    child: const Text(
+                      "Aceptar",
+                      style: TextStyle(color: Color(0xff1C197F)),
+                    ),
                   ),
                 ],
               ],
