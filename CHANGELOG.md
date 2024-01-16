@@ -59,3 +59,7 @@
 ## 0.0.15
 
 - Refactor inputFormatters in StoycoTextFieldWithCheck
+
+## 0.0.16
+
+- Add minHeight and maxHeight properties to ReactiveNewPhoneNumberInput

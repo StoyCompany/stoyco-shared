@@ -20,6 +20,8 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
   /// The current value of the phone number.
   PhoneNumber currentValue = PhoneNumber();
   late bool touched;
+  final double? minHeight;
+  final double? maxHeight;
 
   /// Creates a [ReactiveNewPhoneNumberInput].
   ///
@@ -29,6 +31,8 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
   ///
   ReactiveNewPhoneNumberInput({
     Key? key,
+    this.minHeight,
+    this.maxHeight,
     TextEditingController? controller,
     String? formControlName,
     ReactiveFormFieldCallback<T>? onTap,
@@ -60,7 +64,9 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
                 .applyDefaults(Theme.of(state.context).inputDecorationTheme);
 
             return SizedBox(
-              height: !field.control.invalid ? 70 : 85,
+              height: !field.control.invalid
+                  ? (minHeight ?? 70)
+                  : (maxHeight ?? 85),
               child: Stack(
                 children: [
                   Positioned(
@@ -115,7 +121,7 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                             side: const BorderSide(
-                              color: Colors.black,
+                              color: Colors.transparent,
                               width: 2,
                             ),
                           ),
