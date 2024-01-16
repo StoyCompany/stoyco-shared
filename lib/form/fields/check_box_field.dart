@@ -87,11 +87,11 @@ class _StoycoCheckBoxFieldState extends State<StoycoCheckBoxField> {
           ),
         ),
         const Gap(8),
-        MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: widget.textAction,
-            child: Expanded(
+        Expanded(
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: widget.textAction,
               child: Text(
                 widget.labelText,
                 style: const TextStyle(
