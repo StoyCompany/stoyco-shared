@@ -119,15 +119,12 @@ class _StoycoCountryPrefixIconState extends State<StoycoCountryPrefixIcon> {
                   ),
                 ),
                 const Gap(4),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 3.0),
-                  child: SvgPicture.asset(
-                    'packages/stoyco_shared/lib/assets/icons/arrow-down-icon.svg',
-                    height: 16,
-                    width: 16,
-                    colorFilter: const ColorFilter.mode(
-                        Color(0xFFF2F2FA), BlendMode.srcIn),
-                  ),
+                SvgPicture.asset(
+                  'packages/stoyco_shared/lib/assets/icons/arrow-down-icon.svg',
+                  height: 16,
+                  width: 16,
+                  colorFilter: const ColorFilter.mode(
+                      Color(0xFFF2F2FA), BlendMode.srcIn),
                 ),
                 const Gap(4),
               ],
