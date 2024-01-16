@@ -91,7 +91,7 @@ class _StoycoCountryPrefixIconState extends State<StoycoCountryPrefixIcon> {
               children: [
                 const Gap(4),
                 CountryFlag.fromCountryCode(
-                  value?.flag ?? '',
+                  value?.code ?? '',
                   height: 20,
                   width: 20,
                   borderRadius: 8,
