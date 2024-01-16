@@ -22,6 +22,7 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
   late bool touched;
   final double? minHeight;
   final double? maxHeight;
+  final Color? borderLabelColor;
 
   /// Creates a [ReactiveNewPhoneNumberInput].
   ///
@@ -33,6 +34,7 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
     Key? key,
     this.minHeight,
     this.maxHeight,
+    this.borderLabelColor,
     TextEditingController? controller,
     String? formControlName,
     ReactiveFormFieldCallback<T>? onTap,
@@ -120,8 +122,8 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
-                            side: const BorderSide(
-                              color: Colors.transparent,
+                            side: BorderSide(
+                              color: borderLabelColor ?? Colors.black,
                               width: 2,
                             ),
                           ),
