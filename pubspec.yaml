@@ -14,6 +14,7 @@ dependencies:
   gap: ^3.0.1
   intl_phone_field: ^3.2.0
   reactive_forms: ^16.1.1
+  vph_web_date_picker: ^0.0.5
 
 dev_dependencies:
   flutter_test:

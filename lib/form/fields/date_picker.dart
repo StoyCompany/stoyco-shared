@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:reactive_forms/reactive_forms.dart';
+import 'package:stoyco_shared/form/fields/custom_date_picker.dart';
 import 'package:stoyco_shared/form/forms.dart';
 
 /// A custom date picker widget.
@@ -43,29 +44,46 @@ class StoycoDatePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
-      child: ReactiveDatePicker(
-        formControlName: formControlName,
-        firstDate: firstDate,
-        lastDate: lastDate ?? DateTime.now(),
-        locale: const Locale('es'),
-        builder: (BuildContext context, picker, child) {
-          return StoyCoTextFormField(
-              labelText: labelText,
-              hintText: hintText,
-              formControlName: 'birthDate',
-              validationMessages:
-                  validationMessages ?? StoycoForms.validationMessages(),
-              onTap: (value) {
-                picker.showPicker();
-              },
-              suffixIcon: UnconstrainedBox(
-                child: SvgPicture.asset(
-                  'packages/stoyco_shared/lib/assets/icons/calendar.svg',
-                  height: 20,
-                  width: 20,
-                ),
-              ));
-        },
+      child: Column(
+        children: [
+          // DatePicker(
+          //   minDate: DateTime(2021, 1, 1),
+          //   maxDate: DateTime.now(),
+          // ),
+          ReactiveDatePicker(
+            formControlName: formControlName,
+            firstDate: firstDate,
+            lastDate: lastDate ?? DateTime.now(),
+            locale: const Locale('es'),
+            builder: (BuildContext context, picker, child) {
+              return StoyCoTextFormField(
+                  labelText: labelText,
+                  hintText: hintText,
+                  formControlName: 'birthDate',
+                  validationMessages:
+                      validationMessages ?? StoycoForms.validationMessages(),
+                  enableInteractiveSelection: false,
+                  onTap: (value) async {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    final pickedDate = await showWebDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: firstDate,
+                      lastDate: lastDate ?? DateTime.now(),
+                      withoutActionButtons: true,
+                    );
+                    value.value = pickedDate ?? value.value;
+                  },
+                  suffixIcon: UnconstrainedBox(
+                    child: SvgPicture.asset(
+                      'packages/stoyco_shared/lib/assets/icons/calendar.svg',
+                      height: 20,
+                      width: 20,
+                    ),
+                  ));
+            },
+          ),
+        ],
       ),
     );
   }

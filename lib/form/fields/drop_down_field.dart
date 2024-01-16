@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:stoyco_shared/form/forms.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:stoyco_shared/form/fields/text_field.dart';
@@ -174,15 +175,13 @@ class _MyCustomDropdownState extends State<StoycoDropdown>
                 width: 1,
               ),
             ),
-            suffixIcon: _isDropdownOpen
-                ? const Icon(
-                    Icons.expand_less_rounded,
-                    color: Color(0xFF92929D),
-                  )
-                : const Icon(
-                    Icons.expand_more_rounded,
-                    color: Color(0xFF92929D),
-                  ),
+            suffixIcon: SvgPicture.asset(
+                  'packages/stoyco_shared/lib/assets/icons/arrow-down-icon.svg',
+                  height: 16,
+                  width: 16,
+                  colorFilter: const ColorFilter.mode(
+                      Color(0xFFF2F2FA), BlendMode.srcIn),
+                ),
           ),
         ),
         AnimatedContainer(

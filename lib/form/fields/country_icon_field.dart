@@ -123,7 +123,9 @@ class _StoycoCountryPrefixIconState extends State<StoycoCountryPrefixIcon> {
                   height: 16,
                   width: 16,
                   colorFilter: const ColorFilter.mode(
-                      Color(0xFFF2F2FA), BlendMode.srcIn),
+                    Color(0xFF92929D),
+                    BlendMode.srcIn,
+                  ),
                 ),
                 const Gap(4),
               ],
