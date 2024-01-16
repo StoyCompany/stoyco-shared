@@ -90,25 +90,23 @@ class _StoycoCountryPrefixIconState extends State<StoycoCountryPrefixIcon> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Gap(4),
-                CountryFlag.fromCountryCode(
-                  value?.code ?? '',
-                  height: 20,
-                  width: 20,
-                  borderRadius: 8,
-                ),
-                Visibility(
-                  visible: value == null,
-                  child: Container(
-                    width: 22,
-                    height: 19,
-                    decoration: ShapeDecoration(
-                      color: const Color(0xFF92929D),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
+                value != null
+                    ? CountryFlag.fromCountryCode(
+                        value.code,
+                        height: 20,
+                        width: 20,
+                        borderRadius: 8,
+                      )
+                    : Container(
+                        width: 22,
+                        height: 19,
+                        decoration: ShapeDecoration(
+                          color: const Color(0xFF92929D),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
                 const Gap(4),
                 Text(
                   value?.code ?? '__',
