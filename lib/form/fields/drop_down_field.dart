@@ -175,13 +175,15 @@ class _MyCustomDropdownState extends State<StoycoDropdown>
                 width: 1,
               ),
             ),
-            suffixIcon: SvgPicture.asset(
-                  'packages/stoyco_shared/lib/assets/icons/arrow-down-icon.svg',
-                  height: 16,
-                  width: 16,
-                  colorFilter: const ColorFilter.mode(
-                      Color(0xFFF2F2FA), BlendMode.srcIn),
-                ),
+            suffixIcon: UnconstrainedBox(
+              child: SvgPicture.asset(
+                'packages/stoyco_shared/lib/assets/icons/arrow-down-icon.svg',
+                height: 20,
+                width: 20,
+                colorFilter:
+                    const ColorFilter.mode(Color(0xFFF2F2FA), BlendMode.srcIn),
+              ),
+            ),
           ),
         ),
         AnimatedContainer(
