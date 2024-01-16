@@ -7,6 +7,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
+  country_flags: ^2.2.0
   flutter:
     sdk: flutter
   flutter_svg: ^2.0.9

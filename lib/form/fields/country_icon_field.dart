@@ -1,3 +1,4 @@
+import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
@@ -89,11 +90,11 @@ class _StoycoCountryPrefixIconState extends State<StoycoCountryPrefixIcon> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Gap(4),
-                Text(
+                CountryFlag.fromCountryCode(
                   value?.flag ?? '',
-                  style: const TextStyle(
-                    fontSize: 20,
-                  ),
+                  height: 20,
+                  width: 20,
+                  borderRadius: 8,
                 ),
                 Visibility(
                   visible: value == null,
