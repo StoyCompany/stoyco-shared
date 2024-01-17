@@ -85,3 +85,7 @@
 ## 0.0.21
 
 - Remove unnecessary text and divider in date picker modal
+
+## 0.0.22
+
+- Add drop down field with modal
