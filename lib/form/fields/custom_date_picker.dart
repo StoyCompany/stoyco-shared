@@ -158,9 +158,7 @@ class _WebDatePickerState extends State<_WebDatePicker> {
           (date.monthCompareTo(widget.lastDate) <= 0);
       final isSelected = date.monthCompareTo(_selectedDate) == 0;
       final isNow = date.monthCompareTo(now) == 0;
-      final color = isEnabled
-          ? theme.colorScheme.primary
-          : theme.colorScheme.primary.withOpacity(0.5);
+
       Widget child = Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
