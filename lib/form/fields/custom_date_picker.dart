@@ -226,6 +226,7 @@ class _WebDatePickerState extends State<_WebDatePicker> {
                   : textStyle?.copyWith(color: Colors.black.withOpacity(0.3)),
         ),
       );
+
       if (isEnabled) {
         child = InkWell(
           onTap: () => _onViewModeChanged(next: false, date: date),

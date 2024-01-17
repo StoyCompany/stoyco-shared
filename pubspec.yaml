@@ -16,6 +16,7 @@ dependencies:
   reactive_forms: ^16.1.1
   vph_web_date_picker: ^0.0.5
   intl: ^0.18.1
+  vph_common_widgets: ^0.0.2
 
 dev_dependencies:
   flutter_test:
