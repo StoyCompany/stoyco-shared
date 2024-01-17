@@ -71,3 +71,9 @@
 ## 0.0.18
 
 - Add select widget and update color filter
+
+## 0.0.19
+
+- Update select.dart
+- Add custom_date_picker.dart
+- Update drop_down_field.dart

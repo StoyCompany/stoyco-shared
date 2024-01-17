@@ -266,7 +266,7 @@ class _WebDatePickerState extends State<_WebDatePicker> {
       Widget child = Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: isSelected ? Color(0xff1C197F).withOpacity(0.6) : null,
+          color: isSelected ? const Color(0xff1C197F).withOpacity(0.6) : null,
           border: isNow && !isSelected ? Border.all(color: color) : null,
           borderRadius: borderRadius,
         ),
@@ -509,7 +509,7 @@ class _WebDatePickerState extends State<_WebDatePicker> {
                   onPressed: () => Navigator.of(context).pop(),
                   child: const Text(
                     "Cancelar",
-                    style: TextStyle(color: const Color(0xff1C197F)),
+                    style: TextStyle(color: Color(0xff1C197F)),
                   ),
                 ),
 

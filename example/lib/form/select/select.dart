@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:stoyco_shared/form/fields/drop_down_field.dart';
-import 'package:stoyco_shared/form/fields/phone_number_field.dart';
-import 'package:stoyco_shared/form/models/phone_number.dart';
 
 class SelectView extends StatelessWidget {
   const SelectView({super.key});
@@ -26,7 +24,7 @@ class SelectView extends StatelessWidget {
               StoycoDropdown(
                 formControl: form.control('select') as FormControl<String>,
                 formControlName: 'select',
-                options: ['1', '2', '3'],
+                options: const ['1', '2', '3'],
                 labelText: 'Número de celular',
               ),
               const SizedBox(height: 16.0),
