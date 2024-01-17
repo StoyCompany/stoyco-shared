@@ -64,6 +64,27 @@ class StoycoDropDownFielWithModal extends StatelessWidget {
             ),
           ),
         ),
+        label: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+          decoration: ShapeDecoration(
+            gradient: const LinearGradient(
+              begin: Alignment(1.00, 0.00),
+              end: Alignment(-1, 0),
+              colors: [Color(0xFF030A1A), Color(0xFF0C1B24)],
+            ),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
+          child: Text(
+            label ?? '',
+            style: const TextStyle(
+              color: Color(0xFF92929D),
+              fontSize: 12,
+              fontFamily: 'Akkurat Pro',
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
       ),
       readOnly: true,
       onTap: (_) async {
