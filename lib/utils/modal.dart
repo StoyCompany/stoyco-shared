@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:stoyco_shared/utils/text_button.dart';
 
 /// Shows a modal dialog with the specified [child] widget.
 ///
@@ -18,15 +18,22 @@ import 'package:gap/gap.dart';
 ///   barrierDismissible: false,
 /// );
 /// ```
-Future<T?> showStoycoModal<T>({
-  required BuildContext context,
-  required Widget child,
-  bool barrierDismissible = true,
-}) =>
+Future<T?> showStoycoModal<T>(
+        {required BuildContext context,
+        required Widget child,
+        bool barrierDismissible = true,
+        required String title,
+        void Function()? onTapAccept,
+        void Function()? onTapCancel,
+        bool? showActions}) =>
     showModalBottomSheet(
       context: context,
       barrierColor: Colors.black.withOpacity(0.5),
       builder: (BuildContext context) => StoycoContainerModal(
+        title: title,
+        onTapAccept: onTapAccept,
+        onTapCancel: onTapCancel,
+        showActions: showActions ?? false,
         child: child,
       ),
     );
@@ -71,12 +78,20 @@ class StoycoContainerModal extends StatelessWidget {
       ),
       color: Color(0xff253341),
     ),
+    required this.title,
+    this.onTapAccept,
+    this.onTapCancel,
+    this.showActions = false,
   });
 
   final Widget child;
   final double height;
   final EdgeInsets padding;
   final BoxDecoration decoration;
+  final String title;
+  final void Function()? onTapAccept;
+  final void Function()? onTapCancel;
+  final bool showActions;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -95,7 +110,69 @@ class StoycoContainerModal extends StatelessWidget {
               ),
             ),
             const Gap(36),
+            Text(
+              title,
+              style: const TextStyle(
+                fontFamily: 'Akkurat Pro',
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: Color(0xfff2f2fa),
+                decoration: TextDecoration.none,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const Gap(16),
+            const Divider(
+              color: Color(0xff92929d),
+              thickness: 1,
+              indent: 32,
+              endIndent: 32,
+            ),
             child,
+            showActions
+                ? Column(
+                    children: [
+                      const Divider(
+                        color: Color(0xff92929d),
+                        thickness: 1,
+                        indent: 32,
+                        endIndent: 32,
+                      ),
+                      const Gap(16),
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 32),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: TextButton(
+                                onPressed: onTapCancel ?? () {},
+                                child: const Text(
+                                  'Cancelar',
+                                  style: TextStyle(
+                                    fontFamily: 'Akkurat Pro',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xffde2424),
+                                    decoration: TextDecoration.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const Gap(16),
+                            Expanded(
+                              child: TextButtonStoyco(
+                                text: 'Aceptar',
+                                height: 40,
+                                onTap: onTapAccept ?? () {},
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                : Container()
           ],
         ),
       );

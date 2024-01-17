@@ -81,3 +81,7 @@
 ## 0.0.20
 
 - Refactor date picker modal and modal container
+
+## 0.0.21
+
+- Remove unnecessary text and divider in date picker modal

@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 
-import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
 import 'package:stoyco_shared/utils/modal.dart';
@@ -173,6 +172,7 @@ Future<DateTime> showDatePickerStoyco(
 }) async =>
     await showStoycoModal(
       context: context,
+      title: 'Desliza para seleccionar una fecha',
       child: StoycoCupertinoDatePicker(
         backgroundColor: Colors.transparent,
         itemExtent: 29,

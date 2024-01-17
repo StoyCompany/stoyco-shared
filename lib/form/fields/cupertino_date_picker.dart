@@ -377,24 +377,6 @@ class _StoycoCupertinoDatePickerState extends State<StoycoCupertinoDatePicker> {
   @override
   Widget build(BuildContext context) => Column(
         children: [
-          const Text(
-            'Desliza para seleccionar una fecha',
-            style: TextStyle(
-              fontFamily: 'Akkurat Pro',
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: Color(0xfff2f2fa),
-              decoration: TextDecoration.none,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const Gap(16),
-          const Divider(
-            color: Color(0xff92929d),
-            thickness: 1,
-            indent: 32,
-            endIndent: 32,
-          ),
           Container(
             height: 200,
             margin: const EdgeInsets.symmetric(horizontal: 20),
