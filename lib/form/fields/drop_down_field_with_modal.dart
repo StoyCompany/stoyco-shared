@@ -53,6 +53,7 @@ class StoycoDropDownFielWithModal extends StatelessWidget {
       hintText: title,
       validationMessages: validationMessages,
       decoration: InputDecoration(
+        floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: UnconstrainedBox(
           child: SvgPicture.asset(
             'packages/stoyco_shared/lib/assets/icons/arrow-down-icon.svg',
