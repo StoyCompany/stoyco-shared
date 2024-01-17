@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:stoyco_shared/form/form.dart';
 import 'package:stoyco_shared/utils/modal.dart';
 
@@ -34,12 +35,14 @@ class StoycoDropDownFielWithModal extends StatelessWidget {
     required this.formControlName,
     this.title,
     this.label,
+    this.hintText,
     this.validationMessages,
   });
   final String formControlName;
   final List<String> options;
   final String? title;
   final String? label;
+  final String? hintText;
   final Map<String, String Function(Object)>? validationMessages;
 
   @override
@@ -47,9 +50,23 @@ class StoycoDropDownFielWithModal extends StatelessWidget {
     return StoyCoTextFormField(
       formControlName: formControlName,
       labelText: label,
+      hintText: title,
       validationMessages: validationMessages,
+      decoration: InputDecoration(
+        suffixIcon: UnconstrainedBox(
+          child: SvgPicture.asset(
+            'packages/stoyco_shared/lib/assets/icons/arrow-down-icon.svg',
+            height: 20,
+            width: 20,
+            colorFilter: const ColorFilter.mode(
+              Color(0xFFF2F2FA),
+              BlendMode.srcIn,
+            ),
+          ),
+        ),
+      ),
+      readOnly: true,
       onTap: (_) async {
-        FocusScope.of(context).unfocus();
         final value = await showSelectOptionModal(
           context: context,
           title: title ?? '',
