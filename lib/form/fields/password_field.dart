@@ -148,7 +148,8 @@ class _StoycoPasswordFielState extends State<StoycoPasswordField> {
             labelText: widget.labelText,
             hintText: widget.hintText,
             validationMessages: _validationMessages,
-            obscureText: false,
+            obscureText: true,
+            obscuringCharacter: '*',
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.deny(
                 RegExp(_spaceRegExp),
