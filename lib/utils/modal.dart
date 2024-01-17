@@ -22,9 +22,8 @@ Future<T?> showStoycoModal<T>({
   required Widget child,
   bool barrierDismissible = true,
 }) =>
-    showCupertinoModalPopup(
+    showModalBottomSheet(
       context: context,
-      barrierDismissible: barrierDismissible,
       barrierColor: Colors.black.withOpacity(0.5),
       builder: (BuildContext context) => StoycoContainerModal(
         child: child,
