@@ -18,14 +18,16 @@ import 'package:stoyco_shared/utils/text_button.dart';
 ///   barrierDismissible: false,
 /// );
 /// ```
-Future<T?> showStoycoModal<T>(
-        {required BuildContext context,
-        required Widget child,
-        bool barrierDismissible = true,
-        required String title,
-        void Function()? onTapAccept,
-        void Function()? onTapCancel,
-        bool? showActions}) =>
+Future<T?> showStoycoModal<T>({
+  required BuildContext context,
+  required Widget child,
+  bool barrierDismissible = true,
+  required String title,
+  void Function()? onTapAccept,
+  void Function()? onTapCancel,
+  bool? showActions,
+  double? height,
+}) =>
     showModalBottomSheet(
       context: context,
       barrierColor: Colors.black.withOpacity(0.5),
@@ -34,6 +36,7 @@ Future<T?> showStoycoModal<T>(
         onTapAccept: onTapAccept,
         onTapCancel: onTapCancel,
         showActions: showActions ?? false,
+        height: height ?? 400,
         child: child,
       ),
     );
