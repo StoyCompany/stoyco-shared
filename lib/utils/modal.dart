@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 /// Shows a modal dialog with the specified [child] widget.
 ///
@@ -80,8 +81,22 @@ class StoycoContainerModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         height: height,
+        width: double.infinity,
         padding: padding,
         decoration: decoration,
-        child: child,
+        child: Column(
+          children: [
+            Container(
+              height: 2,
+              width: 56,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                color: const Color(0xff92929d),
+              ),
+            ),
+            const Gap(36),
+            child,
+          ],
+        ),
       );
 }

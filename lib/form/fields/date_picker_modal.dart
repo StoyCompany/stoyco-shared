@@ -173,25 +173,12 @@ Future<DateTime> showDatePickerStoyco(
 }) async =>
     await showStoycoModal(
       context: context,
-      child: Column(
-        children: [
-          Container(
-            height: 2,
-            width: 56,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100),
-              color: const Color(0xff92929d),
-            ),
-          ),
-          const Gap(36),
-          StoycoCupertinoDatePicker(
-            backgroundColor: Colors.transparent,
-            itemExtent: 29,
-            onSelectedItemChanged: (_) {},
-            minDate: minDate ?? DateTime(1900),
-            maxDate: maxDate ?? DateTime.now(),
-            selectedDate: selectedDate ?? maxDate ?? DateTime.now(),
-          ),
-        ],
+      child: StoycoCupertinoDatePicker(
+        backgroundColor: Colors.transparent,
+        itemExtent: 29,
+        onSelectedItemChanged: (_) {},
+        minDate: minDate ?? DateTime(1900),
+        maxDate: maxDate ?? DateTime.now(),
+        selectedDate: selectedDate ?? maxDate ?? DateTime.now(),
       ),
     );

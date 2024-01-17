@@ -77,3 +77,7 @@
 - Update select.dart
 - Add custom_date_picker.dart
 - Update drop_down_field.dart
+
+## 0.0.20
+
+- Refactor date picker modal and modal container
