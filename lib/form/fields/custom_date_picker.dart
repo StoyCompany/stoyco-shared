@@ -508,7 +508,7 @@ class _WebDatePickerState extends State<_WebDatePicker> {
                   onPressed: () => Navigator.of(context).pop(),
                   child: const Text(
                     "Cancelar",
-                    style: TextStyle(color: Color(0xff1C197F)),
+                    style: TextStyle(color: Color(0xff92929D)),
                   ),
                 ),
 
