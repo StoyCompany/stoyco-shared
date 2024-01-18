@@ -120,7 +120,7 @@ Future<String> showSelectOptionModal({
     await showStoycoModal(
       context: context,
       title: title,
-      height: 280,
+      height: 300,
       child: ListView.builder(
         shrinkWrap: true,
         itemCount: options.length,
