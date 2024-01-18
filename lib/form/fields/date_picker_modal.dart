@@ -27,6 +27,7 @@ class StoycoDatePickerModal extends StatefulWidget {
     required this.hintText,
     this.validationMessages,
     required this.formControlName,
+    this.initialValue,
   });
 
   /// The label text of the date picker.
@@ -47,6 +48,8 @@ class StoycoDatePickerModal extends StatefulWidget {
   /// The name of the form control.
   final String formControlName;
 
+  final DateTime? initialValue;
+
   @override
   State<StoycoDatePickerModal> createState() => _StoycoDatePickerModalState();
 }
@@ -56,6 +59,14 @@ class StoycoDatePickerModal extends StatefulWidget {
 class _StoycoDatePickerModalState extends State<StoycoDatePickerModal> {
   final TextEditingController controller = TextEditingController();
   bool touched = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialValue != null) {
+      controller.text = DateFormat('dd/MM/yyyy').format(widget.initialValue!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) => Padding(
