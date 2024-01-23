@@ -89,3 +89,7 @@
 ## 0.0.22
 
 - Add drop down field with modal
+
+## 0.0.23
+
+- Add selectedCountry parameter to StoycoCountryPrefixIcon constructor

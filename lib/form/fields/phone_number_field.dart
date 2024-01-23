@@ -89,6 +89,7 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
                           onCountryChanged: (Country country) {
                             field.didChangeCountryValue(country);
                           },
+                          selectedCountry: field.value?.selectedCountry,
                         ),
                       ),
                       onSubmitted: onSubmitted != null
@@ -194,7 +195,8 @@ class _NewPhoneNumberInputState<T>
     _textController = (currentWidget._textController != null)
         ? currentWidget._textController!
         : TextEditingController();
-    _textController.text = initialValue == null ? '' : initialValue.toString();
+    _textController.text =
+        initialValue == null ? '' : initialValue.number ?? '';
   }
 
   /// Called when the phone value changes.

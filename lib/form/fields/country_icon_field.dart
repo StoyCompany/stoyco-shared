@@ -13,10 +13,12 @@ class StoycoCountryPrefixIcon extends StatefulWidget {
   /// Creates a [StoycoCountryPrefixIcon].
   ///
   /// The [onCountryChanged] argument is required.
-  const StoycoCountryPrefixIcon({super.key, required this.onCountryChanged});
+  const StoycoCountryPrefixIcon(
+      {super.key, required this.onCountryChanged, this.selectedCountry});
 
   /// The callback function that is called when the selected country changes.
   final void Function(Country) onCountryChanged;
+  final Country? selectedCountry;
 
   @override
   State<StoycoCountryPrefixIcon> createState() =>
@@ -37,6 +39,12 @@ class _StoycoCountryPrefixIconState extends State<StoycoCountryPrefixIcon> {
     } else {
       return size.width * 0.3;
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    seletectedCountry.value = widget.selectedCountry;
   }
 
   @override
