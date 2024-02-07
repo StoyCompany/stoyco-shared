@@ -93,3 +93,7 @@
 ## 0.0.23
 
 - Add selectedCountry parameter to StoycoCountryPrefixIcon constructor
+
+## 0.0.24
+
+- Add StoycoValidators
