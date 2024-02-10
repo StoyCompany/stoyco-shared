@@ -23,6 +23,7 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
   final double? minHeight;
   final double? maxHeight;
   final Color? borderLabelColor;
+  final bool? readOnly;
 
   /// Creates a [ReactiveNewPhoneNumberInput].
   ///
@@ -32,6 +33,7 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
   ///
   ReactiveNewPhoneNumberInput({
     Key? key,
+    this.readOnly,
     this.minHeight,
     this.maxHeight,
     this.borderLabelColor,
@@ -107,6 +109,7 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
                         FilteringTextInputFormatter.digitsOnly
                       ],
                       keyboardType: TextInputType.phone,
+                      readOnly: readOnly ?? false,
                     ),
                   ),
                   Positioned(
