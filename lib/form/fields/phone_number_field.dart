@@ -24,6 +24,7 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
   final double? maxHeight;
   final Color? borderLabelColor;
   final bool? readOnly;
+  final bool? showErrorsOnInit;
 
   /// Creates a [ReactiveNewPhoneNumberInput].
   ///
@@ -37,6 +38,7 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
     this.minHeight,
     this.maxHeight,
     this.borderLabelColor,
+    this.showErrorsOnInit,
     TextEditingController? controller,
     String? formControlName,
     ReactiveFormFieldCallback<T>? onTap,
@@ -83,10 +85,13 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
                       controller: field._textController,
                       onTap: onTap != null ? () => onTap(field.control) : null,
                       decoration: effectiveDecoration.copyWith(
-                        errorText: state.wasTouched ? field.errorText : null,
-                        errorBorder: !state.wasTouched
-                            ? effectiveDecoration.enabledBorder
+                        errorText: state.wasTouched || showErrorsOnInit == true
+                            ? field.errorText
                             : null,
+                        errorBorder:
+                            !state.wasTouched && showErrorsOnInit != true
+                                ? effectiveDecoration.enabledBorder
+                                : null,
                         prefixIcon: StoycoCountryPrefixIcon(
                           onCountryChanged: (Country country) {
                             field.didChangeCountryValue(country);
