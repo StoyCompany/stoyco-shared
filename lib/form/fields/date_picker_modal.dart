@@ -28,6 +28,8 @@ class StoycoDatePickerModal extends StatefulWidget {
     this.validationMessages,
     required this.formControlName,
     this.initialValue,
+    this.showErrorsOnInit,
+    this.requiredErrorMessage,
   });
 
   /// The label text of the date picker.
@@ -49,6 +51,10 @@ class StoycoDatePickerModal extends StatefulWidget {
   final String formControlName;
 
   final DateTime? initialValue;
+
+  /// Whether to show errors on initialization.
+  final bool? showErrorsOnInit;
+  final String? requiredErrorMessage;
 
   @override
   State<StoycoDatePickerModal> createState() => _StoycoDatePickerModalState();
@@ -96,7 +102,8 @@ class _StoycoDatePickerModalState extends State<StoycoDatePickerModal> {
                       width: 20,
                       color: controller.text.isNotEmpty
                           ? Colors.white
-                          : touched && controller.text.isEmpty
+                          : widget.showErrorsOnInit == true ||
+                                  (touched && controller.text.isEmpty)
                               ? const Color(0xFFE02020)
                               : const Color(0xFF92929D),
                     ),
@@ -123,8 +130,10 @@ class _StoycoDatePickerModalState extends State<StoycoDatePickerModal> {
                       ),
                     ),
                   ),
-                  errorText:
-                      touched && controller.text.isEmpty ? 'Requerido' : null,
+                  errorText: widget.showErrorsOnInit == true ||
+                          (touched && controller.text.isEmpty)
+                      ? widget.requiredErrorMessage ?? 'Requerido'
+                      : null,
                   errorStyle: const TextStyle(
                     color: Color(0xFFE02020),
                     fontSize: 12,
