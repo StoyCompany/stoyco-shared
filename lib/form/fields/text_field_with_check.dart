@@ -69,7 +69,7 @@ class _StoycoTextFieldWithCheckState extends State<StoycoTextFieldWithCheck> {
 
   //oninit
   @override
-  void initState() async {
+  Future<void> initState() async {
     super.initState();
     if (widget.showErrorsOnInit == true) {
       isValid = await widget.asyncValidate(value);
