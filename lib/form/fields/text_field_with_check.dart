@@ -22,6 +22,7 @@ class StoycoTextFieldWithCheck extends StatefulWidget {
     this.inputFormatters,
     this.onChanged,
     this.readOnly,
+    this.showErrorsOnInit,
   });
 
   /// The label text of the text field.
@@ -45,6 +46,7 @@ class StoycoTextFieldWithCheck extends StatefulWidget {
   /// The validation function for the text field.
   final Future<bool> Function(String?) asyncValidate;
   final bool? readOnly;
+  final bool? showErrorsOnInit;
 
   @override
   State<StoycoTextFieldWithCheck> createState() =>
@@ -63,6 +65,15 @@ class _StoycoTextFieldWithCheckState extends State<StoycoTextFieldWithCheck> {
     setState(() {
       this.value = value;
     });
+  }
+
+  //oninit
+  @override
+  void initState() async {
+    super.initState();
+    if (widget.showErrorsOnInit == true) {
+      isValid = await widget.asyncValidate(value);
+    }
   }
 
   @override
@@ -101,7 +112,7 @@ class _StoycoTextFieldWithCheckState extends State<StoycoTextFieldWithCheck> {
                   height: 20,
                 ),
               )
-            : value.isNotEmpty
+            : value.isNotEmpty || widget.showErrorsOnInit == true
                 ? UnconstrainedBox(
                     child: SvgPicture.asset(
                       'packages/stoyco_shared/lib/assets/icons/close_icon.svg',
