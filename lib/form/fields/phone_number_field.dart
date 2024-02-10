@@ -56,7 +56,8 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
           formControl: formControl,
           formControlName: formControlName,
           validationMessages: {
-            ValidationMessage.required: (_) => 'Requerido',
+            ValidationMessage.required: (_) =>
+                'El número de celular es requerido',
             'invalid': (_) => 'Número de celular inválido',
             'requiredCountry': (error) => 'Debe seleccionar un país',
           },
