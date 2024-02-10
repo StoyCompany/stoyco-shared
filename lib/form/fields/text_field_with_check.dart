@@ -113,7 +113,7 @@ class _StoycoTextFieldWithCheckState extends State<StoycoTextFieldWithCheck> {
                   )
                 : null,
         errorBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(16)),
+          borderRadius: BorderRadius.all(Radius.circular(24)),
           borderSide: BorderSide(
             color: Color(0xFFDE2424),
             width: 1,
