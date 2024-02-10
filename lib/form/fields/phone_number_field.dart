@@ -201,6 +201,9 @@ class _NewPhoneNumberInputState<T>
   void _initializeTextController() {
     final initialValue = value;
     final currentWidget = widget as ReactiveNewPhoneNumberInput<T>;
+    if (initialValue != null) {
+      currentValue = initialValue;
+    }
     _textController = (currentWidget._textController != null)
         ? currentWidget._textController!
         : TextEditingController();
