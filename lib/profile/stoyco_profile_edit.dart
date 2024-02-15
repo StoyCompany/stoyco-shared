@@ -36,7 +36,7 @@ class StoycoProfileEditWidget extends StatelessWidget {
   /// The [userPhoto] parameter specifies the URL of the user's photo.
   /// The [onTapEdit] parameter is a callback function that is triggered when the edit button is tapped.
   const StoycoProfileEditWidget({
-    Key? key,
+    super.key,
     required this.width,
     required this.height,
     required this.borderWidth,
