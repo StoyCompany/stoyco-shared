@@ -101,3 +101,20 @@
 ## 0.0.25
 
 - Add StoycoSimplePasswordField
+
+### 0.0.26
+
+## 0.0.25
+
+- Introduced **StoycoProfileEditWidget**: A new widget to enhance the user experience in profile editing scenarios. It showcases a profile picture with an editable interface, including a customizable circular container for the image, an edit button, and various styling options. This widget is designed to facilitate intuitive interactions for updating profile photos or personal information, with a focus on flexibility and user engagement.
+
+  - Key Features:
+
+    - Visual customization options for circular container dimensions, border thickness, edit icon size and layout, and background color.
+    - Support for displaying a user photo from a URL.
+    - An `onTapEdit` callback for handling edit button interactions.
+
+  - Usage Example:
+    Demonstrates basic usage including setting dimensions, colors, user photo, and handling the edit event.
+
+This update continues the library's commitment to providing flexible, customizable components for creating engaging and functional user interfaces in Flutter applications.
