@@ -1,4 +1,4 @@
-import 'package:example/extensions/hex_color.dart';
+import 'package:stoyco_shared/extensions/hex_color.dart';
 import 'package:flutter/material.dart';
 
 class StoycoColors {

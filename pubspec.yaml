@@ -17,28 +17,40 @@ dependencies:
   vph_web_date_picker: ^0.0.5
   intl: ^0.18.1
   vph_common_widgets: ^0.0.2
+  equatable: ^2.0.5
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  firebase_messaging: ^14.7.15
+  cached_network_image: ^3.3.0
+  json_annotation: ^4.8.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
 
+  flutter_gen: ^5.3.1
+  flutter_gen_runner: ^5.3.1
+  build_runner: ^2.4.7
+  hive_generator: ^2.0.0
+  json_serializable: ^6.7.0
+
 flutter:
   assets:
-    - lib/assets/
-    - lib/assets/icons/
+    - assets/
+    - assets/icons/
+    - assets/home/
 
-  # For more details about assets in packages, see
-  # https://flutter.dev/assets-and-images/#from-packages
-# Add custom fonts if needed
-# fonts:
-#   - family: Schyler
-#     fonts:
-#       - asset: fonts/Schyler-Regular.ttf
-#       - asset: fonts/Schyler-Italic.ttf
-#         style: italic
-#   - family: Trajan Pro
-#     fonts:
-#       - asset: fonts/TrajanPro.ttf
-#       - asset: fonts/TrajanPro_Bold.ttf
-#         weight: 700
+flutter_gen:
+  output: lib/core/gen/
+  integrations:
+    flutter_svg: true
+    lottie: true
+  assets:
+    enabled: true
+    outputs:
+      class_name: AssetsShared
+  fonts:
+    enabled: true
+    outputs:
+      class_name: FontFamilyShared
