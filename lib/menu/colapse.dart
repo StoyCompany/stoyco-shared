@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
 import 'package:stoyco_shared/utils/colors.dart';
 
 /// A widget that represents a collapsible menu item.
@@ -57,7 +58,7 @@ class _ColapseState extends State<Colapse> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   widget.icon,
-                  const SizedBox(width: 10),
+                  const Gap(10),
                   Expanded(
                     child: Text(
                       widget.name,
@@ -86,12 +87,10 @@ class _ColapseState extends State<Colapse> {
                   )
                 : const SizedBox.shrink(),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Divider(
-              thickness: 1,
-              color: StoycoColors.grayText.withOpacity(0.26),
-            ),
+          Divider(
+            thickness: 1,
+            height: 30,
+            color: StoycoColors.grayText.withOpacity(0.26),
           ),
         ],
       );
