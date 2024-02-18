@@ -44,58 +44,55 @@ class _ColapseState extends State<Colapse> {
   bool isExpanded = false;
 
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(left: 30, right: 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            InkWell(
-              onTap: () => setState(() {
-                isExpanded = !isExpanded;
-              }),
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 11, top: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    widget.icon,
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        widget.name,
-                        style: TextStyle(
-                          color: StoycoColors.grayText,
-                          fontSize: 16,
-                          fontFamily: 'Akkurat Pro',
-                          fontWeight: FontWeight.w700,
-                        ),
+  Widget build(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          InkWell(
+            onTap: () => setState(() {
+              isExpanded = !isExpanded;
+            }),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 11, top: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  widget.icon,
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      widget.name,
+                      style: TextStyle(
+                        color: StoycoColors.grayText,
+                        fontSize: 16,
+                        fontFamily: 'Akkurat Pro',
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
-                    SvgPicture.asset(isExpanded
-                        ? 'packages/stoyco_shared/lib/assets/icons/arrowUp.svg'
-                        : 'packages/stoyco_shared/lib/assets/icons/arrowDown.svg'),
-                  ],
-                ),
+                  ),
+                  SvgPicture.asset(isExpanded
+                      ? 'packages/stoyco_shared/lib/assets/icons/arrowUp.svg'
+                      : 'packages/stoyco_shared/lib/assets/icons/arrowDown.svg'),
+                ],
               ),
             ),
-            AnimatedOpacity(
-              opacity: isExpanded ? 1.0 : 0.0,
-              duration: const Duration(milliseconds: 300),
-              child: isExpanded
-                  ? Padding(
-                      padding: const EdgeInsets.only(left: 33),
-                      child: widget.child,
-                    )
-                  : const SizedBox.shrink(),
+          ),
+          AnimatedOpacity(
+            opacity: isExpanded ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 300),
+            child: isExpanded
+                ? Padding(
+                    padding: const EdgeInsets.only(left: 33),
+                    child: widget.child,
+                  )
+                : const SizedBox.shrink(),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Divider(
+              thickness: 1,
+              color: StoycoColors.grayText.withOpacity(0.26),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Divider(
-                thickness: 1,
-                color: StoycoColors.grayText.withOpacity(0.26),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       );
 }
