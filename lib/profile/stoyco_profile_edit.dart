@@ -130,26 +130,29 @@ class StoycoProfileEditWidget extends StatelessWidget {
           Positioned(
             bottom: 0,
             right: 0,
-            child: GestureDetector(
-              onTap: onTapEdit,
-              child: Container(
-                width: editIconContainerWidth,
-                height: editIconContainerHeight,
-                padding: const EdgeInsets.all(8),
-                decoration: ShapeDecoration(
-                  gradient: const LinearGradient(
-                    begin: Alignment(0.00, -1.00),
-                    end: Alignment(0, 1),
-                    colors: [Color(0xFF1C197F), Color(0xFF4639E7)],
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: onTapEdit,
+                child: Container(
+                  width: editIconContainerWidth,
+                  height: editIconContainerHeight,
+                  padding: const EdgeInsets.all(8),
+                  decoration: ShapeDecoration(
+                    gradient: const LinearGradient(
+                      begin: Alignment(0.00, -1.00),
+                      end: Alignment(0, 1),
+                      colors: [Color(0xFF1C197F), Color(0xFF4639E7)],
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(56),
+                    ),
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(56),
+                  child: SvgPicture.asset(
+                    'packages/stoyco_shared/lib/assets/icons/edit_icon.svg',
+                    width: editIconWidth,
+                    height: editIconHeight,
                   ),
-                ),
-                child: SvgPicture.asset(
-                  'packages/stoyco_shared/lib/assets/icons/edit_icon.svg',
-                  width: editIconWidth,
-                  height: editIconHeight,
                 ),
               ),
             ),
