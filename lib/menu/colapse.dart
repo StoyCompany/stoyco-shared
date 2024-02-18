@@ -89,7 +89,6 @@ class _ColapseState extends State<Colapse> {
           ),
           Divider(
             thickness: 1,
-            height: 30,
             color: StoycoColors.grayText.withOpacity(0.26),
           ),
         ],
