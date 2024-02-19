@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:stoyco_shared/core/gen/assets.gen.dart';
 
 class NotificationActionWidget extends StatelessWidget {
   const NotificationActionWidget(
@@ -38,7 +37,7 @@ class NotificationActionWidget extends StatelessWidget {
             ),
           ),
           child: SvgPicture.asset(
-            AssetsShared.home.offNotification.path,
+            'packages/stoyco_shared/lib/assets/home/off_notification.svg',
             width: width,
             height: height,
             colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
