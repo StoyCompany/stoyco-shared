@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:stoyco_shared/core/gen/assets.gen.dart';
 import 'package:stoyco_shared/notification/model/notification_model.dart';
 
 class NotificationsCard extends StatelessWidget {
@@ -130,7 +129,7 @@ class NotificationsCard extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 7.5),
                           child: SvgPicture.asset(
-                            AssetsShared.home.horizontalDots.path,
+                            'packages/stoyco_shared/lib/assets/home/horizontal_dots.svg',
                           ),
                         ),
                       ),
