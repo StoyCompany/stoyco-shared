@@ -37,20 +37,6 @@ dev_dependencies:
 
 flutter:
   assets:
-    - assets/
-    - assets/icons/
-    - assets/home/
-
-flutter_gen:
-  output: lib/core/gen/
-  integrations:
-    flutter_svg: true
-    lottie: true
-  assets:
-    enabled: true
-    outputs:
-      class_name: AssetsShared
-  fonts:
-    enabled: true
-    outputs:
-      class_name: FontFamilyShared
+    - lib/assets/
+    - lib/assets/icons/
+    - lib/assets/home/
