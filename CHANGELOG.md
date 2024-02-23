@@ -1,3 +1,11 @@
+## 1.0.2
+
+- Added StoycoEditPhotoWidget: A new widget to further enhance profile management and customization. The StoycoEditPhotoWidget is designed to offer a more advanced and interactive way for users to manage their profile photos, including features such as editing and updating their image directly from the UI.
+  - Key Features:
+    - Provides a customizable circular container for the user photo, with options for dimensions, border thickness, and background color.
+    - Includes an edit button with customizable icon and layout, allowing users to trigger the photo editing process.
+    - Offers a flexible `onTapEdit` callback for handling edit button interactions, enabling developers to implement custom photo editing logic.
+
 ## 1.0.1
 
 - Updated icon resource files: This release includes updates to the icon resource files, ensuring that the latest icons are available for use within the library. This enhancement improves the visual elements available to developers, offering more options for UI customization.
