@@ -79,6 +79,7 @@ class StoycoDatePicker extends StatelessWidget {
                       withoutActionButtons: true,
                       pickerWidth: pickerWidth,
                       pickerHeight: pickerHeight,
+                      width: pickerWidth,
                     );
                     value.value = pickedDate ?? value.value;
                   },
