@@ -39,6 +39,8 @@ Future<DateTime?> showWebDatePicker({
       lastDate: lastDate ?? DateTime(100000),
       withoutActionButtons: withoutActionButtons ?? false,
       weekendDaysColor: weekendDaysColor,
+      pickerWidth: pickerWidth,
+      pickerHeight: pickerHeight,
     ),
     asDropDown: true,
     useTargetWidth: width != null ? false : true,
