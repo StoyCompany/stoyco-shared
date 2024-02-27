@@ -33,20 +33,12 @@ Future<DateTime?> showWebDatePicker({
 }) {
   return showPopupDialog(
     context,
-    (context) => ConstrainedBox(
-      constraints: BoxConstraints(
-        minWidth: 300,
-        maxWidth: 400,
-        minHeight: 300,
-        maxHeight: 450,
-      ),
-      child: _WebDatePicker(
-        initialDate: initialDate,
-        firstDate: firstDate ?? DateTime(0),
-        lastDate: lastDate ?? DateTime(100000),
-        withoutActionButtons: withoutActionButtons ?? false,
-        weekendDaysColor: weekendDaysColor,
-      ),
+    (context) => _WebDatePicker(
+      initialDate: initialDate,
+      firstDate: firstDate ?? DateTime(0),
+      lastDate: lastDate ?? DateTime(100000),
+      withoutActionButtons: withoutActionButtons ?? false,
+      weekendDaysColor: weekendDaysColor,
     ),
     asDropDown: true,
     useTargetWidth: width != null ? false : true,
@@ -61,6 +53,8 @@ class _WebDatePicker extends StatefulWidget {
     required this.lastDate,
     required this.withoutActionButtons,
     this.weekendDaysColor,
+    this.pickerWidth,
+    this.pickerHeight,
   });
 
   final DateTime initialDate;
@@ -68,6 +62,8 @@ class _WebDatePicker extends StatefulWidget {
   final DateTime lastDate;
   final bool withoutActionButtons;
   final Color? weekendDaysColor;
+  final double? pickerWidth;
+  final double? pickerHeight;
 
   @override
   State<_WebDatePicker> createState() => _WebDatePickerState();
@@ -409,57 +405,30 @@ class _WebDatePickerState extends State<_WebDatePicker> {
         nextView = false;
         break;
     }
-    return Card(
-      margin:
-          const EdgeInsets.only(left: 1.0, top: 4.0, right: 1.0, bottom: 2.0),
-      elevation: 1.0,
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            /// Navigation
-            Row(
-              children: [
-                isFirst
-                    ? SvgPicture.asset(
-                        'packages/stoyco_shared/lib/assets/icons/arrow_back.svg',
-                        height: 24,
-                        width: 24,
-                        color: Colors.black.withOpacity(0.3),
-                      )
-                    : GestureDetector(
-                        onTap: () => _onStartDateChanged(next: false),
-                        child: SvgPicture.asset(
-                          'packages/stoyco_shared/lib/assets/icons/arrow_back.svg',
-                          height: 24,
-                          width: 24,
-                          color: Colors.black,
-                        ),
-                      ),
-                nextView
-                    ? Expanded(
-                        child: InkWell(
-                          onTap: () => _onViewModeChanged(next: true),
-                          borderRadius: BorderRadius.circular(4.0),
-                          child: navTitle,
-                        ),
-                      )
-                    : Expanded(child: navTitle),
-                isLast
-                    ? RotatedBox(
-                        quarterTurns: 2,
-                        child: SvgPicture.asset(
+    return SizedBox(
+      width: widget.pickerWidth,
+      height: widget.pickerHeight,
+      child: Card(
+        margin:
+            const EdgeInsets.only(left: 1.0, top: 4.0, right: 1.0, bottom: 2.0),
+        elevation: 1.0,
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              /// Navigation
+              Row(
+                children: [
+                  isFirst
+                      ? SvgPicture.asset(
                           'packages/stoyco_shared/lib/assets/icons/arrow_back.svg',
                           height: 24,
                           width: 24,
                           color: Colors.black.withOpacity(0.3),
-                        ),
-                      )
-                    : GestureDetector(
-                        onTap: () => _onStartDateChanged(next: true),
-                        child: RotatedBox(
-                          quarterTurns: 2,
+                        )
+                      : GestureDetector(
+                          onTap: () => _onStartDateChanged(next: false),
                           child: SvgPicture.asset(
                             'packages/stoyco_shared/lib/assets/icons/arrow_back.svg',
                             height: 24,
@@ -467,75 +436,106 @@ class _WebDatePickerState extends State<_WebDatePicker> {
                             color: Colors.black,
                           ),
                         ),
-                      )
-              ],
-            ),
-
-            /// Month view
-            ClipRRect(
-              child: AnimatedSwitcher(
-                duration: _kSlideTransitionDuration,
-                transitionBuilder: (child, animation) {
-                  if (_isViewModeChanged) {
-                    return ScaleTransition(
-                      scale: animation,
-                      child: child,
-                    );
-                  } else {
-                    double dx = (child.key as _PickerKey).date == _startDate
-                        ? 1.0
-                        : -1.0;
-                    return SlideTransition(
-                      position: Tween<Offset>(
-                              begin: Offset(dx * _slideDirection, 0.0),
-                              end: const Offset(0.0, 0.0))
-                          .animate(animation),
-                      child: child,
-                    );
-                  }
-                },
-                child: _buildChild(theme),
+                  nextView
+                      ? Expanded(
+                          child: InkWell(
+                            onTap: () => _onViewModeChanged(next: true),
+                            borderRadius: BorderRadius.circular(4.0),
+                            child: navTitle,
+                          ),
+                        )
+                      : Expanded(child: navTitle),
+                  isLast
+                      ? RotatedBox(
+                          quarterTurns: 2,
+                          child: SvgPicture.asset(
+                            'packages/stoyco_shared/lib/assets/icons/arrow_back.svg',
+                            height: 24,
+                            width: 24,
+                            color: Colors.black.withOpacity(0.3),
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () => _onStartDateChanged(next: true),
+                          child: RotatedBox(
+                            quarterTurns: 2,
+                            child: SvgPicture.asset(
+                              'packages/stoyco_shared/lib/assets/icons/arrow_back.svg',
+                              height: 24,
+                              width: 24,
+                              color: Colors.black,
+                            ),
+                          ),
+                        )
+                ],
               ),
-            ),
 
-            /// Actions
-            Row(
-              children: [
-                /// Reset
-                if (!widget.withoutActionButtons)
-                  _iconWidget(Icons.restart_alt,
-                      tooltip: "Reset", onTap: _onResetState),
-                if (!widget.withoutActionButtons) const SizedBox(width: 4.0),
-
-                /// Today
-                if (!widget.withoutActionButtons)
-                  _iconWidget(Icons.today,
-                      tooltip: "Today", onTap: _onStartDateChanged),
-                const Spacer(),
-
-                /// CANCEL
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text(
-                    "Cancelar",
-                    style: TextStyle(color: Color(0xff92929D)),
-                  ),
+              /// Month view
+              ClipRRect(
+                child: AnimatedSwitcher(
+                  duration: _kSlideTransitionDuration,
+                  transitionBuilder: (child, animation) {
+                    if (_isViewModeChanged) {
+                      return ScaleTransition(
+                        scale: animation,
+                        child: child,
+                      );
+                    } else {
+                      double dx = (child.key as _PickerKey).date == _startDate
+                          ? 1.0
+                          : -1.0;
+                      return SlideTransition(
+                        position: Tween<Offset>(
+                                begin: Offset(dx * _slideDirection, 0.0),
+                                end: const Offset(0.0, 0.0))
+                            .animate(animation),
+                        child: child,
+                      );
+                    }
+                  },
+                  child: _buildChild(theme),
                 ),
+              ),
 
-                /// OK
-                if (_viewMode == _PickerViewMode.day) ...[
-                  const SizedBox(width: 4.0),
+              /// Actions
+              Row(
+                children: [
+                  /// Reset
+                  if (!widget.withoutActionButtons)
+                    _iconWidget(Icons.restart_alt,
+                        tooltip: "Reset", onTap: _onResetState),
+                  if (!widget.withoutActionButtons) const SizedBox(width: 4.0),
+
+                  /// Today
+                  if (!widget.withoutActionButtons)
+                    _iconWidget(Icons.today,
+                        tooltip: "Today", onTap: _onStartDateChanged),
+                  const Spacer(),
+
+                  /// CANCEL
                   TextButton(
-                    onPressed: () => Navigator.of(context).pop(_selectedDate),
+                    onPressed: () => Navigator.of(context).pop(),
                     child: const Text(
-                      "Aceptar",
-                      style: TextStyle(color: Color(0xff1C197F)),
+                      "Cancelar",
+                      style: TextStyle(color: Color(0xff92929D)),
                     ),
                   ),
+
+                  /// OK
+                  if (_viewMode == _PickerViewMode.day) ...[
+                    const SizedBox(width: 4.0),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(_selectedDate),
+                      child: const Text(
+                        "Aceptar",
+                        style: TextStyle(color: Color(0xff1C197F)),
+                      ),
+                    ),
+                  ],
                 ],
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
