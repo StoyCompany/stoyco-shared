@@ -20,6 +20,8 @@ class StoycoDatePicker extends StatelessWidget {
     required this.hintText,
     this.validationMessages,
     required this.formControlName,
+    this.pickerWidth,
+    this.pickerHeight,
   });
 
   /// The label text of the date picker.
@@ -36,6 +38,10 @@ class StoycoDatePicker extends StatelessWidget {
 
   /// The validation messages for the date picker.
   final Map<String, String Function(Object)>? validationMessages;
+
+  final double? pickerWidth;
+
+  final double? pickerHeight;
 
   /// The name of the form control.
   final String formControlName;

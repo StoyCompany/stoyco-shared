@@ -28,11 +28,14 @@ Future<DateTime?> showWebDatePicker({
   double? width,
   bool? withoutActionButtons,
   Color? weekendDaysColor,
+  double? pickerWidth,
+  double? pickerHeight,
 }) {
   return showPopupDialog(
     context,
-    (context) => Container(
-      height: 400,
+    (context) => SizedBox(
+      height: pickerHeight,
+      width: pickerWidth,
       child: _WebDatePicker(
         initialDate: initialDate,
         firstDate: firstDate ?? DateTime(0),
