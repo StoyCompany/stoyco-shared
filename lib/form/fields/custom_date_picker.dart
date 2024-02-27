@@ -48,7 +48,7 @@ Future<DateTime?> showWebDatePicker({
     ),
     asDropDown: true,
     useTargetWidth: width != null ? false : true,
-    dialogWidth: width,
+    //dialogWidth: width,
   );
 }
 
