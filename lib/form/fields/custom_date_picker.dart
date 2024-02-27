@@ -31,12 +31,15 @@ Future<DateTime?> showWebDatePicker({
 }) {
   return showPopupDialog(
     context,
-    (context) => _WebDatePicker(
-      initialDate: initialDate,
-      firstDate: firstDate ?? DateTime(0),
-      lastDate: lastDate ?? DateTime(100000),
-      withoutActionButtons: withoutActionButtons ?? false,
-      weekendDaysColor: weekendDaysColor,
+    (context) => Container(
+      height: 400,
+      child: _WebDatePicker(
+        initialDate: initialDate,
+        firstDate: firstDate ?? DateTime(0),
+        lastDate: lastDate ?? DateTime(100000),
+        withoutActionButtons: withoutActionButtons ?? false,
+        weekendDaysColor: weekendDaysColor,
+      ),
     ),
     asDropDown: true,
     useTargetWidth: width != null ? false : true,
