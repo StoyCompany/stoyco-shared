@@ -33,7 +33,7 @@ class TextButtonStoyco extends StatelessWidget {
     this.backgroundColor,
     this.fontSize = 16,
     this.fontWeight = FontWeight.w400,
-    this.blurRadius,
+    this.boxShadow,
   });
 
   final String text;
@@ -44,7 +44,7 @@ class TextButtonStoyco extends StatelessWidget {
   final Color? backgroundColor;
   final double fontSize;
   final FontWeight fontWeight;
-  final double? blurRadius;
+  final List<BoxShadow>? boxShadow;
 
   @override
   Widget build(BuildContext context) {
@@ -89,18 +89,19 @@ class TextButtonStoyco extends StatelessWidget {
                       ],
                     )
                   : null,
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF2B3445).withOpacity(0.5),
-                  offset: const Offset(0, -20),
-                  blurRadius: blurRadius ?? 30,
-                ),
-                const BoxShadow(
-                  color: Color(0xFF10141C),
-                  offset: Offset(0, 20),
-                  blurRadius: 30,
-                ),
-              ],
+              boxShadow: boxShadow ??
+                  [
+                    BoxShadow(
+                      color: const Color(0xFF2B3445).withOpacity(0.5),
+                      offset: const Offset(0, -20),
+                      blurRadius: 30,
+                    ),
+                    const BoxShadow(
+                      color: Color(0xFF10141C),
+                      offset: Offset(0, 20),
+                      blurRadius: 30,
+                    ),
+                  ],
             ),
             child: center,
           ),
