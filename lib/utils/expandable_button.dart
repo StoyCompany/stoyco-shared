@@ -146,35 +146,3 @@ class _ExpandableButtonState extends State<ExpandableButton> {
     );
   }
 }
-
-final Decoration decorationSesh = BoxDecoration(
-  gradient: const LinearGradient(
-    begin: Alignment.topLeft, // Comienzo del gradiente
-    end: Alignment.bottomRight, // Fin del gradiente
-    // Los ángulos en Flutter se manejan a través de la dirección de "begin" a "end"
-    // En este caso, usamos topLeft a bottomRight para simular la dirección de 146 grados.
-    colors: [
-      Color.fromRGBO(255, 255, 255, 0.31),
-      Color.fromRGBO(255, 255, 255, 0.04),
-    ],
-    stops: [0.0618, 0.9001], // Puntos de parada correspondientes al CSS
-  ),
-  boxShadow: [
-    BoxShadow(
-      color: Colors.white.withOpacity(0.1), // Sombra con opacidad
-      spreadRadius: 3,
-      blurRadius: 6,
-      offset: const Offset(
-        0,
-        3,
-      ), // Cambios de posición de la sombra
-    ),
-  ],
-  borderRadius: BorderRadius.circular(
-    100,
-  ),
-  border: Border.all(
-    color: Colors.white.withOpacity(0.2),
-    width: 1,
-  ),
-);
