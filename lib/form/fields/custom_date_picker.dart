@@ -33,9 +33,13 @@ Future<DateTime?> showWebDatePicker({
 }) {
   return showPopupDialog(
     context,
-    (context) => SizedBox(
-      height: pickerHeight,
-      width: pickerWidth,
+    (context) => ConstrainedBox(
+      constraints: BoxConstraints(
+        minWidth: 300,
+        maxWidth: 400,
+        minHeight: 300,
+        maxHeight: 450,
+      ),
       child: _WebDatePicker(
         initialDate: initialDate,
         firstDate: firstDate ?? DateTime(0),
