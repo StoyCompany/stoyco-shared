@@ -1,3 +1,15 @@
+## 1.0.3
+
+- Added imports for text buttons and expandable buttons in `utils.dart`: This update enhances the utility file by incorporating additional imports specifically for text buttons and expandable buttons. This inclusion broadens the scope of readily available UI components for developers, facilitating easier access and implementation of these common interactive elements within their applications.
+
+  - Key Enhancements:
+
+    - **Text Buttons**: Now more accessible for implementation, text buttons are essential for simple, text-based user interactions within the UI.
+    - **Expandable Buttons**: Catering to more dynamic UI requirements, the addition of expandable buttons allows for a richer, more engaging user experience with collapsible and expandable content.
+
+  - Impact:
+    This update streamlines the development process by ensuring that commonly used button types are easily accessible, reducing the need for repetitive code and promoting a more efficient workflow. These components are crucial for creating intuitive and user-friendly interfaces, thereby enhancing the overall user experience in applications built with this library.
+
 ## 1.0.2
 
 - Added StoycoEditPhotoWidget: A new widget to further enhance profile management and customization. The StoycoEditPhotoWidget is designed to offer a more advanced and interactive way for users to manage their profile photos, including features such as editing and updating their image directly from the UI.
