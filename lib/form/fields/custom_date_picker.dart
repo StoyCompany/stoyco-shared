@@ -407,9 +407,16 @@ class _WebDatePickerState extends State<_WebDatePicker> {
         nextView = false;
         break;
     }
-    return SizedBox(
-      width: widget.pickerWidth,
-      height: widget.pickerHeight,
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minWidth: widget.pickerWidth ??
+            300.0, // Asegura un ancho mínimo si no se especifica uno
+        maxWidth: widget.pickerWidth ??
+            300.0, // Asegura que el ancho máximo sea igual al mínimo para fijarlo
+        minHeight: widget.pickerHeight ?? 400.0, // Asegura un alto mínimo
+        maxHeight: widget.pickerHeight ??
+            400.0, // Asegura que el alto máximo sea igual al mínimo para fijarlo
+      ),
       child: Card(
         margin:
             const EdgeInsets.only(left: 1.0, top: 4.0, right: 1.0, bottom: 2.0),
