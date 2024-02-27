@@ -29,6 +29,7 @@ Future<T?> showStoycoModal<T>({
   double? height,
   bool? showDivider,
   BoxDecoration? decoration,
+  TextStyle? titleTextStyle,
 }) =>
     showModalBottomSheet(
       context: context,
@@ -41,6 +42,7 @@ Future<T?> showStoycoModal<T>({
         height: height ?? 400,
         showDivider: showDivider ?? true,
         decoration: decoration,
+        titleTextStyle: titleTextStyle,
         child: child,
       ),
     );
@@ -101,6 +103,7 @@ class StoycoContainerModal extends StatelessWidget {
     this.onTapCancel,
     this.showActions = false,
     this.showDivider = true,
+    this.titleTextStyle,
   });
 
   final Widget child;
@@ -112,6 +115,7 @@ class StoycoContainerModal extends StatelessWidget {
   final void Function()? onTapCancel;
   final bool showActions;
   final bool showDivider;
+  final TextStyle? titleTextStyle;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -139,13 +143,14 @@ class StoycoContainerModal extends StatelessWidget {
             const Gap(36),
             Text(
               title,
-              style: const TextStyle(
-                fontFamily: 'Akkurat Pro',
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Color(0xfff2f2fa),
-                decoration: TextDecoration.none,
-              ),
+              style: titleTextStyle ??
+                  const TextStyle(
+                    fontFamily: 'Akkurat Pro',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xfff2f2fa),
+                    decoration: TextDecoration.none,
+                  ),
               textAlign: TextAlign.center,
             ),
             const Gap(16),
