@@ -42,6 +42,12 @@ class $LibAssetsIconsGen {
   /// File path: lib/assets/icons/arrow-down-icon.svg
   String get arrowDownIcon => 'lib/assets/icons/arrow-down-icon.svg';
 
+  /// File path: lib/assets/icons/arrowDown.svg
+  String get arrowDown => 'lib/assets/icons/arrowDown.svg';
+
+  /// File path: lib/assets/icons/arrowUp.svg
+  String get arrowUp => 'lib/assets/icons/arrowUp.svg';
+
   /// File path: lib/assets/icons/arrow_back.svg
   String get arrowBack => 'lib/assets/icons/arrow_back.svg';
 
@@ -60,6 +66,9 @@ class $LibAssetsIconsGen {
   /// File path: lib/assets/icons/down_arrow_icon.svg
   String get downArrowIcon => 'lib/assets/icons/down_arrow_icon.svg';
 
+  /// File path: lib/assets/icons/edit_icon.svg
+  String get editIcon => 'lib/assets/icons/edit_icon.svg';
+
   /// File path: lib/assets/icons/keyboard_arrow_down_white_18dp.svg
   String get keyboardArrowDownWhite18dp =>
       'lib/assets/icons/keyboard_arrow_down_white_18dp.svg';
@@ -67,12 +76,15 @@ class $LibAssetsIconsGen {
   /// List of all assets
   List<String> get values => [
         arrowDownIcon,
+        arrowDown,
+        arrowUp,
         arrowBack,
         calendar,
         checkIcon,
         closeIcon,
         doneWhite18dp,
         downArrowIcon,
+        editIcon,
         keyboardArrowDownWhite18dp
       ];
 }

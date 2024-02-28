@@ -33,6 +33,7 @@ class TextButtonStoyco extends StatelessWidget {
     this.backgroundColor,
     this.fontSize = 16,
     this.fontWeight = FontWeight.w400,
+    this.boxShadow,
   });
 
   final String text;
@@ -43,14 +44,14 @@ class TextButtonStoyco extends StatelessWidget {
   final Color? backgroundColor;
   final double fontSize;
   final FontWeight fontWeight;
+  final List<BoxShadow>? boxShadow;
 
   @override
   Widget build(BuildContext context) {
     final center = Center(
       child: isLoading
           ? const CircularProgressIndicator(
-              valueColor:
-                  AlwaysStoppedAnimation<Color>(Color(0xFFFAFAFA)),
+              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFAFAFA)),
             )
           : Text(
               text,
@@ -88,18 +89,19 @@ class TextButtonStoyco extends StatelessWidget {
                       ],
                     )
                   : null,
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF2B3445).withOpacity(0.5),
-                  offset: const Offset(0, -20),
-                  blurRadius: 30,
-                ),
-                const BoxShadow(
-                  color: Color(0xFF10141C),
-                  offset: Offset(0, 20),
-                  blurRadius: 30,
-                ),
-              ],
+              boxShadow: boxShadow ??
+                  [
+                    BoxShadow(
+                      color: const Color(0xFF2B3445).withOpacity(0.5),
+                      offset: const Offset(0, -20),
+                      blurRadius: 30,
+                    ),
+                    const BoxShadow(
+                      color: Color(0xFF10141C),
+                      offset: Offset(0, 20),
+                      blurRadius: 30,
+                    ),
+                  ],
             ),
             child: center,
           ),

@@ -27,6 +27,9 @@ Future<T?> showStoycoModal<T>({
   void Function()? onTapCancel,
   bool? showActions,
   double? height,
+  bool? showDivider,
+  BoxDecoration? decoration,
+  TextStyle? titleTextStyle,
 }) =>
     showModalBottomSheet(
       context: context,
@@ -37,6 +40,9 @@ Future<T?> showStoycoModal<T>({
         onTapCancel: onTapCancel,
         showActions: showActions ?? false,
         height: height ?? 400,
+        showDivider: showDivider ?? true,
+        decoration: decoration,
+        titleTextStyle: titleTextStyle,
         child: child,
       ),
     );
@@ -60,6 +66,18 @@ Future<T?> showStoycoModal<T>({
 /// )
 /// ```
 
+/// A modal container widget used in the Stoyco application.
+///
+/// This widget displays a container with a title, child widget, and optional actions.
+/// The container has a specified height, padding, and decoration.
+/// By default, the container has a rounded border and a specific color.
+/// The title is displayed at the top of the container.
+/// The child widget is displayed below the title.
+/// If [showActions] is true, additional actions are displayed at the bottom of the container.
+/// The actions include a cancel button and an accept button.
+/// The cancel button triggers [onTapCancel] when pressed.
+/// The accept button triggers [onTapAccept] when pressed.
+/// The [showDivider] property determines whether to show a divider between the title and the child widget.
 class StoycoContainerModal extends StatelessWidget {
   /// Constructs a [StoycoContainerModal] widget.
   ///
@@ -67,6 +85,11 @@ class StoycoContainerModal extends StatelessWidget {
   /// The [height] parameter specifies the height of the container. The default value is 400.
   /// The [padding] parameter specifies the padding around the container. The default value is `EdgeInsets.symmetric(vertical: 12)`.
   /// The [decoration] parameter specifies the decoration of the container. The default value is a BoxDecoration with a rounded border and a specific color.
+  /// The [title] parameter specifies the title of the container.
+  /// The [onTapAccept] parameter specifies the callback function when the accept button is pressed.
+  /// The [onTapCancel] parameter specifies the callback function when the cancel button is pressed.
+  /// The [showActions] parameter determines whether to show the actions at the bottom of the container. The default value is false.
+  /// The [showDivider] parameter determines whether to show a divider between the title and the child widget. The default value is true.
   const StoycoContainerModal({
     super.key,
     required this.child,
@@ -74,34 +97,39 @@ class StoycoContainerModal extends StatelessWidget {
     this.padding = const EdgeInsets.symmetric(
       vertical: 12,
     ),
-    this.decoration = const BoxDecoration(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(24),
-        topRight: Radius.circular(24),
-      ),
-      color: Color(0xff253341),
-    ),
+    this.decoration,
     required this.title,
     this.onTapAccept,
     this.onTapCancel,
     this.showActions = false,
+    this.showDivider = true,
+    this.titleTextStyle,
   });
 
   final Widget child;
   final double height;
   final EdgeInsets padding;
-  final BoxDecoration decoration;
+  final BoxDecoration? decoration;
   final String title;
   final void Function()? onTapAccept;
   final void Function()? onTapCancel;
   final bool showActions;
+  final bool showDivider;
+  final TextStyle? titleTextStyle;
 
   @override
   Widget build(BuildContext context) => Container(
         height: height,
         width: double.infinity,
         padding: padding,
-        decoration: decoration,
+        decoration: decoration ??
+            const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(24),
+                topRight: Radius.circular(24),
+              ),
+              color: Color(0xff253341),
+            ),
         child: Column(
           children: [
             Container(
@@ -115,22 +143,24 @@ class StoycoContainerModal extends StatelessWidget {
             const Gap(36),
             Text(
               title,
-              style: const TextStyle(
-                fontFamily: 'Akkurat Pro',
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Color(0xfff2f2fa),
-                decoration: TextDecoration.none,
-              ),
+              style: titleTextStyle ??
+                  const TextStyle(
+                    fontFamily: 'Akkurat Pro',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xfff2f2fa),
+                    decoration: TextDecoration.none,
+                  ),
               textAlign: TextAlign.center,
             ),
             const Gap(16),
-            const Divider(
-              color: Color(0xff92929d),
-              thickness: 1,
-              indent: 32,
-              endIndent: 32,
-            ),
+            if (showDivider)
+              const Divider(
+                color: Color(0xff92929d),
+                thickness: 1,
+                indent: 32,
+                endIndent: 32,
+              ),
             child,
             showActions
                 ? Column(
