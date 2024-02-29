@@ -126,8 +126,6 @@ class _ExpandableButtonState extends State<ExpandableButton> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  widget.icon ?? const Icon(Icons.add, color: Colors.white),
-                  if (_isExpanded) const Gap(8),
                   if (_isExpanded)
                     Flexible(
                       child: Text(widget.text ?? 'Click Me',
@@ -137,6 +135,8 @@ class _ExpandableButtonState extends State<ExpandableButton> {
                                 overflow: TextOverflow.ellipsis,
                               )),
                     ),
+                  if (_isExpanded) const Gap(8),
+                  widget.icon ?? const Icon(Icons.add, color: Colors.white),
                 ],
               ),
             ),
