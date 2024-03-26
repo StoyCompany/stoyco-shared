@@ -23,6 +23,9 @@ dependencies:
   firebase_messaging: ^14.7.15
   cached_network_image: ^3.3.0
   json_annotation: ^4.8.1
+  dio: ^5.4.2
+  logger: ^2.2.0
+  firebase_core_platform_interface: ^5.0.0
 
 dev_dependencies:
   flutter_test:
