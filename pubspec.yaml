@@ -1,6 +1,6 @@
 name: stoyco_shared
 description: A set of shared components for Stoyco Flutter projects.
-version: 1.0.2
+version: 2.0.0
 
 environment:
   sdk: ">=3.1.2 <4.0.0"
@@ -23,7 +23,6 @@ dependencies:
   firebase_messaging: ^14.7.15
   cached_network_image: ^3.3.0
   json_annotation: ^4.8.1
-  dio: ^5.4.2
   logger: ^2.2.0
   firebase_core_platform_interface: ^5.0.0
 
