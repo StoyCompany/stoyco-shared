@@ -60,9 +60,9 @@ class StoycoCupertinoDatePicker extends StatefulWidget {
   // Initially selected date
   final DateTime? selectedDate;
 
-  final String cancelText;
-  final String confirmText;
-  final Color cancelColor;
+  final String? cancelText;
+  final String? confirmText;
+  final Color? cancelColor;
 
   const StoycoCupertinoDatePicker(
       {Key? key,
@@ -154,10 +154,10 @@ class _StoycoCupertinoDatePickerState extends State<StoycoCupertinoDatePicker> {
     _selectedMonthIndex = _selectedDate.month - 1;
     _selectedYearIndex = _selectedDate.year - _minDate.year;
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) => {
-        _scrollList(_dayScrollController, _selectedDayIndex),
-        _scrollList(_monthScrollController, _selectedMonthIndex),
-        _scrollList(_yearScrollController, _selectedYearIndex),
+      (_) {
+        _scrollList(_dayScrollController, _selectedDayIndex);
+        _scrollList(_monthScrollController, _selectedMonthIndex);
+        _scrollList(_yearScrollController, _selectedYearIndex);
       },
     );
   }
@@ -430,7 +430,7 @@ class _StoycoCupertinoDatePickerState extends State<StoycoCupertinoDatePicker> {
                       Navigator.of(context).pop();
                     },
                     child: Text(
-                      widget.cancelText,
+                      widget.cancelText ?? 'Cancelar',
                       style: TextStyle(
                         fontFamily: 'Akkurat Pro',
                         fontSize: 16,
@@ -444,7 +444,7 @@ class _StoycoCupertinoDatePickerState extends State<StoycoCupertinoDatePicker> {
                 const Gap(16),
                 Expanded(
                   child: TextButtonStoyco(
-                    text: widget.confirmText,
+                    text: widget.confirmText ?? 'Seleccionar',
                     height: 40,
                     onTap: () {
                       Navigator.of(context).pop(_selectedDate);
