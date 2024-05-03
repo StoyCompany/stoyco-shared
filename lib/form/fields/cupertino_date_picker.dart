@@ -59,24 +59,32 @@ class StoycoCupertinoDatePicker extends StatefulWidget {
   final DateTime? maxDate;
   // Initially selected date
   final DateTime? selectedDate;
-  const StoycoCupertinoDatePicker({
-    Key? key,
-    required this.itemExtent,
-    required this.onSelectedItemChanged,
-    this.minDate,
-    this.maxDate,
-    this.selectedDate,
-    this.selectedStyle,
-    this.unselectedStyle,
-    this.disabledStyle,
-    this.backgroundColor,
-    this.squeeze = 1.45,
-    this.diameterRatio = 1.1,
-    this.magnification = 1.0,
-    this.offAxisFraction = 0.0,
-    this.useMagnifier = false,
-    this.selectionOverlay = const CupertinoPickerDefaultSelectionOverlay(),
-  }) : super(key: key);
+
+  final String? cancelText;
+  final String? confirmText;
+  final Color? cancelColor;
+
+  const StoycoCupertinoDatePicker(
+      {Key? key,
+      required this.itemExtent,
+      required this.onSelectedItemChanged,
+      this.minDate,
+      this.maxDate,
+      this.selectedDate,
+      this.selectedStyle,
+      this.unselectedStyle,
+      this.disabledStyle,
+      this.backgroundColor,
+      this.squeeze = 1.45,
+      this.diameterRatio = 1.1,
+      this.magnification = 1.0,
+      this.offAxisFraction = 0.0,
+      this.useMagnifier = false,
+      this.selectionOverlay = const CupertinoPickerDefaultSelectionOverlay(),
+      this.cancelText = 'Cancelar',
+      this.confirmText = 'Aceptar',
+      this.cancelColor = const Color(0xffde2424)})
+      : super(key: key);
   @override
   State<StoycoCupertinoDatePicker> createState() =>
       _StoycoCupertinoDatePickerState();
@@ -146,10 +154,10 @@ class _StoycoCupertinoDatePickerState extends State<StoycoCupertinoDatePicker> {
     _selectedMonthIndex = _selectedDate.month - 1;
     _selectedYearIndex = _selectedDate.year - _minDate.year;
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) => {
-        _scrollList(_dayScrollController, _selectedDayIndex),
-        _scrollList(_monthScrollController, _selectedMonthIndex),
-        _scrollList(_yearScrollController, _selectedYearIndex),
+      (_) {
+        _scrollList(_dayScrollController, _selectedDayIndex);
+        _scrollList(_monthScrollController, _selectedMonthIndex);
+        _scrollList(_yearScrollController, _selectedYearIndex);
       },
     );
   }
@@ -421,13 +429,13 @@ class _StoycoCupertinoDatePickerState extends State<StoycoCupertinoDatePicker> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Text(
-                      'Cancelar',
+                    child: Text(
+                      widget.cancelText ?? 'Cancelar',
                       style: TextStyle(
                         fontFamily: 'Akkurat Pro',
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xffde2424),
+                        color: widget.cancelColor,
                         decoration: TextDecoration.none,
                       ),
                     ),
@@ -436,7 +444,7 @@ class _StoycoCupertinoDatePickerState extends State<StoycoCupertinoDatePicker> {
                 const Gap(16),
                 Expanded(
                   child: TextButtonStoyco(
-                    text: 'Aceptar',
+                    text: widget.confirmText ?? 'Seleccionar',
                     height: 40,
                     onTap: () {
                       Navigator.of(context).pop(_selectedDate);

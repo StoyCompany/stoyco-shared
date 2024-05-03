@@ -30,6 +30,9 @@ class StoycoDatePickerModal extends StatefulWidget {
     this.initialValue,
     this.showErrorsOnInit,
     this.requiredErrorMessage,
+    this.cancelColor,
+    this.cancelText,
+    this.confirmText,
   });
 
   /// The label text of the date picker.
@@ -55,6 +58,10 @@ class StoycoDatePickerModal extends StatefulWidget {
   /// Whether to show errors on initialization.
   final bool? showErrorsOnInit;
   final String? requiredErrorMessage;
+
+  final String? cancelText;
+  final String? confirmText;
+  final Color? cancelColor;
 
   @override
   State<StoycoDatePickerModal> createState() => _StoycoDatePickerModalState();
@@ -149,6 +156,9 @@ class _StoycoDatePickerModalState extends State<StoycoDatePickerModal> {
                       minDate: widget.firstDate,
                       maxDate: widget.lastDate ?? DateTime.now(),
                       selectedDate: picker.control.value as DateTime?,
+                      cancelColor: widget.cancelColor,
+                      confirmText: widget.confirmText,
+                      cancelText: widget.cancelText,
                     );
                     picker.control.value = result;
 
@@ -189,6 +199,9 @@ Future<DateTime> showDatePickerStoyco(
   DateTime? maxDate,
   DateTime? selectedDate,
   DateTime? minDate,
+  Color? cancelColor,
+  String? confirmText,
+  String? cancelText,
 }) async =>
     await showStoycoModal(
       context: context,
@@ -200,5 +213,8 @@ Future<DateTime> showDatePickerStoyco(
         minDate: minDate ?? DateTime(1900),
         maxDate: maxDate ?? DateTime.now(),
         selectedDate: selectedDate ?? maxDate ?? DateTime.now(),
+        cancelColor: cancelColor,
+        confirmText: confirmText,
+        cancelText: cancelText,
       ),
     );
