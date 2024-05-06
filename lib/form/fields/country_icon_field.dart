@@ -14,7 +14,7 @@ class StoycoCountryPrefixIcon extends StatefulWidget {
   ///
   /// The [onCountryChanged] argument is required.
   const StoycoCountryPrefixIcon(
-      {super.key, required this.onCountryChanged, this.selectedCountry});
+      {super.key, required this.onCountryChanged, this.selectedCountry,});
 
   /// The callback function that is called when the selected country changes.
   final void Function(Country) onCountryChanged;
@@ -60,7 +60,7 @@ class _StoycoCountryPrefixIconState extends State<StoycoCountryPrefixIcon> {
             builder: (context) => StatefulBuilder(
               builder: (ctx, setState) => Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: getPadding(), vertical: size.height * 0.1),
+                    horizontal: getPadding(), vertical: size.height * 0.1,),
                 child: CountryPickerDialog(
                   languageCode: 'es',
                   style: PickerDialogStyle(
@@ -91,21 +91,17 @@ class _StoycoCountryPrefixIconState extends State<StoycoCountryPrefixIcon> {
         borderRadius: BorderRadius.circular(16),
         child: ValueListenableBuilder(
           valueListenable: seletectedCountry,
-          builder: (BuildContext context, Country? value, Widget? child) {
-            return Row(
+          builder: (BuildContext context, Country? value, Widget? child) => Row(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Gap(4),
-                value != null
-                    ? CountryFlag.fromCountryCode(
+                if (value != null) CountryFlag.fromCountryCode(
                         value.code,
                         borderRadius: 4,
                         width: 22,
                         height: 19,
-                      )
-                    : Container(
+                      ) else Container(
                         width: 22,
                         height: 19,
                         decoration: ShapeDecoration(
@@ -137,8 +133,7 @@ class _StoycoCountryPrefixIconState extends State<StoycoCountryPrefixIcon> {
                 ),
                 const Gap(4),
               ],
-            );
-          },
+            ),
         ),
       ),
     );

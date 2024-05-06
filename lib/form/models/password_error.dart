@@ -1,10 +1,5 @@
 /// Represents an error related to password validation.
 class PasswordError {
-  /// The error message associated with the password error.
-  final String message;
-
-  /// The validator function used to validate the password.
-  final bool Function()? validator;
 
   /// Creates a new instance of the [PasswordError] class.
   ///
@@ -14,4 +9,9 @@ class PasswordError {
     required this.message,
     required this.validator,
   });
+  /// The error message associated with the password error.
+  final String message;
+
+  /// The validator function used to validate the password.
+  final bool Function()? validator;
 }

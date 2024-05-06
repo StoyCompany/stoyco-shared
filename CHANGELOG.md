@@ -1,3 +1,7 @@
+## 5.0.0
+
+- Remove unnecessary files and update dependencies
+
 ## 1.0.3
 
 - Added imports for text buttons and expandable buttons in `utils.dart`: This update enhances the utility file by incorporating additional imports specifically for text buttons and expandable buttons. This inclusion broadens the scope of readily available UI components for developers, facilitating easier access and implementation of these common interactive elements within their applications.

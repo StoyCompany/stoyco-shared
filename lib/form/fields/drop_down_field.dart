@@ -85,8 +85,7 @@ class _MyCustomDropdownState extends State<StoycoDropdown>
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
+  Widget build(BuildContext context) => Column(
       children: [
         StoyCoTextFormField(
           formControlName: widget.formControlName,
@@ -114,9 +113,7 @@ class _MyCustomDropdownState extends State<StoycoDropdown>
               }
             });
           },
-          showErrors: (control) {
-            return showErrorMessage && control.invalid && _isListViewClosed;
-          },
+          showErrors: (control) => showErrorMessage && control.invalid && _isListViewClosed,
           validationMessages:
               widget.validationMessages ?? StoycoForms.validationMessages(),
           decoration: InputDecoration(
@@ -160,7 +157,6 @@ class _MyCustomDropdownState extends State<StoycoDropdown>
                     ),
                     borderSide: BorderSide(
                       color: Color(0xFF252836),
-                      width: 1,
                     ),
                   )
                 : null,
@@ -171,7 +167,6 @@ class _MyCustomDropdownState extends State<StoycoDropdown>
               ),
               borderSide: BorderSide(
                 color: Color(0xFF252836),
-                width: 1,
               ),
             ),
             suffixIcon: UnconstrainedBox(
@@ -203,8 +198,7 @@ class _MyCustomDropdownState extends State<StoycoDropdown>
             opacity: _isDropdownOpen ? 1.0 : 0.0,
             child: ListView.builder(
               itemCount: widget.options.length,
-              itemBuilder: (context, index) {
-                return ListTile(
+              itemBuilder: (context, index) => ListTile(
                   title: Text(widget.options[index]),
                   onTap: () {
                     setState(() {
@@ -216,14 +210,12 @@ class _MyCustomDropdownState extends State<StoycoDropdown>
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                );
-              },
+                ),
             ),
           ),
         ),
       ],
     );
-  }
 
   @override
   void dispose() {

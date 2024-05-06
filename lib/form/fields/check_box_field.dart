@@ -5,14 +5,6 @@ import 'package:reactive_forms/reactive_forms.dart';
 
 /// A custom checkbox field widget with a label for Flutter applications using reactive forms.
 class StoycoCheckBoxField extends StatefulWidget {
-  /// The text to be displayed as the label for the checkbox.
-  final String labelText;
-
-  /// The form control associated with the checkbox.
-  final FormControl<bool> formControl;
-
-  /// A callback function that will be triggered when the label text is tapped.
-  final void Function()? textAction;
 
   /// Creates a [StoycoCheckBoxField].
   ///
@@ -27,6 +19,14 @@ class StoycoCheckBoxField extends StatefulWidget {
     required this.formControl,
     this.textAction,
   }) : super(key: key);
+  /// The text to be displayed as the label for the checkbox.
+  final String labelText;
+
+  /// The form control associated with the checkbox.
+  final FormControl<bool> formControl;
+
+  /// A callback function that will be triggered when the label text is tapped.
+  final void Function()? textAction;
 
   @override
   State<StoycoCheckBoxField> createState() => _StoycoCheckBoxFieldState();
@@ -50,8 +50,7 @@ class _StoycoCheckBoxFieldState extends State<StoycoCheckBoxField> {
   }
 
   /// Builds the checkbox UI.
-  Widget buildCheckBox() {
-    return Container(
+  Widget buildCheckBox() => Container(
       width: 24,
       height: 24,
       decoration: BoxDecoration(
@@ -71,11 +70,9 @@ class _StoycoCheckBoxFieldState extends State<StoycoCheckBoxField> {
             )
           : null,
     );
-  }
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
+  Widget build(BuildContext context) => Row(
       children: [
         MouseRegion(
           cursor: SystemMouseCursors.click,
@@ -106,5 +103,4 @@ class _StoycoCheckBoxFieldState extends State<StoycoCheckBoxField> {
         ),
       ],
     );
-  }
 }

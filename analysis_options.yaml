@@ -1,4 +1,24 @@
 include: package:flutter_lints/flutter.yaml
-
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+analyzer:
+  exclude: [build/**, lib/**.freezed.dart, lib/**.g.dart, test/**.mocks.dart]
+linter:
+  rules:
+    prefer_single_quotes: true
+    always_declare_return_types: true
+    always_use_package_imports: true
+    avoid_type_to_string: true
+    avoid_bool_literals_in_conditional_expressions: true
+    avoid_multiple_declarations_per_line: true
+    avoid_redundant_argument_values: true
+    avoid_void_async: true
+    eol_at_end_of_file: true
+    prefer_expression_function_bodies: true
+    prefer_final_in_for_each: true
+    prefer_final_locals: true
+    prefer_if_elements_to_conditional_expressions: true
+    require_trailing_commas: true
+    sort_constructors_first: true
+    unawaited_futures: true
+    unnecessary_breaks: true
+    unnecessary_to_list_in_spreads: true
+    use_decorated_box: true

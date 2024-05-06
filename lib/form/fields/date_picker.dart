@@ -47,8 +47,7 @@ class StoycoDatePicker extends StatelessWidget {
   final String formControlName;
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
+  Widget build(BuildContext context) => Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Column(
         children: [
@@ -61,8 +60,7 @@ class StoycoDatePicker extends StatelessWidget {
             firstDate: firstDate,
             lastDate: lastDate ?? DateTime.now(),
             locale: const Locale('es'),
-            builder: (BuildContext context, picker, child) {
-              return StoyCoTextFormField(
+            builder: (BuildContext context, picker, child) => StoyCoTextFormField(
                   labelText: labelText,
                   hintText: hintText,
                   formControlName: 'birthDate',
@@ -89,11 +87,9 @@ class StoycoDatePicker extends StatelessWidget {
                       height: 20,
                       width: 20,
                     ),
-                  ));
-            },
+                  ),),
           ),
         ],
       ),
     );
-  }
 }

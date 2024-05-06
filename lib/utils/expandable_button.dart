@@ -47,7 +47,7 @@ class ExpandableButton extends StatefulWidget {
   /// The [onPressed] parameter is a callback function that is called when the button is pressed.
   /// The [text] parameter sets the text displayed inside the button.
   const ExpandableButton({
-    Key? key,
+    super.key,
     this.color,
     this.height,
     this.minWidth,
@@ -128,12 +128,14 @@ class _ExpandableButtonState extends State<ExpandableButton> {
                 children: <Widget>[
                   if (_isExpanded)
                     Flexible(
-                      child: Text(widget.text ?? 'Click Me',
-                          style: widget.textStyle ??
-                              const TextStyle(
-                                color: Colors.white,
-                                overflow: TextOverflow.ellipsis,
-                              )),
+                      child: Text(
+                        widget.text ?? 'Click Me',
+                        style: widget.textStyle ??
+                            const TextStyle(
+                              color: Colors.white,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                      ),
                     ),
                   if (_isExpanded) const Gap(8),
                   widget.icon ?? const Icon(Icons.add, color: Colors.white),
