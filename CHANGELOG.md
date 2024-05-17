@@ -1,3 +1,7 @@
+## 5.0.4
+
+- feat: Add padding property to LaunchLocationWidget
+
 ## 5.0.3
 
 - chore: Update pubspec.yaml version to 5.0.3 and add SVG support to LaunchLocationWidget

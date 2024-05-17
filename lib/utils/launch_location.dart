@@ -34,6 +34,7 @@ class LaunchLocationWidget extends StatelessWidget {
     this.query,
     this.coordinates,
     this.type,
+    this.padding,
   }) : assert(
           query != null || coordinates != null,
           'Either query or coordinates must be provided.',
@@ -47,6 +48,8 @@ class LaunchLocationWidget extends StatelessWidget {
 
   /// The type of location launch, which can be specified explicitly. If not provided, it is inferred from provided parameters.
   final LaunchLocationType? type;
+
+  final EdgeInsetsGeometry? padding;
 
   /// Launches the location based on the provided [type], [query], or [coordinates].
   ///
@@ -87,10 +90,11 @@ class LaunchLocationWidget extends StatelessWidget {
         onPressed: () => _launchLocation(),
         style: ButtonStyle(
           padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-            const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 8,
-            ),
+            padding ??
+                const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
           ),
           backgroundColor: MaterialStateProperty.all<Color>(
             const Color(0xff252836),
