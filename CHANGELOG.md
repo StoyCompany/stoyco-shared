@@ -1,3 +1,7 @@
+## 5.0.2
+
+- fix enabled property type in WidgetButton
+
 ## 5.0.1
 
 - Added `StoycoTextButton` and `StoycoExpandableButton` to `utils.dart`: This update introduces two new button widgets, `StoycoTextButton` and `StoycoExpandableButton`, to the `utils.dart` file. These widgets are designed to provide developers with additional options for creating interactive elements in their applications, enhancing the user experience and promoting a more engaging interface.

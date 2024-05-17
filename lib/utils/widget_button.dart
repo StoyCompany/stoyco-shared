@@ -39,7 +39,7 @@ class WidgetButton extends StatelessWidget {
 
   /// Indicates whether the button is enabled.
   /// It's not used effectively in the current implementation to control the button's enabled state.
-  final enabled;
+  final bool enabled;
 
   /// Shows a loading indicator if set to true, ignoring the [content].
   final bool isLoading;
