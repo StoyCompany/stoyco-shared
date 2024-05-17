@@ -1,3 +1,14 @@
+## 5.0.1
+
+- Added `StoycoTextButton` and `StoycoExpandableButton` to `utils.dart`: This update introduces two new button widgets, `StoycoTextButton` and `StoycoExpandableButton`, to the `utils.dart` file. These widgets are designed to provide developers with additional options for creating interactive elements in their applications, enhancing the user experience and promoting a more engaging interface.
+  - Key Features:
+    - **StoycoTextButton**: A simple text button widget that allows developers to create clickable text elements with customizable text styles and callbacks.
+    - **StoycoExpandableButton**: An expandable button widget that provides a collapsible content area for displaying additional information or options. It includes customizable header and content sections, as well as expand/collapse animations.
+  - Usage Example:
+    Demonstrates how to implement the `StoycoTextButton` and `StoycoExpandableButton` widgets in a Flutter application, showcasing their features and customization options.
+  - Impact:
+    This update expands the library's collection of UI components, offering developers more flexibility and versatility in designing interactive elements for their applications. By providing additional button options, developers can create more engaging and user-friendly interfaces, enhancing the overall user experience.
+
 ## 5.0.0
 
 - Remove unnecessary files and update dependencies

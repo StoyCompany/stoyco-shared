@@ -18,6 +18,7 @@ class WidgetButton extends StatelessWidget {
     super.key,
     this.height = 56,
     this.width = 115,
+    this.enabled = true,
     this.isLoading = false,
     required this.onTap,
     required this.content,
@@ -38,7 +39,7 @@ class WidgetButton extends StatelessWidget {
 
   /// Indicates whether the button is enabled.
   /// It's not used effectively in the current implementation to control the button's enabled state.
-  final enabled = true;
+  final enabled;
 
   /// Shows a loading indicator if set to true, ignoring the [content].
   final bool isLoading;
