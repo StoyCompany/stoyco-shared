@@ -1,3 +1,7 @@
+## 5.0.5
+
+- feat: Add textStyle property to LaunchLocationWidget
+
 ## 5.0.4
 
 - feat: Add padding property to LaunchLocationWidget

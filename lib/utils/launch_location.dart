@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:stoyco_shared/utils/colors.dart';
@@ -35,6 +36,7 @@ class LaunchLocationWidget extends StatelessWidget {
     this.coordinates,
     this.type,
     this.padding,
+    this.textStyle,
   }) : assert(
           query != null || coordinates != null,
           'Either query or coordinates must be provided.',
@@ -50,6 +52,8 @@ class LaunchLocationWidget extends StatelessWidget {
   final LaunchLocationType? type;
 
   final EdgeInsetsGeometry? padding;
+
+  final TextStyle? textStyle;
 
   /// Launches the location based on the provided [type], [query], or [coordinates].
   ///
@@ -113,8 +117,14 @@ class LaunchLocationWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Flexible(
-              child: Text('Como llegar'),
+            Flexible(
+              child: Text(
+                'Como llegar',
+                style: textStyle ??
+                    const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
             ),
             const Gap(9),
             SvgPicture.asset(
