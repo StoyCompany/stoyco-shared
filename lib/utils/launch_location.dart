@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:stoyco_shared/utils/colors.dart';
 import 'package:maps_launcher/maps_launcher.dart';
@@ -112,10 +113,10 @@ class LaunchLocationWidget extends StatelessWidget {
               child: Text('Como llegar'),
             ),
             const Gap(9),
-            Icon(
-              Icons.location_on,
-              color: StoycoColors.text,
-              size: 16,
+            SvgPicture.asset(
+              'packages/stoyco_shared/lib/assets/icons/location_icon.svg',
+              height: 16,
+              width: 16,
             ),
           ],
         ),
