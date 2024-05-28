@@ -32,6 +32,13 @@
 ## 5.0.0
 
 - Remove unnecessary files and update dependencies
+## 3.1.1
+
+chore: Update intl dependency to version 0.18.1
+
+## 3.1.0
+
+- chore: Update Flutter plugin dependencies and paths in .flutter-plugins file
 
 ## 1.0.3
 
