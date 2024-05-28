@@ -30,27 +30,26 @@ Future<DateTime?> showWebDatePicker({
   Color? weekendDaysColor,
   double? pickerWidth,
   double? pickerHeight,
-}) {
-  return showPopupDialog(
-    context,
-    (context) => Center(
-      child: SizedBox(
-        height: pickerHeight,
-        width: pickerWidth,
-        child: _WebDatePicker(
-          initialDate: initialDate,
-          firstDate: firstDate ?? DateTime(0),
-          lastDate: lastDate ?? DateTime(100000),
-          withoutActionButtons: withoutActionButtons ?? false,
-          weekendDaysColor: weekendDaysColor,
+}) =>
+    showPopupDialog(
+      context,
+      (context) => Center(
+        child: SizedBox(
+          height: pickerHeight,
+          width: pickerWidth,
+          child: _WebDatePicker(
+            initialDate: initialDate,
+            firstDate: firstDate ?? DateTime(0),
+            lastDate: lastDate ?? DateTime(100000),
+            withoutActionButtons: withoutActionButtons ?? false,
+            weekendDaysColor: weekendDaysColor,
+          ),
         ),
       ),
-    ),
-    asDropDown: true,
-    useTargetWidth: width != null ? false : true,
-    //dialogWidth: width,
-  );
-}
+      asDropDown: true,
+      useTargetWidth: width != null ? false : true,
+      //dialogWidth: width,
+    );
 
 class _WebDatePicker extends StatefulWidget {
   const _WebDatePicker({
@@ -99,12 +98,14 @@ class _WebDatePickerState extends State<_WebDatePicker> {
           (e) => Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Text(e.value,
-                style: e.key == 0 || e.key == (kWeekdayAbbreviations.length - 1)
-                    ? widget.weekendDaysColor != null
-                        ? textStyle?.copyWith(color: widget.weekendDaysColor)
-                        : textStyle
-                    : textStyle),
+            child: Text(
+              e.value,
+              style: e.key == 0 || e.key == (kWeekdayAbbreviations.length - 1)
+                  ? widget.weekendDaysColor != null
+                      ? textStyle?.copyWith(color: widget.weekendDaysColor)
+                      : textStyle
+                  : textStyle,
+            ),
           ),
         )
         .toList();
@@ -129,7 +130,8 @@ class _WebDatePickerState extends State<_WebDatePicker> {
                 : textStyle?.copyWith(
                     color: isWeekend && widget.weekendDaysColor != null
                         ? widget.weekendDaysColor?.withOpacity(0.5)
-                        : Colors.black.withOpacity(0.3));
+                        : Colors.black.withOpacity(0.3),
+                  );
         Widget child = Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
@@ -278,7 +280,7 @@ class _WebDatePickerState extends State<_WebDatePicker> {
           borderRadius: borderRadius,
         ),
         child: Text(
-          "${date.year} - ${date.year + 19}",
+          '${date.year} - ${date.year + 19}',
           style: isSelected
               ? textStyle?.copyWith(color: Colors.white)
               : isEnabled
@@ -344,24 +346,26 @@ class _WebDatePickerState extends State<_WebDatePicker> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     Widget navTitle;
-    bool isFirst = false, isLast = false, nextView = true;
+    bool isFirst = false;
+    bool isLast = false;
+    bool nextView = true;
     switch (_viewMode) {
       case _PickerViewMode.day:
         navTitle = Container(
           height: _kActionHeight,
           alignment: Alignment.center,
           child: Text(
-            "${kMonthNames[_startDate.month - 1]} ${_startDate.year}",
+            '${kMonthNames[_startDate.month - 1]} ${_startDate.year}',
             style: theme.textTheme.bodyLarge?.copyWith(
-                color: const Color(0xff1C197F), fontWeight: FontWeight.bold),
+              color: const Color(0xff1C197F),
+              fontWeight: FontWeight.bold,
+            ),
           ),
         );
-        final monthDateRange = _startDate.monthDateTimeRange(
-            includeTrailingAndLeadingDates: false);
+        final monthDateRange = _startDate.monthDateTimeRange();
         isFirst = widget.firstDate.dateCompareTo(monthDateRange.start) >= 0;
         isLast = widget.lastDate.dateCompareTo(monthDateRange.end) <= 0;
         nextView = widget.lastDate.difference(widget.firstDate).inDays > 28;
-        break;
       case _PickerViewMode.month:
         navTitle = Container(
           height: _kActionHeight,
@@ -375,7 +379,6 @@ class _WebDatePickerState extends State<_WebDatePicker> {
         isFirst = _startDate.year <= widget.firstDate.year;
         isLast = _startDate.year >= widget.lastDate.year;
         nextView = widget.lastDate.year != widget.firstDate.year;
-        break;
       case _PickerViewMode.year:
         final year = _startDate.year - _startDate.year % 20;
         isFirst = year <= widget.firstDate.year;
@@ -384,13 +387,12 @@ class _WebDatePickerState extends State<_WebDatePicker> {
           height: _kActionHeight,
           alignment: Alignment.center,
           child: Text(
-            "$year - ${year + 19}",
+            '$year - ${year + 19}',
             style: theme.textTheme.bodyLarge
                 ?.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
           ),
         );
         nextView = widget.lastDate.year - widget.firstDate.year > 20;
-        break;
       case _PickerViewMode.century:
         final year = _startDate.year - _startDate.year % 200;
         isFirst = year <= widget.firstDate.year;
@@ -399,13 +401,14 @@ class _WebDatePickerState extends State<_WebDatePicker> {
           height: _kActionHeight,
           alignment: Alignment.center,
           child: Text(
-            "$year - ${year + 199}",
+            '$year - ${year + 199}',
             style: theme.textTheme.bodyLarge?.copyWith(
-                color: const Color(0xff1C197F), fontWeight: FontWeight.bold),
+              color: const Color(0xff1C197F),
+              fontWeight: FontWeight.bold,
+            ),
           ),
         );
         nextView = false;
-        break;
     }
     return Card(
       margin:
@@ -419,53 +422,56 @@ class _WebDatePickerState extends State<_WebDatePicker> {
             /// Navigation
             Row(
               children: [
-                isFirst
-                    ? SvgPicture.asset(
+                if (isFirst)
+                  SvgPicture.asset(
+                    'packages/stoyco_shared/lib/assets/icons/arrow_back.svg',
+                    height: 24,
+                    width: 24,
+                    color: Colors.black.withOpacity(0.3),
+                  )
+                else
+                  GestureDetector(
+                    onTap: () => _onStartDateChanged(next: false),
+                    child: SvgPicture.asset(
+                      'packages/stoyco_shared/lib/assets/icons/arrow_back.svg',
+                      height: 24,
+                      width: 24,
+                      color: Colors.black,
+                    ),
+                  ),
+                if (nextView)
+                  Expanded(
+                    child: InkWell(
+                      onTap: () => _onViewModeChanged(next: true),
+                      borderRadius: BorderRadius.circular(4.0),
+                      child: navTitle,
+                    ),
+                  )
+                else
+                  Expanded(child: navTitle),
+                if (isLast)
+                  RotatedBox(
+                    quarterTurns: 2,
+                    child: SvgPicture.asset(
+                      'packages/stoyco_shared/lib/assets/icons/arrow_back.svg',
+                      height: 24,
+                      width: 24,
+                      color: Colors.black.withOpacity(0.3),
+                    ),
+                  )
+                else
+                  GestureDetector(
+                    onTap: () => _onStartDateChanged(next: true),
+                    child: RotatedBox(
+                      quarterTurns: 2,
+                      child: SvgPicture.asset(
                         'packages/stoyco_shared/lib/assets/icons/arrow_back.svg',
                         height: 24,
                         width: 24,
-                        color: Colors.black.withOpacity(0.3),
-                      )
-                    : GestureDetector(
-                        onTap: () => _onStartDateChanged(next: false),
-                        child: SvgPicture.asset(
-                          'packages/stoyco_shared/lib/assets/icons/arrow_back.svg',
-                          height: 24,
-                          width: 24,
-                          color: Colors.black,
-                        ),
+                        color: Colors.black,
                       ),
-                nextView
-                    ? Expanded(
-                        child: InkWell(
-                          onTap: () => _onViewModeChanged(next: true),
-                          borderRadius: BorderRadius.circular(4.0),
-                          child: navTitle,
-                        ),
-                      )
-                    : Expanded(child: navTitle),
-                isLast
-                    ? RotatedBox(
-                        quarterTurns: 2,
-                        child: SvgPicture.asset(
-                          'packages/stoyco_shared/lib/assets/icons/arrow_back.svg',
-                          height: 24,
-                          width: 24,
-                          color: Colors.black.withOpacity(0.3),
-                        ),
-                      )
-                    : GestureDetector(
-                        onTap: () => _onStartDateChanged(next: true),
-                        child: RotatedBox(
-                          quarterTurns: 2,
-                          child: SvgPicture.asset(
-                            'packages/stoyco_shared/lib/assets/icons/arrow_back.svg',
-                            height: 24,
-                            width: 24,
-                            color: Colors.black,
-                          ),
-                        ),
-                      )
+                    ),
+                  ),
               ],
             ),
 
@@ -480,14 +486,15 @@ class _WebDatePickerState extends State<_WebDatePicker> {
                       child: child,
                     );
                   } else {
-                    double dx = (child.key as _PickerKey).date == _startDate
-                        ? 1.0
-                        : -1.0;
+                    final double dx =
+                        (child.key as _PickerKey).date == _startDate
+                            ? 1.0
+                            : -1.0;
                     return SlideTransition(
                       position: Tween<Offset>(
-                              begin: Offset(dx * _slideDirection, 0.0),
-                              end: const Offset(0.0, 0.0))
-                          .animate(animation),
+                        begin: Offset(dx * _slideDirection, 0.0),
+                        end: const Offset(0.0, 0.0),
+                      ).animate(animation),
                       child: child,
                     );
                   }
@@ -501,21 +508,27 @@ class _WebDatePickerState extends State<_WebDatePicker> {
               children: [
                 /// Reset
                 if (!widget.withoutActionButtons)
-                  _iconWidget(Icons.restart_alt,
-                      tooltip: "Reset", onTap: _onResetState),
+                  _iconWidget(
+                    Icons.restart_alt,
+                    tooltip: 'Reset',
+                    onTap: _onResetState,
+                  ),
                 if (!widget.withoutActionButtons) const SizedBox(width: 4.0),
 
                 /// Today
                 if (!widget.withoutActionButtons)
-                  _iconWidget(Icons.today,
-                      tooltip: "Today", onTap: _onStartDateChanged),
+                  _iconWidget(
+                    Icons.today,
+                    tooltip: 'Today',
+                    onTap: _onStartDateChanged,
+                  ),
                 const Spacer(),
 
                 /// CANCEL
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
                   child: const Text(
-                    "Cancelar",
+                    'Cancelar',
                     style: TextStyle(color: Color(0xff92929D)),
                   ),
                 ),
@@ -526,7 +539,7 @@ class _WebDatePickerState extends State<_WebDatePicker> {
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(_selectedDate),
                     child: const Text(
-                      "Aceptar",
+                      'Aceptar',
                       style: TextStyle(color: Color(0xff1C197F)),
                     ),
                   ),
@@ -539,8 +552,12 @@ class _WebDatePickerState extends State<_WebDatePicker> {
     );
   }
 
-  Widget _iconWidget(IconData icon,
-      {Color? color, String? tooltip, GestureTapCallback? onTap}) {
+  Widget _iconWidget(
+    IconData icon, {
+    Color? color,
+    String? tooltip,
+    GestureTapCallback? onTap,
+  }) {
     final child = Container(
       height: _kActionHeight,
       width: _kActionHeight,
@@ -566,18 +583,14 @@ class _WebDatePickerState extends State<_WebDatePicker> {
       switch (_viewMode) {
         case _PickerViewMode.day:
           date = next ? _startDate.nextMonth : _startDate.previousMonth;
-          break;
         case _PickerViewMode.month:
           date = next ? _startDate.nextYear : _startDate.previousYear;
-          break;
         case _PickerViewMode.year:
           final year = _startDate.year - _startDate.year % 20;
           date = next ? DateTime(year + 20) : DateTime(year - 20);
-          break;
         case _PickerViewMode.century:
           final year = _startDate.year - _startDate.year % 200;
           date = next ? DateTime(year + 200) : DateTime(year - 200);
-          break;
       }
     } else {
       final year20 = _startDate.year - _startDate.year % 20;
@@ -683,7 +696,5 @@ class _PickerKey extends LocalKey {
   int get hashCode => Object.hash(runtimeType, date, viewMode);
 
   @override
-  String toString() {
-    return "_PickerKey(date: $date, viewMode: $viewMode)";
-  }
+  String toString() => '_PickerKey(date: $date, viewMode: $viewMode)';
 }

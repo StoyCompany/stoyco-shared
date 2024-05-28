@@ -38,6 +38,28 @@ enum _SelectorType { day, month, year }
 /// ```
 
 class StoycoCupertinoDatePicker extends StatefulWidget {
+
+  const StoycoCupertinoDatePicker(
+      {Key? key,
+      required this.itemExtent,
+      required this.onSelectedItemChanged,
+      this.minDate,
+      this.maxDate,
+      this.selectedDate,
+      this.selectedStyle,
+      this.unselectedStyle,
+      this.disabledStyle,
+      this.backgroundColor,
+      this.squeeze = 1.45,
+      this.diameterRatio = 1.1,
+      this.magnification = 1.0,
+      this.offAxisFraction = 0.0,
+      this.useMagnifier = false,
+      this.selectionOverlay = const CupertinoPickerDefaultSelectionOverlay(),
+      this.cancelText = 'Cancelar',
+      this.confirmText = 'Aceptar',
+      this.cancelColor = const Color(0xffde2424),})
+      : super(key: key);
   final double itemExtent;
   final Widget selectionOverlay;
   final double diameterRatio;
@@ -63,28 +85,6 @@ class StoycoCupertinoDatePicker extends StatefulWidget {
   final String? cancelText;
   final String? confirmText;
   final Color? cancelColor;
-
-  const StoycoCupertinoDatePicker(
-      {Key? key,
-      required this.itemExtent,
-      required this.onSelectedItemChanged,
-      this.minDate,
-      this.maxDate,
-      this.selectedDate,
-      this.selectedStyle,
-      this.unselectedStyle,
-      this.disabledStyle,
-      this.backgroundColor,
-      this.squeeze = 1.45,
-      this.diameterRatio = 1.1,
-      this.magnification = 1.0,
-      this.offAxisFraction = 0.0,
-      this.useMagnifier = false,
-      this.selectionOverlay = const CupertinoPickerDefaultSelectionOverlay(),
-      this.cancelText = 'Cancelar',
-      this.confirmText = 'Aceptar',
-      this.cancelColor = const Color(0xffde2424)})
-      : super(key: key);
   @override
   State<StoycoCupertinoDatePicker> createState() =>
       _StoycoCupertinoDatePickerState();
@@ -194,21 +194,18 @@ class _StoycoCupertinoDatePickerState extends State<StoycoCupertinoDatePicker> {
           _selectedMonthIndex + 1,
           index + 1,
         );
-        break;
       case _SelectorType.month:
         temp = DateTime(
           _minDate.year + _selectedYearIndex,
           index + 1,
           _selectedDayIndex + 1,
         );
-        break;
       case _SelectorType.year:
         temp = DateTime(
           _minDate.year + index,
           _selectedMonthIndex + 1,
           _selectedDayIndex + 1,
         );
-        break;
     }
 
     // return if selected date is not the min - max date range
@@ -217,13 +214,10 @@ class _StoycoCupertinoDatePickerState extends State<StoycoCupertinoDatePicker> {
       switch (type) {
         case _SelectorType.day:
           _dayScrollController.jumpToItem(_selectedDayIndex);
-          break;
         case _SelectorType.month:
           _monthScrollController.jumpToItem(_selectedMonthIndex);
-          break;
         case _SelectorType.year:
           _yearScrollController.jumpToItem(_selectedYearIndex);
-          break;
       }
       return;
     }
@@ -233,7 +227,6 @@ class _StoycoCupertinoDatePickerState extends State<StoycoCupertinoDatePicker> {
     switch (type) {
       case _SelectorType.day:
         _selectedDayIndex = index;
-        break;
       case _SelectorType.month:
         _selectedMonthIndex = index;
         // if month is changed to february &
@@ -248,7 +241,6 @@ class _StoycoCupertinoDatePickerState extends State<StoycoCupertinoDatePicker> {
         if (_selectedDayIndex == 30 && _days[_selectedMonthIndex] == 30) {
           _selectedDayIndex = 29;
         }
-        break;
       case _SelectorType.year:
         _selectedYearIndex = index;
         // if selected month is february & selected day is 29
@@ -259,7 +251,6 @@ class _StoycoCupertinoDatePickerState extends State<StoycoCupertinoDatePicker> {
             _selectedDayIndex == 28) {
           _selectedDayIndex = 27;
         }
-        break;
     }
     HapticFeedback.heavyImpact();
     setState(() {});
@@ -276,21 +267,18 @@ class _StoycoCupertinoDatePickerState extends State<StoycoCupertinoDatePicker> {
           _selectedMonthIndex + 1,
           index + 1,
         );
-        break;
       case _SelectorType.month:
         temp = DateTime(
           _minDate.year + _selectedYearIndex,
           index + 1,
           _selectedDayIndex + 1,
         );
-        break;
       case _SelectorType.year:
         temp = DateTime(
           _minDate.year + index,
           _selectedMonthIndex + 1,
           _selectedDayIndex + 1,
         );
-        break;
     }
     return temp.isAfter(_maxDate) || temp.isBefore(_minDate);
   }

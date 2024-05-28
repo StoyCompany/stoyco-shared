@@ -46,8 +46,7 @@ class StoycoDropDownFielWithModal extends StatelessWidget {
   final Map<String, String Function(Object)>? validationMessages;
 
   @override
-  Widget build(BuildContext context) {
-    return StoyCoTextFormField(
+  Widget build(BuildContext context) => StoyCoTextFormField(
       formControlName: formControlName,
       labelText: label,
       hintText: title,
@@ -99,7 +98,6 @@ class StoycoDropDownFielWithModal extends StatelessWidget {
         _.value = value;
       },
     );
-  }
 }
 
 /// Shows a modal dialog for selecting an option from a list.

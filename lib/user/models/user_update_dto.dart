@@ -1,5 +1,37 @@
 /// Represents a data transfer object for updating user information.
 class UserUpdateDTO {
+
+  /// Creates a new instance of [UserUpdateDTO].
+  UserUpdateDTO({
+    this.uid,
+    this.name,
+    this.phoneNumber,
+    this.firstName,
+    this.lastName,
+    this.photo,
+    this.verifyEmail,
+    this.provider,
+    this.email,
+    this.gender,
+    this.nickName,
+    this.birthDate,
+  });
+
+  /// Creates a new instance of [UserUpdateDTO] from a JSON map.
+  UserUpdateDTO.fromJson(Map<String, dynamic> json) {
+    uid = json['uid'];
+    name = json['name'];
+    phoneNumber = json['phoneNumber'];
+    firstName = json['firstName'];
+    lastName = json['lastName'];
+    photo = json['photo'];
+    verifyEmail = json['verifyEmail'];
+    provider = json['provider'];
+    email = json['email'];
+    gender = json['gender'];
+    nickName = json['nickName'];
+    birthDate = json['birthDate'];
+  }
   /// The unique identifier of the user.
   String? uid;
 
@@ -35,38 +67,6 @@ class UserUpdateDTO {
 
   /// The birth date of the user.
   String? birthDate;
-
-  /// Creates a new instance of [UserUpdateDTO].
-  UserUpdateDTO({
-    this.uid,
-    this.name,
-    this.phoneNumber,
-    this.firstName,
-    this.lastName,
-    this.photo,
-    this.verifyEmail,
-    this.provider,
-    this.email,
-    this.gender,
-    this.nickName,
-    this.birthDate,
-  });
-
-  /// Creates a new instance of [UserUpdateDTO] from a JSON map.
-  UserUpdateDTO.fromJson(Map<String, dynamic> json) {
-    uid = json['uid'];
-    name = json['name'];
-    phoneNumber = json['phoneNumber'];
-    firstName = json['firstName'];
-    lastName = json['lastName'];
-    photo = json['photo'];
-    verifyEmail = json['verifyEmail'];
-    provider = json['provider'];
-    email = json['email'];
-    gender = json['gender'];
-    nickName = json['nickName'];
-    birthDate = json['birthDate'];
-  }
 
   /// Converts the [UserUpdateDTO] instance to a JSON map.
   Map<String, dynamic> toJson() {

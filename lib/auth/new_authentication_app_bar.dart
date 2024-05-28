@@ -5,8 +5,6 @@ import 'package:flutter_svg/svg.dart';
 ///
 /// This class extends the default [AppBar] and provides customization specific to the authentication screen.
 class NewAuthenticationAppBar extends AppBar {
-  /// A callback function to be executed when the leading icon is tapped.
-  final void Function()? leadingOnTap;
 
   /// Creates a [NewAuthenticationAppBar] with the specified [title] and optional [leadingOnTap] callback.
   ///
@@ -51,6 +49,8 @@ class NewAuthenticationAppBar extends AppBar {
             ),
           ),
         );
+  /// A callback function to be executed when the leading icon is tapped.
+  final void Function()? leadingOnTap;
 
   // Additional customization or documentation can be added as needed.
 }
@@ -59,11 +59,6 @@ class NewAuthenticationAppBar extends AppBar {
 ///
 /// This class extends the default [AppBar] and provides customization specific to the authentication screen on mobile devices.
 class NewAuthenticationAppBarMobile extends AppBar {
-  /// A callback function to be executed when the leading icon is tapped.
-  final void Function()? leadingOnTap;
-
-  /// The size of the leading icon.
-  final double? leadingIconSize;
 
   /// Creates a [NewAuthenticationAppBarMobile] with the specified [title], [leadingOnTap] callback, and optional [leadingIconSize].
   ///
@@ -98,4 +93,9 @@ class NewAuthenticationAppBarMobile extends AppBar {
             ),
           ),
         );
+  /// A callback function to be executed when the leading icon is tapped.
+  final void Function()? leadingOnTap;
+
+  /// The size of the leading icon.
+  final double? leadingIconSize;
 }

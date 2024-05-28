@@ -15,8 +15,7 @@ export 'package:stoyco_shared/form/fields/text_field_with_check.dart';
 /// A utility class for managing and validating forms using the `reactive_forms` package.
 class StoycoForms {
   /// Returns a map of validation messages for common form errors.
-  static Map<String, String Function(dynamic error)> validationMessages() {
-    return {
+  static Map<String, String Function(dynamic error)> validationMessages() => {
       'required': requiredMessage(),
       'number': numberMessage(),
       'max': numberMax(),
@@ -28,18 +27,15 @@ class StoycoForms {
       'minLength': minLength(),
       'maxLength': maxLength(),
     };
-  }
 
   /// Merges custom validators with the default validation messages.
   static Map<String, String Function(dynamic error)>
       validationMessagesWithParameters(
     Map<String, String Function(dynamic error)> validators,
-  ) {
-    return {
+  ) => {
       ...validationMessages(),
       ...validators,
     };
-  }
 
   /// Returns the keyboard type based on the [formControlName].
   static TextInputType keyBoardTypeByFormControl(String? formControlName) {
@@ -58,39 +54,26 @@ class StoycoForms {
   }
 
   /// Returns a required validation error message.
-  static String Function(dynamic error) requiredMessage() {
-    return (error) => 'Required';
-  }
+  static String Function(dynamic error) requiredMessage() => (error) => 'Required';
 
   /// Returns a number validation error message.
-  static String Function(dynamic error) numberMessage() {
-    return (error) => 'Must be a number';
-  }
+  static String Function(dynamic error) numberMessage() => (error) => 'Must be a number';
 
   /// Returns a maximum value validation error message.
-  static String Function(dynamic error) numberMax() {
-    return (error) => '$error';
-  }
+  static String Function(dynamic error) numberMax() => (error) => '$error';
 
   /// Returns a minimum value validation error message.
-  static String Function(dynamic error) numberMin() {
-    return (error) => '$error';
-  }
+  static String Function(dynamic error) numberMin() => (error) => '$error';
 
   /// Returns a maximum length validation error message.
-  static String Function(dynamic error) maxLength() {
-    return (error) => '${error['actualLength']}/${error['requiredLength']}';
-  }
+  static String Function(dynamic error) maxLength() => (error) => '${error['actualLength']}/${error['requiredLength']}';
 
   /// Returns a minimum length validation error message.
-  static String Function(dynamic error) minLength() {
-    return (error) => '${error['actualLength']}/${error['requiredLength']}';
-  }
+  static String Function(dynamic error) minLength() => (error) => '${error['actualLength']}/${error['requiredLength']}';
 
   /// Returns a pattern validation error message based on the regular expression patterns.
-  static String Function(dynamic error) pattern() {
-    return (error) {
-      Map<String, String> patternMessages = {
+  static String Function(dynamic error) pattern() => (error) {
+      final Map<String, String> patternMessages = {
         r'^[a-zA-Z0-9 ]+$': 'Only letters and numbers are allowed.',
         r'^[a-zA-Z]+$': 'Only letters are allowed.',
         r'^[0-9]+$': 'Only numbers are allowed.',
@@ -98,29 +81,21 @@ class StoycoForms {
             'Only letters, numbers, and special characters: *, _, ., - are allowed',
       };
 
-      String pattern = error['requiredPattern'];
+      final String pattern = error['requiredPattern'];
       return patternMessages[pattern] ?? 'Must match the pattern: "$pattern"';
     };
-  }
 
   /// Returns an email validation error message.
-  static String Function(dynamic error) email() {
-    return (error) => 'Incorrect email format';
-  }
+  static String Function(dynamic error) email() => (error) => 'Incorrect email format';
 
   /// Returns a type document verification error message.
-  static String Function(dynamic error) typeDocumentVerify() {
-    return (error) => 'Incorrect document';
-  }
+  static String Function(dynamic error) typeDocumentVerify() => (error) => 'Incorrect document';
 
   /// Returns an address verification error message.
-  static String Function(dynamic error) addressVerify() {
-    return (error) => 'Incorrect address';
-  }
+  static String Function(dynamic error) addressVerify() => (error) => 'Incorrect address';
 
   /// Returns the decoration for a [DropdownButton] with a down arrow icon and optional [hintText].
-  static InputDecoration decorationSelect({String? hintText}) {
-    return InputDecoration(
+  static InputDecoration decorationSelect({String? hintText}) => InputDecoration(
       suffixIcon: const Padding(
         padding: EdgeInsets.only(right: 10),
         child: Icon(
@@ -135,7 +110,6 @@ class StoycoForms {
         fontSize: 16,
       ),
     );
-  }
 
   /// Marks a control in the [form] as required and sets an error to indicate its required status.
   static void markedAsRequired(FormGroup form, String controlName) {

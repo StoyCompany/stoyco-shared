@@ -39,11 +39,6 @@ const _spaceRegExp = r'[ ]';
 /// )
 /// ```
 class StoycoPasswordField extends StatefulWidget {
-  final InputDecoration? decoration;
-  final String formControlName;
-  final FormControl<dynamic> formControl;
-  final String labelText;
-  final String hintText;
   const StoycoPasswordField({
     Key? key,
     this.decoration,
@@ -52,6 +47,11 @@ class StoycoPasswordField extends StatefulWidget {
     required this.labelText,
     required this.hintText,
   }) : super(key: key);
+  final InputDecoration? decoration;
+  final String formControlName;
+  final FormControl<dynamic> formControl;
+  final String labelText;
+  final String hintText;
 
   @override
   State<StoycoPasswordField> createState() => _StoycoPasswordFielState();
@@ -94,21 +94,21 @@ class _StoycoPasswordFielState extends State<StoycoPasswordField> {
         message: '1 letra mayúscula',
         validator: () =>
             _requiredPattern(
-                widget.formControl, _capitalLetterRegExp, 'capitalLetter') ==
+                widget.formControl, _capitalLetterRegExp, 'capitalLetter',) ==
             null,
       ),
       PasswordError(
         message: '1 letra minúscula',
         validator: () =>
             _requiredPattern(widget.formControl, _lowercaseLetterRegExp,
-                'lowercaseLetter') ==
+                'lowercaseLetter',) ==
             null,
       ),
       PasswordError(
         message: '1 símbolo',
         validator: () =>
             _requiredPattern(widget.formControl, _specialCharacterRegExp,
-                'specialCharacter') ==
+                'specialCharacter',) ==
             null,
       ),
     ];
@@ -117,31 +117,30 @@ class _StoycoPasswordFielState extends State<StoycoPasswordField> {
   /// Checks if the control value matches the required pattern.
   /// Returns a map with the error key if the pattern is not matched, otherwise returns null.
   Map<String, dynamic>? _requiredPattern(
-      AbstractControl<dynamic> control, String pattern, String errorKey) {
+      AbstractControl<dynamic> control, String pattern, String errorKey,) {
     final bool hasMatch = RegExp(pattern).hasMatch(control.value);
     return hasMatch ? null : <String, dynamic>{errorKey: true};
   }
 
   /// Adds the necessary validators to the form control.
   void _addValidators() {
-    List<Validator> validators = [
+    final List<Validator> validators = [
       Validators.required,
       Validators.minLength(8),
       Validators.delegate(
-          (control) => _requiredPattern(control, _digitRegExp, 'digit')),
+          (control) => _requiredPattern(control, _digitRegExp, 'digit'),),
       Validators.delegate((control) => _requiredPattern(
-          control, _specialCharacterRegExp, 'specialCharacter')),
+          control, _specialCharacterRegExp, 'specialCharacter',),),
       Validators.delegate((control) =>
-          _requiredPattern(control, _capitalLetterRegExp, 'capitalLetter')),
+          _requiredPattern(control, _capitalLetterRegExp, 'capitalLetter'),),
       Validators.delegate((control) =>
-          _requiredPattern(control, _lowercaseLetterRegExp, 'lowercaseLetter')),
+          _requiredPattern(control, _lowercaseLetterRegExp, 'lowercaseLetter'),),
     ];
     widget.formControl.setValidators(validators);
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
+  Widget build(BuildContext context) => Column(
       children: [
         StoyCoTextFormField(
             formControlName: widget.formControlName,
@@ -153,7 +152,7 @@ class _StoycoPasswordFielState extends State<StoycoPasswordField> {
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.deny(
                 RegExp(_spaceRegExp),
-              )
+              ),
             ],
             keyboardType: TextInputType.visiblePassword,
             onChanged: (value) {
@@ -177,7 +176,7 @@ class _StoycoPasswordFielState extends State<StoycoPasswordField> {
                     colors: [Color(0xFF030A1A), Color(0xFF0C1B24)],
                   ),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                      borderRadius: BorderRadius.circular(8),),
                 ),
                 child: Text(
                   widget.labelText,
@@ -189,22 +188,19 @@ class _StoycoPasswordFielState extends State<StoycoPasswordField> {
                   ),
                 ),
               ),
-            )),
+            ),),
         const Gap(30),
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 9.5),
           child: Column(
-            children: passwordErrors.map((e) {
-              return VerificationWidgetWithMessage(
+            children: passwordErrors.map((e) => VerificationWidgetWithMessage(
                 isValid: e.validator?.call() ?? false,
                 message: e.message,
-              );
-            }).toList(),
+              ),).toList(),
           ),
         ),
       ],
     );
-  }
 }
 
 /// A widget that displays a verification message with an icon.
@@ -213,17 +209,16 @@ class _StoycoPasswordFielState extends State<StoycoPasswordField> {
 /// The [isValid] property determines whether the icon should be a check mark or a close mark.
 /// The [message] property is the text to be displayed as the verification message.
 class VerificationWidgetWithMessage extends StatelessWidget {
-  final bool isValid;
-  final String message;
   const VerificationWidgetWithMessage({
     Key? key,
     this.isValid = false,
     required this.message,
   }) : super(key: key);
+  final bool isValid;
+  final String message;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       margin: const EdgeInsets.only(bottom: 8.0),
       child: Row(
         children: [
@@ -247,5 +242,4 @@ class VerificationWidgetWithMessage extends StatelessWidget {
         ],
       ),
     );
-  }
 }

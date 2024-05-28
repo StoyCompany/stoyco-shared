@@ -8,7 +8,7 @@ class NotificationActionWidget extends StatelessWidget {
       required this.count,
       required this.width,
       required this.height,
-      required this.fontSize});
+      required this.fontSize,});
 
   final int count;
   final void Function() callback;
