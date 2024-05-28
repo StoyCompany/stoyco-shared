@@ -1,3 +1,7 @@
+## 5.1.0
+
+- chore: Update reactive_forms dependency to version 17.0.1 in pubspec.yaml
+
 ## 5.0.5
 
 - feat: Add textStyle property to LaunchLocationWidget
