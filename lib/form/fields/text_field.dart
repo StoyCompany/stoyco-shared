@@ -7,11 +7,6 @@ import 'package:reactive_forms/reactive_forms.dart';
 /// It includes properties for setting the label text, hint text, decoration, and more.
 
 class StoyCoTextFormField extends ReactiveTextField {
-  final String? labelText;
-  final String? hintText;
-  final InputDecoration? decoration;
-  final Widget? suffixIcon;
-  final Widget? prefixIcon;
   StoyCoTextFormField({
     super.key,
     super.onChanged,
@@ -55,7 +50,7 @@ class StoyCoTextFormField extends ReactiveTextField {
                       colors: [Color(0xFF030A1A), Color(0xFF0C1B24)],
                     ),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
+                        borderRadius: BorderRadius.circular(8),),
                   ),
                   child: Text(
                     labelText ?? '',
@@ -77,4 +72,9 @@ class StoyCoTextFormField extends ReactiveTextField {
                 ),
               ),
         );
+  final String? labelText;
+  final String? hintText;
+  final InputDecoration? decoration;
+  final Widget? suffixIcon;
+  final Widget? prefixIcon;
 }

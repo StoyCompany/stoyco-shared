@@ -5,51 +5,51 @@ const kNumberOfWeekday = 7;
 const kNumberOfMonth = 12;
 
 const kWeekdayNames = <String>[
-  "Domingo",
-  "Lunes",
-  "Martes",
-  "Miércoles",
-  "Jueves",
-  "Viernes",
-  "Sábado"
+  'Domingo',
+  'Lunes',
+  'Martes',
+  'Miércoles',
+  'Jueves',
+  'Viernes',
+  'Sábado',
 ];
 const kWeekdayShortNames = <String>[
-  "Dom",
-  "Lun",
-  "Mar",
-  "Mié",
-  "Jue",
-  "Vie",
-  "Sáb"
+  'Dom',
+  'Lun',
+  'Mar',
+  'Mié',
+  'Jue',
+  'Vie',
+  'Sáb',
 ];
-const kWeekdayAbbreviations = <String>["D", "L", "M", "X", "J", "V", "S"];
+const kWeekdayAbbreviations = <String>['D', 'L', 'M', 'X', 'J', 'V', 'S'];
 const kMonthNames = <String>[
-  "Enero",
-  "Febrero",
-  "Marzo",
-  "Abril",
-  "Mayo",
-  "Junio",
-  "Julio",
-  "Agosto",
-  "Septiembre",
-  "Octubre",
-  "Noviembre",
-  "Diciembre"
+  'Enero',
+  'Febrero',
+  'Marzo',
+  'Abril',
+  'Mayo',
+  'Junio',
+  'Julio',
+  'Agosto',
+  'Septiembre',
+  'Octubre',
+  'Noviembre',
+  'Diciembre',
 ];
 const kMonthShortNames = <String>[
-  "Ene",
-  "Feb",
-  "Mar",
-  "Abr",
-  "May",
-  "Jun",
-  "Jul",
-  "Ago",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dic"
+  'Ene',
+  'Feb',
+  'Mar',
+  'Abr',
+  'May',
+  'Jun',
+  'Jul',
+  'Ago',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dic',
 ];
 
 extension DateTimeExtension on DateTime {
@@ -60,21 +60,19 @@ extension DateTimeExtension on DateTime {
   DateTime get previousYear => DateTime(year - 1);
 
   DateTimeRange monthDateTimeRange(
-      {bool includeTrailingAndLeadingDates = false}) {
+      {bool includeTrailingAndLeadingDates = false,}) {
     DateTime start = DateTime(year, month);
     if (includeTrailingAndLeadingDates) {
       start = start.subtract(Duration(days: start.weekday % kNumberOfWeekday));
     }
-    DateTime end = includeTrailingAndLeadingDates
+    final DateTime end = includeTrailingAndLeadingDates
         ? start.add(const Duration(days: kNumberCellsOfMonth))
         : DateTime(year, month + 1, 0);
     return DateTimeRange(start: start, end: end);
   }
 
-  bool isInRange(DateTimeRange range) {
-    return difference(range.start).inSeconds >= 0 &&
+  bool isInRange(DateTimeRange range) => difference(range.start).inSeconds >= 0 &&
         difference(range.end).inSeconds <= 0;
-  }
 
   int monthCompareTo(DateTime other) {
     if (year < other.year) {

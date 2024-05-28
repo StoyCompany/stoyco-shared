@@ -68,15 +68,14 @@ class _StoycoTextFieldWithCheckState extends State<StoycoTextFieldWithCheck> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return StoyCoTextFormField(
+  Widget build(BuildContext context) => StoyCoTextFormField(
       formControlName: widget.formControlName,
       labelText: widget.labelText,
       hintText: widget.hintText,
       readOnly: widget.readOnly ?? false,
       inputFormatters: widget.inputFormatters ??
           <TextInputFormatter>[
-            FilteringTextInputFormatter.allow(RegExp("[A-zÀ-ú]")),
+            FilteringTextInputFormatter.allow(RegExp('[A-zÀ-ú]')),
           ],
       onChanged: (formControl) async {
         widget.onChanged?.call(formControl);
@@ -116,7 +115,6 @@ class _StoycoTextFieldWithCheckState extends State<StoycoTextFieldWithCheck> {
           borderRadius: BorderRadius.all(Radius.circular(24)),
           borderSide: BorderSide(
             color: Color(0xFFDE2424),
-            width: 1,
           ),
         ),
         label: Container(
@@ -150,5 +148,4 @@ class _StoycoTextFieldWithCheckState extends State<StoycoTextFieldWithCheck> {
         ),
       ),
     );
-  }
 }

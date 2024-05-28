@@ -12,6 +12,38 @@ part 'user_dto.g.dart';
 /// It implements the [Equatable] class for easy equality comparisons.
 /// The class is annotated with [HiveType] and [JsonSerializable] to enable serialization with Hive and JSON.
 class UserDTO extends Equatable {
+
+  /// Creates a new instance of [UserDTO].
+  const UserDTO({
+    this.photo,
+    this.stripeCustomerId,
+    this.walletAdress,
+    this.firstName,
+    this.lastName,
+    this.numEventsPurchased,
+    this.id,
+    this.uid,
+    this.name,
+    this.email,
+    this.phoneNumber,
+    this.country,
+    this.typeDocument,
+    this.document,
+    this.roles,
+    this.createdAt,
+    this.changePasswordDate,
+    this.verifiedEmail,
+    this.isUserTest,
+    this.provider,
+    this.uidevice,
+    this.birthDate,
+    this.gender,
+    this.nickName,
+  });
+
+  /// Creates a new instance of [UserDTO] from a JSON map.
+  factory UserDTO.fromJson(Map<String, dynamic> json) =>
+      _$UserDTOFromJson(json);
   /// The user's photo.
   @HiveField(0)
   final String? photo;
@@ -107,38 +139,6 @@ class UserDTO extends Equatable {
   /// The user's nickname.
   @HiveField(23)
   final String? nickName;
-
-  /// Creates a new instance of [UserDTO].
-  UserDTO({
-    this.photo,
-    this.stripeCustomerId,
-    this.walletAdress,
-    this.firstName,
-    this.lastName,
-    this.numEventsPurchased,
-    this.id,
-    this.uid,
-    this.name,
-    this.email,
-    this.phoneNumber,
-    this.country,
-    this.typeDocument,
-    this.document,
-    this.roles,
-    this.createdAt,
-    this.changePasswordDate,
-    this.verifiedEmail,
-    this.isUserTest,
-    this.provider,
-    this.uidevice,
-    this.birthDate,
-    this.gender,
-    this.nickName,
-  });
-
-  /// Creates a new instance of [UserDTO] from a JSON map.
-  factory UserDTO.fromJson(Map<String, dynamic> json) =>
-      _$UserDTOFromJson(json);
 
   /// Converts the [UserDTO] instance to a JSON map.
   Map<String, dynamic> toJson() => _$UserDTOToJson(this);

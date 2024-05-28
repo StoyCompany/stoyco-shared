@@ -162,8 +162,7 @@ class StoycoContainerModal extends StatelessWidget {
                 endIndent: 32,
               ),
             child,
-            showActions
-                ? Column(
+            if (showActions) Column(
                     children: [
                       const Divider(
                         color: Color(0xff92929d),
@@ -204,8 +203,7 @@ class StoycoContainerModal extends StatelessWidget {
                         ),
                       ),
                     ],
-                  )
-                : Container()
+                  ) else Container(),
           ],
         ),
       );

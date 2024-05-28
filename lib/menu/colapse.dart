@@ -72,7 +72,7 @@ class _ColapseState extends State<Colapse> {
                   ),
                   SvgPicture.asset(isExpanded
                       ? 'packages/stoyco_shared/lib/assets/icons/arrowUp.svg'
-                      : 'packages/stoyco_shared/lib/assets/icons/arrowDown.svg'),
+                      : 'packages/stoyco_shared/lib/assets/icons/arrowDown.svg',),
                 ],
               ),
             ),

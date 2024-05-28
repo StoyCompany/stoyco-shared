@@ -15,8 +15,7 @@ class StepInfo extends StatelessWidget {
   final double? descriptionWidth;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       constraints: const BoxConstraints(minHeight: 80),
       width: descriptionWidth,
       child: Column(
@@ -31,19 +30,17 @@ class StepInfo extends StatelessWidget {
         ],
       ),
     );
-  }
 }
 
 class StepTitleWidget extends StatelessWidget {
-  final String title;
   const StepTitleWidget({
     super.key,
     required this.title,
   });
+  final String title;
 
   @override
-  Widget build(BuildContext context) {
-    return Text(
+  Widget build(BuildContext context) => Text(
       title,
       textAlign: TextAlign.center,
       style: const TextStyle(
@@ -53,19 +50,17 @@ class StepTitleWidget extends StatelessWidget {
         fontWeight: FontWeight.w700,
       ),
     );
-  }
 }
 
 class StepDescription extends StatelessWidget {
-  final String description;
   const StepDescription({
     super.key,
     required this.description,
   });
+  final String description;
 
   @override
-  Widget build(BuildContext context) {
-    return SizedBox(
+  Widget build(BuildContext context) => SizedBox(
       width: 452,
       child: Text(
         description,
@@ -78,5 +73,4 @@ class StepDescription extends StatelessWidget {
         ),
       ),
     );
-  }
 }

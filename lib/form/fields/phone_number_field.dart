@@ -14,17 +14,6 @@ import 'package:stoyco_shared/form/models/phone_number.dart';
 /// the user to input a phone number. The phone number is then validated and the
 /// result is stored in a [PhoneNumber] object.
 class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
-  /// The controller for the text field.
-  final TextEditingController? _textController;
-
-  /// The current value of the phone number.
-  PhoneNumber currentValue = PhoneNumber();
-  late bool touched;
-  final double? minHeight;
-  final double? maxHeight;
-  final Color? borderLabelColor;
-  final bool? readOnly;
-  final bool? showErrorsOnInit;
 
   /// Creates a [ReactiveNewPhoneNumberInput].
   ///
@@ -61,9 +50,7 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
             'invalid': (_) => 'Número de celular inválido',
             'requiredCountry': (error) => 'Debe seleccionar un país',
           },
-          showErrors: (value) {
-            return value.invalid;
-          },
+          showErrors: (value) => value.invalid,
           focusNode: FocusNode(),
           builder: (ReactiveFormFieldState<T, PhoneNumber> field) {
             final state = field as _NewPhoneNumberInputState<T>;
@@ -82,7 +69,6 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
                     left: 0,
                     right: 0,
                     child: TextField(
-                      autofocus: false,
                       controller: field._textController,
                       onTap: onTap != null ? () => onTap(field.control) : null,
                       decoration: effectiveDecoration.copyWith(
@@ -112,7 +98,7 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
                         onChanged?.call(field.control);
                       },
                       inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
+                        FilteringTextInputFormatter.digitsOnly,
                       ],
                       keyboardType: TextInputType.phone,
                       readOnly: readOnly ?? false,
@@ -123,7 +109,7 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
                       left: 14,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 3),
+                            horizontal: 8, vertical: 3,),
                         decoration: ShapeDecoration(
                           gradient: const LinearGradient(
                             begin: Alignment(1.00, 0.00),
@@ -147,12 +133,23 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                      )),
+                      ),),
                 ],
               ),
             );
           },
         );
+  /// The controller for the text field.
+  final TextEditingController? _textController;
+
+  /// The current value of the phone number.
+  PhoneNumber currentValue = PhoneNumber();
+  late bool touched;
+  final double? minHeight;
+  final double? maxHeight;
+  final Color? borderLabelColor;
+  final bool? readOnly;
+  final bool? showErrorsOnInit;
 
   @override
   ReactiveFormFieldState<T, PhoneNumber> createState() =>
@@ -268,15 +265,11 @@ class PhoneNumberValueAccessor
     extends ControlValueAccessor<PhoneNumber, String> {
   /// Converts the model value to view value.
   @override
-  String modelToViewValue(PhoneNumber? modelValue) {
-    return modelValue == null ? '' : modelValue.toString();
-  }
+  String modelToViewValue(PhoneNumber? modelValue) => modelValue == null ? '' : modelValue.toString();
 
   /// Converts the view value to model value.
   @override
-  PhoneNumber? viewToModelValue(String? viewValue) {
-    return (viewValue == '' || viewValue == null)
+  PhoneNumber? viewToModelValue(String? viewValue) => (viewValue == '' || viewValue == null)
         ? null
         : PhoneNumber(number: viewValue);
-  }
 }
