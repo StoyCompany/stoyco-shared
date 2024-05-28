@@ -15,7 +15,7 @@ dependencies:
   intl_phone_field: ^3.2.0
   reactive_forms: ^17.0.1
   vph_web_date_picker: ^0.0.5
-  intl: ^0.18.1
+  intl: ^0.19.0
   vph_common_widgets: ^0.0.2
   equatable: ^2.0.5
   hive: ^2.2.3
