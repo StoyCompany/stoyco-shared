@@ -1,3 +1,6 @@
+## 5.2.0
+- chore: Update intl and url_launcher dependencies to latest versions
+
 ## 5.1.0
 
 - chore: Update reactive_forms dependency to version 17.0.1 in pubspec.yaml
