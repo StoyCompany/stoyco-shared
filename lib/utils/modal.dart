@@ -30,10 +30,13 @@ Future<T?> showStoycoModal<T>({
   bool? showDivider,
   BoxDecoration? decoration,
   TextStyle? titleTextStyle,
+  bool? useRootNavigator,
+  bool? showTitle,
 }) =>
     showModalBottomSheet(
       context: context,
       barrierColor: Colors.black.withOpacity(0.5),
+      useRootNavigator: useRootNavigator ?? false,
       builder: (BuildContext context) => StoycoContainerModal(
         title: title,
         onTapAccept: onTapAccept,
@@ -43,6 +46,7 @@ Future<T?> showStoycoModal<T>({
         showDivider: showDivider ?? true,
         decoration: decoration,
         titleTextStyle: titleTextStyle,
+        showTitle: showTitle ?? true,
         child: child,
       ),
     );
@@ -90,6 +94,7 @@ class StoycoContainerModal extends StatelessWidget {
   /// The [onTapCancel] parameter specifies the callback function when the cancel button is pressed.
   /// The [showActions] parameter determines whether to show the actions at the bottom of the container. The default value is false.
   /// The [showDivider] parameter determines whether to show a divider between the title and the child widget. The default value is true.
+  /// The [showTitle] parameter determines whether to show the title. The default value is true.
   const StoycoContainerModal({
     super.key,
     required this.child,
@@ -104,6 +109,7 @@ class StoycoContainerModal extends StatelessWidget {
     this.showActions = false,
     this.showDivider = true,
     this.titleTextStyle,
+    this.showTitle = true,
   });
 
   final Widget child;
@@ -116,6 +122,7 @@ class StoycoContainerModal extends StatelessWidget {
   final bool showActions;
   final bool showDivider;
   final TextStyle? titleTextStyle;
+  final bool showTitle;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -140,19 +147,26 @@ class StoycoContainerModal extends StatelessWidget {
                 color: const Color(0xff92929d),
               ),
             ),
-            const Gap(36),
-            Text(
-              title,
-              style: titleTextStyle ??
-                  const TextStyle(
-                    fontFamily: 'Akkurat Pro',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xfff2f2fa),
-                    decoration: TextDecoration.none,
+            if (showTitle)
+              Column(
+                children: [
+                  const Gap(36),
+                  Text(
+                    title,
+                    style: titleTextStyle ??
+                        const TextStyle(
+                          fontFamily: 'Akkurat Pro',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xfff2f2fa),
+                          decoration: TextDecoration.none,
+                        ),
+                    textAlign: TextAlign.center,
                   ),
-              textAlign: TextAlign.center,
-            ),
+                ],
+              )
+            else
+              Container(),
             const Gap(16),
             if (showDivider)
               const Divider(
@@ -162,48 +176,51 @@ class StoycoContainerModal extends StatelessWidget {
                 endIndent: 32,
               ),
             child,
-            if (showActions) Column(
-                    children: [
-                      const Divider(
-                        color: Color(0xff92929d),
-                        thickness: 1,
-                        indent: 32,
-                        endIndent: 32,
-                      ),
-                      const Gap(16),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 32),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: TextButton(
-                                onPressed: onTapCancel ?? () {},
-                                child: const Text(
-                                  'Cancelar',
-                                  style: TextStyle(
-                                    fontFamily: 'Akkurat Pro',
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                    color: Color(0xffde2424),
-                                    decoration: TextDecoration.none,
-                                  ),
-                                ),
+            if (showActions)
+              Column(
+                children: [
+                  const Divider(
+                    color: Color(0xff92929d),
+                    thickness: 1,
+                    indent: 32,
+                    endIndent: 32,
+                  ),
+                  const Gap(16),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 32),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: TextButton(
+                            onPressed: onTapCancel ?? () {},
+                            child: const Text(
+                              'Cancelar',
+                              style: TextStyle(
+                                fontFamily: 'Akkurat Pro',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xffde2424),
+                                decoration: TextDecoration.none,
                               ),
                             ),
-                            const Gap(16),
-                            Expanded(
-                              child: TextButtonStoyco(
-                                text: 'Aceptar',
-                                height: 40,
-                                onTap: onTapAccept ?? () {},
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ) else Container(),
+                        const Gap(16),
+                        Expanded(
+                          child: TextButtonStoyco(
+                            text: 'Aceptar',
+                            height: 40,
+                            onTap: onTapAccept ?? () {},
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            else
+              Container(),
           ],
         ),
       );
