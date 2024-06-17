@@ -1,6 +1,10 @@
+## 6.0.1
+
+- chore: Update CampaignAppDataDto to use Map<String, String> for data field
+
 ## 6.0.0
 
--feat: Add notification model to shared library
+- feat: Add notification model to shared library
 
 ## 5.2.1
 
