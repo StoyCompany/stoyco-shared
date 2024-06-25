@@ -1,3 +1,7 @@
+## 6.0.2
+
+- chore: Update PhoneNumber structure for user data field
+
 ## 6.0.1
 
 - chore: Update CampaignAppDataDto to use Map<String, String> for data field

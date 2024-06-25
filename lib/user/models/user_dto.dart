@@ -1,11 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:stoyco_shared/user/models/user_phone_number.dart';
 
 part 'user_dto.g.dart';
 
 @HiveType(typeId: 6)
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 
 /// Represents a Data Transfer Object (DTO) for a user.
 /// This class is used for serializing and deserializing user data.
@@ -86,7 +87,8 @@ class UserDTO extends Equatable {
 
   /// The user's phone number.
   @HiveField(10)
-  final String? phoneNumber;
+  @JsonKey(name: 'phoneNumber')
+  final UserPhoneNumber? phoneNumber;
 
   /// The user's country.
   @HiveField(11)
@@ -155,7 +157,7 @@ class UserDTO extends Equatable {
     String? uid,
     String? name,
     String? email,
-    String? phoneNumber,
+    UserPhoneNumber? phoneNumber,
     String? country,
     String? typeDocument,
     String? document,
@@ -296,7 +298,8 @@ class UserDTO extends Equatable {
       email!.isNotEmpty &&
       email != 'empty@empty.com' &&
       phoneNumber != null &&
-      phoneNumber!.isNotEmpty &&
+      phoneNumber!.number.isNotEmpty &&
+      phoneNumber!.cca2Country.isNotEmpty &&
       birthDate != null &&
       birthDate!.isNotEmpty &&
       nickName != null &&

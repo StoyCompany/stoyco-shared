@@ -1,3 +1,5 @@
+import 'package:stoyco_shared/user/models/user_phone_number.dart';
+
 /// Represents a data transfer object for updating user information.
 class UserUpdateDTO {
 
@@ -21,7 +23,10 @@ class UserUpdateDTO {
   UserUpdateDTO.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
     name = json['name'];
-    phoneNumber = json['phoneNumber'];
+    phoneNumber = json['phoneNumber'] == null
+          ? null
+          : UserPhoneNumber.fromJson(
+              json['phoneNumber'] as Map<String, dynamic>,);
     firstName = json['firstName'];
     lastName = json['lastName'];
     photo = json['photo'];
@@ -39,7 +44,7 @@ class UserUpdateDTO {
   String? name;
 
   /// The phone number of the user.
-  String? phoneNumber;
+  UserPhoneNumber? phoneNumber;
 
   /// The first name of the user.
   String? firstName;
@@ -73,7 +78,7 @@ class UserUpdateDTO {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['uid'] = uid;
     data['name'] = name;
-    data['phoneNumber'] = phoneNumber;
+    data['phoneNumber'] = phoneNumber?.toJson();
     data['firstName'] = firstName;
     data['lastName'] = lastName;
     data['photo'] = photo;
