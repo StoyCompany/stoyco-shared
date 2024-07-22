@@ -1,3 +1,7 @@
+## 6.1.3
+
+- feat: Update StoycoContainerModal to include showTitle parameter
+
 ## 6.1.2
 
 - feat: Add showTitle parameter to StoycoContainerModal

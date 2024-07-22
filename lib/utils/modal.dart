@@ -31,6 +31,7 @@ Future<T?> showStoycoModal<T>({
   BoxDecoration? decoration,
   TextStyle? titleTextStyle,
   bool? useRootNavigator,
+  bool? showTitle,
 }) =>
     showModalBottomSheet(
       context: context,
@@ -45,6 +46,7 @@ Future<T?> showStoycoModal<T>({
         showDivider: showDivider ?? true,
         decoration: decoration,
         titleTextStyle: titleTextStyle,
+        showTitle: showTitle ?? true,
         child: child,
       ),
     );
