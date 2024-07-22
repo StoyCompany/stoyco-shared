@@ -1,6 +1,9 @@
 ## 6.1.0
 
 - chore: Update showModalBottomSheet to include useRootNavigator parameter
+## 6.0.2
+
+- chore: Update PhoneNumber structure for user data field
 
 ## 6.0.1
 
