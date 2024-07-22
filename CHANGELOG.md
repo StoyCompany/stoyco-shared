@@ -1,3 +1,7 @@
+## 6.1.0
+
+- chore: Update showModalBottomSheet to include useRootNavigator parameter
+
 ## 6.0.1
 
 - chore: Update CampaignAppDataDto to use Map<String, String> for data field
