@@ -1,3 +1,7 @@
+## 6.1.4
+
+- feat: Update StoycoContainerModal to include showTitle parameter and fix layout issue
+
 ## 6.1.3
 
 - feat: Update StoycoContainerModal to include showTitle parameter

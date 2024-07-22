@@ -147,19 +147,23 @@ class StoycoContainerModal extends StatelessWidget {
                 color: const Color(0xff92929d),
               ),
             ),
-            const Gap(36),
             if (showTitle)
-              Text(
-                title,
-                style: titleTextStyle ??
-                    const TextStyle(
-                      fontFamily: 'Akkurat Pro',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xfff2f2fa),
-                      decoration: TextDecoration.none,
-                    ),
-                textAlign: TextAlign.center,
+              Column(
+                children: [
+                  const Gap(36),
+                  Text(
+                    title,
+                    style: titleTextStyle ??
+                        const TextStyle(
+                          fontFamily: 'Akkurat Pro',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xfff2f2fa),
+                          decoration: TextDecoration.none,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               )
             else
               Container(),
