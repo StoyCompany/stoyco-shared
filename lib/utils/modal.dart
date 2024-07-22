@@ -92,6 +92,7 @@ class StoycoContainerModal extends StatelessWidget {
   /// The [onTapCancel] parameter specifies the callback function when the cancel button is pressed.
   /// The [showActions] parameter determines whether to show the actions at the bottom of the container. The default value is false.
   /// The [showDivider] parameter determines whether to show a divider between the title and the child widget. The default value is true.
+  /// The [showTitle] parameter determines whether to show the title. The default value is true.
   const StoycoContainerModal({
     super.key,
     required this.child,
@@ -106,6 +107,7 @@ class StoycoContainerModal extends StatelessWidget {
     this.showActions = false,
     this.showDivider = true,
     this.titleTextStyle,
+    this.showTitle = true,
   });
 
   final Widget child;
@@ -118,6 +120,7 @@ class StoycoContainerModal extends StatelessWidget {
   final bool showActions;
   final bool showDivider;
   final TextStyle? titleTextStyle;
+  final bool showTitle;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -143,18 +146,21 @@ class StoycoContainerModal extends StatelessWidget {
               ),
             ),
             const Gap(36),
-            Text(
-              title,
-              style: titleTextStyle ??
-                  const TextStyle(
-                    fontFamily: 'Akkurat Pro',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xfff2f2fa),
-                    decoration: TextDecoration.none,
-                  ),
-              textAlign: TextAlign.center,
-            ),
+            if (showTitle)
+              Text(
+                title,
+                style: titleTextStyle ??
+                    const TextStyle(
+                      fontFamily: 'Akkurat Pro',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xfff2f2fa),
+                      decoration: TextDecoration.none,
+                    ),
+                textAlign: TextAlign.center,
+              )
+            else
+              Container(),
             const Gap(16),
             if (showDivider)
               const Divider(
