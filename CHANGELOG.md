@@ -1,7 +1,13 @@
+## 5.2.2
+
+chore: Update intl and url_launcher dependencies to latest versions
+
 ## 5.2.1
+
 - chore: Update intl and url_launcher dependencies to latest versions
 
 ## 5.2.0
+
 - chore: Update intl and url_launcher dependencies to latest versions
 
 ## 5.1.0
@@ -38,6 +44,7 @@
 ## 5.0.0
 
 - Remove unnecessary files and update dependencies
+
 ## 3.1.1
 
 chore: Update intl dependency to version 0.18.1
