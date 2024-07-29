@@ -1,3 +1,7 @@
+### 6.2.2
+
+- feat: Refactor PhoneNumber class to improve code readability and maintainability
+
 ## 6.2.1
 
 - feat: Add BorderGradientStoyco widget documentation for custom border gradient effect
