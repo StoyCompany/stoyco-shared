@@ -4,12 +4,12 @@ import 'package:intl_phone_field/countries.dart';
 ///
 /// It contains a [Country] and a [String] number.
 class PhoneNumber {
-
   /// Creates a [PhoneNumber].
   PhoneNumber({
     this.selectedCountry,
     this.number,
   });
+
   /// The selected country of the phone number.
   Country? selectedCountry;
 
@@ -20,24 +20,25 @@ class PhoneNumber {
   PhoneNumber copyWith({
     Country? selectedCountry,
     String? phoneNumber,
-  }) => PhoneNumber(
-      selectedCountry: selectedCountry ?? this.selectedCountry,
-      number: phoneNumber ?? number,
-    );
+  }) =>
+      PhoneNumber(
+        selectedCountry: selectedCountry ?? this.selectedCountry,
+        number: phoneNumber ?? number,
+      );
 
   /// Returns true if the phone number is valid.
   ///
   /// A phone number is valid if it has a country and a number.
   bool get isValid {
-    if (isValidCountry && number == null) {
-      return false;
-    } else if (number!.isEmpty) {
-      return false;
-    } else if (number!.length < selectedCountry!.minLength) {
-      return false;
-    } else if (number!.length > selectedCountry!.maxLength) {
+    if (number == null || number!.isEmpty || selectedCountry == null) {
       return false;
     }
+
+    if (number!.length < selectedCountry!.minLength ||
+        number!.length > selectedCountry!.maxLength) {
+      return false;
+    }
+
     return true;
   }
 
