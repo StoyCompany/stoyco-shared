@@ -1,6 +1,35 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+/// A custom widget that applies a gradient border to its child widget.
+///
+/// The [BorderGradientStoyco] widget takes in several parameters including the [strokeWidth],
+/// [radius], [gradient], [child], and [minHeight]. It then uses these parameters to create a
+/// custom border gradient effect around its child widget.
+///
+/// The [strokeWidth] parameter specifies the width of the border stroke.
+/// The [radius] parameter specifies the radius of the border corners.
+/// The [gradient] parameter specifies the gradient to be applied to the border.
+/// The [child] parameter specifies the widget to be displayed inside the border.
+/// The [minHeight] parameter specifies the minimum height of the widget.
+///
+/// Example usage:
+///
+/// ```dart
+/// BorderGradientStoyco(
+///   strokeWidth: 2.0,
+///   radius: 10.0,
+///   gradient: LinearGradient(
+///     colors: [Colors.red, Colors.blue],
+///   ),
+///   child: Container(
+///     width: 200,
+///     height: 100,
+///     child: Text('Hello World'),
+///   ),
+///   minHeight: 50,
+/// )
+/// ```
 class BorderGradientStoyco extends StatelessWidget {
   BorderGradientStoyco({
     super.key,

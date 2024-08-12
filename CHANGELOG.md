@@ -1,3 +1,7 @@
+## 6.2.1
+
+- feat: Add BorderGradientStoyco widget documentation for custom border gradient effect
+
 ## 6.2.0
 
 - feat: Introduce `BorderGradientStoyco` and `StoycoOutlinedButton` widgets.
