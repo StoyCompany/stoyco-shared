@@ -1,3 +1,17 @@
+## 6.2.0
+
+- feat: Introduce `BorderGradientStoyco` and `StoycoOutlinedButton` widgets.
+
+  - **`BorderGradientStoyco`**: A new widget that allows creating a custom border with a gradient around a child `Widget`. It uses a `CustomPainter` to draw the border, providing an attractive and customizable visual effect.
+
+    - Adds support for configuring the border thickness (`strokeWidth`), corner radius (`radius`), and a gradient (`gradient`) to style the border.
+
+  - **`StoycoOutlinedButton`**: A stylized button that includes a gradient border and custom shadows, designed to stand out in the user interface. This button is highly configurable, allowing customization of its size, text style, and click behavior.
+    - Includes support for adjusting the button's width (`width`), height (`height`), and text style (`style`).
+    - Uses `BorderGradientStoyco` to achieve a gradient border effect around the button, offering a modern and consistent aesthetic across the interface.
+
+This change adds new customization and design options to your library, enabling developers to create more visually appealing and dynamic user interfaces.
+
 ## 6.1.4
 
 - feat: Update StoycoContainerModal to include showTitle parameter and fix layout issue
