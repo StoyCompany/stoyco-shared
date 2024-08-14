@@ -1,3 +1,8 @@
+## 7.1.2
+
+- feat: Update pin_code_fields package to version 7.1.2
+
+
 ## 7.0.1
 
 - feat: Update StoycoCountryPrefixIcon to improve UI and add language support
