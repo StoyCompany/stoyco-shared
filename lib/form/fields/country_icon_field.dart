@@ -13,8 +13,11 @@ class StoycoCountryPrefixIcon extends StatefulWidget {
   /// Creates a [StoycoCountryPrefixIcon].
   ///
   /// The [onCountryChanged] argument is required.
-  const StoycoCountryPrefixIcon(
-      {super.key, required this.onCountryChanged, this.selectedCountry,});
+  const StoycoCountryPrefixIcon({
+    super.key,
+    required this.onCountryChanged,
+    this.selectedCountry,
+  });
 
   /// The callback function that is called when the selected country changes.
   final void Function(Country) onCountryChanged;
@@ -60,7 +63,9 @@ class _StoycoCountryPrefixIconState extends State<StoycoCountryPrefixIcon> {
             builder: (context) => StatefulBuilder(
               builder: (ctx, setState) => Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: getPadding(), vertical: size.height * 0.1,),
+                  horizontal: getPadding(),
+                  vertical: size.height * 0.1,
+                ),
                 child: CountryPickerDialog(
                   languageCode: 'es',
                   style: PickerDialogStyle(
@@ -92,48 +97,53 @@ class _StoycoCountryPrefixIconState extends State<StoycoCountryPrefixIcon> {
         child: ValueListenableBuilder(
           valueListenable: seletectedCountry,
           builder: (BuildContext context, Country? value, Widget? child) => Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Gap(4),
-                if (value != null) CountryFlag.fromCountryCode(
-                        value.code,
-                        borderRadius: 4,
-                        width: 22,
-                        height: 19,
-                      ) else Container(
-                        width: 22,
-                        height: 19,
-                        decoration: ShapeDecoration(
-                          color: const Color(0xFF92929D),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                        ),
-                      ),
-                const Gap(4),
-                Text(
-                  value != null ? '+${value.dialCode}' : '__',
-                  style: const TextStyle(
-                    color: Color(0xFFF2F2FA),
-                    fontSize: 16,
-                    fontFamily: 'Akkurat Pro',
-                    fontWeight: FontWeight.w700,
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Gap(4),
+              if (value != null)
+                CountryFlag.fromCountryCode(
+                  value.code,
+                  shape: const RoundedRectangle(
+                    4,
+                  ),
+                  width: 22,
+                  height: 19,
+                )
+              else
+                Container(
+                  width: 22,
+                  height: 19,
+                  decoration: ShapeDecoration(
+                    color: const Color(0xFF92929D),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
                   ),
                 ),
-                const Gap(4),
-                SvgPicture.asset(
-                  'packages/stoyco_shared/lib/assets/icons/arrow-down-icon.svg',
-                  height: 16,
-                  width: 16,
-                  colorFilter: const ColorFilter.mode(
-                    Color(0xFF92929D),
-                    BlendMode.srcIn,
-                  ),
+              const Gap(4),
+              Text(
+                value != null ? '+${value.dialCode}' : '__',
+                style: const TextStyle(
+                  color: Color(0xFFF2F2FA),
+                  fontSize: 16,
+                  fontFamily: 'Akkurat Pro',
+                  fontWeight: FontWeight.w700,
                 ),
-                const Gap(4),
-              ],
-            ),
+              ),
+              const Gap(4),
+              SvgPicture.asset(
+                'packages/stoyco_shared/lib/assets/icons/arrow-down-icon.svg',
+                height: 16,
+                width: 16,
+                colorFilter: const ColorFilter.mode(
+                  Color(0xFF92929D),
+                  BlendMode.srcIn,
+                ),
+              ),
+              const Gap(4),
+            ],
+          ),
         ),
       ),
     );
