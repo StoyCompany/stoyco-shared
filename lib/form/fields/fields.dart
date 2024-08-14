@@ -10,3 +10,4 @@ export 'package:stoyco_shared/form/fields/phone_number_field.dart';
 export 'package:stoyco_shared/form/fields/text_field_with_check.dart';
 export 'package:stoyco_shared/form/fields/text_field.dart';
 export 'package:stoyco_shared/form/fields/drop_down_field_with_modal.dart';
+export 'package:stoyco_shared/form/fields/pin_code.dart';

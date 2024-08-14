@@ -1,7 +1,10 @@
+## 7.1.3
+
+- feat: Add `PinCode` field to form fields
+
 ## 7.1.2
 
 - feat: Update pin_code_fields package to version 7.1.2
-
 
 ## 7.0.1
 

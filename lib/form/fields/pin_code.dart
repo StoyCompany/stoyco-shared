@@ -12,8 +12,6 @@ import 'package:flutter/services.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:stoyco_shared/external_packages/pin_code_fields/pin_code_fields.dart';
 
-export 'package:stoyco_shared/external_packages/pin_code_fields/pin_code_fields.dart';
-
 /// A [StoycoReactivePinCodeTextField] that contains a [PinCodeTextField].
 ///
 /// This is a convenience widget that wraps a [PinCodeTextField] widget in a

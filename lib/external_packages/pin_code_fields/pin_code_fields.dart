@@ -1,8 +1,6 @@
 library pin_code_fields;
 
 import 'dart:async';
-import 'dart:io';
-
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
@@ -10,6 +8,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:stoyco_shared/external_packages/pin_code_fields/src/cursor_painter.dart';
+
+export 'package:stoyco_shared/external_packages/pin_code_fields/src/cursor_painter.dart';
 
 part 'src/models/haptic_feedback_type.dart';
 part 'src/models/animation_type.dart';
