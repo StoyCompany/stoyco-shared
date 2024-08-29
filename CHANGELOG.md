@@ -1,3 +1,7 @@
+## 7.1.4
+
+- feat: Update text field with check to remove null check
+
 ## 7.1.3
 
 - feat: Add `PinCode` field to form fields
