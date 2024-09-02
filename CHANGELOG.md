@@ -1,3 +1,19 @@
+## 7.1.4
+
+- feat: Update text field with check to remove null check
+
+## 7.1.3
+
+- feat: Add `PinCode` field to form fields
+
+## 7.1.2
+
+- feat: Update pin_code_fields package to version 7.1.2
+
+## 7.0.1
+
+- feat: Update StoycoCountryPrefixIcon to improve UI and add language support
+
 ### 6.2.2
 
 - feat: Refactor PhoneNumber class to improve code readability and maintainability

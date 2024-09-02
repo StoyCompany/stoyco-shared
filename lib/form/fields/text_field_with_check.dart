@@ -60,92 +60,87 @@ class _StoycoTextFieldWithCheckState extends State<StoycoTextFieldWithCheck> {
   /// The value of the text field.
   String value = '';
 
-  /// Sets the value of the text field.
-  set setValue(String value) {
-    setState(() {
-      this.value = value;
-    });
-  }
-
   @override
   Widget build(BuildContext context) => StoyCoTextFormField(
-      formControlName: widget.formControlName,
-      labelText: widget.labelText,
-      hintText: widget.hintText,
-      readOnly: widget.readOnly ?? false,
-      inputFormatters: widget.inputFormatters ??
-          <TextInputFormatter>[
-            FilteringTextInputFormatter.allow(RegExp('[A-zÀ-ú]')),
-          ],
-      onChanged: (formControl) async {
-        widget.onChanged?.call(formControl);
-        final valueIsValid = await widget.asyncValidate(formControl.value);
-        setState(() {
-          setValue = formControl.value;
-
-          if (!formControl.invalid) {
-            isValid = valueIsValid;
-          } else {
-            isValid = false;
-          }
-        });
-      },
-      validationMessages:
-          widget.validationMessages ?? StoycoForms.validationMessages(),
-      decoration: InputDecoration(
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: isValid || widget.readOnly == true
-            ? UnconstrainedBox(
-                child: SvgPicture.asset(
-                  'packages/stoyco_shared/lib/assets/icons/check_icon.svg',
-                  width: 20,
-                  height: 20,
-                ),
-              )
-            : value.isNotEmpty || widget.showErrorsOnInit == true
-                ? UnconstrainedBox(
-                    child: SvgPicture.asset(
-                      'packages/stoyco_shared/lib/assets/icons/close_icon.svg',
-                      width: 20,
-                      height: 20,
-                    ),
-                  )
-                : null,
-        errorBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(24)),
-          borderSide: BorderSide(
-            color: Color(0xFFDE2424),
-          ),
-        ),
-        label: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-          decoration: ShapeDecoration(
-            gradient: const LinearGradient(
-              begin: Alignment(1.00, 0.00),
-              end: Alignment(-1, 0),
-              colors: [Color(0xFF030A1A), Color(0xFF0C1B24)],
-            ),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          ),
-          child: Text(
-            widget.labelText ?? '',
-            style: const TextStyle(
-              color: Color(0xFF92929D),
-              fontSize: 12,
-              fontFamily: 'Akkurat Pro',
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ),
+        formControlName: widget.formControlName,
+        labelText: widget.labelText,
         hintText: widget.hintText,
-        hintStyle: const TextStyle(
-          color: Color(0xFF92929D),
-          fontSize: 14,
-          fontFamily: 'Akkurat Pro',
-          fontWeight: FontWeight.w400,
-          height: 0.08,
+        readOnly: widget.readOnly ?? false,
+        inputFormatters: widget.inputFormatters ??
+            <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp('[A-zÀ-ú]')),
+            ],
+        onChanged: (formControl) async {
+          widget.onChanged?.call(formControl);
+          final valueIsValid = await widget.asyncValidate(formControl.value);
+          setState(() {
+            if (formControl.value != null) {
+              value = formControl.value;
+            }
+
+            if (!formControl.invalid) {
+              isValid = valueIsValid;
+            } else {
+              isValid = false;
+            }
+          });
+        },
+        validationMessages:
+            widget.validationMessages ?? StoycoForms.validationMessages(),
+        decoration: InputDecoration(
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          suffixIcon: isValid || widget.readOnly == true
+              ? UnconstrainedBox(
+                  child: SvgPicture.asset(
+                    'packages/stoyco_shared/lib/assets/icons/check_icon.svg',
+                    width: 20,
+                    height: 20,
+                  ),
+                )
+              : value.isNotEmpty || widget.showErrorsOnInit == true
+                  ? UnconstrainedBox(
+                      child: SvgPicture.asset(
+                        'packages/stoyco_shared/lib/assets/icons/close_icon.svg',
+                        width: 20,
+                        height: 20,
+                      ),
+                    )
+                  : null,
+          errorBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(24)),
+            borderSide: BorderSide(
+              color: Color(0xFFDE2424),
+            ),
+          ),
+          label: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+            decoration: ShapeDecoration(
+              gradient: const LinearGradient(
+                begin: Alignment(1.00, 0.00),
+                end: Alignment(-1, 0),
+                colors: [Color(0xFF030A1A), Color(0xFF0C1B24)],
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+            ),
+            child: Text(
+              widget.labelText ?? '',
+              style: const TextStyle(
+                color: Color(0xFF92929D),
+                fontSize: 12,
+                fontFamily: 'Akkurat Pro',
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+          hintText: widget.hintText,
+          hintStyle: const TextStyle(
+            color: Color(0xFF92929D),
+            fontSize: 14,
+            fontFamily: 'Akkurat Pro',
+            fontWeight: FontWeight.w400,
+            height: 0.08,
+          ),
         ),
-      ),
-    );
+      );
 }
