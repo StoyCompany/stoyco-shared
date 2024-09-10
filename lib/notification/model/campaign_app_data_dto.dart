@@ -5,21 +5,12 @@ import 'package:stoyco_shared/notification/model/field.dart';
 
 @immutable
 class CampaignAppDataDto {
-  final String? userId;
-  final String? itemId;
-  final List<Field>? fields;
-  final Map<String, String>? data;
-
   const CampaignAppDataDto({
     this.userId,
     this.itemId,
     this.fields,
     this.data,
   });
-
-  @override
-  String toString() =>
-      'CampaignAppDataDto(userId: $userId, itemId: $itemId, fields: $fields, data: $data)';
 
   factory CampaignAppDataDto.fromMap(Map<String, dynamic> data) =>
       CampaignAppDataDto(
@@ -32,18 +23,26 @@ class CampaignAppDataDto {
             ?.map((key, value) => MapEntry(key, value as String)),
       );
 
+  /// `dart:convert`
+  ///
+  /// Parses the string and returns the resulting Json object as [CampaignAppDataDto].
+  factory CampaignAppDataDto.fromJson(String data) =>
+      CampaignAppDataDto.fromMap(json.decode(data) as Map<String, dynamic>);
+  final String? userId;
+  final String? itemId;
+  final List<Field>? fields;
+  final Map<String, String>? data;
+
+  @override
+  String toString() =>
+      'CampaignAppDataDto(userId: $userId, itemId: $itemId, fields: $fields, data: $data)';
+
   Map<String, dynamic> toMap() => {
         'userId': userId,
         'itemId': itemId,
         'fields': fields?.map((e) => e.toMap()).toList(),
         'data': data,
       };
-
-  /// `dart:convert`
-  ///
-  /// Parses the string and returns the resulting Json object as [CampaignAppDataDto].
-  factory CampaignAppDataDto.fromJson(String data) =>
-      CampaignAppDataDto.fromMap(json.decode(data) as Map<String, dynamic>);
 
   /// `dart:convert`
   ///

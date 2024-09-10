@@ -1,3 +1,6 @@
+## 8.0.1
+- chore: Run dart format on the project and dart fix on the project
+
 ## 8.0.0
 
 - feat: Add new dependencies and update existing ones

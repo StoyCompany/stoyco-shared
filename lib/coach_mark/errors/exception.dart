@@ -7,8 +7,9 @@ class EmptyUserTokenException implements Exception {
 }
 
 class NoContentCoachMarkDataByTypeException implements Exception {
-  NoContentCoachMarkDataByTypeException(
-      [this.message = 'No content coach mark data by type']);
+  NoContentCoachMarkDataByTypeException([
+    this.message = 'No content coach mark data by type',
+  ]);
   final String message;
 
   @override
@@ -16,8 +17,9 @@ class NoContentCoachMarkDataByTypeException implements Exception {
 }
 
 class OnboardingTypeNotProvidedException implements Exception {
-  OnboardingTypeNotProvidedException(
-      [this.message = 'Onboarding type not provided']);
+  OnboardingTypeNotProvidedException([
+    this.message = 'Onboarding type not provided',
+  ]);
   final String message;
 
   @override
@@ -26,8 +28,9 @@ class OnboardingTypeNotProvidedException implements Exception {
 
 //ERROR getCouchMarksContent
 class GetCoachMarksContentException implements Exception {
-  GetCoachMarksContentException(
-      [this.message = 'Error getting coach marks content']);
+  GetCoachMarksContentException([
+    this.message = 'Error getting coach marks content',
+  ]);
   final String message;
 
   @override

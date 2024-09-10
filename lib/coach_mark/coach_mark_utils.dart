@@ -144,7 +144,8 @@ class CoachMarkUtils {
 
   /// Builds a list of `TargetFocus` objects from a list of `CoachMarkTargetContent`.
   static List<TargetFocus> buildTargets(
-          List<CoachMarkTargetContent> targetContents) =>
+    List<CoachMarkTargetContent> targetContents,
+  ) =>
       targetContents
           .map((targetContent) => targetContent.buildTargetFocus())
           .toList();

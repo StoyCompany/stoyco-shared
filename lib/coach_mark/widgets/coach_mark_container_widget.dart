@@ -104,7 +104,7 @@ class CoachMarkContainerWidget extends StatelessWidget {
 
         decoration: BoxDecoration(
           border: const GradientBoxBorder(
-            gradient: const LinearGradient(
+            gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [

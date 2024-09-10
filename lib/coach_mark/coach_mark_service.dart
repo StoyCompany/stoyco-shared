@@ -29,7 +29,7 @@ class CoachMarkService {
   CoachMarkService._({
     this.environment = StoycoEnvironment.development,
     this.userToken = '',
-    functionToUpdateToken = null,
+    functionToUpdateToken,
   }) {
     _coachMarkDataSource = CoachMarkDataSource(
       environment: environment,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:stoyco_shared/utils/colors.dart';
@@ -93,23 +92,23 @@ class LaunchLocationWidget extends StatelessWidget {
   Widget build(BuildContext context) => ElevatedButton(
         onPressed: () => _launchLocation(),
         style: ButtonStyle(
-          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+          padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
             padding ??
                 const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 8,
                 ),
           ),
-          backgroundColor: MaterialStateProperty.all<Color>(
+          backgroundColor: WidgetStateProperty.all<Color>(
             const Color(0xff252836),
           ),
-          textStyle: MaterialStateProperty.all<TextStyle>(
+          textStyle: WidgetStateProperty.all<TextStyle>(
             TextStyle(
               color: StoycoColors.text,
               fontSize: 10,
             ),
           ),
-          minimumSize: MaterialStateProperty.all<Size>(
+          minimumSize: WidgetStateProperty.all<Size>(
             const Size(111, 32),
           ),
         ),

@@ -16,20 +16,20 @@ class StepInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-      constraints: const BoxConstraints(minHeight: 80),
-      width: descriptionWidth,
-      child: Column(
-        children: [
-          StepTitleWidget(
-            title: title,
-          ),
-          const Gap(38),
-          StepDescription(
-            description: description,
-          ),
-        ],
-      ),
-    );
+        constraints: const BoxConstraints(minHeight: 80),
+        width: descriptionWidth,
+        child: Column(
+          children: [
+            StepTitleWidget(
+              title: title,
+            ),
+            const Gap(38),
+            StepDescription(
+              description: description,
+            ),
+          ],
+        ),
+      );
 }
 
 class StepTitleWidget extends StatelessWidget {
@@ -41,15 +41,15 @@ class StepTitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Text(
-      title,
-      textAlign: TextAlign.center,
-      style: const TextStyle(
-        color: Color(0xFFF2F2FA),
-        fontSize: 32,
-        fontFamily: 'Akkurat Pro',
-        fontWeight: FontWeight.w700,
-      ),
-    );
+        title,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          color: Color(0xFFF2F2FA),
+          fontSize: 32,
+          fontFamily: 'Akkurat Pro',
+          fontWeight: FontWeight.w700,
+        ),
+      );
 }
 
 class StepDescription extends StatelessWidget {
@@ -61,16 +61,16 @@ class StepDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SizedBox(
-      width: 452,
-      child: Text(
-        description,
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          color: Color(0xFFF2F2FA),
-          fontSize: 16,
-          fontFamily: 'Akkurat Pro',
-          fontWeight: FontWeight.w700,
+        width: 452,
+        child: Text(
+          description,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Color(0xFFF2F2FA),
+            fontSize: 16,
+            fontFamily: 'Akkurat Pro',
+            fontWeight: FontWeight.w700,
+          ),
         ),
-      ),
-    );
+      );
 }

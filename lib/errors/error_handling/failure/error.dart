@@ -2,7 +2,6 @@ import 'package:hive/hive.dart';
 import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
 import 'package:stoyco_shared/stoyco_shared.dart';
 
-
 class ErrorFailure extends Failure {
   factory ErrorFailure.decode(
     Error? error,
