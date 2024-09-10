@@ -7,16 +7,37 @@ import 'package:stoyco_shared/errors/error_handling/failure/error.dart';
 import 'package:stoyco_shared/errors/error_handling/failure/exception.dart';
 import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
 
+/// A repository class responsible for interacting with the coach mark data source.
+///
+/// This class provides methods to fetch, update, create, and reset coach mark
+/// and onboarding data. It uses the `CoachMarkDataSource` to communicate with
+/// the underlying data source (likely an API).
+///
+/// It handles error cases and returns results wrapped in `Either` to indicate
+/// success or failure.
 class CoachMarkRepository {
+  /// Creates a `CoachMarkRepository` instance.
+  ///
+  /// * `_dataSource`: The data source to use for fetching and updating data.
+  /// * `userToken`: The user's authentication token.
   CoachMarkRepository(this._dataSource, this.userToken);
+
+  /// The data source used by the repository.
   final CoachMarkDataSource _dataSource;
+
+  /// The user's authentication token.
   late String userToken;
 
+  /// Updates the user token and propagates it to the data source.
   set token(String token) {
     userToken = token;
     _dataSource.updateUserToken(token);
   }
 
+  /// Fetches onboarding data for the current user.
+  ///
+  /// Returns a `Right` containing a list of `Onboarding` objects on success,
+  /// or a `Left` containing a `Failure` on error.
   Future<Either<Failure, List<Onboarding>>>
       getOnboardingsByUserCoachMarkData() async {
     try {
@@ -43,6 +64,9 @@ class CoachMarkRepository {
     }
   }
 
+  /// Fetches onboarding data for the current user by type.
+  ///
+  /// * `type`: The type of onboarding data to fetch.
   Future<Either<Failure, Onboarding>> getOnboardingByTypeCoachMarkData({
     required String type,
   }) async {
@@ -68,6 +92,11 @@ class CoachMarkRepository {
     }
   }
 
+  /// Updates onboarding data for the current user.
+  ///
+  /// * `type`: The type of onboarding data to update.
+  /// * `step`: The step of the onboarding data to update.
+  /// * `isCompleted`: Whether the onboarding data is completed.
   Future<Either<Failure, Onboarding>> updateOnboardingCoachMarkData({
     required String type,
     required int step,
@@ -97,6 +126,9 @@ class CoachMarkRepository {
     }
   }
 
+  /// Creates onboarding data for the current user.
+  ///
+  /// * `type`: The type of onboarding data to create.
   Future<Either<Failure, Onboarding>> createOnboardingCoachMarkData({
     required String type,
   }) async {
@@ -122,6 +154,10 @@ class CoachMarkRepository {
     }
   }
 
+  /// Resets all onboarding coach mark data
+  ///
+  /// Returns a `Right` containing `true` on success,
+  /// or a `Left` containing a `Failure` on error
   Future<Either<Failure, bool>> resetOnboardingCoachMarkData() async {
     try {
       final response = await _dataSource.resetOnboardingCoachMarkData();
@@ -143,6 +179,10 @@ class CoachMarkRepository {
     }
   }
 
+  /// Fetches general coach mark data.
+  ///
+  /// Returns a `Right` containing a `CoachMarksContent` object on success
+  /// or a `Left` containing a `Failure` on error
   Future<Either<Failure, CoachMarksContent>> getCoachMarkData() async {
     try {
       final response = await _dataSource.getCoachMarkData();

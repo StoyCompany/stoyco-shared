@@ -155,7 +155,10 @@ class _StoycoPasswordFielState extends State<StoycoPasswordField> {
       ),
       Validators.delegate(
         (control) => _requiredPattern(
-            control, _lowercaseLetterRegExp, 'lowercaseLetter'),
+          control,
+          _lowercaseLetterRegExp,
+          'lowercaseLetter',
+        ),
       ),
     ];
     widget.formControl.setValidators(validators);

@@ -11,7 +11,19 @@ import 'package:stoyco_shared/coach_mark/errors/exception.dart';
 import 'package:stoyco_shared/coach_mark/models/onboarding.dart';
 import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
 
+/// A service class to handle coach marks and onboarding functionality.
+///
+/// This class provides methods to fetch, update, and interact with coach mark
+/// data, as well as manage user onboarding progress.
+///
+/// It also handles user token management and provides a stream to indicate
+/// whether coach marks are currently open.
 class CoachMarkService {
+  /// Creates a singleton instance of `CoachMarkService`.
+  ///
+  /// * `environment`: The current environment (development, production, etc.). Defaults to `StoycoEnvironment.development`.
+  /// * `userToken`: The user's authentication token.
+  /// * `functionToUpdateToken`: An optional function to update the token if it becomes invalid.
   factory CoachMarkService({
     StoycoEnvironment environment = StoycoEnvironment.development,
     String userToken = '',
@@ -26,6 +38,8 @@ class CoachMarkService {
 
     return instance;
   }
+
+  /// Private constructor to enforce singleton pattern.
   CoachMarkService._({
     this.environment = StoycoEnvironment.development,
     this.userToken = '',
@@ -59,27 +73,36 @@ class CoachMarkService {
   Stream<bool> get isCoachMarkOpenStream => _isCoachMarkController.stream;
   Future<bool> get isCoachMarkOpen => _isCoachMarkController.stream.last;
 
+  /// Initializes the service by fetching onboarding data.
   void onInit() {
     getOnboardingsByUserCoachMarkData();
   }
+
+  /// Updates the user token and associated repositories.
 
   set token(String token) {
     userToken = token;
     _coachMarkRepository!.token = token;
   }
 
+  /// Sets the list of onboarding data.
   set onboardingListData(List<Onboarding> onboardingListData) {
     onboardingList = onboardingListData;
   }
 
+  /// Opens the coach mark.
   void openCoachMark() {
     _isCoachMarkController.add(true);
   }
 
+  /// Closes the coach mark.
   void closeCoachMark() {
     _isCoachMarkController.add(false);
   }
 
+  /// Fetches the coach marks content.
+  ///
+  /// Throws a `GetCoachMarksContentException` if fetching fails.
   Future<CoachMarksContent> getCouchMarksContent() async {
     final result = await _coachMarkRepository?.getCoachMarkData();
     if (result != null && result.isRight) {
@@ -88,6 +111,7 @@ class CoachMarkService {
     throw GetCoachMarksContentException();
   }
 
+  /// Fetches onboarding data for the current user.
   Future<void> getOnboardingsByUserCoachMarkData() async {
     await verifyToken();
     final result =
@@ -96,10 +120,9 @@ class CoachMarkService {
     onboardingListData = result.isRight ? result.right : [];
   }
 
-  void dispose() {
-    _isCoachMarkController.close();
-  }
-
+  /// Verifies the user token and updates it if necessary.
+  ///
+  /// Throws an exception if token update fails.
   Future<void> verifyToken() async {
     if (userToken.isEmpty) {
       if (functionToUpdateToken == null) {
@@ -118,6 +141,9 @@ class CoachMarkService {
     }
   }
 
+  /// Fetches onboarding data for a specific type.
+  ///
+  /// * `type`: The type of onboarding to fetch.
   Future<Either<Failure, Onboarding>> getOnboardingByTypeCoachMarkData({
     required String type,
   }) async {
@@ -148,6 +174,11 @@ class CoachMarkService {
     );
   }
 
+  /// Marks a specific step in an onboarding as completed.
+  ///
+  /// * `type`: The type of onboarding.
+  /// * `step`: The step to mark as completed.
+  /// * `isCompleted`: Whether the step is completed or not.
   Future<Either<Failure, Onboarding>> markStepAsCompleted({
     required OnboardingType type,
     required int step,
@@ -161,6 +192,9 @@ class CoachMarkService {
     );
   }
 
+  /// Resets all onboarding data.
+  ///
+  /// Returns `true` if reset is successful, `false` otherwise.
   Future<bool> resetOnboardingCoachMarkData() async {
     await verifyToken();
     final result = await _coachMarkRepository!
@@ -175,6 +209,11 @@ class CoachMarkService {
     return result;
   }
 
+  /// Fetches coach mark content for a specific type.
+  ///
+  /// * `type`: The type of coach mark to fetch.
+  ///
+  /// Throws exceptions if type is ignored, content is not found, or fetching fails.
   Future<CoachMark>? getCouchMarksContentByType(OnboardingType type) async {
     if (ignoredTutorials.contains(type)) {
       throw OnboardingTypeNotProvidedException();
@@ -211,10 +250,23 @@ class CoachMarkService {
     }
   }
 
+  /// Skips an onboarding for a specific type.
+  ///
+  /// * `type`: The type of onboarding to skip.
   void skipOnboardingByType(OnboardingType type) {
     ignoredTutorials.add(type);
   }
 
+  /// Checks if an onboarding is ignored.
+  ///
+  /// * `type`: The type of onboarding to check
+  ///
+  /// Returns `true` if ignored, `false` otherwise
   bool isOnboardingIgnored(OnboardingType type) =>
       ignoredTutorials.contains(type);
+
+  /// Disposes of the stream controller.
+  void dispose() {
+    _isCoachMarkController.close();
+  }
 }

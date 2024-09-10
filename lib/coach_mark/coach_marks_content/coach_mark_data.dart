@@ -2,11 +2,24 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'coach_mark_data.g.dart';
 
+/// Represents data associated with a coach mark, including content and behavior settings.
 @JsonSerializable()
 class CoachMarkData {
+  /// Creates a `CoachMarkData` object from a JSON map.
+  ///
+  /// * `json`: The JSON map containing the coach mark data
   factory CoachMarkData.fromJson(Map<String, dynamic> json) =>
       _$CoachMarkDataFromJson(json);
 
+  /// Creates a `CoachMarkData` object.
+  ///
+  /// * `title`: The title of the coach mark (optional).
+  /// * `description`: The description or body text of the coach mark (optional).
+  /// * `button`: The text for the button in the coach mark (optional).
+  /// * `type`: The type of coach mark, likely corresponding to a specific feature or area (optional).
+  /// * `step`: The current step or position in a sequence of coach marks (optional).
+  /// * `enableClose`: Whether to show a close button in the coach mark (optional).
+  /// * `enableNext`: Whether to show a "next" button in the coach mark (optional).
   const CoachMarkData({
     this.title,
     this.description,
