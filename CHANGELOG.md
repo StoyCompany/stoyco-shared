@@ -1,3 +1,7 @@
+## 8.0.3
+
+- test: Add unit tests for the `coach_mark` package
+
 ## 8.0.2
 
 - docs: Document the coach_mark package
