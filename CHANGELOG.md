@@ -1,3 +1,71 @@
+## 8.0.0
+
+- feat: Add new dependencies and update existing ones
+
+  - Added glassmorphism, gradient_borders, dio, and either_dart dependencies
+  - Updated intl and url_launcher dependencies to latest versions
+  - Updated firebase_core_platform_interface and maps_launcher dependencies
+
+  Refactor the Failure class
+
+  - Moved the Failure class to a separate file
+  - Added the Equatable mixin to the Failure class
+
+  Add CoachMark module
+
+  - Created the CoachMark module with various components and error handling classes
+  - Added CoachMark, CoachMarksContent, CoachMarkData, and Onboarding classes
+  - Generated code for JSON serialization and deserialization
+
+  Add SVG icon file
+
+  - Added the check_icon_coach_mark.svg file to the assets/icons directory
+
+  Update errors module
+
+  - Added exports for various error handling classes in the errors module
+
+  Update pubspec.yaml
+
+  - Added tutorial_coach_mark dependency
+
+  Update errors.dart
+
+  - Added exports for various error handling classes in the errors.dart file
+
+  Update coach_mark.dart
+
+  - Added exports for various coach mark related classes in the coach_mark.dart file
+
+  Update coach_marks_content.dart
+
+  - Added exports for various coach marks content related classes in the coach_marks_content.dart file
+
+  Update exception.dart
+
+  - Added various exception classes for error handling in the exception.dart file
+
+  Update coach_marks_content.g.dart
+
+  - Generated code for JSON serialization and deserialization in the coach_marks_content.g.dart file
+
+  Update coach_mark.g.dart
+
+  - Generated code for JSON serialization and deserialization in the coach_mark.g.dart file
+
+  Update onboarding.dart
+
+  - Added the Onboarding class for managing onboarding data
+  - Added the OnboardingType enum for different types of onboarding
+
+  Refactor error handling in error.dart
+
+  - Refactored the ErrorFailure and HiveFailure classes for error handling
+
+  Refactor error handling in failure.dart
+
+  - Refactored the ErrorFailure and HiveFailure classes for error handling
+
 ## 7.1.4
 
 - feat: Update text field with check to remove null check
