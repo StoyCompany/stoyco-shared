@@ -1,3 +1,7 @@
+## 8.0.10
+
+- feat: Improve exception handling in LaunchLocationWidget
+
 ## 8.0.9
 
 - **feat:** Add `dataS3Url` getter to StoycoEnvironmentExtension

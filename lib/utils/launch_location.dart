@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:stoyco_shared/utils/colors.dart';
@@ -58,27 +59,36 @@ class LaunchLocationWidget extends StatelessWidget {
   ///
   /// If no valid location is provided, it throws an exception.
   void _launchLocation() {
-    final effectiveType = type ??
-        (query != null
-            ? LaunchLocationType.query
-            : LaunchLocationType.coordinates);
+    print('El query es: $query');
+    try {
+      final effectiveType = type ??
+          (query != null
+              ? LaunchLocationType.query
+              : LaunchLocationType.coordinates);
 
-    switch (effectiveType) {
-      case LaunchLocationType.query:
-        if (query != null) {
-          MapsLauncher.launchQuery(query!);
-        } else {
-          _showException('No query provided.');
-        }
-      case LaunchLocationType.coordinates:
-        if (coordinates != null) {
-          MapsLauncher.launchCoordinates(
-            coordinates!.latitude,
-            coordinates!.longitude,
-          );
-        } else {
-          _showException('No coordinates provided.');
-        }
+      switch (effectiveType) {
+        case LaunchLocationType.query:
+          if (query != null) {
+            try {
+              MapsLauncher.launchQuery(query!);
+            } catch (e) {
+              print('El error del map es es: $e');
+            }
+          } else {
+            _showException('No query provided.');
+          }
+        case LaunchLocationType.coordinates:
+          if (coordinates != null) {
+            MapsLauncher.launchCoordinates(
+              coordinates!.latitude,
+              coordinates!.longitude,
+            );
+          } else {
+            _showException('No coordinates provided.');
+          }
+      }
+    } catch (e) {
+      print('El error es: $e');
     }
   }
 
@@ -92,23 +102,23 @@ class LaunchLocationWidget extends StatelessWidget {
   Widget build(BuildContext context) => ElevatedButton(
         onPressed: () => _launchLocation(),
         style: ButtonStyle(
-          padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
+          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
             padding ??
                 const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 8,
                 ),
           ),
-          backgroundColor: WidgetStateProperty.all<Color>(
+          backgroundColor: MaterialStateProperty.all<Color>(
             const Color(0xff252836),
           ),
-          textStyle: WidgetStateProperty.all<TextStyle>(
+          textStyle: MaterialStateProperty.all<TextStyle>(
             TextStyle(
               color: StoycoColors.text,
               fontSize: 10,
             ),
           ),
-          minimumSize: WidgetStateProperty.all<Size>(
+          minimumSize: MaterialStateProperty.all<Size>(
             const Size(111, 32),
           ),
         ),
