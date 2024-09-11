@@ -1,5 +1,9 @@
 ## 8.0.3
 
+- **fix:** Replace `WidgetStateProperty.all` with `WidgetStatePropertyAll` to avoid error reports in Flutter versions 3.24.1 and above.
+
+## 8.0.3
+
 - test: Add unit tests for the `coach_mark` package
 
 ## 8.0.2

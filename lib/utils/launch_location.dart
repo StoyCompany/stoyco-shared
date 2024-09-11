@@ -92,24 +92,24 @@ class LaunchLocationWidget extends StatelessWidget {
   Widget build(BuildContext context) => ElevatedButton(
         onPressed: () => _launchLocation(),
         style: ButtonStyle(
-          padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
+          padding: WidgetStatePropertyAll<EdgeInsetsGeometry>(
             padding ??
                 const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 8,
                 ),
           ),
-          backgroundColor: WidgetStateProperty.all<Color>(
-            const Color(0xff252836),
+          backgroundColor: const WidgetStatePropertyAll<Color>(
+            Color(0xff252836),
           ),
-          textStyle: WidgetStateProperty.all<TextStyle>(
+          textStyle: WidgetStatePropertyAll<TextStyle>(
             TextStyle(
               color: StoycoColors.text,
               fontSize: 10,
             ),
           ),
-          minimumSize: WidgetStateProperty.all<Size>(
-            const Size(111, 32),
+          minimumSize: const WidgetStatePropertyAll<Size>(
+            Size(111, 32),
           ),
         ),
         child: Row(
