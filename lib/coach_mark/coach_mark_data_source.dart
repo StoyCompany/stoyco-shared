@@ -139,7 +139,7 @@ class CoachMarkDataSource {
   Future<Response> resetOnboardingCoachMarkData() async {
     final cancelToken = CancelToken();
     final String url = '${environment.baseUrl}onboarding/user/reset';
-    return await _dio.post(
+    return await _dio.delete(
       url,
       cancelToken: cancelToken,
       options: Options(headers: _getHeaders()),
