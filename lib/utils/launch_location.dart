@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart'; // Import necesario para kIsWeb
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
@@ -37,6 +36,7 @@ class LaunchLocationWidget extends StatelessWidget {
     this.type,
     this.padding,
     this.textStyle,
+    this.kIsWeb = false,
   }) : assert(
           query != null || coordinates != null,
           'Either query or coordinates must be provided.',
@@ -55,6 +55,9 @@ class LaunchLocationWidget extends StatelessWidget {
 
   final TextStyle? textStyle;
 
+  /// A boolean value to check if the platform is web.
+  final bool kIsWeb;
+
   /// Launches the location based on the provided [type], [query], or [coordinates].
   ///
   /// If no valid location is provided, it throws an exception.
@@ -71,7 +74,6 @@ class LaunchLocationWidget extends StatelessWidget {
         } else {
           _showException('No query provided.');
         }
-        break;
       case LaunchLocationType.coordinates:
         if (coordinates != null) {
           MapsLauncher.launchCoordinates(
@@ -81,7 +83,6 @@ class LaunchLocationWidget extends StatelessWidget {
         } else {
           _showException('No coordinates provided.');
         }
-        break;
     }
   }
 

@@ -1,3 +1,9 @@
+## 8.0.6
+
+- **refactor:** Refactor platform handling in LaunchLocationWidget
+
+  The platform handling logic in LaunchLocationWidget has been refactored to improve code organization and maintainability. This refactor aims to make the code more readable and easier to understand, especially when dealing with platform-specific styling or behavior. 
+
 ## 8.0.5
 
 - **feat:** Update "Como llegar" button style in LaunchLocationWidget
