@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart'; // Import necesario para kIsWeb
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
@@ -70,6 +71,7 @@ class LaunchLocationWidget extends StatelessWidget {
         } else {
           _showException('No query provided.');
         }
+        break;
       case LaunchLocationType.coordinates:
         if (coordinates != null) {
           MapsLauncher.launchCoordinates(
@@ -79,6 +81,7 @@ class LaunchLocationWidget extends StatelessWidget {
         } else {
           _showException('No coordinates provided.');
         }
+        break;
     }
   }
 
@@ -89,49 +92,76 @@ class LaunchLocationWidget extends StatelessWidget {
 
   /// Builds the widget with a styled [ElevatedButton] that triggers location launch on press.
   @override
-  Widget build(BuildContext context) => ElevatedButton(
-        onPressed: () => _launchLocation(),
-        style: ButtonStyle(
-          padding: WidgetStatePropertyAll<EdgeInsetsGeometry>(
-            padding ??
-                const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-          ),
-          backgroundColor: const WidgetStatePropertyAll<Color>(
-            Color(0xff252836),
-          ),
-          textStyle: WidgetStatePropertyAll<TextStyle>(
-            TextStyle(
-              color: StoycoColors.text,
-              fontSize: 10,
+  Widget build(BuildContext context) {
+    // Condición para manejar diferentes estilos según la plataforma
+    final ButtonStyle buttonStyle = kIsWeb
+        ? ButtonStyle(
+            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+              padding ??
+                  const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
             ),
-          ),
-          minimumSize: const WidgetStatePropertyAll<Size>(
-            Size(111, 32),
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Flexible(
-              child: Text(
-                'Como llegar',
-                style: textStyle ??
-                    const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+            backgroundColor: MaterialStateProperty.all<Color>(
+              const Color(0xff252836),
+            ),
+            textStyle: MaterialStateProperty.all<TextStyle>(
+              TextStyle(
+                color: StoycoColors.text,
+                fontSize: 10,
               ),
             ),
-            const Gap(9),
-            SvgPicture.asset(
-              'packages/stoyco_shared/lib/assets/icons/location_icon.svg',
-              height: 16,
-              width: 16,
+            minimumSize: MaterialStateProperty.all<Size>(
+              const Size(111, 32),
             ),
-          ],
-        ),
-      );
+          )
+        : ButtonStyle(
+            padding: WidgetStatePropertyAll<EdgeInsetsGeometry>(
+              padding ??
+                  const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+            ),
+            backgroundColor: const WidgetStatePropertyAll<Color>(
+              Color(0xff252836),
+            ),
+            textStyle: WidgetStatePropertyAll<TextStyle>(
+              TextStyle(
+                color: StoycoColors.text,
+                fontSize: 10,
+              ),
+            ),
+            minimumSize: const WidgetStatePropertyAll<Size>(
+              Size(111, 32),
+            ),
+          );
+
+    return ElevatedButton(
+      onPressed: () => _launchLocation(),
+      style: buttonStyle,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Flexible(
+            child: Text(
+              'Como llegar',
+              style: textStyle ??
+                  const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+          ),
+          const Gap(9),
+          SvgPicture.asset(
+            'packages/stoyco_shared/lib/assets/icons/location_icon.svg',
+            height: 16,
+            width: 16,
+          ),
+        ],
+      ),
+    );
+  }
 }
