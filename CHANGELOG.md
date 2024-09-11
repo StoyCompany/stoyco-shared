@@ -1,10 +1,10 @@
-## 8.0.4
+## 8.0.5
 
 - **feat:** Update "Como llegar" button style in LaunchLocationWidget
 
   The style of the "Como llegar" button in LaunchLocationWidget has been updated to handle different styles depending on the platform. A condition was added to apply specific styles when running on the web. In addition, the padding, background color, text color, and minimum button size styles were adjusted.
 
-## 8.0.3
+## 8.0.4
 
 - **fix:** Replace `WidgetStateProperty.all` with `WidgetStatePropertyAll` to avoid error reports in Flutter versions 3.24.1 and above.
 
