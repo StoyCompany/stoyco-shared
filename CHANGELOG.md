@@ -1,3 +1,9 @@
+## 8.0.9
+
+- **feat:** Add `dataS3Url` getter to StoycoEnvironmentExtension
+
+  A new getter `dataS3Url` has been added to `StoycoEnvironmentExtension`. This getter provides the correct URL for the JSON file based on the current environment (`development`, `production`, or `testing`). This enhancement improves the flexibility and maintainability of the code by centralizing the logic for determining the appropriate data source URL based on the environment.
+
 ## 8.0.8
 
 - **refactor:** Refactor onboarding data reset method in CoachMarkDataSource

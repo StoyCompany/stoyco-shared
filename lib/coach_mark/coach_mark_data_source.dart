@@ -25,6 +25,17 @@ extension StoycoEnvironmentExtension on StoycoEnvironment {
         return 'https://qa.api.stoyco.io/api/stoyco/v1/';
     }
   }
+
+  String get dataS3Url {
+    switch (this) {
+      case StoycoEnvironment.development:
+        return 'https://stoyco-medias-dev.s3.amazonaws.com/data/coach_mark_data.json';
+      case StoycoEnvironment.production:
+        return 'https://stoyco-medias-prod.s3.amazonaws.com/data/coach_mark_data.json';
+      case StoycoEnvironment.testing:
+        return 'https://stoyco-medias-qa.s3.amazonaws.com/data/coach_mark_data.json';
+    }
+  }
 }
 
 /// A data source class responsible for making network requests related to coach marks.
@@ -151,8 +162,7 @@ class CoachMarkDataSource {
   /// Returns a `Response` object from the Dio request
   Future<Response> getCoachMarkData() async {
     final cancelToken = CancelToken();
-    const String url =
-        'https://stoyco-medias-dev.s3.amazonaws.com/data/coach_mark_data.json';
+    final String url = environment.dataS3Url;
     return await _dio.get(
       url,
       cancelToken: cancelToken,
