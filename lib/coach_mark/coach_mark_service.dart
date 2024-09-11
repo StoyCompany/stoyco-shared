@@ -204,6 +204,8 @@ class CoachMarkService {
 
     if (result) {
       onboardingList = [];
+      ignoredTutorials = [];
+      closeCoachMark();
     }
 
     return result;
@@ -264,6 +266,13 @@ class CoachMarkService {
   /// Returns `true` if ignored, `false` otherwise
   bool isOnboardingIgnored(OnboardingType type) =>
       ignoredTutorials.contains(type);
+
+  //reset instance
+  void reset() {
+    onboardingList = [];
+    ignoredTutorials = [];
+    closeCoachMark();
+  }
 
   /// Disposes of the stream controller.
   void dispose() {
