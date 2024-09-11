@@ -1,3 +1,9 @@
+## 8.0.7
+
+- **refactor:** Refactor platform handling in LaunchLocationWidget
+
+  The `kIsWeb` parameter has been removed from LaunchLocationWidget, and a new widget called LaunchLocationWebWidget has been created to handle the specific styling and behavior for the web platform. This further improves code organization and separation of concerns, making it easier to maintain and update platform-specific implementations. 
+
 ## 8.0.6
 
 - **refactor:** Refactor platform handling in LaunchLocationWidget
