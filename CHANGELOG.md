@@ -1,6 +1,11 @@
+### 8.0.12
+
+- feat: Refactoring input data reset method into CoachMarkDataSource and StoycoDatePickerModal
+
 ## 8.0.11
 
 - feat: Refactoring platform handling in LaunchLocationWidget
+
 ## 8.0.10
 
 - feat: Improve exception handling in LaunchLocationWidget

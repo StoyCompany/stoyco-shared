@@ -166,10 +166,10 @@ class _StoycoDatePickerModalState extends State<StoycoDatePickerModal> {
                     setState(() {
                       controller.text = DateFormat('dd/MM/yyyy')
                           .format(picker.control.value as DateTime);
+                      touched = true;
                     });
                   } catch (e) {
                     log(e.toString());
-                  } finally {
                     setState(() {
                       touched = true;
                     });

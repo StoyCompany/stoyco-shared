@@ -73,17 +73,20 @@ class _StoycoTextFieldWithCheckState extends State<StoycoTextFieldWithCheck> {
         onChanged: (formControl) async {
           widget.onChanged?.call(formControl);
           final valueIsValid = await widget.asyncValidate(formControl.value);
-          setState(() {
-            if (formControl.value != null) {
-              value = formControl.value;
-            }
 
-            if (!formControl.invalid) {
-              isValid = valueIsValid;
-            } else {
-              isValid = false;
-            }
-          });
+          if (mounted) {
+            setState(() {
+              if (formControl.value != null) {
+                value = formControl.value;
+              }
+
+              if (!formControl.invalid) {
+                isValid = valueIsValid;
+              } else {
+                isValid = false;
+              }
+            });
+          }
         },
         validationMessages:
             widget.validationMessages ?? StoycoForms.validationMessages(),
