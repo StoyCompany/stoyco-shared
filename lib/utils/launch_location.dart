@@ -59,27 +59,36 @@ class LaunchLocationWidget extends StatelessWidget {
   ///
   /// If no valid location is provided, it throws an exception.
   void _launchLocation() {
-    final effectiveType = type ??
-        (query != null
-            ? LaunchLocationType.query
-            : LaunchLocationType.coordinates);
+    print('El query es: $query');
+    try {
+      final effectiveType = type ??
+          (query != null
+              ? LaunchLocationType.query
+              : LaunchLocationType.coordinates);
 
-    switch (effectiveType) {
-      case LaunchLocationType.query:
-        if (query != null) {
-          MapsLauncher.launchQuery(query!);
-        } else {
-          _showException('No query provided.');
-        }
-      case LaunchLocationType.coordinates:
-        if (coordinates != null) {
-          MapsLauncher.launchCoordinates(
-            coordinates!.latitude,
-            coordinates!.longitude,
-          );
-        } else {
-          _showException('No coordinates provided.');
-        }
+      switch (effectiveType) {
+        case LaunchLocationType.query:
+          if (query != null) {
+            try {
+              MapsLauncher.launchQuery(query!);
+            } catch (e) {
+              print('El error del map es es: $e');
+            }
+          } else {
+            _showException('No query provided.');
+          }
+        case LaunchLocationType.coordinates:
+          if (coordinates != null) {
+            MapsLauncher.launchCoordinates(
+              coordinates!.latitude,
+              coordinates!.longitude,
+            );
+          } else {
+            _showException('No coordinates provided.');
+          }
+      }
+    } catch (e) {
+      print('El error es: $e');
     }
   }
 

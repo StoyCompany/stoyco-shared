@@ -1,3 +1,7 @@
+## 7.1.5
+
+- feat: Improve exception handling in LaunchLocationWidget
+
 ## 7.1.4
 
 - feat: Update text field with check to remove null check
