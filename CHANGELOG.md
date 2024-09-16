@@ -1,3 +1,9 @@
+## 8.0.13
+
+- **refactor:** Refactor onboarding data reset method in CoachMarkDataSource and StoycoDatePickerModal
+
+  The methods responsible for resetting onboarding data in both `CoachMarkDataSource` and `StoycoDatePickerModal` have been refactored. This refactor aims to improve code clarity, efficiency, or maintainability in both components, potentially involving simplification of logic, performance optimization, or enhancement of code readability. 
+
 ### 8.0.12
 
 - feat: Refactoring input data reset method into CoachMarkDataSource and StoycoDatePickerModal

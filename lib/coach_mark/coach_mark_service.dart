@@ -24,44 +24,62 @@ class CoachMarkService {
   /// * `environment`: The current environment (development, production, etc.). Defaults to `StoycoEnvironment.development`.
   /// * `userToken`: The user's authentication token.
   /// * `functionToUpdateToken`: An optional function to update the token if it becomes invalid.
+
   factory CoachMarkService({
     StoycoEnvironment environment = StoycoEnvironment.development,
     String userToken = '',
     Future<String?>? functionToUpdateToken,
   }) {
-    instance.environment = environment;
-    instance.userToken = userToken;
-    instance._coachMarkRepository!.token = userToken;
-    instance.functionToUpdateToken = functionToUpdateToken;
+    // Si la instancia ya existe, simplemente actualizamos su entorno y token
+    if (_instance != null) {
+      _instance!.environment = environment;
+      _instance!.userToken = userToken;
+      _instance!._coachMarkRepository!.token = userToken;
+      _instance!.functionToUpdateToken = functionToUpdateToken;
+      _instance!.onInit();
+      return _instance!;
+    }
 
-    instance.onInit();
-
-    return instance;
+    // Si la instancia no existe, la creamos
+    _instance = CoachMarkService._(
+      environment: environment,
+      userToken: userToken,
+      functionToUpdateToken: functionToUpdateToken,
+    );
+    return _instance!;
   }
 
   /// Private constructor to enforce singleton pattern.
   CoachMarkService._({
-    this.environment = StoycoEnvironment.development,
-    this.userToken = '',
-    functionToUpdateToken,
-  }) {
-    _coachMarkDataSource = CoachMarkDataSource(
-      environment: environment,
-    );
-
+    required StoycoEnvironment environment,
+    required this.userToken,
+    this.functionToUpdateToken,
+  }) : _environment = environment {
+    _coachMarkDataSource = CoachMarkDataSource(environment: environment);
     _coachMarkRepository = CoachMarkRepository(
       _coachMarkDataSource!,
       userToken,
     );
-
     _coachMarkRepository!.token = userToken;
     _coachMarkDataSource!.updateUserToken(userToken);
+
+    onInit();
   }
 
-  static final CoachMarkService instance = CoachMarkService._();
+  static CoachMarkService? _instance;
 
   String userToken;
-  StoycoEnvironment environment;
+  set environment(StoycoEnvironment newEnvironment) {
+    _environment = newEnvironment;
+    _coachMarkDataSource = CoachMarkDataSource(environment: newEnvironment);
+    _coachMarkRepository = CoachMarkRepository(
+      _coachMarkDataSource!,
+      userToken,
+    );
+  }
+
+  StoycoEnvironment get environment => _environment;
+  StoycoEnvironment _environment;
   List<Onboarding> onboardingList = [];
   CoachMarkRepository? _coachMarkRepository;
   CoachMarkDataSource? _coachMarkDataSource;
