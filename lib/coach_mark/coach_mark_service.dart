@@ -68,6 +68,14 @@ class CoachMarkService {
 
   static CoachMarkService? _instance;
 
+  //get instance
+  static CoachMarkService get instance {
+    if (_instance == null) {
+      throw Exception('CoachMarkService instance not created');
+    }
+    return _instance!;
+  }
+
   String userToken;
   set environment(StoycoEnvironment newEnvironment) {
     _environment = newEnvironment;
