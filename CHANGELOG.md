@@ -1,3 +1,7 @@
+## 8.0.15
+
+- **change:** CoachMarkContainerWidget now uses custom icons instead of Material icons
+
 ## 8.0.14
 
 - **feat:** Add `FunctionToUpdateTokenNotSetException` exception
