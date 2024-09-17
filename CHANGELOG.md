@@ -1,3 +1,7 @@
+## 8.0.13
+
+- **feat:** Add `verifyToken` to `getCouchMarksContent`
+
 ### 8.0.12
 
 - feat: Refactoring input data reset method into CoachMarkDataSource and StoycoDatePickerModal

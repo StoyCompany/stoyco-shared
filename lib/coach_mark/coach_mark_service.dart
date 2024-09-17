@@ -105,6 +105,7 @@ class CoachMarkService {
   ///
   /// Throws a `GetCoachMarksContentException` if fetching fails.
   Future<CoachMarksContent> getCouchMarksContent() async {
+    await verifyToken();
     final result = await _coachMarkRepository?.getCoachMarkData();
     if (result != null && result.isRight) {
       return result.right;
