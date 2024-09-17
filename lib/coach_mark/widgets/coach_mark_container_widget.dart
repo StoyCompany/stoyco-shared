@@ -145,10 +145,18 @@ class CoachMarkContainerWidget extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: InkWell(
                   onTap: onSkip,
-                  child: const Icon(
-                    Icons.close,
-                    color: Colors.white,
-                    size: 24,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 3,
+                      vertical: 4,
+                    ),
+                    child: SvgPicture.asset(
+                      showCheck
+                          ? 'packages/stoyco_shared/lib/assets/icons/check_icon_coach_mark.svg'
+                          : 'packages/stoyco_shared/lib/assets/icons/arrow_forward_icon',
+                      height: 17,
+                      width: 15,
+                    ),
                   ),
                 ),
               ),
@@ -178,22 +186,19 @@ class CoachMarkContainerWidget extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: InkWell(
                 onTap: onFinish,
-                child: !showCheck
-                    ? const Icon(
-                        Icons.arrow_forward_rounded,
-                        color: Colors.white,
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 3,
-                          vertical: 4,
-                        ),
-                        child: SvgPicture.asset(
-                          'packages/stoyco_shared/lib/assets/icons/check_icon_coach_mark.svg',
-                          height: 17,
-                          width: 15,
-                        ),
-                      ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 3,
+                    vertical: 4,
+                  ),
+                  child: SvgPicture.asset(
+                    showCheck
+                        ? 'packages/stoyco_shared/lib/assets/icons/check_icon_coach_mark.svg'
+                        : 'packages/stoyco_shared/lib/assets/icons/arrow_forward_icon',
+                    height: 17,
+                    width: 15,
+                  ),
+                ),
               ),
             ),
           ],
