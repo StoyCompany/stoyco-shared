@@ -63,3 +63,20 @@ class GetCoachMarksContentException implements Exception {
   @override
   String toString() => 'GetCoachMarksContentException: $message';
 }
+
+//Exception: Exception: functionToUpdateToken is not set
+class FunctionToUpdateTokenNotSetException implements Exception {
+  /// Creates a `FunctionToUpdateTokenNotSetException` with an optional message
+  ///
+  /// * `message`: The error message (defaults to "functionToUpdateToken is not set")
+  FunctionToUpdateTokenNotSetException([
+    this.message = 'functionToUpdateToken is not set',
+  ]);
+
+  /// The error message associated with the exception
+  final String message;
+
+  /// Returns a string representation of the exception
+  @override
+  String toString() => 'FunctionToUpdateTokenNotSetException: $message';
+}

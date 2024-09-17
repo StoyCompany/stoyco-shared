@@ -1,3 +1,9 @@
+## 8.0.14
+
+- **feat:** Add `FunctionToUpdateTokenNotSetException` exception
+
+- **change:** `showSelectOptionModal` function now returns `Future<String?>`
+
 ## 8.0.13
 
 - **feat:** Add `verifyToken` to `getCouchMarksContent`

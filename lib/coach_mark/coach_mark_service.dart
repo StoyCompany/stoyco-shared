@@ -128,7 +128,7 @@ class CoachMarkService {
   Future<void> verifyToken() async {
     if (userToken.isEmpty) {
       if (functionToUpdateToken == null) {
-        throw Exception('functionToUpdateToken is not set');
+        throw FunctionToUpdateTokenNotSetException();
       }
 
       final String? newToken = await functionToUpdateToken!;

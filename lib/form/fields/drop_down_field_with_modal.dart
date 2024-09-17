@@ -110,7 +110,7 @@ class StoycoDropDownFielWithModal extends StatelessWidget {
 ///
 /// Returns a [Future] that completes with the selected option.
 
-Future<String> showSelectOptionModal({
+Future<String?> showSelectOptionModal({
   required BuildContext context,
   required String title,
   required List<String> options,
