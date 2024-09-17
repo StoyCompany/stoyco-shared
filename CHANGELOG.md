@@ -1,3 +1,7 @@
+## 8.0.16
+
+- **change:** Icon paths updated
+
 ## 8.0.15
 
 - **change:** CoachMarkContainerWidget now uses custom icons instead of Material icons

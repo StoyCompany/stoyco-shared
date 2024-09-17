@@ -151,9 +151,7 @@ class CoachMarkContainerWidget extends StatelessWidget {
                       vertical: 4,
                     ),
                     child: SvgPicture.asset(
-                      showCheck
-                          ? 'packages/stoyco_shared/lib/assets/icons/check_icon_coach_mark.svg'
-                          : 'packages/stoyco_shared/lib/assets/icons/arrow_forward_icon',
+                      'packages/stoyco_shared/lib/assets/icons/close_icon_outlined.svg',
                       height: 17,
                       width: 15,
                     ),
@@ -194,7 +192,7 @@ class CoachMarkContainerWidget extends StatelessWidget {
                   child: SvgPicture.asset(
                     showCheck
                         ? 'packages/stoyco_shared/lib/assets/icons/check_icon_coach_mark.svg'
-                        : 'packages/stoyco_shared/lib/assets/icons/arrow_forward_icon',
+                        : 'packages/stoyco_shared/lib/assets/icons/arrow_forward_icon.svg',
                     height: 17,
                     width: 15,
                   ),
