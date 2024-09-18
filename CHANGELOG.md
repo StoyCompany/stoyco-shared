@@ -1,3 +1,7 @@
+## 8.0.21
+
+- **refactor:** Refactor user icon in `StoycoProfileEditWidget`
+
 ## 8.0.20
 
 - **refactor:** Refactor `reset` in `CoachMarkService`, reset `functionToUpdateToken` and `UserId`

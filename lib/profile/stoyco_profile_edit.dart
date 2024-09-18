@@ -118,10 +118,8 @@ class StoycoProfileEditWidget extends StatelessWidget {
                       : null,
                 ),
                 child: !userPhoto.isNotEmpty
-                    ? const Icon(
-                        Icons.person,
-                        size: 30,
-                        color: Colors.white,
+                    ? SvgPicture.asset(
+                        'packages/stoyco_shared/lib/assets/icons/person.svg',
                       )
                     : null,
               ),
