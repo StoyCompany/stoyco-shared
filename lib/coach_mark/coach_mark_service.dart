@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:either_dart/either.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:stoyco_shared/coach_mark/coach_mark_data_source.dart';
 import 'package:stoyco_shared/coach_mark/coach_mark_repository.dart';
 import 'package:stoyco_shared/coach_mark/coach_marks_content/coach_mark.dart';
@@ -70,9 +71,11 @@ class CoachMarkService {
 
   List<OnboardingType> ignoredTutorials = [];
 
-  final _isCoachMarkController = StreamController<bool>.broadcast();
-  Stream<bool> get isCoachMarkOpenStream => _isCoachMarkController.stream;
-  Future<bool> get isCoachMarkOpen => _isCoachMarkController.stream.last;
+  final _isCoachMarkSubject = BehaviorSubject<bool>.seeded(false);
+
+  Stream<bool> get isCoachMarkOpenStream => _isCoachMarkSubject.stream;
+
+  bool get isCoachMarkOpen => _isCoachMarkSubject.value;
 
   /// Initializes the service by fetching onboarding data.
   void onInit() {
@@ -98,12 +101,12 @@ class CoachMarkService {
 
   /// Opens the coach mark.
   void openCoachMark() {
-    _isCoachMarkController.add(true);
+    _isCoachMarkSubject.add(true);
   }
 
   /// Closes the coach mark.
   void closeCoachMark() {
-    _isCoachMarkController.add(false);
+    _isCoachMarkSubject.add(false);
   }
 
   /// Fetches the coach marks content.
@@ -283,6 +286,6 @@ class CoachMarkService {
 
   /// Disposes of the stream controller.
   void dispose() {
-    _isCoachMarkController.close();
+    _isCoachMarkSubject.close();
   }
 }

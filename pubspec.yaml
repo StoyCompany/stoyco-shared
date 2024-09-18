@@ -31,6 +31,7 @@ dependencies:
   dio: ^5.7.0
   either_dart: ^1.0.0
   tutorial_coach_mark: ^1.2.11
+  rxdart: ^0.28.0
 
 dev_dependencies:
   flutter_test:
