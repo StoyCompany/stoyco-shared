@@ -1,3 +1,7 @@
+## 8.0.17
+
+- **feat:** Add `setFunctionToUpdateToken` to `coachMarkService`
+
 ## 8.0.16
 
 - **change:** Icon paths updated

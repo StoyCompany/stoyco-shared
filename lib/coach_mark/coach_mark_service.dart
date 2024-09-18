@@ -91,6 +91,11 @@ class CoachMarkService {
     onboardingList = onboardingListData;
   }
 
+  /// Sets the function to update the user token.
+  void setFunctionToUpdateToken(Future<String?>? function) {
+    functionToUpdateToken = function;
+  }
+
   /// Opens the coach mark.
   void openCoachMark() {
     _isCoachMarkController.add(true);
