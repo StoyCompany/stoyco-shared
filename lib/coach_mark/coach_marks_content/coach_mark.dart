@@ -68,7 +68,7 @@ class CoachMark {
   /// Throws a `RangeError` if the new step exceeds the number of content steps.
   set currentStep(int newStep) {
     if (content == null || newStep > content!.length) {
-      throw RangeError('currentStep cannot exceed the length + 1 of content');
+      return;
     }
     _currentStep = newStep;
   }

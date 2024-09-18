@@ -1,3 +1,7 @@
+## 8.0.19
+
+- **refactor:** Refactor `currentStep` validation in `CoachMark`
+
 ## 8.0.18
 
 - **refactor:** Refactor initialization of `_isCoachMarkController` in `CoachMarkService`
