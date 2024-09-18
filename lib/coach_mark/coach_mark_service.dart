@@ -281,6 +281,8 @@ class CoachMarkService {
   void reset() {
     onboardingList = [];
     ignoredTutorials = [];
+    functionToUpdateToken = null;
+    userToken = '';
     closeCoachMark();
   }
 

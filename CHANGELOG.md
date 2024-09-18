@@ -1,3 +1,7 @@
+## 8.0.20
+
+- **refactor:** Refactor `reset` in `CoachMarkService`, reset `functionToUpdateToken` and `UserId`
+
 ## 8.0.19
 
 - **refactor:** Refactor `currentStep` validation in `CoachMark`
