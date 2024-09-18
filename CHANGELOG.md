@@ -1,7 +1,3 @@
-## 8.0.18
-
-- **refactor:** Refactor initialization of `_isCoachMarkController` in `CoachMarkService`
-
 ## 8.0.17
 
 - **feat:** Add `setFunctionToUpdateToken` to `coachMarkService`

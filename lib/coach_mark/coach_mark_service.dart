@@ -70,7 +70,7 @@ class CoachMarkService {
 
   List<OnboardingType> ignoredTutorials = [];
 
-  final _isCoachMarkController = StreamController<bool>();
+  final _isCoachMarkController = StreamController<bool>.broadcast();
   Stream<bool> get isCoachMarkOpenStream => _isCoachMarkController.stream;
   Future<bool> get isCoachMarkOpen => _isCoachMarkController.stream.last;
 
