@@ -1,3 +1,9 @@
+## 8.0.24
+
+- **refactor:** Refactor `CoachMarkContainerWidget` to `StatefulWidget`
+
+- **feat:** Add global key to `CoachMarkContainerWidget`
+
 ## 8.0.23
 
 - **refactor:** Refactor `CoachMarkContainerWidget` to `StatefulWidget`
