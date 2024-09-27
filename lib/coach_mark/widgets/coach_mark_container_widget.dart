@@ -25,7 +25,7 @@ import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 ///   onFinish: () => print('User finished the coach mark'),
 /// )
 /// ```
-class CoachMarkContainerWidget extends StatelessWidget {
+class CoachMarkContainerWidget extends StatefulWidget {
   /// Creates a [CoachMarkContainerWidget].
   ///
   /// * [title]: The main title of the coach mark.
@@ -67,6 +67,12 @@ class CoachMarkContainerWidget extends StatelessWidget {
   final void Function()? onFinish;
   final bool showCheck;
 
+  @override
+  State<CoachMarkContainerWidget> createState() =>
+      _CoachMarkContainerWidgetState();
+}
+
+class _CoachMarkContainerWidgetState extends State<CoachMarkContainerWidget> {
   /// Creates a copy of this widget with the specified properties overridden.
   CoachMarkContainerWidget copyWith({
     String? title,
@@ -82,19 +88,22 @@ class CoachMarkContainerWidget extends StatelessWidget {
     bool? showCheck,
   }) =>
       CoachMarkContainerWidget(
-        key: key,
-        title: title ?? this.title,
-        description: description ?? this.description,
-        onSkip: onSkip ?? this.onSkip,
-        onFinish: onFinish ?? this.onFinish,
-        blur: blur ?? this.blur,
-        width: width ?? this.width,
-        height: height ?? this.height,
-        border: border ?? this.border,
-        borderRadius: borderRadius ?? this.borderRadius,
-        showSkip: showSkip ?? this.showSkip,
-        showCheck: showCheck ?? this.showCheck,
+        key: widget.key,
+        title: title ?? widget.title,
+        description: description ?? widget.description,
+        onSkip: onSkip ?? widget.onSkip,
+        onFinish: onFinish ?? widget.onFinish,
+        blur: blur ?? widget.blur,
+        width: width ?? widget.width,
+        height: height ?? widget.height,
+        border: border ?? widget.border,
+        borderRadius: borderRadius ?? widget.borderRadius,
+        showSkip: showSkip ?? widget.showSkip,
+        showCheck: showCheck ?? widget.showCheck,
       );
+
+  int counterTapNext = 0;
+  int counterTapSkip = 0;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -139,12 +148,19 @@ class CoachMarkContainerWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (showSkip)
+            if (widget.showSkip)
               Container(
                 width: double.infinity,
                 alignment: Alignment.centerRight,
                 child: InkWell(
-                  onTap: onSkip,
+                  onTap: () {
+                    if (widget.onSkip != null && counterTapSkip == 0) {
+                      widget.onSkip!();
+                      setState(() {
+                        counterTapSkip++;
+                      });
+                    }
+                  },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 3,
@@ -160,7 +176,7 @@ class CoachMarkContainerWidget extends StatelessWidget {
               ),
             const Gap(2),
             Text(
-              title,
+              widget.title,
               textAlign: TextAlign.left,
               style: const TextStyle(
                 fontSize: 16,
@@ -170,7 +186,7 @@ class CoachMarkContainerWidget extends StatelessWidget {
             ),
             const Gap(4),
             Text(
-              description,
+              widget.description,
               textAlign: TextAlign.left,
               style: const TextStyle(
                 color: Colors.white,
@@ -183,14 +199,21 @@ class CoachMarkContainerWidget extends StatelessWidget {
               width: double.infinity,
               alignment: Alignment.centerRight,
               child: InkWell(
-                onTap: onFinish,
+                onTap: () {
+                  if (widget.onFinish != null && counterTapNext == 0) {
+                    widget.onFinish!();
+                    setState(() {
+                      counterTapNext++;
+                    });
+                  }
+                },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 3,
                     vertical: 4,
                   ),
                   child: SvgPicture.asset(
-                    showCheck
+                    widget.showCheck
                         ? 'packages/stoyco_shared/lib/assets/icons/check_icon_coach_mark.svg'
                         : 'packages/stoyco_shared/lib/assets/icons/arrow_forward_icon.svg',
                     height: 17,

@@ -1,7 +1,11 @@
+## 8.0.23
+
+- **refactor:** Refactor `CoachMarkContainerWidget` to `StatefulWidget`
+
 ## 8.0.22
 
 - **feat:** can show menu info expanded at `Colapse` widget.
-  
+
 ## 8.0.21
 
 - **refactor:** Refactor user icon in `StoycoProfileEditWidget`
