@@ -105,6 +105,20 @@ class _CoachMarkContainerWidgetState extends State<CoachMarkContainerWidget> {
   int counterTapNext = 0;
   int counterTapSkip = 0;
 
+  bool _isButtonEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        setState(() {
+          _isButtonEnabled = true;
+        });
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) => Container(
         // blur: blur ?? 15,
@@ -153,14 +167,16 @@ class _CoachMarkContainerWidgetState extends State<CoachMarkContainerWidget> {
                 width: double.infinity,
                 alignment: Alignment.centerRight,
                 child: InkWell(
-                  onTap: () {
-                    if (widget.onSkip != null && counterTapSkip == 0) {
-                      widget.onSkip!();
-                      setState(() {
-                        counterTapSkip++;
-                      });
-                    }
-                  },
+                  onTap: _isButtonEnabled == true
+                      ? () {
+                          if (widget.onSkip != null && counterTapSkip == 0) {
+                            widget.onSkip!();
+                            setState(() {
+                              counterTapSkip++;
+                            });
+                          }
+                        }
+                      : null,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 3,
@@ -199,14 +215,18 @@ class _CoachMarkContainerWidgetState extends State<CoachMarkContainerWidget> {
               width: double.infinity,
               alignment: Alignment.centerRight,
               child: InkWell(
-                onTap: () {
-                  if (widget.onFinish != null && counterTapNext == 0) {
-                    widget.onFinish!();
-                    setState(() {
-                      counterTapNext++;
-                    });
-                  }
-                },
+                onTap: _isButtonEnabled == true
+                    ? () {
+                        if (widget.onFinish != null && counterTapSkip == 0) {
+                          print(
+                              'onFinish called $counterTapNext ${widget.key}');
+                          widget.onFinish!();
+                          setState(() {
+                            counterTapSkip++;
+                          });
+                        }
+                      }
+                    : null,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 3,
@@ -225,4 +245,12 @@ class _CoachMarkContainerWidgetState extends State<CoachMarkContainerWidget> {
           ],
         ),
       );
+
+  //dispose counters
+  @override
+  void dispose() {
+    counterTapNext = 0;
+    counterTapSkip = 0;
+    super.dispose();
+  }
 }

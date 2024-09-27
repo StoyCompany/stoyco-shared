@@ -83,6 +83,7 @@ class CoachMarkTargetContent {
             customPosition: customPosition,
             align: align,
             builder: (context, controller) => CoachMarkContainerWidget(
+              key: GlobalKey(),
               title: title,
               description: description,
               onFinish: () {
