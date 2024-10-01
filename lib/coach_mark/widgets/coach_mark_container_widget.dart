@@ -112,9 +112,11 @@ class _CoachMarkContainerWidgetState extends State<CoachMarkContainerWidget> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(const Duration(milliseconds: 500), () {
-        setState(() {
-          _isButtonEnabled = true;
-        });
+        if (mounted) {
+          setState(() {
+            _isButtonEnabled = true;
+          });
+        }
       });
     });
   }

@@ -1,3 +1,6 @@
+## 8.0.25
+- **fix:** Corrected the setState usage in CoachMarkContainerWidget.
+
 ## 8.0.24
 
 - **refactor:** Refactor `CoachMarkContainerWidget` to `StatefulWidget`
