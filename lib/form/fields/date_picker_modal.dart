@@ -125,7 +125,8 @@ class _StoycoDatePickerModalState extends State<StoycoDatePickerModal> {
                         colors: [Color(0xFF030A1A), Color(0xFF0C1B24)],
                       ),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
                     child: Text(
                       widget.labelText,
@@ -165,10 +166,10 @@ class _StoycoDatePickerModalState extends State<StoycoDatePickerModal> {
                     setState(() {
                       controller.text = DateFormat('dd/MM/yyyy')
                           .format(picker.control.value as DateTime);
+                      touched = true;
                     });
                   } catch (e) {
                     log(e.toString());
-                  } finally {
                     setState(() {
                       touched = true;
                     });

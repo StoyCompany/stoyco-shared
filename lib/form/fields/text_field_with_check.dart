@@ -73,17 +73,20 @@ class _StoycoTextFieldWithCheckState extends State<StoycoTextFieldWithCheck> {
         onChanged: (formControl) async {
           widget.onChanged?.call(formControl);
           final valueIsValid = await widget.asyncValidate(formControl.value);
-          setState(() {
-            if (formControl.value != null) {
-              value = formControl.value;
-            }
 
-            if (!formControl.invalid) {
-              isValid = valueIsValid;
-            } else {
-              isValid = false;
-            }
-          });
+          if (mounted) {
+            setState(() {
+              if (formControl.value != null) {
+                value = formControl.value;
+              }
+
+              if (!formControl.invalid) {
+                isValid = valueIsValid;
+              } else {
+                isValid = false;
+              }
+            });
+          }
         },
         validationMessages:
             widget.validationMessages ?? StoycoForms.validationMessages(),
@@ -121,7 +124,8 @@ class _StoycoTextFieldWithCheckState extends State<StoycoTextFieldWithCheck> {
                 colors: [Color(0xFF030A1A), Color(0xFF0C1B24)],
               ),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
             child: Text(
               widget.labelText ?? '',

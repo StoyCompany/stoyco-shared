@@ -10,13 +10,17 @@
 class $LibGen {
   const $LibGen();
 
+  /// Directory path: lib/assets
   $LibAssetsGen get assets => const $LibAssetsGen();
 }
 
 class $LibAssetsGen {
   const $LibAssetsGen();
 
+  /// Directory path: lib/assets/home
   $LibAssetsHomeGen get home => const $LibAssetsHomeGen();
+
+  /// Directory path: lib/assets/icons
   $LibAssetsIconsGen get icons => const $LibAssetsIconsGen();
 }
 
@@ -54,8 +58,14 @@ class $LibAssetsIconsGen {
   /// File path: lib/assets/icons/calendar.svg
   String get calendar => 'lib/assets/icons/calendar.svg';
 
+  /// File path: lib/assets/icons/camera.svg
+  String get camera => 'lib/assets/icons/camera.svg';
+
   /// File path: lib/assets/icons/check_icon.svg
   String get checkIcon => 'lib/assets/icons/check_icon.svg';
+
+  /// File path: lib/assets/icons/check_icon_coach_mark.svg
+  String get checkIconCoachMark => 'lib/assets/icons/check_icon_coach_mark.svg';
 
   /// File path: lib/assets/icons/close_icon.svg
   String get closeIcon => 'lib/assets/icons/close_icon.svg';
@@ -73,6 +83,9 @@ class $LibAssetsIconsGen {
   String get keyboardArrowDownWhite18dp =>
       'lib/assets/icons/keyboard_arrow_down_white_18dp.svg';
 
+  /// File path: lib/assets/icons/location_icon.svg
+  String get locationIcon => 'lib/assets/icons/location_icon.svg';
+
   /// List of all assets
   List<String> get values => [
         arrowDownIcon,
@@ -80,12 +93,15 @@ class $LibAssetsIconsGen {
         arrowUp,
         arrowBack,
         calendar,
+        camera,
         checkIcon,
+        checkIconCoachMark,
         closeIcon,
         doneWhite18dp,
         downArrowIcon,
         editIcon,
-        keyboardArrowDownWhite18dp
+        keyboardArrowDownWhite18dp,
+        locationIcon
       ];
 }
 

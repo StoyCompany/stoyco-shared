@@ -14,7 +14,6 @@ import 'package:stoyco_shared/form/models/phone_number.dart';
 /// the user to input a phone number. The phone number is then validated and the
 /// result is stored in a [PhoneNumber] object.
 class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
-
   /// Creates a [ReactiveNewPhoneNumberInput].
   ///
   /// The [controller], [formControlName], [onTap], [onSubmitted], [onEditingComplete],
@@ -22,28 +21,25 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
   /// and [labelText] arguments are optional.
   ///
   ReactiveNewPhoneNumberInput({
-    Key? key,
+    super.key,
     this.readOnly,
     this.minHeight,
     this.maxHeight,
     this.borderLabelColor,
     this.showErrorsOnInit,
     TextEditingController? controller,
-    String? formControlName,
+    super.formControlName,
     ReactiveFormFieldCallback<T>? onTap,
     ReactiveFormFieldCallback<T>? onSubmitted,
     ReactiveFormFieldCallback<T>? onEditingComplete,
     ReactiveFormFieldCallback<T>? onChanged,
-    FormControl<T>? formControl,
+    super.formControl,
     List<Validator<dynamic>>? originalValidators,
     InputDecoration decoration = const InputDecoration(),
     ShowErrorsFunction<T>? showErrors,
     String? labelText,
   })  : _textController = controller,
         super(
-          key: key,
-          formControl: formControl,
-          formControlName: formControlName,
           validationMessages: {
             ValidationMessage.required: (_) =>
                 'El número de celular es requerido',
@@ -105,40 +101,44 @@ class ReactiveNewPhoneNumberInput<T> extends ReactiveFormField<T, PhoneNumber> {
                     ),
                   ),
                   Positioned(
-                      top: 0,
-                      left: 14,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 3,),
-                        decoration: ShapeDecoration(
-                          gradient: const LinearGradient(
-                            begin: Alignment(1.00, 0.00),
-                            end: Alignment(-1, 0),
-                            colors: [Color(0xFF030A1A), Color(0xFF0C1B24)],
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            side: BorderSide(
-                              color: borderLabelColor ?? Colors.black,
-                              width: 2,
-                            ),
+                    top: 0,
+                    left: 14,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
+                      decoration: ShapeDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment(1.00, 0.00),
+                          end: Alignment(-1, 0),
+                          colors: [Color(0xFF030A1A), Color(0xFF0C1B24)],
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          side: BorderSide(
+                            color: borderLabelColor ?? Colors.black,
+                            width: 2,
                           ),
                         ),
-                        child: Text(
-                          labelText ?? '',
-                          style: const TextStyle(
-                            color: Color(0xFF92929D),
-                            fontSize: 8,
-                            fontFamily: 'Akkurat Pro',
-                            fontWeight: FontWeight.w400,
-                          ),
+                      ),
+                      child: Text(
+                        labelText ?? '',
+                        style: const TextStyle(
+                          color: Color(0xFF92929D),
+                          fontSize: 8,
+                          fontFamily: 'Akkurat Pro',
+                          fontWeight: FontWeight.w400,
                         ),
-                      ),),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             );
           },
         );
+
   /// The controller for the text field.
   final TextEditingController? _textController;
 
@@ -265,11 +265,13 @@ class PhoneNumberValueAccessor
     extends ControlValueAccessor<PhoneNumber, String> {
   /// Converts the model value to view value.
   @override
-  String modelToViewValue(PhoneNumber? modelValue) => modelValue == null ? '' : modelValue.toString();
+  String modelToViewValue(PhoneNumber? modelValue) =>
+      modelValue == null ? '' : modelValue.toString();
 
   /// Converts the view value to model value.
   @override
-  PhoneNumber? viewToModelValue(String? viewValue) => (viewValue == '' || viewValue == null)
-        ? null
-        : PhoneNumber(number: viewValue);
+  PhoneNumber? viewToModelValue(String? viewValue) =>
+      (viewValue == '' || viewValue == null)
+          ? null
+          : PhoneNumber(number: viewValue);
 }

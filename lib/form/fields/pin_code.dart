@@ -233,7 +233,8 @@ class _ReactivePinCodeTextFieldState<T>
 
     final initialValue = value;
     _textController = TextEditingController(
-        text: initialValue == null ? '' : initialValue.toString());
+      text: initialValue == null ? '' : initialValue.toString(),
+    );
   }
 
   @override

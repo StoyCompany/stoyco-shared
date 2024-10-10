@@ -38,28 +38,27 @@ enum _SelectorType { day, month, year }
 /// ```
 
 class StoycoCupertinoDatePicker extends StatefulWidget {
-
-  const StoycoCupertinoDatePicker(
-      {Key? key,
-      required this.itemExtent,
-      required this.onSelectedItemChanged,
-      this.minDate,
-      this.maxDate,
-      this.selectedDate,
-      this.selectedStyle,
-      this.unselectedStyle,
-      this.disabledStyle,
-      this.backgroundColor,
-      this.squeeze = 1.45,
-      this.diameterRatio = 1.1,
-      this.magnification = 1.0,
-      this.offAxisFraction = 0.0,
-      this.useMagnifier = false,
-      this.selectionOverlay = const CupertinoPickerDefaultSelectionOverlay(),
-      this.cancelText = 'Cancelar',
-      this.confirmText = 'Aceptar',
-      this.cancelColor = const Color(0xffde2424),})
-      : super(key: key);
+  const StoycoCupertinoDatePicker({
+    super.key,
+    required this.itemExtent,
+    required this.onSelectedItemChanged,
+    this.minDate,
+    this.maxDate,
+    this.selectedDate,
+    this.selectedStyle,
+    this.unselectedStyle,
+    this.disabledStyle,
+    this.backgroundColor,
+    this.squeeze = 1.45,
+    this.diameterRatio = 1.1,
+    this.magnification = 1.0,
+    this.offAxisFraction = 0.0,
+    this.useMagnifier = false,
+    this.selectionOverlay = const CupertinoPickerDefaultSelectionOverlay(),
+    this.cancelText = 'Cancelar',
+    this.confirmText = 'Aceptar',
+    this.cancelColor = const Color(0xffde2424),
+  });
   final double itemExtent;
   final Widget selectionOverlay;
   final double diameterRatio;
