@@ -1,6 +1,5 @@
 /// Represents an error related to password validation.
 class PasswordError {
-
   /// Creates a new instance of the [PasswordError] class.
   ///
   /// The [message] parameter is the error message associated with the password error.
@@ -9,6 +8,7 @@ class PasswordError {
     required this.message,
     required this.validator,
   });
+
   /// The error message associated with the password error.
   final String message;
 

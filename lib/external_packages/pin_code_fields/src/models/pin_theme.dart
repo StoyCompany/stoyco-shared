@@ -130,13 +130,17 @@ class PinTheme {
       activeBoxShadows: activeBoxShadow ?? [],
       inActiveBoxShadows: inActiveBoxShadow ?? [],
       activeBorderWidth: activeBorderWidth ?? defaultValues.activeBorderWidth,
-      inactiveBorderWidth:
-      inactiveBorderWidth ?? borderWidth ?? defaultValues.inactiveBorderWidth,
-      selectedBorderWidth:
-      selectedBorderWidth ?? borderWidth ?? defaultValues.selectedBorderWidth,
-      errorBorderWidth: errorBorderWidth ?? borderWidth ?? defaultValues.errorBorderWidth,
-      disabledBorderWidth:
-      disabledBorderWidth ?? borderWidth ?? defaultValues.disabledBorderWidth,
+      inactiveBorderWidth: inactiveBorderWidth ??
+          borderWidth ??
+          defaultValues.inactiveBorderWidth,
+      selectedBorderWidth: selectedBorderWidth ??
+          borderWidth ??
+          defaultValues.selectedBorderWidth,
+      errorBorderWidth:
+          errorBorderWidth ?? borderWidth ?? defaultValues.errorBorderWidth,
+      disabledBorderWidth: disabledBorderWidth ??
+          borderWidth ??
+          defaultValues.disabledBorderWidth,
     );
   }
 }

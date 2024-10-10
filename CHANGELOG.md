@@ -1,3 +1,184 @@
+## 8.0.25
+- **fix:** Corrected the setState usage in CoachMarkContainerWidget.
+
+## 8.0.24
+
+- **refactor:** Refactor `CoachMarkContainerWidget` to `StatefulWidget`
+
+- **feat:** Add global key to `CoachMarkContainerWidget`
+
+## 8.0.23
+
+- **refactor:** Refactor `CoachMarkContainerWidget` to `StatefulWidget`
+
+## 8.0.22
+
+- **feat:** can show menu info expanded at `Colapse` widget.
+
+## 8.0.21
+
+- **refactor:** Refactor user icon in `StoycoProfileEditWidget`
+
+## 8.0.20
+
+- **refactor:** Refactor `reset` in `CoachMarkService`, reset `functionToUpdateToken` and `UserId`
+
+## 8.0.19
+
+- **refactor:** Refactor `currentStep` validation in `CoachMark`
+
+## 8.0.18
+
+- **refactor:** Refactor initialization of `_isCoachMarkController` in `CoachMarkService`
+
+## 8.0.17
+
+- **feat:** Add `setFunctionToUpdateToken` to `coachMarkService`
+
+## 8.0.16
+
+- **change:** Icon paths updated
+
+## 8.0.15
+
+- **change:** CoachMarkContainerWidget now uses custom icons instead of Material icons
+
+## 8.0.14
+
+- **feat:** Add `FunctionToUpdateTokenNotSetException` exception
+
+- **change:** `showSelectOptionModal` function now returns `Future<String?>`
+
+## 8.0.13
+
+- **feat:** Add `verifyToken` to `getCouchMarksContent`
+
+### 8.0.12
+
+- feat: Refactoring input data reset method into CoachMarkDataSource and StoycoDatePickerModal
+
+## 8.0.11
+
+- feat: Refactoring platform handling in LaunchLocationWidget
+
+## 8.0.10
+
+- feat: Improve exception handling in LaunchLocationWidget
+
+## 8.0.9
+
+- **feat:** Add `dataS3Url` getter to StoycoEnvironmentExtension
+
+  A new getter `dataS3Url` has been added to `StoycoEnvironmentExtension`. This getter provides the correct URL for the JSON file based on the current environment (`development`, `production`, or `testing`). This enhancement improves the flexibility and maintainability of the code by centralizing the logic for determining the appropriate data source URL based on the environment.
+
+## 8.0.8
+
+- **refactor:** Refactor onboarding data reset method in CoachMarkDataSource
+
+  The method responsible for resetting onboarding data in CoachMarkDataSource has been refactored to improve code clarity, efficiency, or maintainability. This refactor may involve simplifying the logic, optimizing performance, or enhancing code readability.
+
+## 8.0.7
+
+- **refactor:** Refactor platform handling in LaunchLocationWidget
+
+  The `kIsWeb` parameter has been removed from LaunchLocationWidget, and a new widget called LaunchLocationWebWidget has been created to handle the specific styling and behavior for the web platform. This further improves code organization and separation of concerns, making it easier to maintain and update platform-specific implementations.
+
+## 8.0.6
+
+- **refactor:** Refactor platform handling in LaunchLocationWidget
+
+  The platform handling logic in LaunchLocationWidget has been refactored to improve code organization and maintainability. This refactor aims to make the code more readable and easier to understand, especially when dealing with platform-specific styling or behavior.
+
+## 8.0.5
+
+- **feat:** Update "Como llegar" button style in LaunchLocationWidget
+
+  The style of the "Como llegar" button in LaunchLocationWidget has been updated to handle different styles depending on the platform. A condition was added to apply specific styles when running on the web. In addition, the padding, background color, text color, and minimum button size styles were adjusted.
+
+## 8.0.4
+
+- **fix:** Replace `WidgetStateProperty.all` with `WidgetStatePropertyAll` to avoid error reports in Flutter versions 3.24.1 and above.
+
+## 8.0.3
+
+- test: Add unit tests for the `coach_mark` package
+
+## 8.0.2
+
+- docs: Document the coach_mark package
+
+## 8.0.1
+
+- chore: Run dart format on the project and dart fix on the project
+
+## 8.0.0
+
+- feat: Add new dependencies and update existing ones
+
+  - Added glassmorphism, gradient_borders, dio, and either_dart dependencies
+  - Updated intl and url_launcher dependencies to latest versions
+  - Updated firebase_core_platform_interface and maps_launcher dependencies
+
+  ### Refactor the Failure class
+
+  - Moved the Failure class to a separate file
+  - Added the Equatable mixin to the Failure class
+
+  ### Add CoachMark module
+
+  - Created the CoachMark module with various components and error handling classes
+  - Added CoachMark, CoachMarksContent, CoachMarkData, and Onboarding classes
+  - Generated code for JSON serialization and deserialization
+
+  ### Add SVG icon file
+
+  - Added the check_icon_coach_mark.svg file to the assets/icons directory
+
+  ### Update errors module
+
+  - Added exports for various error handling classes in the errors module
+
+  ### Update pubspec.yaml
+
+  - Added tutorial_coach_mark dependency
+
+  ### Update errors.dart
+
+  - Added exports for various error handling classes in the errors.dart file
+
+  ### Update coach_mark.dart
+
+  - Added exports for various coach mark related classes in the coach_mark.dart file
+
+  ### Update coach_marks_content.dart
+
+  - Added exports for various coach marks content related classes in the coach_marks_content.dart file
+
+  ### Update exception.dart
+
+  - Added various exception classes for error handling in the exception.dart file
+
+  ### Update coach_marks_content.g.dart
+
+  - Generated code for JSON serialization and deserialization in the coach_marks_content.g.dart file
+
+  ### Update coach_mark.g.dart
+
+  - Generated code for JSON serialization and deserialization in the coach_mark.g.dart file
+
+  ### Update onboarding.dart
+
+  - Added the Onboarding class for managing onboarding data
+  - Added the OnboardingType enum for different types of onboarding
+
+  ### Refactor error handling in error.dart
+
+  - Refactored the ErrorFailure and HiveFailure classes for error handling
+
+  ### Refactor error handling in failure.dart
+
+  - Refactored the ErrorFailure and HiveFailure classes for error handling
+
 ## 7.1.4
 
 - feat: Update text field with check to remove null check

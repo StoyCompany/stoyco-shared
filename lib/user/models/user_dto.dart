@@ -13,7 +13,6 @@ part 'user_dto.g.dart';
 /// It implements the [Equatable] class for easy equality comparisons.
 /// The class is annotated with [HiveType] and [JsonSerializable] to enable serialization with Hive and JSON.
 class UserDTO extends Equatable {
-
   /// Creates a new instance of [UserDTO].
   const UserDTO({
     this.photo,
@@ -45,6 +44,7 @@ class UserDTO extends Equatable {
   /// Creates a new instance of [UserDTO] from a JSON map.
   factory UserDTO.fromJson(Map<String, dynamic> json) =>
       _$UserDTOFromJson(json);
+
   /// The user's photo.
   @HiveField(0)
   final String? photo;

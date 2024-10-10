@@ -5,7 +5,6 @@ import 'package:reactive_forms/reactive_forms.dart';
 
 /// A custom checkbox field widget with a label for Flutter applications using reactive forms.
 class StoycoCheckBoxField extends StatefulWidget {
-
   /// Creates a [StoycoCheckBoxField].
   ///
   /// The [labelText] parameter is required to set the label text for the checkbox.
@@ -14,11 +13,12 @@ class StoycoCheckBoxField extends StatefulWidget {
   ///
   /// The optional [textAction] parameter is a callback function that will be triggered when the label text is tapped.
   const StoycoCheckBoxField({
-    Key? key,
+    super.key,
     required this.labelText,
     required this.formControl,
     this.textAction,
-  }) : super(key: key);
+  });
+
   /// The text to be displayed as the label for the checkbox.
   final String labelText;
 
@@ -51,56 +51,56 @@ class _StoycoCheckBoxFieldState extends State<StoycoCheckBoxField> {
 
   /// Builds the checkbox UI.
   Widget buildCheckBox() => Container(
-      width: 24,
-      height: 24,
-      decoration: BoxDecoration(
-        color: value ? const Color(0xFF4639E7) : Colors.transparent,
-        border: Border.all(
-          color: value ? const Color(0xFF4639E7) : const Color(0xFFFAFAFA),
-          width: 2,
+        width: 24,
+        height: 24,
+        decoration: BoxDecoration(
+          color: value ? const Color(0xFF4639E7) : Colors.transparent,
+          border: Border.all(
+            color: value ? const Color(0xFF4639E7) : const Color(0xFFFAFAFA),
+            width: 2,
+          ),
+          borderRadius: BorderRadius.circular(5),
         ),
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: value
-          ? SvgPicture.asset(
-              'packages/stoyco_shared/lib/assets/icons/done_white_18dp.svg',
-              color: const Color(0xFFFAFAFA),
-              width: 16,
-              height: 16,
-            )
-          : null,
-    );
+        child: value
+            ? SvgPicture.asset(
+                'packages/stoyco_shared/lib/assets/icons/done_white_18dp.svg',
+                color: const Color(0xFFFAFAFA),
+                width: 16,
+                height: 16,
+              )
+            : null,
+      );
 
   @override
   Widget build(BuildContext context) => Row(
-      children: [
-        MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: () {
-              setValue(!value);
-            },
-            child: buildCheckBox(),
-          ),
-        ),
-        const Gap(8),
-        Expanded(
-          child: MouseRegion(
+        children: [
+          MouseRegion(
             cursor: SystemMouseCursors.click,
             child: GestureDetector(
-              onTap: widget.textAction,
-              child: Text(
-                widget.labelText,
-                style: const TextStyle(
-                  color: Color(0xFFF2F2FA),
-                  fontSize: 14,
-                  fontFamily: 'Akkurat Pro',
-                  fontWeight: FontWeight.w400,
+              onTap: () {
+                setValue(!value);
+              },
+              child: buildCheckBox(),
+            ),
+          ),
+          const Gap(8),
+          Expanded(
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: widget.textAction,
+                child: Text(
+                  widget.labelText,
+                  style: const TextStyle(
+                    color: Color(0xFFF2F2FA),
+                    fontSize: 14,
+                    fontFamily: 'Akkurat Pro',
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
 }

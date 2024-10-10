@@ -59,8 +59,9 @@ extension DateTimeExtension on DateTime {
   DateTime get nextYear => DateTime(year + 1);
   DateTime get previousYear => DateTime(year - 1);
 
-  DateTimeRange monthDateTimeRange(
-      {bool includeTrailingAndLeadingDates = false,}) {
+  DateTimeRange monthDateTimeRange({
+    bool includeTrailingAndLeadingDates = false,
+  }) {
     DateTime start = DateTime(year, month);
     if (includeTrailingAndLeadingDates) {
       start = start.subtract(Duration(days: start.weekday % kNumberOfWeekday));
@@ -71,8 +72,9 @@ extension DateTimeExtension on DateTime {
     return DateTimeRange(start: start, end: end);
   }
 
-  bool isInRange(DateTimeRange range) => difference(range.start).inSeconds >= 0 &&
-        difference(range.end).inSeconds <= 0;
+  bool isInRange(DateTimeRange range) =>
+      difference(range.start).inSeconds >= 0 &&
+      difference(range.end).inSeconds <= 0;
 
   int monthCompareTo(DateTime other) {
     if (year < other.year) {

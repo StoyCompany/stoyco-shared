@@ -26,6 +26,7 @@ class Colapse extends StatefulWidget {
     required this.name,
     required this.icon,
     required this.child,
+    this.isExpanded,
   });
 
   /// The name of the menu item.
@@ -36,6 +37,9 @@ class Colapse extends StatefulWidget {
 
   /// The content to display when the menu item is expanded.
   final Widget child;
+  
+  /// diplay menu content expanded
+  final bool? isExpanded;
 
   @override
   State<Colapse> createState() => _ColapseState();
@@ -43,7 +47,11 @@ class Colapse extends StatefulWidget {
 
 class _ColapseState extends State<Colapse> {
   bool isExpanded = false;
-
+  @override
+  void initState() {
+    super.initState();    
+    isExpanded = widget.isExpanded ?? false; 
+  }
   @override
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,

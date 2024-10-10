@@ -40,13 +40,13 @@ const _spaceRegExp = r'[ ]';
 /// ```
 class StoycoPasswordField extends StatefulWidget {
   const StoycoPasswordField({
-    Key? key,
+    super.key,
     this.decoration,
     required this.formControlName,
     required this.formControl,
     required this.labelText,
     required this.hintText,
-  }) : super(key: key);
+  });
   final InputDecoration? decoration;
   final String formControlName;
   final FormControl<dynamic> formControl;
@@ -94,21 +94,30 @@ class _StoycoPasswordFielState extends State<StoycoPasswordField> {
         message: '1 letra mayúscula',
         validator: () =>
             _requiredPattern(
-                widget.formControl, _capitalLetterRegExp, 'capitalLetter',) ==
+              widget.formControl,
+              _capitalLetterRegExp,
+              'capitalLetter',
+            ) ==
             null,
       ),
       PasswordError(
         message: '1 letra minúscula',
         validator: () =>
-            _requiredPattern(widget.formControl, _lowercaseLetterRegExp,
-                'lowercaseLetter',) ==
+            _requiredPattern(
+              widget.formControl,
+              _lowercaseLetterRegExp,
+              'lowercaseLetter',
+            ) ==
             null,
       ),
       PasswordError(
         message: '1 símbolo',
         validator: () =>
-            _requiredPattern(widget.formControl, _specialCharacterRegExp,
-                'specialCharacter',) ==
+            _requiredPattern(
+              widget.formControl,
+              _specialCharacterRegExp,
+              'specialCharacter',
+            ) ==
             null,
       ),
     ];
@@ -117,7 +126,10 @@ class _StoycoPasswordFielState extends State<StoycoPasswordField> {
   /// Checks if the control value matches the required pattern.
   /// Returns a map with the error key if the pattern is not matched, otherwise returns null.
   Map<String, dynamic>? _requiredPattern(
-      AbstractControl<dynamic> control, String pattern, String errorKey,) {
+    AbstractControl<dynamic> control,
+    String pattern,
+    String errorKey,
+  ) {
     final bool hasMatch = RegExp(pattern).hasMatch(control.value);
     return hasMatch ? null : <String, dynamic>{errorKey: true};
   }
@@ -128,21 +140,34 @@ class _StoycoPasswordFielState extends State<StoycoPasswordField> {
       Validators.required,
       Validators.minLength(8),
       Validators.delegate(
-          (control) => _requiredPattern(control, _digitRegExp, 'digit'),),
-      Validators.delegate((control) => _requiredPattern(
-          control, _specialCharacterRegExp, 'specialCharacter',),),
-      Validators.delegate((control) =>
-          _requiredPattern(control, _capitalLetterRegExp, 'capitalLetter'),),
-      Validators.delegate((control) =>
-          _requiredPattern(control, _lowercaseLetterRegExp, 'lowercaseLetter'),),
+        (control) => _requiredPattern(control, _digitRegExp, 'digit'),
+      ),
+      Validators.delegate(
+        (control) => _requiredPattern(
+          control,
+          _specialCharacterRegExp,
+          'specialCharacter',
+        ),
+      ),
+      Validators.delegate(
+        (control) =>
+            _requiredPattern(control, _capitalLetterRegExp, 'capitalLetter'),
+      ),
+      Validators.delegate(
+        (control) => _requiredPattern(
+          control,
+          _lowercaseLetterRegExp,
+          'lowercaseLetter',
+        ),
+      ),
     ];
     widget.formControl.setValidators(validators);
   }
 
   @override
   Widget build(BuildContext context) => Column(
-      children: [
-        StoyCoTextFormField(
+        children: [
+          StoyCoTextFormField(
             formControlName: widget.formControlName,
             labelText: widget.labelText,
             hintText: widget.hintText,
@@ -176,7 +201,8 @@ class _StoycoPasswordFielState extends State<StoycoPasswordField> {
                     colors: [Color(0xFF030A1A), Color(0xFF0C1B24)],
                   ),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
                 child: Text(
                   widget.labelText,
@@ -188,19 +214,24 @@ class _StoycoPasswordFielState extends State<StoycoPasswordField> {
                   ),
                 ),
               ),
-            ),),
-        const Gap(30),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 9.5),
-          child: Column(
-            children: passwordErrors.map((e) => VerificationWidgetWithMessage(
-                isValid: e.validator?.call() ?? false,
-                message: e.message,
-              ),).toList(),
+            ),
           ),
-        ),
-      ],
-    );
+          const Gap(30),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 9.5),
+            child: Column(
+              children: passwordErrors
+                  .map(
+                    (e) => VerificationWidgetWithMessage(
+                      isValid: e.validator?.call() ?? false,
+                      message: e.message,
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+        ],
+      );
 }
 
 /// A widget that displays a verification message with an icon.
@@ -210,36 +241,36 @@ class _StoycoPasswordFielState extends State<StoycoPasswordField> {
 /// The [message] property is the text to be displayed as the verification message.
 class VerificationWidgetWithMessage extends StatelessWidget {
   const VerificationWidgetWithMessage({
-    Key? key,
+    super.key,
     this.isValid = false,
     required this.message,
-  }) : super(key: key);
+  });
   final bool isValid;
   final String message;
 
   @override
   Widget build(BuildContext context) => Container(
-      margin: const EdgeInsets.only(bottom: 8.0),
-      child: Row(
-        children: [
-          SvgPicture.asset(
-            isValid
-                ? 'packages/stoyco_shared/lib/assets/icons/check_icon.svg'
-                : 'packages/stoyco_shared/lib/assets/icons/close_icon.svg',
-            width: 12,
-            height: 12,
-          ),
-          const SizedBox(width: 8.0),
-          Text(
-            message,
-            style: const TextStyle(
-              color: Color(0xFFF2F2FA),
-              fontSize: 10,
-              fontFamily: 'Akkurat Pro',
-              fontWeight: FontWeight.w400,
+        margin: const EdgeInsets.only(bottom: 8.0),
+        child: Row(
+          children: [
+            SvgPicture.asset(
+              isValid
+                  ? 'packages/stoyco_shared/lib/assets/icons/check_icon.svg'
+                  : 'packages/stoyco_shared/lib/assets/icons/close_icon.svg',
+              width: 12,
+              height: 12,
             ),
-          ),
-        ],
-      ),
-    );
+            const SizedBox(width: 8.0),
+            Text(
+              message,
+              style: const TextStyle(
+                color: Color(0xFFF2F2FA),
+                fontSize: 10,
+                fontFamily: 'Akkurat Pro',
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
+        ),
+      );
 }

@@ -50,7 +50,8 @@ class StoyCoTextFormField extends ReactiveTextField {
                       colors: [Color(0xFF030A1A), Color(0xFF0C1B24)],
                     ),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                   child: Text(
                     labelText ?? '',

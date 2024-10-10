@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class NotificationActionWidget extends StatelessWidget {
-  const NotificationActionWidget(
-      {super.key,
-      required this.callback,
-      required this.count,
-      required this.width,
-      required this.height,
-      required this.fontSize,});
+  const NotificationActionWidget({
+    super.key,
+    required this.callback,
+    required this.count,
+    required this.width,
+    required this.height,
+    required this.fontSize,
+  });
 
   final int count;
   final void Function() callback;
