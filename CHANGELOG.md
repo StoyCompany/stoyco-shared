@@ -1,3 +1,6 @@
+## 8.0.26
+- **feat:** Added new notification type onboardingCompleted.
+
 ## 8.0.25
 - **fix:** Corrected the setState usage in CoachMarkContainerWidget.
 
