@@ -8,7 +8,16 @@ import 'package:stoyco_shared/design/skeleton_card.dart';
 import 'package:stoyco_shared/news/models/new_model.dart';
 import 'package:stoyco_shared/stoyco_shared.dart';
 
+/// A widget that displays a news card with an image, title, description, and other details.
+///
+/// The [NewsCard] can be in a loading state, in which case it shows skeleton placeholders.
+/// When not loading, it displays the data provided by [newData].
+///
+/// The card is tappable if [onTap] is provided and [isLoading] is false.
 class NewsCard extends StatelessWidget {
+  /// Creates a [NewsCard].
+  ///
+  /// The [newData] must be provided if [isLoading] is false.
   const NewsCard({
     super.key,
     this.onTap,
@@ -25,19 +34,40 @@ class NewsCard extends StatelessWidget {
     this.titleMaxLines = 4,
   }) : assert(newData != null || isLoading);
 
+  /// Callback when the card is tapped.
   final VoidCallback? onTap;
+
+  /// Whether the card is in a loading state.
   final bool isLoading;
+
+  /// The data to display in the card.
   final NewModel? newData;
 
-  // Dynamic parameters with default values
+  /// The height of the card.
   final double height;
+
+  /// The border radius of the card.
   final double borderRadius;
+
+  /// The spacing between elements in the card.
   final double spacing;
+
+  /// The size of the icon displayed in the card.
   final double iconSize;
+
+  /// The font size of the title text.
   final double titleFontSize;
+
+  /// The font size of the description text.
   final double descriptionFontSize;
+
+  /// The font size of the views text.
   final double viewsFontSize;
+
+  /// The height of the skeleton placeholders.
   final double skeletonHeight;
+
+  /// The maximum number of lines for the title text.
   final int titleMaxLines;
 
   @override

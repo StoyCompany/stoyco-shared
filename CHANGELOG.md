@@ -1,3 +1,7 @@
+### 9.0.1
+
+- **docs:** Documented NewsCard, NewsService, and ScreenSize.
+
 ### 9.0.0
 
 - **feat:** Created the news sub-package to fetch Stoyco news and mark them as viewed.
