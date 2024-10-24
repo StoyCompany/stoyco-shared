@@ -1,4 +1,11 @@
+### 9.0.0
+
+- **feat:** Created the news sub-package to fetch Stoyco news and mark them as viewed.
+- **feat:** Added the StoycoScreenSize class.
+- **refactor:** Refactored the Colors class.
+
 ## 8.0.25
+
 - **fix:** Corrected the setState usage in CoachMarkContainerWidget.
 
 ## 8.0.24
