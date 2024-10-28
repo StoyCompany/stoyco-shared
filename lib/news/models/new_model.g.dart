@@ -7,7 +7,7 @@ part of 'new_model.dart';
 // **************************************************************************
 
 NewModel _$NewModelFromJson(Map<String, dynamic> json) => NewModel(
-      id: '',
+      id: json['id'] as String?,
       title: json['title'] as String?,
       mainImage: json['mainImage'] as String?,
       images:

@@ -1,3 +1,7 @@
+### 9.0.2
+
+- **chore:** Ran build_runner build to generate necessary files.
+
 ### 9.0.1
 
 - **docs:** Documented NewsCard, NewsService, and ScreenSize.
