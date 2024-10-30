@@ -77,11 +77,11 @@ class NewsRepository {
     }
   }
 
-  Future<Either<Failure, NewModel>> markAsViewed(String id) async {
+  Future<Either<Failure, bool>> markAsViewed(String id) async {
     try {
       final response = await _newsDataSource.markAsViewed(id);
-      final NewModel news = NewModel.fromJson(response.data);
-      return Right(news);
+
+      return Right(response.statusCode == 204);
     } on DioException catch (error) {
       return Left(DioFailure.decode(error));
     } on Error catch (error) {

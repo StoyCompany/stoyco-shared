@@ -1,3 +1,7 @@
+### 9.0.3
+
+- **refactor:** Updated markAsViewed method to interpret the response based on the status code instead of response data for improved logic handling.
+
 ### 9.0.2
 
 - **chore:** Ran build_runner build to generate necessary files.
