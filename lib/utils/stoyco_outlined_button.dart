@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stoyco_shared/utils/border_gradient_stoyco.dart';
-import 'package:stoyco_shared/utils/colors.dart';
+import 'package:stoyco_shared/design/colors.dart';
 
 /// A custom outlined button widget with a gradient background and border.
 ///

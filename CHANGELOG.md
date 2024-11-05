@@ -1,3 +1,25 @@
+### 9.0.3
+
+- **refactor:** Updated markAsViewed method to interpret the response based on the status code instead of response data for improved logic handling.
+
+### 9.0.2
+
+- **chore:** Ran build_runner build to generate necessary files.
+
+### 9.0.1
+
+- **docs:** Documented NewsCard, NewsService, and ScreenSize.
+
+### 9.0.0
+
+- **feat:** Created the news sub-package to fetch Stoyco news and mark them as viewed.
+- **feat:** Added the StoycoScreenSize class.
+- **refactor:** Refactored the Colors class.
+
+## 8.0.26
+
+- **feat:** Added new notification type onboardingCompleted.
+
 ## 8.0.25
 
 - **fix:** Corrected the setState usage in CoachMarkContainerWidget.
