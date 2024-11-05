@@ -1,3 +1,7 @@
+## 9.0.4
+
+- **feat:** Add calendar icon and update close icon formatting; include SvgPicture in NewsCard
+
 ### 9.0.3
 
 - **refactor:** Updated markAsViewed method to interpret the response based on the status code instead of response data for improved logic handling.
