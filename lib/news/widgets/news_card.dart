@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:stoyco_shared/design/colors.dart';
@@ -146,6 +147,17 @@ class NewsCard extends StatelessWidget {
                         if (!isLoading)
                           Row(
                             children: [
+                              SvgPicture.asset(
+                                'packages/stoyco_shared/lib/assets/icons/calendar_icon.svg',
+                                width: StoycoScreenSize.width(
+                                  context,
+                                  iconSize,
+                                ),
+                                height: StoycoScreenSize.height(
+                                  context,
+                                  iconSize,
+                                ),
+                              ),
                               Icon(
                                 Icons.date_range,
                                 color: StoycoColors.white2,
