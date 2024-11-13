@@ -24,6 +24,7 @@ NewModel _$NewModelFromJson(Map<String, dynamic> json) => NewModel(
       deletionDate: json['deletionDate'],
       cronJobId: json['cronJobId'],
       createdBy: json['createdBy'] as String?,
+      createdAt: json['createdAt'] as String?,
     );
 
 Map<String, dynamic> _$NewModelToJson(NewModel instance) => <String, dynamic>{
@@ -43,4 +44,5 @@ Map<String, dynamic> _$NewModelToJson(NewModel instance) => <String, dynamic>{
       'deletionDate': instance.deletionDate,
       'cronJobId': instance.cronJobId,
       'createdBy': instance.createdBy,
+      'createdAt': instance.createdAt,
     };

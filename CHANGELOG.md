@@ -1,3 +1,7 @@
+## 9.0.8
+
+- **feat:** createdAt field to NewModel and update related logic in NewsCard widget
+
 ## 9.0.7
 
 - **feat:** update NewsCard widget to use main image instead of image list for improved display

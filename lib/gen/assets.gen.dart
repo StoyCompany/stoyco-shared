@@ -61,6 +61,9 @@ class $LibAssetsIconsGen {
   /// File path: lib/assets/icons/calendar.svg
   String get calendar => 'lib/assets/icons/calendar.svg';
 
+  /// File path: lib/assets/icons/calendar_icon.svg
+  String get calendarIcon => 'lib/assets/icons/calendar_icon.svg';
+
   /// File path: lib/assets/icons/camera.svg
   String get camera => 'lib/assets/icons/camera.svg';
 
@@ -103,6 +106,7 @@ class $LibAssetsIconsGen {
         arrowBack,
         arrowForwardIcon,
         calendar,
+        calendarIcon,
         camera,
         checkIcon,
         checkIconCoachMark,

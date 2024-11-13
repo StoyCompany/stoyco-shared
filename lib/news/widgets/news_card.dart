@@ -78,7 +78,8 @@ class NewsCard extends StatelessWidget {
 
     try {
       if (newData != null) {
-        final date = DateTime.parse(newData?.scheduledPublishDate ?? '');
+        final date = DateTime.parse(
+            newData?.scheduledPublishDate ?? newData?.createdAt ?? '');
         formattedDate = date.year == currentYear
             ? DateFormat('MMM dd | HH:mm').format(date)
             : DateFormat('MMM dd - yyyy | HH:mm').format(date);
@@ -123,7 +124,7 @@ class NewsCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(
                             StoycoScreenSize.radius(context, borderRadius),
                           ),
-                          child: newData?.mainImage!=null
+                          child: newData?.mainImage != null
                               ? CachedNetworkImage(
                                   imageUrl: newData?.mainImage ?? '',
                                   placeholder: (context, url) =>
