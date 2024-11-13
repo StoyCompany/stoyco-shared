@@ -123,13 +123,16 @@ class NewsCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(
                             StoycoScreenSize.radius(context, borderRadius),
                           ),
-                          child: CachedNetworkImage(
-                            imageUrl: newData?.images?.first ?? '',
-                            placeholder: (context, url) => const SkeletonCard(),
-                            errorWidget: (context, url, error) =>
-                                const SkeletonCard(),
-                            fit: BoxFit.cover,
-                          ),
+                          child: (newData?.images ?? []).isNotEmpty
+                              ? CachedNetworkImage(
+                                  imageUrl: newData?.images?.first ?? '',
+                                  placeholder: (context, url) =>
+                                      const SkeletonCard(),
+                                  errorWidget: (context, url, error) =>
+                                      const SkeletonCard(),
+                                  fit: BoxFit.cover,
+                                )
+                              : const SkeletonCard(),
                         )
                       : SkeletonCard(
                           borderRadius: BorderRadius.circular(

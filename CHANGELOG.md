@@ -1,3 +1,7 @@
+## 9.0.5
+
+- **feat:** news card image handling improve image loading logic to display a placeholder when no images are available
+
 ## 9.0.4
 
 - **feat:** Add calendar icon and update close icon formatting; include SvgPicture in NewsCard
