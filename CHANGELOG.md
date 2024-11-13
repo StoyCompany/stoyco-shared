@@ -1,4 +1,5 @@
-## 9.0.5
+## 9.0.6
+- **feat:** remove date range icon from NewsCard widget to streamline design
 
 - **feat:** news card image handling improve image loading logic to display a placeholder when no images are available
 

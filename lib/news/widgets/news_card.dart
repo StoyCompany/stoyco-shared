@@ -161,14 +161,6 @@ class NewsCard extends StatelessWidget {
                                   iconSize,
                                 ),
                               ),
-                              Icon(
-                                Icons.date_range,
-                                color: StoycoColors.white2,
-                                size: StoycoScreenSize.width(
-                                  context,
-                                  iconSize,
-                                ),
-                              ),
                               Gap(StoycoScreenSize.width(context, 5)),
                               Text(
                                 formattedDate,
