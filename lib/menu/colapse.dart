@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-import 'package:stoyco_shared/utils/colors.dart';
+import 'package:stoyco_shared/design/colors.dart';
 
 /// A widget that represents a collapsible menu item.
 ///
@@ -37,7 +37,7 @@ class Colapse extends StatefulWidget {
 
   /// The content to display when the menu item is expanded.
   final Widget child;
-  
+
   /// diplay menu content expanded
   final bool? isExpanded;
 
@@ -49,9 +49,10 @@ class _ColapseState extends State<Colapse> {
   bool isExpanded = false;
   @override
   void initState() {
-    super.initState();    
-    isExpanded = widget.isExpanded ?? false; 
+    super.initState();
+    isExpanded = widget.isExpanded ?? false;
   }
+
   @override
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,9 +79,11 @@ class _ColapseState extends State<Colapse> {
                       ),
                     ),
                   ),
-                  SvgPicture.asset(isExpanded
-                      ? 'packages/stoyco_shared/lib/assets/icons/arrowUp.svg'
-                      : 'packages/stoyco_shared/lib/assets/icons/arrowDown.svg',),
+                  SvgPicture.asset(
+                    isExpanded
+                        ? 'packages/stoyco_shared/lib/assets/icons/arrowUp.svg'
+                        : 'packages/stoyco_shared/lib/assets/icons/arrowDown.svg',
+                  ),
                 ],
               ),
             ),

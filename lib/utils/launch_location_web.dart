@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-import 'package:stoyco_shared/utils/colors.dart';
+import 'package:stoyco_shared/design/colors.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
 /// Enum representing the type of location launch - either via a search query or using specific coordinates.

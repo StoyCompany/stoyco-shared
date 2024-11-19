@@ -1,7 +1,45 @@
+## 9.0.8
+
+- **feat:** createdAt field to NewModel and update related logic in NewsCard widget
+
+## 9.0.7
+
+- **feat:** update NewsCard widget to use main image instead of image list for improved display
+
+## 9.0.6
+
+- **feat:** remove date range icon from NewsCard widget to streamline design
+
+- **feat:** news card image handling improve image loading logic to display a placeholder when no images are available
+
+## 9.0.4
+
+- **feat:** Add calendar icon and update close icon formatting; include SvgPicture in NewsCard
+
+### 9.0.3
+
+- **refactor:** Updated markAsViewed method to interpret the response based on the status code instead of response data for improved logic handling.
+
+### 9.0.2
+
+- **chore:** Ran build_runner build to generate necessary files.
+
+### 9.0.1
+
+- **docs:** Documented NewsCard, NewsService, and ScreenSize.
+
+### 9.0.0
+
+- **feat:** Created the news sub-package to fetch Stoyco news and mark them as viewed.
+- **feat:** Added the StoycoScreenSize class.
+- **refactor:** Refactored the Colors class.
+
 ## 8.0.26
+
 - **feat:** Added new notification type onboardingCompleted.
 
 ## 8.0.25
+
 - **fix:** Corrected the setState usage in CoachMarkContainerWidget.
 
 ## 8.0.24
