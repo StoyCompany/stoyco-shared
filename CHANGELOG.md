@@ -1,3 +1,7 @@
+## 9.0.9
+
+- **feat:** update date parsing in NewsCard widget to convert scheduledPublishDate and createdAt to local time
+
 ## 9.0.8
 
 - **feat:** createdAt field to NewModel and update related logic in NewsCard widget

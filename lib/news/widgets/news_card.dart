@@ -79,7 +79,8 @@ class NewsCard extends StatelessWidget {
     try {
       if (newData != null) {
         final date = DateTime.parse(
-            newData?.scheduledPublishDate ?? newData?.createdAt ?? '');
+                newData?.scheduledPublishDate ?? newData?.createdAt ?? '')
+            .toLocal();
         formattedDate = date.year == currentYear
             ? DateFormat('MMM dd | HH:mm').format(date)
             : DateFormat('MMM dd - yyyy | HH:mm').format(date);
