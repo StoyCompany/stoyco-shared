@@ -1,3 +1,7 @@
+## 10.0.0
+
+- **feat:** Update map dependencies and launch URLs instead of using maps_launcher in the web widget
+
 ## 9.0.9
 
 - **feat:** update date parsing in NewsCard widget to convert scheduledPublishDate and createdAt to local time

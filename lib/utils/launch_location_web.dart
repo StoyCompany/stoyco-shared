@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:stoyco_shared/design/colors.dart';
-import 'package:maps_launcher/maps_launcher.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Enum representing the type of location launch - either via a search query or using specific coordinates.
 enum LaunchLocationWebType { query, coordinates }
@@ -31,56 +31,28 @@ class LaunchLocationWebWidget extends StatelessWidget {
   /// The [type] specifies the launch type, defaulting to using the available data.
   const LaunchLocationWebWidget({
     super.key,
-    this.query,
-    this.coordinates,
-    this.type,
+    this.title,
+    required this.coordinates,
     this.padding,
     this.textStyle,
-  }) : assert(
-          query != null || coordinates != null,
-          'Either query or coordinates must be provided.',
-        );
+  });
 
-  /// A search query for the location. This is optional and used if [type] is [LaunchLocationWebType.query].
-  final String? query;
+  /// Coordinates of the location.
+  final Coordinates coordinates;
 
-  /// Coordinates of the location. This is optional and used if [type] is [LaunchLocationWebType.coordinates].
-  final Coordinates? coordinates;
-
-  /// The type of location launch, which can be specified explicitly. If not provided, it is inferred from provided parameters.
-  final LaunchLocationWebType? type;
+  final String? title;
 
   final EdgeInsetsGeometry? padding;
 
   final TextStyle? textStyle;
 
-  /// Launches the location based on the provided [type], [query], or [coordinates].
-  ///
-  /// If no valid location is provided, it throws an exception.
-  void _launchLocation() {
-    final effectiveType = type ??
-        (query != null
-            ? LaunchLocationWebType.query
-            : LaunchLocationWebType.coordinates);
-
-    switch (effectiveType) {
-      case LaunchLocationWebType.query:
-        if (query != null) {
-          MapsLauncher.launchQuery(query!);
-        } else {
-          _showException('No query provided.');
-        }
-        break;
-      case LaunchLocationWebType.coordinates:
-        if (coordinates != null) {
-          MapsLauncher.launchCoordinates(
-            coordinates!.latitude,
-            coordinates!.longitude,
-          );
-        } else {
-          _showException('No coordinates provided.');
-        }
-        break;
+  void _launchLocation() async {
+    final url = Uri.parse(
+        'https://www.google.com/maps/search/?api=1&query=${coordinates.latitude},${coordinates.longitude}');
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      _showException('Could not launch $url');
     }
   }
 
@@ -94,23 +66,23 @@ class LaunchLocationWebWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // Condición para manejar diferentes estilos según la plataforma
     final buttonStyle = ButtonStyle(
-      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+      padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
         padding ??
             const EdgeInsets.symmetric(
               horizontal: 16,
               vertical: 8,
             ),
       ),
-      backgroundColor: MaterialStateProperty.all<Color>(
+      backgroundColor: WidgetStateProperty.all<Color>(
         const Color(0xff252836),
       ),
-      textStyle: MaterialStateProperty.all<TextStyle>(
+      textStyle: WidgetStateProperty.all<TextStyle>(
         TextStyle(
           color: StoycoColors.text,
           fontSize: 10,
         ),
       ),
-      minimumSize: MaterialStateProperty.all<Size>(
+      minimumSize: WidgetStateProperty.all<Size>(
         const Size(111, 32),
       ),
     );

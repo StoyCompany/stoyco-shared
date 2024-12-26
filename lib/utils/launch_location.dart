@@ -1,13 +1,11 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:map_launcher/map_launcher.dart';
 
-import 'package:maps_launcher/maps_launcher.dart';
 import 'package:stoyco_shared/design/colors.dart';
 
-/// Enum representing the type of location launch - either via a search query or using specific coordinates.
-enum LaunchLocationType { query, coordinates }
 
 /// A class to hold latitude and longitude data.
 class Coordinates {
@@ -33,60 +31,30 @@ class LaunchLocationWidget extends StatelessWidget {
   /// The [type] specifies the launch type, defaulting to using the available data.
   const LaunchLocationWidget({
     super.key,
-    this.query,
-    this.coordinates,
-    this.type,
+    this.title,
+    required this.coordinates,
     this.padding,
     this.textStyle,
-  }) : assert(
-          query != null || coordinates != null,
-          'Either query or coordinates must be provided.',
-        );
+  });
 
-  /// A search query for the location. This is optional and used if [type] is [LaunchLocationType.query].
-  final String? query;
+  /// Coordinates of the location.
+  final Coordinates coordinates;
 
-  /// Coordinates of the location. This is optional and used if [type] is [LaunchLocationType.coordinates].
-  final Coordinates? coordinates;
-
-  /// The type of location launch, which can be specified explicitly. If not provided, it is inferred from provided parameters.
-  final LaunchLocationType? type;
+  final String? title;
 
   final EdgeInsetsGeometry? padding;
 
   final TextStyle? textStyle;
 
-  /// Launches the location based on the provided [type], [query], or [coordinates].
-  ///
-  /// If no valid location is provided, it throws an exception.
   void _launchLocation() {
-    final effectiveType = type ??
-        (query != null
-            ? LaunchLocationType.query
-            : LaunchLocationType.coordinates);
-
-    switch (effectiveType) {
-      case LaunchLocationType.query:
-        if (query != null) {
-          MapsLauncher.launchQuery(query!);
-        } else {
-          _showException('No query provided.');
-        }
-      case LaunchLocationType.coordinates:
-        if (coordinates != null) {
-          MapsLauncher.launchCoordinates(
-            coordinates!.latitude,
-            coordinates!.longitude,
-          );
-        } else {
-          _showException('No coordinates provided.');
-        }
-    }
-  }
-
-  /// Helper method to throw an exception with a specific [message].
-  void _showException(String message) {
-    throw Exception('Error launching location: $message');
+    MapLauncher.showMarker(
+      coords: Coords(
+        coordinates!.latitude,
+        coordinates!.longitude,
+      ),
+      title: title ?? 'Location',
+      mapType: Platform.isIOS ? MapType.apple : MapType.google,
+    );
   }
 
   /// Builds the widget with a styled [ElevatedButton] that triggers location launch on press.
@@ -94,23 +62,23 @@ class LaunchLocationWidget extends StatelessWidget {
   Widget build(BuildContext context) => ElevatedButton(
         onPressed: () => _launchLocation(),
         style: ButtonStyle(
-          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+          padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
             padding ??
                 const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 8,
                 ),
           ),
-          backgroundColor: MaterialStateProperty.all<Color>(
+          backgroundColor: WidgetStateProperty.all<Color>(
             const Color(0xff252836),
           ),
-          textStyle: MaterialStateProperty.all<TextStyle>(
+          textStyle: WidgetStateProperty.all<TextStyle>(
             TextStyle(
               color: StoycoColors.text,
               fontSize: 10,
             ),
           ),
-          minimumSize: MaterialStateProperty.all<Size>(
+          minimumSize: WidgetStateProperty.all<Size>(
             const Size(111, 32),
           ),
         ),
