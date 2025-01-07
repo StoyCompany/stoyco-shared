@@ -22,4 +22,9 @@ class GeoEntity {
   final String name;
   final String lada;
   final String countryCode;
+
+  @override
+  String toString() {
+    return name;
+  }
 }

@@ -113,8 +113,7 @@ class _StoycoDropDownFielWithModalV2State<T>
             enableSearch: widget.enableSearch,
             height: widget.height,
           );
-
-          _.value = value;
+          if (value != null) _.value = value.toString();
         },
       );
 }
@@ -209,13 +208,15 @@ Future<T?> showSelectOptionModal<T>({
                               setState(() {
                                 searchQuery = value;
                                 filteredOptions = options
-                                    .where((option) => option.toShow
-                                        .toLowerCase()
-                                        .contains(searchQuery.toLowerCase()))
+                                    .where(
+                                      (option) => option.toShow
+                                          .toLowerCase()
+                                          .contains(searchQuery.toLowerCase()),
+                                    )
                                     .toList();
                               });
                             },
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               hintText: 'Buscar...',
                               prefixIcon: Icon(Icons.search),
                             ),
@@ -226,42 +227,44 @@ Future<T?> showSelectOptionModal<T>({
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: filteredOptions
-                                .map((option) => Container(
-                                      height: 36,
-                                      width: double.infinity,
-                                      margin: const EdgeInsets.symmetric(
-                                        horizontal: 32,
-                                        vertical: 4,
-                                      ),
-                                      child: InkWell(
-                                        onTap: () {
-                                          selectedOption = option.value;
-                                          Navigator.of(context)
-                                              .pop(selectedOption);
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                option.toShow,
-                                                style: const TextStyle(
-                                                  fontFamily: 'Akkurat Pro',
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Color(0xfff2f2fa),
-                                                ),
+                                .map(
+                                  (option) => Container(
+                                    height: 36,
+                                    width: double.infinity,
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 32,
+                                      vertical: 4,
+                                    ),
+                                    child: InkWell(
+                                      onTap: () {
+                                        selectedOption = option.value;
+                                        Navigator.of(context)
+                                            .pop(selectedOption);
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              option.toShow,
+                                              style: const TextStyle(
+                                                fontFamily: 'Akkurat Pro',
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                                color: Color(0xfff2f2fa),
                                               ),
                                             ),
-                                            if (selectedOption == option.value)
-                                              const Icon(
-                                                Icons.check,
-                                                size: 18,
-                                                color: Color(0xfff2f2fa),
-                                              )
-                                          ],
-                                        ),
+                                          ),
+                                          if (selectedOption == option.value)
+                                            const Icon(
+                                              Icons.check,
+                                              size: 18,
+                                              color: Color(0xfff2f2fa),
+                                            ),
+                                        ],
                                       ),
-                                    ))
+                                    ),
+                                  ),
+                                )
                                 .toList(),
                           ),
                         ),
@@ -292,13 +295,15 @@ Future<T?> showSelectOptionModal<T>({
                       setState(() {
                         searchQuery = value;
                         filteredOptions = options
-                            .where((option) => option.toShow
-                                .toLowerCase()
-                                .contains(searchQuery.toLowerCase()))
+                            .where(
+                              (option) => option.toShow
+                                  .toLowerCase()
+                                  .contains(searchQuery.toLowerCase()),
+                            )
                             .toList();
                       });
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Buscar...',
                       prefixIcon: Icon(Icons.search),
                     ),

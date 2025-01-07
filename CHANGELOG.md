@@ -1,3 +1,7 @@
+## 11.0.4
+
+- **fix:** Mejoras en geo entity y en dropdown field.
+
 ## 11.0.3
 
 - **fix:** Design corrections to prevent overflow issues in modals.
