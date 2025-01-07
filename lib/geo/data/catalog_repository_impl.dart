@@ -7,7 +7,6 @@ class CatalogRepository {
   CatalogRepository(this._catalogDataSource);
   final CatalogDataSource _catalogDataSource;
 
-  @override
   Future<List<GeoEntity>> getCitiesByCountryV2(String countryCode) async {
     try {
       final result = await _catalogDataSource.getCitiesByCountryV2(countryCode);
@@ -30,7 +29,6 @@ class CatalogRepository {
     }
   }
 
-  @override
   Future<List<GeoEntity>> getCountriesV2() async {
     try {
       final result = await _catalogDataSource.getCountriesV2();

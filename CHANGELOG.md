@@ -1,3 +1,7 @@
+## 11.0.1
+
+- **fix:** Corrected the base URL for the catalog DS.
+
 ## 11.0.0
 
 - **feat:** Created geo service to obtain the catalog of countries and cities from Stoyco.

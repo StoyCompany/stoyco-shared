@@ -13,7 +13,7 @@ class CatalogDataSource {
 
   Future<List<GeoLocationDto>> getCitiesByCountryV2(String countryCode) async {
     final info = await _dio.get(
-      '${environment.baseUrl}/locations/cities?code=$countryCode',
+      '${environment.dataCatalogUrl}/locations/cities?code=$countryCode',
     );
 
     return List<GeoLocationDto>.from(
@@ -23,7 +23,7 @@ class CatalogDataSource {
 
   Future<List<GeoLocationDto>> getCountriesV2() async {
     final info = await _dio.get(
-      '${environment.baseUrl}/locations/countries',
+      '${environment.dataCatalogUrl}/locations/countries',
     );
 
     return List<GeoLocationDto>.from(
