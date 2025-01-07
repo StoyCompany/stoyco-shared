@@ -1,3 +1,7 @@
+## 11.0.3
+
+- **fix:** Design corrections to prevent overflow issues in modals.
+
 ## 11.0.2
 
 - **fix:** Removed a slash that caused an error when calling the catalog.

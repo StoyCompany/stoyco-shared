@@ -175,7 +175,7 @@ class StoycoContainerModal extends StatelessWidget {
                 indent: 32,
                 endIndent: 32,
               ),
-            child,
+            Expanded(child: child),
             if (showActions)
               Column(
                 children: [

@@ -148,7 +148,7 @@ Future<T?> showSelectOptionModal<T>({
   String searchQuery = '';
   List<DropDownItem<T>> filteredOptions = options;
 
-  const isWeb = kIsWeb; // Verificar si es web
+  final isWeb = kIsWeb; // Verificar si es web
 
   if (isWeb) {
     return await showDialog<T>(
@@ -211,11 +211,11 @@ Future<T?> showSelectOptionModal<T>({
                                 filteredOptions = options
                                     .where((option) => option.toShow
                                         .toLowerCase()
-                                        .contains(searchQuery.toLowerCase()),)
+                                        .contains(searchQuery.toLowerCase()))
                                     .toList();
                               });
                             },
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               hintText: 'Buscar...',
                               prefixIcon: Icon(Icons.search),
                             ),
@@ -257,11 +257,11 @@ Future<T?> showSelectOptionModal<T>({
                                                 Icons.check,
                                                 size: 18,
                                                 color: Color(0xfff2f2fa),
-                                              ),
+                                              )
                                           ],
                                         ),
                                       ),
-                                    ),)
+                                    ))
                                 .toList(),
                           ),
                         ),
@@ -280,68 +280,74 @@ Future<T?> showSelectOptionModal<T>({
       context: context,
       title: title,
       height: enableSearch ? 410 : height,
-      child: StatefulBuilder(
-        builder: (context, setState) => Column(
-          children: [
-            if (enableSearch)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  onChanged: (value) {
-                    setState(() {
-                      searchQuery = value;
-                      filteredOptions = options
-                          .where((option) => option.toShow
-                              .toLowerCase()
-                              .contains(searchQuery.toLowerCase()),)
-                          .toList();
-                    });
-                  },
-                  decoration: const InputDecoration(
-                    hintText: 'Buscar...',
-                    prefixIcon: Icon(Icons.search),
+      child: LayoutBuilder(
+        builder: (context, constraints) => StatefulBuilder(
+          builder: (context, setState) => Column(
+            children: [
+              if (enableSearch)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    onChanged: (value) {
+                      setState(() {
+                        searchQuery = value;
+                        filteredOptions = options
+                            .where((option) => option.toShow
+                                .toLowerCase()
+                                .contains(searchQuery.toLowerCase()))
+                            .toList();
+                      });
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Buscar...',
+                      prefixIcon: Icon(Icons.search),
+                    ),
                   ),
                 ),
-              ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: filteredOptions.length,
-              itemBuilder: (context, index) => Container(
-                height: 18,
-                width: double.infinity,
-                margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 9),
-                child: GestureDetector(
-                  onTap: () {
-                    selectedOption = filteredOptions[index].value;
-                    Navigator.of(context).pop(selectedOption);
-                  },
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          filteredOptions[index].toShow,
-                          style: const TextStyle(
-                            fontFamily: 'Akkurat Pro',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xfff2f2fa),
-                            height: 16 / 14,
+              SizedBox(
+                height: constraints.maxHeight - 80,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: filteredOptions.length,
+                  itemBuilder: (context, index) => Container(
+                    height: 18,
+                    width: double.infinity,
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 32, vertical: 9),
+                    child: GestureDetector(
+                      onTap: () {
+                        selectedOption = filteredOptions[index].value;
+                        Navigator.of(context).pop(selectedOption);
+                      },
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              filteredOptions[index].toShow,
+                              style: const TextStyle(
+                                fontFamily: 'Akkurat Pro',
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: Color(0xfff2f2fa),
+                                height: 16 / 14,
+                              ),
+                            ),
                           ),
-                        ),
+                          if (selectedOption == filteredOptions[index].value)
+                            const Icon(
+                              Icons.check,
+                              size: 18,
+                            )
+                          else
+                            Container(),
+                        ],
                       ),
-                      if (selectedOption == filteredOptions[index].value)
-                        const Icon(
-                          Icons.check,
-                          size: 18,
-                        )
-                      else
-                        Container(),
-                    ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
