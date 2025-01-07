@@ -84,22 +84,15 @@ class StoycoScreenSize {
       case DeviceType.desktopLarge:
         referenceWidth = _figmaDesktopLargeWidthReference;
         referenceHeight = _figmaDesktopLargeHeightReference;
-        break;
       case DeviceType.desktop:
         referenceWidth = _figmaDesktopWidthReference;
         referenceHeight = _figmaDesktopHeightReference;
-        break;
       case DeviceType.mobile:
         referenceWidth = _figmaMobileWidthReference;
         referenceHeight = _figmaMobileHeightReference;
-        break;
       case DeviceType.tablet:
         referenceWidth = _figmaTabletWidthReference;
         referenceHeight = _figmaTabletHeightReference;
-        break;
-      default:
-        referenceWidth = _figmaDesktopWidthReference;
-        referenceHeight = _figmaDesktopHeightReference;
     }
 
     final deviceAspectRatio = screenWidth / screenHeight;

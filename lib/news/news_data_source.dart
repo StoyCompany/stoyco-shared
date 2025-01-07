@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:stoyco_shared/coach_mark/coach_mark_data_source.dart';
+import 'package:stoyco_shared/envs/envs.dart';
 
 class NewsDataSource {
   NewsDataSource({required this.environment});

@@ -10,6 +10,7 @@ import 'package:stoyco_shared/coach_mark/coach_marks_content/coach_mark.dart';
 import 'package:stoyco_shared/coach_mark/coach_marks_content/coach_marks_content.dart';
 import 'package:stoyco_shared/coach_mark/errors/exception.dart';
 import 'package:stoyco_shared/coach_mark/models/onboarding.dart';
+import 'package:stoyco_shared/envs/envs.dart';
 import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
 
 /// A service class to handle coach marks and onboarding functionality.

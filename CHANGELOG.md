@@ -1,3 +1,8 @@
+## 11.0.0
+
+- **feat:** Created geo service to obtain the catalog of countries and cities from Stoyco.
+- **feat:** Created drop down field with modal v2 to include a search feature.
+
 ## 10.0.0
 
 - **feat:** Update map dependencies and launch URLs instead of using maps_launcher in the web widget

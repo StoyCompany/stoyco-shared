@@ -21,6 +21,7 @@
 /// ```
 ///
 /// Returns a [DeviceType] value representing the type of device.
+library;
 import 'package:flutter/material.dart';
 
 enum DeviceType { mobile, tablet, desktop, desktopLarge }

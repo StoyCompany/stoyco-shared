@@ -49,8 +49,8 @@ class LaunchLocationWidget extends StatelessWidget {
   void _launchLocation() {
     MapLauncher.showMarker(
       coords: Coords(
-        coordinates!.latitude,
-        coordinates!.longitude,
+        coordinates.latitude,
+        coordinates.longitude,
       ),
       title: title ?? 'Location',
       mapType: Platform.isIOS ? MapType.apple : MapType.google,
