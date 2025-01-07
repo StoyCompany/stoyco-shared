@@ -1,3 +1,7 @@
+## 11.0.2
+
+- **fix:** Removed a slash that caused an error when calling the catalog.
+
 ## 11.0.1
 
 - **fix:** Corrected the base URL for the catalog DS.
