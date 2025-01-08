@@ -406,9 +406,9 @@ class _PinCodeTextFieldState extends State<PinCodeTextField>
           _dialogConfig.negativeText!.isNotEmpty,
     );
     assert(_dialogConfig.dialogTitle != null &&
-        _dialogConfig.dialogTitle!.isNotEmpty);
+        _dialogConfig.dialogTitle!.isNotEmpty,);
     assert(_dialogConfig.dialogContent != null &&
-        _dialogConfig.dialogContent!.isNotEmpty);
+        _dialogConfig.dialogContent!.isNotEmpty,);
   }
 
   runHapticFeedback() {

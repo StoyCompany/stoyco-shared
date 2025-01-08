@@ -1,6 +1,6 @@
 name: stoyco_shared
 description: A set of shared components for Stoyco Flutter projects.
-version: 11.0.5
+version: 11.0.6
 
 environment:
   sdk: ">=3.1.2 <4.0.0"
@@ -19,7 +19,6 @@ dependencies:
   vph_common_widgets: ^0.0.2
   equatable: ^2.0.5
   hive: ^2.2.3
-  hive_flutter: ^1.1.0
   firebase_messaging: ^15.0.4
   cached_network_image: ^3.3.0
   json_annotation: ^4.8.1
@@ -44,7 +43,6 @@ dev_dependencies:
   flutter_gen: ^5.3.1
   flutter_gen_runner: ^5.3.1
   build_runner: ^2.4.7
-  hive_generator: ^2.0.0
   json_serializable: ^6.7.0
   mockito: ^5.4.4
 

@@ -46,9 +46,9 @@ class LaunchLocationWebWidget extends StatelessWidget {
 
   final TextStyle? textStyle;
 
-  void _launchLocation() async {
+  Future<void> _launchLocation() async {
     final url = Uri.parse(
-        'https://www.google.com/maps/search/?api=1&query=${coordinates.latitude},${coordinates.longitude}');
+        'https://www.google.com/maps/search/?api=1&query=${coordinates.latitude},${coordinates.longitude}',);
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     } else {

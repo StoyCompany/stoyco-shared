@@ -3,13 +3,12 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+
 import 'package:stoyco_shared/extensions/hex_color.dart';
 import 'package:stoyco_shared/notification/model/notification_type.dart';
 
 part 'notification_model.g.dart';
 
-@HiveType(typeId: 5)
 class NotificationModel extends Equatable {
   factory NotificationModel.fromJson(Map<String, dynamic> json) =>
       NotificationModel(
@@ -59,27 +58,16 @@ class NotificationModel extends Equatable {
     this.isReaded,
     this.createAt,
   });
-  @HiveField(0)
   final String? id;
-  @HiveField(1)
   final String? itemId;
-  @HiveField(2)
   final String? userId;
-  @HiveField(3)
   final String? title;
-  @HiveField(4)
   final String? text;
-  @HiveField(5)
   final String? image;
-  @HiveField(6)
   final int? type;
-  @HiveField(7)
   final String? color;
-  @HiveField(8)
   final bool? isReaded;
-  @HiveField(9)
   final DateTime? createAt;
-  @HiveField(10)
   final String? guid;
 
   Color get materialColor =>

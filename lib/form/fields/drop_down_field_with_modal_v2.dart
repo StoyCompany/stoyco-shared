@@ -147,7 +147,7 @@ Future<T?> showSelectOptionModal<T>({
   String searchQuery = '';
   List<DropDownItem<T>> filteredOptions = options;
 
-  final isWeb = kIsWeb; // Verificar si es web
+  const isWeb = kIsWeb; // Verificar si es web
 
   if (isWeb) {
     return await showDialog<T>(

@@ -24,7 +24,5 @@ class GeoEntity {
   final String countryCode;
 
   @override
-  String toString() {
-    return name;
-  }
+  String toString() => name;
 }

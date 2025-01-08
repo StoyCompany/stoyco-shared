@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
-import 'package:hive/hive.dart';
+
 import 'package:json_annotation/json_annotation.dart';
+import 'package:stoyco_shared/user/models/user_location_info/user_location_info.dart';
 import 'package:stoyco_shared/user/models/user_phone_number.dart';
 
 part 'user_dto.g.dart';
 
-@HiveType(typeId: 6)
 @JsonSerializable(explicitToJson: true)
 
 /// Represents a Data Transfer Object (DTO) for a user.
@@ -39,6 +39,7 @@ class UserDTO extends Equatable {
     this.birthDate,
     this.gender,
     this.nickName,
+    this.locationInfo,
   });
 
   /// Creates a new instance of [UserDTO] from a JSON map.
@@ -46,101 +47,80 @@ class UserDTO extends Equatable {
       _$UserDTOFromJson(json);
 
   /// The user's photo.
-  @HiveField(0)
   final String? photo;
 
   /// The user's Stripe customer ID.
-  @HiveField(1)
   final String? stripeCustomerId;
 
   /// The user's wallet address.
-  @HiveField(2)
   final String? walletAdress;
 
   /// The user's first name.
-  @HiveField(3)
   final String? firstName;
 
   /// The user's last name.
-  @HiveField(4)
   final String? lastName;
 
   /// The number of events purchased by the user.
-  @HiveField(5)
   final int? numEventsPurchased;
 
   /// The user's ID.
-  @HiveField(6)
   final String? id;
 
   /// The user's UID.
-  @HiveField(7)
   final String? uid;
 
   /// The user's name.
-  @HiveField(8)
   final String? name;
 
   /// The user's email.
-  @HiveField(9)
   final String? email;
 
   /// The user's phone number.
-  @HiveField(10)
   @JsonKey(name: 'phoneNumber')
   final UserPhoneNumber? phoneNumber;
 
   /// The user's country.
-  @HiveField(11)
   final String? country;
 
   /// The type of document used by the user.
-  @HiveField(12)
   final String? typeDocument;
 
   /// The user's document.
-  @HiveField(13)
   final String? document;
 
   /// The roles assigned to the user.
-  @HiveField(14)
   final List<String>? roles;
 
   /// The user's creation date.
-  @HiveField(15)
   final String? createdAt;
 
   /// The date when the user last changed their password.
-  @HiveField(16)
   final String? changePasswordDate;
 
   /// Indicates if the user's email has been verified.
-  @HiveField(17)
   final bool? verifiedEmail;
 
   /// Indicates if the user is a test user.
-  @HiveField(18)
   final bool? isUserTest;
 
   /// The provider used for authentication.
-  @HiveField(19)
   final String? provider;
 
   /// The user's device UID.
-  @HiveField(20)
   final String? uidevice;
 
   /// The user's birth date.
-  @HiveField(21)
   final String? birthDate;
 
   /// The user's gender.
-  @HiveField(22)
   final String? gender;
 
   /// The user's nickname.
-  @HiveField(23)
   final String? nickName;
+
+  @JsonKey(name: 'location')
+  final UserLocationInfo? locationInfo;
 
   /// Converts the [UserDTO] instance to a JSON map.
   Map<String, dynamic> toJson() => _$UserDTOToJson(this);
@@ -171,6 +151,7 @@ class UserDTO extends Equatable {
     String? birthDate,
     String? gender,
     String? nickName,
+    UserLocationInfo? locationInfo,
   }) =>
       UserDTO(
         photo: photo ?? this.photo,
@@ -197,6 +178,7 @@ class UserDTO extends Equatable {
         birthDate: birthDate ?? this.birthDate,
         gender: gender ?? this.gender,
         nickName: nickName ?? this.nickName,
+        locationInfo: locationInfo ?? this.locationInfo,
       );
 
   /// Indicates whether the [UserDTO] instance should be treated as a string when comparing equality.
@@ -227,6 +209,7 @@ class UserDTO extends Equatable {
         isUserTest,
         provider,
         uidevice,
+        locationInfo
       ];
 
   /// Indicates whether the user is logged in.
@@ -286,7 +269,8 @@ class UserDTO extends Equatable {
       userModel.uidevice == uidevice &&
       userModel.birthDate == birthDate &&
       userModel.gender == gender &&
-      userModel.nickName == nickName;
+      userModel.nickName == nickName &&
+      userModel.locationInfo == locationInfo;
 
   /// Indicates whether the user's profile is complete.
   bool get isProfileComplete =>
@@ -306,7 +290,8 @@ class UserDTO extends Equatable {
       nickName!.isNotEmpty &&
       nickName != 'empty' &&
       gender != null &&
-      gender!.isNotEmpty;
+      gender!.isNotEmpty &&
+      locationInfo != null;
 
   /// Indicates whether the essential user data is empty.
   bool get isEssentialDataEmpty => email == null || uid == null || id == null;
@@ -321,5 +306,6 @@ class UserDTO extends Equatable {
       country == null &&
       birthDate == null &&
       gender == null &&
-      nickName == null;
+      nickName == null &&
+      locationInfo == null;
 }

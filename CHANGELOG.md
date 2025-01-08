@@ -1,10 +1,15 @@
+## 11.0.6
+
+- **feat:** Added locationInfo to UserDTO model for managing user location data.
+- **refactor:** Removed unnecessary Hive dependencies.
+
 ## 11.0.5
 
 - **feat:** Added UserLocationInfo model for managing user location data.
 
 ## 11.0.4
 
-- **fix:** Mejoras en geo entity y en dropdown field.
+- **fix:** Improvements in geo entity and dropdown field.
 
 ## 11.0.3
 

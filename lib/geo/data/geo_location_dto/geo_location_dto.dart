@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'attributes.dart';
+import 'package:stoyco_shared/geo/data/geo_location_dto/attributes.dart';
 
 part 'geo_location_dto.g.dart';
 

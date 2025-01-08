@@ -4,7 +4,6 @@ import 'package:stoyco_shared/news/news_repository.dart';
 import 'package:stoyco_shared/news/models/new_model.dart';
 import 'package:stoyco_shared/news/news_data_source.dart';
 import 'package:stoyco_shared/models/page_result/page_result.dart';
-import 'package:stoyco_shared/coach_mark/coach_mark_data_source.dart';
 import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
 
 /// A service that handles all operations related to news, including
