@@ -209,7 +209,7 @@ class UserDTO extends Equatable {
         isUserTest,
         provider,
         uidevice,
-        locationInfo
+        locationInfo,
       ];
 
   /// Indicates whether the user is logged in.

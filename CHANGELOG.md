@@ -1,3 +1,7 @@
+## 11.0.7
+
+- **refactor:** Removed unnecessary type adapter dependency.
+
 ## 11.0.6
 
 - **feat:** Added locationInfo to UserDTO model for managing user location data.

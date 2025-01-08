@@ -3,32 +3,17 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 import 'package:stoyco_shared/extensions/hex_color.dart';
 import 'package:stoyco_shared/notification/model/notification_type.dart';
 
 part 'notification_model.g.dart';
 
+@JsonSerializable()
 class NotificationModel extends Equatable {
   factory NotificationModel.fromJson(Map<String, dynamic> json) =>
-      NotificationModel(
-        id: json['id'] as String?,
-        guid: json['guid'] as String?,
-        itemId: json['itemId'] as String?,
-        userId: json['userId'] as String?,
-        title: json['title'] as String?,
-        text: json['text'] as String?,
-        image: json['image'] as String?,
-        type: int.tryParse(json['type'].toString()),
-        color: json['color'] as String?,
-        isReaded: json['isReaded'] is bool
-            ? json['isReaded'] as bool
-            : json['isReaded'] == 'true',
-        createAt: json['createAt'] == null
-            ? null
-            : DateTime.tryParse(json['createAt'] as String),
-      );
-
+      _$NotificationModelFromJson(json);
   factory NotificationModel.fromRemoteMessage(RemoteMessage message) {
     NotificationModel data = NotificationModel.fromJson(message.data);
     String? imageUrl;

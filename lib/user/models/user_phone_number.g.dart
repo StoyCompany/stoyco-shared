@@ -3,47 +3,6 @@
 part of 'user_phone_number.dart';
 
 // **************************************************************************
-// TypeAdapterGenerator
-// **************************************************************************
-
-class UserPhoneNumberAdapter extends TypeAdapter<UserPhoneNumber> {
-  @override
-  final int typeId = 7;
-
-  @override
-  UserPhoneNumber read(BinaryReader reader) {
-    final numOfFields = reader.readByte();
-    final fields = <int, dynamic>{
-      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
-    };
-    return UserPhoneNumber(
-      number: fields[0] as String,
-      cca2Country: fields[1] as String,
-    );
-  }
-
-  @override
-  void write(BinaryWriter writer, UserPhoneNumber obj) {
-    writer
-      ..writeByte(2)
-      ..writeByte(0)
-      ..write(obj.number)
-      ..writeByte(1)
-      ..write(obj.cca2Country);
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is UserPhoneNumberAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
-
-// **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
