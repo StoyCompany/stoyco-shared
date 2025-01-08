@@ -186,15 +186,6 @@ Future<T?> showSelectOptionModal<T>({
             mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(height: 12),
-              Container(
-                height: 2,
-                width: 56,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  color: const Color(0xff92929d),
-                ),
-              ),
-              const SizedBox(height: 36),
               Text(
                 title,
                 style: const TextStyle(

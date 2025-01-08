@@ -1,3 +1,7 @@
+## 11.0.9
+
+- **feat:** Removed visual separator in options selection modal for cleaner interface.
+
 ## 11.0.8
 
 - **feat:** Added width property to StoycoDropDownFieldWithModalV2 for custom sizing.
