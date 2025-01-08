@@ -1,3 +1,7 @@
+## 11.0.5
+
+- **feat:** Added UserLocationInfo model for managing user location data.
+
 ## 11.0.4
 
 - **fix:** Mejoras en geo entity y en dropdown field.
