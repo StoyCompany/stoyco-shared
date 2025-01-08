@@ -1,5 +1,6 @@
 ## 11.0.8
 
+- **feat:** Added width property to StoycoDropDownFieldWithModalV2 for custom sizing.
 - **feat:** improve dropdown selection handling in modal for better user experience
 
 ## 11.0.7

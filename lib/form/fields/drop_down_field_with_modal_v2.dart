@@ -44,6 +44,7 @@ class StoycoDropDownFielWithModalV2<T> extends StatefulWidget {
     this.validationMessages,
     this.enableSearch = false,
     this.height,
+    this.width,
   });
   final String formControlName;
   final List<DropDownItem<T>> options;
@@ -53,6 +54,7 @@ class StoycoDropDownFielWithModalV2<T> extends StatefulWidget {
   final Map<String, String Function(Object)>? validationMessages;
   final bool enableSearch;
   final double? height;
+  final double? width;
 
   @override
   State<StoycoDropDownFielWithModalV2> createState() =>
@@ -109,16 +111,19 @@ class _StoycoDropDownFielWithModalV2State<T>
             context: context,
             title: widget.title ?? '',
             options: widget.options,
-            selectedOption: _.value != null 
-                ? widget.options.firstWhere(
-                    (item) => item.value.toString() == _.value.toString(),
-                    orElse: () => widget.options.first,
-                  ).value
+            selectedOption: _.value != null
+                ? widget.options
+                    .firstWhere(
+                      (item) => item.value.toString() == _.value.toString(),
+                      orElse: () => widget.options.first,
+                    )
+                    .value
                 : null,
             enableSearch: widget.enableSearch,
             height: widget.height,
+            width: widget.width,
           );
-          
+
           if (selectedItem != null) {
             final selectedOption = widget.options.firstWhere(
               (item) => item.value == selectedItem,
@@ -155,6 +160,7 @@ Future<T?> showSelectOptionModal<T>({
   required T? selectedOption,
   bool enableSearch = false,
   double? height,
+  double? width,
 }) async {
   String searchQuery = '';
   List<DropDownItem<T>> filteredOptions = options;
@@ -169,7 +175,7 @@ Future<T?> showSelectOptionModal<T>({
         backgroundColor: Colors.transparent,
         insetPadding: EdgeInsets.zero,
         child: Container(
-          width: MediaQuery.of(context).size.width * 0.9,
+          width: width ?? MediaQuery.of(context).size.width * 0.9,
           height: height ?? 400,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           decoration: const BoxDecoration(
