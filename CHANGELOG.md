@@ -1,3 +1,7 @@
+## 11.0.8
+
+- **feat:** improve dropdown selection handling in modal for better user experience
+
 ## 11.0.7
 
 - **refactor:** Removed unnecessary type adapter dependency.

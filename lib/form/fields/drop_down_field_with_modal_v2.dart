@@ -105,15 +105,27 @@ class _StoycoDropDownFielWithModalV2State<T>
         ),
         readOnly: true,
         onTap: (_) async {
-          final value = await showSelectOptionModal<T>(
+          final selectedItem = await showSelectOptionModal<T>(
             context: context,
             title: widget.title ?? '',
             options: widget.options,
-            selectedOption: _.value,
+            selectedOption: _.value != null 
+                ? widget.options.firstWhere(
+                    (item) => item.value.toString() == _.value.toString(),
+                    orElse: () => widget.options.first,
+                  ).value
+                : null,
             enableSearch: widget.enableSearch,
             height: widget.height,
           );
-          if (value != null) _.value = value.toString();
+          
+          if (selectedItem != null) {
+            final selectedOption = widget.options.firstWhere(
+              (item) => item.value == selectedItem,
+              orElse: () => widget.options.first,
+            );
+            _.value = selectedOption.toShow;
+          }
         },
       );
 }
