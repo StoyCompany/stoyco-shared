@@ -95,6 +95,12 @@ class $LibAssetsIconsGen {
   /// File path: lib/assets/icons/location_icon.svg
   String get locationIcon => 'lib/assets/icons/location_icon.svg';
 
+  /// File path: lib/assets/icons/material_check.svg
+  String get materialCheck => 'lib/assets/icons/material_check.svg';
+
+  /// File path: lib/assets/icons/material_search.svg
+  String get materialSearch => 'lib/assets/icons/material_search.svg';
+
   /// File path: lib/assets/icons/person.svg
   String get person => 'lib/assets/icons/person.svg';
 
@@ -117,6 +123,8 @@ class $LibAssetsIconsGen {
         editIcon,
         keyboardArrowDownWhite18dp,
         locationIcon,
+        materialCheck,
+        materialSearch,
         person
       ];
 }

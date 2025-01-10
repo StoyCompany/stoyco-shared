@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stoyco_shared/form/form.dart';
+import 'package:stoyco_shared/gen/assets.gen.dart';
 import 'package:stoyco_shared/utils/modal.dart';
 import 'package:flutter/foundation.dart'; // Importar kIsWeb
 
@@ -225,10 +226,15 @@ Future<T?> showSelectOptionModal<T>({
                                     .toList();
                               });
                             },
-                            decoration: const InputDecoration(
-                              hintText: 'Buscar...',
-                              prefixIcon: Icon(Icons.search),
-                            ),
+                            decoration: InputDecoration(
+                                hintText: 'Buscar...',
+                                prefixIcon: SvgPicture.asset(
+                                  Assets.lib.assets.icons.materialSearch,
+                                  colorFilter: const ColorFilter.mode(
+                                    Color(0xfff2f2fa),
+                                    BlendMode.srcIn,
+                                  ),
+                                )),
                           ),
                         ),
                       Expanded(
@@ -264,11 +270,15 @@ Future<T?> showSelectOptionModal<T>({
                                             ),
                                           ),
                                           if (selectedOption == option.value)
-                                            const Icon(
-                                              Icons.check,
-                                              size: 18,
-                                              color: Color(0xfff2f2fa),
-                                            ),
+                                            SvgPicture.asset(
+                                              Assets.lib.assets.icons.checkIcon,
+                                              width: 18,
+                                              colorFilter:
+                                                  const ColorFilter.mode(
+                                                Color(0xfff2f2fa),
+                                                BlendMode.srcIn,
+                                              ),
+                                            )
                                         ],
                                       ),
                                     ),

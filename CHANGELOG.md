@@ -1,3 +1,7 @@
+## 11.0.11
+
+- **feat:** Added new search and verification icons to options selection modal.
+
 ## 11.0.9
 
 - **feat:** Removed visual separator in options selection modal for cleaner interface.
