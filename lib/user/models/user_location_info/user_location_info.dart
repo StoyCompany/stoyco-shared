@@ -14,13 +14,9 @@ class UserLocationInfo {
     this.lada,
     this.cityName,
   });
-  @JsonKey(name: 'CountryName')
   final String? countryName;
-  @JsonKey(name: 'CountryCode')
   final String? countryCode;
-  @JsonKey(name: 'Lada')
   final String? lada;
-  @JsonKey(name: 'CityName')
   final String? cityName;
 
   @override

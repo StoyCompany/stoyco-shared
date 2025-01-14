@@ -1,3 +1,7 @@
+## 12.0.12
+
+- **feat:** Remove unused JsonKey annotations in UserLocationInfo model.
+
 ## 12.0.11
 
 - **feat:** Wrapped the search icon in an UnconstrainedBox in StoycoDropDownFieldWithModalV2.
