@@ -45,6 +45,7 @@ class StoycoDropDownFieldWithModalV2<T> extends StatefulWidget {
     this.enableSearch = false,
     this.height,
     this.width,
+    this.searchIconHeight,
   });
   final String formControlName;
   final List<DropDownItem<T>> options;
@@ -55,6 +56,7 @@ class StoycoDropDownFieldWithModalV2<T> extends StatefulWidget {
   final bool enableSearch;
   final double? height;
   final double? width;
+  final double? searchIconHeight;
 
   @override
   State<StoycoDropDownFieldWithModalV2> createState() =>
@@ -122,6 +124,7 @@ class _StoycoDropDownFieldWithModalV2State<T>
             enableSearch: widget.enableSearch,
             height: widget.height,
             width: widget.width,
+            searchIconHeight: widget.searchIconHeight,
           );
 
           if (selectedItem != null) {
@@ -161,6 +164,7 @@ Future<T?> showSelectOptionModal<T>({
   bool enableSearch = false,
   double? height,
   double? width,
+  double? searchIconHeight,
 }) async {
   String searchQuery = '';
   List<DropDownItem<T>> filteredOptions = options;
@@ -229,7 +233,7 @@ Future<T?> showSelectOptionModal<T>({
                               hintText: 'Buscar...',
                               prefixIcon: SvgPicture.asset(
                                 'packages/stoyco_shared/lib/assets/icons/material_search.svg',
-                                height: 12,
+                                height: searchIconHeight ?? 12,
                                 colorFilter: const ColorFilter.mode(
                                   Color(0xfff2f2fa),
                                   BlendMode.srcIn,
@@ -323,9 +327,12 @@ Future<T?> showSelectOptionModal<T>({
                             .toList();
                       });
                     },
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: 'Buscar...',
-                      prefixIcon: Icon(Icons.search),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        size: searchIconHeight ?? 24,
+                      ),
                     ),
                   ),
                 ),
