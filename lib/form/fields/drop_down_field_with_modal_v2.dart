@@ -229,6 +229,7 @@ Future<T?> showSelectOptionModal<T>({
                               hintText: 'Buscar...',
                               prefixIcon: SvgPicture.asset(
                                 'packages/stoyco_shared/lib/assets/icons/material_search.svg',
+                                width: 18,
                                 colorFilter: const ColorFilter.mode(
                                   Color(0xfff2f2fa),
                                   BlendMode.srcIn,

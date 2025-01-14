@@ -1,3 +1,7 @@
+## 12.0.4
+
+- **feat:** Add width property to search icon in StoycoDropDownFieldWithModalV2.
+
 ## 12.0.3
 
 - **fix:** Updated icon paths used in StoycoDropDownFieldWithModalV2.
