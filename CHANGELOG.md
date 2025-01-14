@@ -1,3 +1,7 @@
+## 12.0.11
+
+- **feat:** Wrapped the search icon in an UnconstrainedBox in StoycoDropDownFieldWithModalV2.
+
 ## 12.0.10
 
 - **feat:** Added parameter searchIconHeight in StoycoDropDownFieldWithModalV2.
