@@ -1,3 +1,7 @@
+## 12.0.2
+
+- **feat:** Added locationInfo to UserUpdateDTO.
+
 ## 12.0.1
 
 - **feat:** Added optional width property to CompleteProfileWidget.

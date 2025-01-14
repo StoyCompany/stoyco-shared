@@ -1,3 +1,4 @@
+import 'package:stoyco_shared/user/models/user_location_info/user_location_info.dart';
 import 'package:stoyco_shared/user/models/user_phone_number.dart';
 
 /// Represents a data transfer object for updating user information.
@@ -16,6 +17,7 @@ class UserUpdateDTO {
     this.gender,
     this.nickName,
     this.birthDate,
+    this.locationInfo,
   });
 
   /// Creates a new instance of [UserUpdateDTO] from a JSON map.
@@ -36,6 +38,11 @@ class UserUpdateDTO {
     gender = json['gender'];
     nickName = json['nickName'];
     birthDate = json['birthDate'];
+    locationInfo = json['location'] == null
+        ? null
+        : UserLocationInfo.fromJson(
+            json['location'] as Map<String, dynamic>,
+          );
   }
 
   /// The unique identifier of the user.
@@ -74,6 +81,9 @@ class UserUpdateDTO {
   /// The birth date of the user.
   String? birthDate;
 
+  /// The location information of the user.
+  UserLocationInfo? locationInfo;
+
   /// Converts the [UserUpdateDTO] instance to a JSON map.
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -89,6 +99,7 @@ class UserUpdateDTO {
     data['gender'] = gender;
     data['nickname'] = nickName;
     data['birthDate'] = birthDate;
+    data['location'] = locationInfo?.toJson();
     return data;
   }
 }
