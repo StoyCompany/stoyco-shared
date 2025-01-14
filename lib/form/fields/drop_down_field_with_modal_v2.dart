@@ -227,14 +227,12 @@ Future<T?> showSelectOptionModal<T>({
                             },
                             decoration: InputDecoration(
                               hintText: 'Buscar...',
-                              prefixIcon: Container(
-                                margin: const EdgeInsets.all(4),
-                                child: SvgPicture.asset(
-                                  'packages/stoyco_shared/lib/assets/icons/material_search.svg',
-                                  colorFilter: const ColorFilter.mode(
-                                    Color(0xfff2f2fa),
-                                    BlendMode.srcIn,
-                                  ),
+                              prefixIcon: SvgPicture.asset(
+                                'packages/stoyco_shared/lib/assets/icons/material_search.svg',
+                                height: 16,
+                                colorFilter: const ColorFilter.mode(
+                                  Color(0xfff2f2fa),
+                                  BlendMode.srcIn,
                                 ),
                               ),
                             ),
