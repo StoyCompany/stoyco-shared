@@ -1,3 +1,7 @@
+## 12.0.9
+
+- **feat:** Change size of search icon in StoycoDropDownFieldWithModalV2.
+
 ## 12.0.7
 
 - **feat:** Change size of search icon in StoycoDropDownFieldWithModalV2.
