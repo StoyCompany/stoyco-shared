@@ -1,3 +1,7 @@
+## 12.0.6
+
+- **feat:** Add margin to search icon in StoycoDropDownFieldWithModalV2.
+
 ## 12.0.4
 
 - **feat:** Add width property to search icon in StoycoDropDownFieldWithModalV2.
