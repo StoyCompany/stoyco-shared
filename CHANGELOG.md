@@ -1,3 +1,7 @@
+## 12.0.00
+
+- **feat:** Added CompleteProfileWidget, ModalCompleteProfile, DialogContainer, GradientPainter.
+
 ## 11.0.11
 
 - **feat:** Added new search and verification icons to options selection modal.

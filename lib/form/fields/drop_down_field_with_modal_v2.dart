@@ -234,7 +234,7 @@ Future<T?> showSelectOptionModal<T>({
                                     Color(0xfff2f2fa),
                                     BlendMode.srcIn,
                                   ),
-                                )),
+                                ),),
                           ),
                         ),
                       Expanded(
@@ -278,7 +278,7 @@ Future<T?> showSelectOptionModal<T>({
                                                 Color(0xfff2f2fa),
                                                 BlendMode.srcIn,
                                               ),
-                                            )
+                                            ),
                                         ],
                                       ),
                                     ),
