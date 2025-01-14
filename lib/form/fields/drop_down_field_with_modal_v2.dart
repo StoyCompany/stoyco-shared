@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stoyco_shared/form/form.dart';
-import 'package:stoyco_shared/gen/assets.gen.dart';
 import 'package:stoyco_shared/utils/modal.dart';
 import 'package:flutter/foundation.dart'; // Importar kIsWeb
 
@@ -34,8 +33,8 @@ class DropDownItem<T> {
 /// - [validationMessages]: Custom validation error messages
 /// - [enableSearch]: Toggle search functionality
 /// - [height]: Custom modal height
-class StoycoDropDownFielWithModalV2<T> extends StatefulWidget {
-  const StoycoDropDownFielWithModalV2({
+class StoycoDropDownFieldWithModalV2<T> extends StatefulWidget {
+  const StoycoDropDownFieldWithModalV2({
     super.key,
     required this.options,
     required this.formControlName,
@@ -58,12 +57,12 @@ class StoycoDropDownFielWithModalV2<T> extends StatefulWidget {
   final double? width;
 
   @override
-  State<StoycoDropDownFielWithModalV2> createState() =>
-      _StoycoDropDownFielWithModalV2State<T>();
+  State<StoycoDropDownFieldWithModalV2> createState() =>
+      _StoycoDropDownFieldWithModalV2State<T>();
 }
 
-class _StoycoDropDownFielWithModalV2State<T>
-    extends State<StoycoDropDownFielWithModalV2<T>> {
+class _StoycoDropDownFieldWithModalV2State<T>
+    extends State<StoycoDropDownFieldWithModalV2<T>> {
   @override
   Widget build(BuildContext context) => StoyCoTextFormField(
         formControlName: widget.formControlName,
@@ -227,14 +226,15 @@ Future<T?> showSelectOptionModal<T>({
                               });
                             },
                             decoration: InputDecoration(
-                                hintText: 'Buscar...',
-                                prefixIcon: SvgPicture.asset(
-                                  Assets.lib.assets.icons.materialSearch,
-                                  colorFilter: const ColorFilter.mode(
-                                    Color(0xfff2f2fa),
-                                    BlendMode.srcIn,
-                                  ),
-                                ),),
+                              hintText: 'Buscar...',
+                              prefixIcon: SvgPicture.asset(
+                                'packages/stoyco_shared/lib/assets/icons/material_search.svg',
+                                colorFilter: const ColorFilter.mode(
+                                  Color(0xfff2f2fa),
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       Expanded(
@@ -271,7 +271,7 @@ Future<T?> showSelectOptionModal<T>({
                                           ),
                                           if (selectedOption == option.value)
                                             SvgPicture.asset(
-                                              Assets.lib.assets.icons.checkIcon,
+                                              'packages/stoyco_shared/lib/assets/icons/material_check.svg',
                                               width: 18,
                                               colorFilter:
                                                   const ColorFilter.mode(

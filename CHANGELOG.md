@@ -1,3 +1,7 @@
+## 12.0.3
+
+- **fix:** Updated icon paths used in StoycoDropDownFieldWithModalV2.
+
 ## 12.0.2
 
 - **feat:** Added locationInfo to UserUpdateDTO.
