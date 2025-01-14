@@ -1,4 +1,8 @@
-## 12.0.00
+## 12.0.1
+
+- **feat:** Added optional width property to CompleteProfileWidget.
+
+## 12.0.0
 
 - **feat:** Added CompleteProfileWidget, ModalCompleteProfile, DialogContainer, GradientPainter.
 

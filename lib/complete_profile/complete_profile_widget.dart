@@ -26,6 +26,7 @@ class CompleteProfileWidget extends StatelessWidget {
   /// * [padding] - Optional internal padding for the content.
   /// * [icon] - The icon to display, defaults to [Icons.person_outline].
   /// * [text] - The message to display, defaults to a profile completion prompt.
+  /// * [width] - Optional width for the container.
   const CompleteProfileWidget({
     super.key,
     this.onPressed,
@@ -34,6 +35,7 @@ class CompleteProfileWidget extends StatelessWidget {
     this.icon = Icons.person_outline,
     this.text =
         'Completa tu perfil en StoyCo para disfrutar de una experiencia personalizada al máximo',
+    this.width,
   });
 
   /// Callback function executed when the widget is tapped.
@@ -51,6 +53,9 @@ class CompleteProfileWidget extends StatelessWidget {
   /// The text message to display next to the icon.
   final String text;
 
+  /// The optional width for the container.
+  final double? width;
+
   @override
   Widget build(BuildContext context) => Container(
         margin: margin ??
@@ -58,6 +63,7 @@ class CompleteProfileWidget extends StatelessWidget {
               context,
               horizontal: 16,
             ),
+        width: width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           color: Colors.white.withValues(alpha: .95),
