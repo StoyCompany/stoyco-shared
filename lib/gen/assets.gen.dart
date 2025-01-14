@@ -98,6 +98,9 @@ class $LibAssetsIconsGen {
   /// File path: lib/assets/icons/material_check.svg
   String get materialCheck => 'lib/assets/icons/material_check.svg';
 
+  /// File path: lib/assets/icons/material_person.svg
+  String get materialPerson => 'lib/assets/icons/material_person.svg';
+
   /// File path: lib/assets/icons/material_search.svg
   String get materialSearch => 'lib/assets/icons/material_search.svg';
 
@@ -124,6 +127,7 @@ class $LibAssetsIconsGen {
         keyboardArrowDownWhite18dp,
         locationIcon,
         materialCheck,
+        materialPerson,
         materialSearch,
         person
       ];
