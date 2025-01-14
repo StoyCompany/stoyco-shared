@@ -1,3 +1,7 @@
+## 12.0.14
+
+- **feat:** Add isEmpty and isNotEmpty getters to UserLocationInfo model.
+
 ## 12.0.12
 
 - **feat:** Remove unused JsonKey annotations in UserLocationInfo model.

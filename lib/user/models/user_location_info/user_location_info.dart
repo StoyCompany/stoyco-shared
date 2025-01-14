@@ -14,6 +14,7 @@ class UserLocationInfo {
     this.lada,
     this.cityName,
   });
+
   final String? countryName;
   final String? countryCode;
   final String? lada;
@@ -52,4 +53,12 @@ class UserLocationInfo {
       countryCode.hashCode ^
       lada.hashCode ^
       cityName.hashCode;
+
+  bool get isEmpty =>
+      countryName == null &&
+      countryCode == null &&
+      lada == null &&
+      cityName == null;
+
+  bool get isNotEmpty => !isEmpty;
 }
