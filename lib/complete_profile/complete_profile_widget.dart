@@ -66,7 +66,7 @@ class CompleteProfileWidget extends StatelessWidget {
         width: width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: Colors.white.withValues(alpha: .95),
+          color: Colors.white.withOpacity(0.95),
         ),
         child: GestureDetector(
           onTap: () {
