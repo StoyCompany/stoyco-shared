@@ -1,3 +1,7 @@
+## 12.0.19
+
+- **feat:** make modal scrollable and adjust layout with padding in showStoycoModal
+
 ## 12.0.18
 
 - **feat:** Add color filter to SVG icon in CompleteProfileWidget.

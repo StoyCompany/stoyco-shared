@@ -37,17 +37,21 @@ Future<T?> showStoycoModal<T>({
       context: context,
       barrierColor: Colors.black.withOpacity(0.5),
       useRootNavigator: useRootNavigator ?? false,
-      builder: (BuildContext context) => StoycoContainerModal(
-        title: title,
-        onTapAccept: onTapAccept,
-        onTapCancel: onTapCancel,
-        showActions: showActions ?? false,
-        height: height ?? 400,
-        showDivider: showDivider ?? true,
-        decoration: decoration,
-        titleTextStyle: titleTextStyle,
-        showTitle: showTitle ?? true,
-        child: child,
+      isScrollControlled: true,
+      builder: (BuildContext context) => Padding(
+        padding: MediaQuery.of(context).viewInsets,
+        child: StoycoContainerModal(
+          title: title,
+          onTapAccept: onTapAccept,
+          onTapCancel: onTapCancel,
+          showActions: showActions ?? false,
+          height: height ?? 400,
+          showDivider: showDivider ?? true,
+          decoration: decoration,
+          titleTextStyle: titleTextStyle,
+          showTitle: showTitle ?? true,
+          child: child,
+        ),
       ),
     );
 
@@ -138,6 +142,7 @@ class StoycoContainerModal extends StatelessWidget {
               color: Color(0xff253341),
             ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               height: 2,
