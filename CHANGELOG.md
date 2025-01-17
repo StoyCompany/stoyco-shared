@@ -1,3 +1,7 @@
+## 12.0.17
+
+- **feat:** Change icon parameter to accept SVG widget in CompleteProfileWidget.
+
 ## 12.0.14
 
 - **feat:** Add isEmpty and isNotEmpty getters to UserLocationInfo model.

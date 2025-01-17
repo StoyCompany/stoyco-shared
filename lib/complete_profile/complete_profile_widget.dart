@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 /// A widget that displays a profile completion call-to-action container.
 ///
@@ -24,7 +25,7 @@ class CompleteProfileWidget extends StatelessWidget {
   /// * [onPressed] - Callback function triggered when the widget is tapped.
   /// * [margin] - Optional external padding around the container.
   /// * [padding] - Optional internal padding for the content.
-  /// * [icon] - The icon to display, defaults to [Icons.person_outline].
+  /// * [icon] - The icon widget to display, defaults to an SVG asset.
   /// * [text] - The message to display, defaults to a profile completion prompt.
   /// * [width] - Optional width for the container.
   const CompleteProfileWidget({
@@ -32,7 +33,7 @@ class CompleteProfileWidget extends StatelessWidget {
     this.onPressed,
     this.margin,
     this.padding,
-    this.icon = Icons.person_outline,
+    this.icon,
     this.text =
         'Completa tu perfil en StoyCo para disfrutar de una experiencia personalizada al máximo',
     this.width,
@@ -47,8 +48,8 @@ class CompleteProfileWidget extends StatelessWidget {
   /// The internal padding for the content.
   final EdgeInsetsGeometry? padding;
 
-  /// The icon to display in the widget.
-  final IconData icon;
+  /// The icon widget to display in the widget.
+  final Widget? icon;
 
   /// The text message to display next to the icon.
   final String text;
@@ -83,14 +84,12 @@ class CompleteProfileWidget extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                IconButton(
-                  icon: Icon(
-                    icon,
-                    color: Colors.black,
-                    size: StoycoScreenSize.fontSize(context, 24),
-                  ),
-                  onPressed: onPressed,
-                ),
+                icon ??
+                    SvgPicture.asset(
+                      'packages/stoyco_shared/lib/assets/icons/material_person.svg',
+                      width: StoycoScreenSize.fontSize(context, 24),
+                      height: StoycoScreenSize.fontSize(context, 24),
+                    ),
                 Gap(StoycoScreenSize.width(context, 8)),
                 Expanded(
                   child: Text(
