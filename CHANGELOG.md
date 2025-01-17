@@ -1,3 +1,7 @@
+## 12.0.18
+
+- **feat:** Add color filter to SVG icon in CompleteProfileWidget.
+
 ## 12.0.17
 
 - **feat:** Change icon parameter to accept SVG widget in CompleteProfileWidget.

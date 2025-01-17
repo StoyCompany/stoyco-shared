@@ -89,6 +89,10 @@ class CompleteProfileWidget extends StatelessWidget {
                       'packages/stoyco_shared/lib/assets/icons/material_person.svg',
                       width: StoycoScreenSize.fontSize(context, 24),
                       height: StoycoScreenSize.fontSize(context, 24),
+                      colorFilter: const ColorFilter.mode(
+                        Colors.black,
+                        BlendMode.srcIn,
+                      ),
                     ),
                 Gap(StoycoScreenSize.width(context, 8)),
                 Expanded(
