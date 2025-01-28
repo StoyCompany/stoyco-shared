@@ -1,3 +1,7 @@
+## 13.0.2
+
+- **feat:** update getUserVideoInteractionData to use new URI format for video interactions
+
 ## 13.0.1
 
 - **feat:** make functionToUpdateToken nullable and improve token verification logic with error handling

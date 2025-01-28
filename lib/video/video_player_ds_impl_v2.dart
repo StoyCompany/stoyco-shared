@@ -80,7 +80,8 @@ class VideoPlayerDataSourceV2 {
   }
 
   Future<Response> getUserVideoInteractionData(String videoId) async {
-    final uri = _buildUri('video-interaction/user/$videoId');
+    final uri =
+        _buildUri('video-interaction/user/interaction', {'videoId': videoId});
     return _dio.get(
       uri,
       cancelToken: cancelToken,
