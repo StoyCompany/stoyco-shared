@@ -1,3 +1,7 @@
+## 13.0.1
+
+- **feat:** make functionToUpdateToken nullable and improve token verification logic with error handling
+
 ## 13.0.0
 
 - **feat:** add VideoPlayerModel and VideoInteraction models with JSON serialization, and implement VideoPlayerDataSourceV2 for video interactions

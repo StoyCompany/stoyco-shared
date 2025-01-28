@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:either_dart/either.dart';
+import 'package:stoyco_shared/coach_mark/errors/exception.dart';
 
 import 'package:stoyco_shared/envs/envs.dart';
 import 'package:stoyco_shared/errors/error_handling/failure/exception.dart';
@@ -51,7 +52,7 @@ class VideoPlayerService {
   factory VideoPlayerService({
     StoycoEnvironment environment = StoycoEnvironment.development,
     String userToken = '',
-    Future<String?> Function()? functionToUpdateToken,
+    Future<String?>? functionToUpdateToken,
   }) {
     _instance = VideoPlayerService._(
       environment: environment,
@@ -63,12 +64,12 @@ class VideoPlayerService {
   }
 
   /// Function to update the user token.
-  Future<String?> Function()? functionToUpdateToken;
+  Future<String?>? functionToUpdateToken;
 
   /// Sets the function to update the user token.
   ///
   /// [function] The function to set.
-  void setFunctionToUpdateToken(Future<String?> Function()? function) {
+  void setFunctionToUpdateToken(Future<String?> function) {
     functionToUpdateToken = function;
   }
 
@@ -101,22 +102,23 @@ class VideoPlayerService {
     _dataSource!.updateUserToken(token);
   }
 
-  /// Verifies and updates the user token if necessary.
+  /// Verifies the user token and updates it if necessary.
   ///
-  /// Throws an [Exception] if the token cannot be updated.
+  /// Throws an exception if token update fails.
   Future<void> verifyToken() async {
-    if (userToken.isNotEmpty) return;
+    if (userToken.isEmpty) {
+      if (functionToUpdateToken == null) {
+        throw FunctionToUpdateTokenNotSetException();
+      }
 
-    final updateToken = functionToUpdateToken;
-    if (updateToken == null) {
-      throw Exception('La función para actualizar el token no está definida.');
-    }
+      final String? newToken = await functionToUpdateToken!;
 
-    final newToken = await updateToken();
-    if (newToken?.isNotEmpty ?? false) {
-      token = newToken!;
-    } else {
-      throw Exception('No se pudo actualizar el token.');
+      if (newToken != null && newToken.isNotEmpty) {
+        userToken = newToken;
+        _repository!.token = newToken;
+      } else {
+        throw EmptyUserTokenException('Failed to update token');
+      }
     }
   }
 
