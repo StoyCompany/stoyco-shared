@@ -1,3 +1,7 @@
+## 13.0.0
+
+- **feat:** add VideoPlayerModel and VideoInteraction models with JSON serialization, and implement VideoPlayerDataSourceV2 for video interactions
+
 ## 12.0.19
 
 - **feat:** make modal scrollable and adjust layout with padding in showStoycoModal
