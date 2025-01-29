@@ -10,7 +10,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/stoyco_shared.dart';
 import 'package:stoyco_shared/video/models/video_player_model.dart';
-import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 
 /// A widget that allows users to share a video.
 ///
@@ -167,16 +167,12 @@ class ShareVideoWidgetState extends State<ShareVideoWidget> {
         _stopSharing();
         return;
       }
-      final dio = Dio();
-      final response = await dio.get<List<int>>(
-        videoUrl,
-        options: Options(responseType: ResponseType.bytes),
-      );
+      final response = await http.get(Uri.parse(videoUrl));
       if (response.statusCode == 200) {
         final directory = await getTemporaryDirectory();
         final filePath = '${directory.path}/video.mp4';
         final file = File(filePath);
-        await file.writeAsBytes(response.data!);
+        await file.writeAsBytes(response.bodyBytes);
 
         final xFile = XFile(filePath);
         final shareText = 'Mira este video: $videoName\n$videoDescription';
