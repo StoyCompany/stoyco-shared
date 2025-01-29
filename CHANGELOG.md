@@ -1,3 +1,7 @@
+## 13.1.0
+
+- **feat:** add ShareVideoWidget for sharing videos with customizable options and loading state
+
 ## 13.0.2
 
 - **feat:** update getUserVideoInteractionData to use new URI format for video interactions

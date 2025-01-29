@@ -107,6 +107,13 @@ class $LibAssetsIconsGen {
   /// File path: lib/assets/icons/person.svg
   String get person => 'lib/assets/icons/person.svg';
 
+  /// File path: lib/assets/icons/reaction_arrow_up.svg
+  String get reactionArrowUp => 'lib/assets/icons/reaction_arrow_up.svg';
+
+  /// File path: lib/assets/icons/reaction_arrow_up_filled.svg
+  String get reactionArrowUpFilled =>
+      'lib/assets/icons/reaction_arrow_up_filled.svg';
+
   /// List of all assets
   List<String> get values => [
         arrowDownIcon,
@@ -129,7 +136,9 @@ class $LibAssetsIconsGen {
         materialCheck,
         materialPerson,
         materialSearch,
-        person
+        person,
+        reactionArrowUp,
+        reactionArrowUpFilled
       ];
 }
 
