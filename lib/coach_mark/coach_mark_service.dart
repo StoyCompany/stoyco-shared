@@ -11,7 +11,9 @@ import 'package:stoyco_shared/coach_mark/coach_marks_content/coach_marks_content
 import 'package:stoyco_shared/coach_mark/errors/exception.dart';
 import 'package:stoyco_shared/coach_mark/models/onboarding.dart';
 import 'package:stoyco_shared/envs/envs.dart';
+import 'package:stoyco_shared/errors/error_handling/failure/exception.dart';
 import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
+import 'package:stoyco_shared/stoyco_shared.dart';
 
 /// A service class to handle coach marks and onboarding functionality.
 ///
@@ -114,21 +116,30 @@ class CoachMarkService {
   ///
   /// Throws a `GetCoachMarksContentException` if fetching fails.
   Future<CoachMarksContent> getCouchMarksContent() async {
-    await verifyToken();
-    final result = await _coachMarkRepository?.getCoachMarkData();
-    if (result != null && result.isRight) {
-      return result.right;
+    try {
+      await verifyToken();
+      final result = await _coachMarkRepository?.getCoachMarkData();
+      if (result != null && result.isRight) {
+        return result.right;
+      }
+      throw GetCoachMarksContentException();
+    } catch (e) {
+      StoyCoLogger.error('Error getting coach marks content: $e');
+      throw GetCoachMarksContentException();
     }
-    throw GetCoachMarksContentException();
   }
 
   /// Fetches onboarding data for the current user.
   Future<void> getOnboardingsByUserCoachMarkData() async {
-    await verifyToken();
-    final result =
-        await _coachMarkRepository!.getOnboardingsByUserCoachMarkData();
+    try {
+      await verifyToken();
+      final result =
+          await _coachMarkRepository!.getOnboardingsByUserCoachMarkData();
 
-    onboardingListData = result.isRight ? result.right : [];
+      onboardingListData = result.isRight ? result.right : [];
+    } catch (e) {
+      StoyCoLogger.error('Error getting onboardings by user: $e');
+    }
   }
 
   /// Verifies the user token and updates it if necessary.
@@ -158,31 +169,51 @@ class CoachMarkService {
   Future<Either<Failure, Onboarding>> getOnboardingByTypeCoachMarkData({
     required String type,
   }) async {
-    await verifyToken();
-    return await _coachMarkRepository!.getOnboardingByTypeCoachMarkData(
-      type: type,
-    );
+    try {
+      await verifyToken();
+      return await _coachMarkRepository!.getOnboardingByTypeCoachMarkData(
+        type: type,
+      );
+    } catch (e) {
+      StoyCoLogger.error('Error getting onboarding by type: $e');
+      return Left(ExceptionFailure.decode(Exception(e.toString())));
+    }
   }
 
   Future<Either<Failure, Onboarding>> getOnboardingHome() async {
-    await verifyToken();
-    return await _coachMarkRepository!.getOnboardingByTypeCoachMarkData(
-      type: OnboardingType.home.toString(),
-    );
+    try {
+      await verifyToken();
+      return await _coachMarkRepository!.getOnboardingByTypeCoachMarkData(
+        type: OnboardingType.home.toString(),
+      );
+    } catch (e) {
+      StoyCoLogger.error('Error getting onboarding home: $e');
+      return Left(ExceptionFailure.decode(Exception(e.toString())));
+    }
   }
 
   Future<Either<Failure, Onboarding>> getOnboardingCommunity() async {
-    await verifyToken();
-    return await _coachMarkRepository!.getOnboardingByTypeCoachMarkData(
-      type: OnboardingType.community.toString(),
-    );
+    try {
+      await verifyToken();
+      return await _coachMarkRepository!.getOnboardingByTypeCoachMarkData(
+        type: OnboardingType.community.toString(),
+      );
+    } catch (e) {
+      StoyCoLogger.error('Error getting onboarding community: $e');
+      return Left(ExceptionFailure.decode(Exception(e.toString())));
+    }
   }
 
   Future<Either<Failure, Onboarding>> getOnboardingWallet() async {
-    await verifyToken();
-    return await _coachMarkRepository!.getOnboardingByTypeCoachMarkData(
-      type: OnboardingType.wallet.toString(),
-    );
+    try {
+      await verifyToken();
+      return await _coachMarkRepository!.getOnboardingByTypeCoachMarkData(
+        type: OnboardingType.wallet.toString(),
+      );
+    } catch (e) {
+      StoyCoLogger.error('Error getting onboarding wallet: $e');
+      return Left(ExceptionFailure.decode(Exception(e.toString())));
+    }
   }
 
   /// Marks a specific step in an onboarding as completed.
@@ -195,31 +226,41 @@ class CoachMarkService {
     required int step,
     required bool isCompleted,
   }) async {
-    await verifyToken();
-    return await _coachMarkRepository!.updateOnboardingCoachMarkData(
-      type: type.toString(),
-      step: step + 1, // next step
-      isCompleted: isCompleted,
-    );
+    try {
+      await verifyToken();
+      return await _coachMarkRepository!.updateOnboardingCoachMarkData(
+        type: type.toString(),
+        step: step + 1, // next step
+        isCompleted: isCompleted,
+      );
+    } catch (e) {
+      StoyCoLogger.error('Error marking step as completed: $e');
+      return Left(ExceptionFailure.decode(Exception(e.toString())));
+    }
   }
 
   /// Resets all onboarding data.
   ///
   /// Returns `true` if reset is successful, `false` otherwise.
   Future<bool> resetOnboardingCoachMarkData() async {
-    await verifyToken();
-    final result = await _coachMarkRepository!
-        .resetOnboardingCoachMarkData()
-        .then((value) => true)
-        .catchError((error) => false);
+    try {
+      await verifyToken();
+      final result = await _coachMarkRepository!
+          .resetOnboardingCoachMarkData()
+          .then((value) => true)
+          .catchError((error) => false);
 
-    if (result) {
-      onboardingList = [];
-      ignoredTutorials = [];
-      closeCoachMark();
+      if (result) {
+        onboardingList = [];
+        ignoredTutorials = [];
+        closeCoachMark();
+      }
+
+      return result;
+    } catch (e) {
+      StoyCoLogger.error('Error resetting onboarding data: $e');
+      rethrow;
     }
-
-    return result;
   }
 
   /// Fetches coach mark content for a specific type.

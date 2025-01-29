@@ -1,3 +1,7 @@
+## 13.2.0
+
+- **feat:** improve error handling in CoachMarkService and update version to 13.2.0
+
 ## 13.1.0
 
 - **feat:** add ShareVideoWidget for sharing videos with customizable options and loading state
