@@ -1,3 +1,7 @@
+## 13.2.1
+
+- **feat:** add support for video sharing on web and mobile devices in ShareVideoWidget
+
 ## 13.2.0
 
 - **feat:** improve error handling in CoachMarkService and update version to 13.2.0

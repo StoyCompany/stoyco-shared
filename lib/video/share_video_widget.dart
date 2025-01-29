@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:html' as html;
+import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,8 +12,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/stoyco_shared.dart';
-import 'package:stoyco_shared/video/models/video_player_model.dart';
-import 'package:http/http.dart' as http;
 
 /// A widget that allows users to share a video.
 ///
@@ -161,42 +162,70 @@ class ShareVideoWidgetState extends State<ShareVideoWidget> {
     final String videoUrl = widget.video.appUrl ?? '';
     final String videoName = widget.video.name ?? 'Video';
     final String videoDescription = widget.video.description ?? '';
+
     try {
       if (videoUrl.isEmpty) {
         StoyCoLogger.error('URL del video no disponible');
         _stopSharing();
         return;
       }
-      final response = await http.get(Uri.parse(videoUrl));
-      if (response.statusCode == 200) {
-        final directory = await getTemporaryDirectory();
-        final filePath = '${directory.path}/video.mp4';
-        final file = File(filePath);
-        await file.writeAsBytes(response.bodyBytes);
 
-        final xFile = XFile(filePath);
-        final shareText = 'Mira este video: $videoName\n$videoDescription';
-
-        await Share.shareXFiles(
-          [xFile],
-          text: shareText,
-          subject: videoName,
-          fileNameOverrides: [videoName],
-          sharePositionOrigin: Rect.fromCenter(
-            center: Offset.zero,
-            width: 0,
-            height: 0,
-          ),
-        );
-
-        widget.onResultAction();
+      if (kIsWeb) {
+        await _shareOnWeb(videoUrl, videoName, videoDescription);
       } else {
-        StoyCoLogger.error('Error downloading video: ${response.statusCode}');
+        await _shareOnMobile(videoUrl, videoName, videoDescription);
       }
+
+      widget.onResultAction();
     } catch (e) {
       StoyCoLogger.error('Error sharing video: $e');
     } finally {
       _stopSharing();
+    }
+  }
+
+  Future<void> _shareOnWeb(
+      String videoUrl, String videoName, String videoDescription) async {
+    final shareData = {
+      'title': videoName,
+      'text': 'Mira este video: $videoName\n$videoDescription',
+      'url': videoUrl,
+    };
+
+    try {
+      await html.window.navigator.share(shareData);
+    } catch (e) {
+      StoyCoLogger.error('Error sharing on web: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> _shareOnMobile(
+      String videoUrl, String videoName, String videoDescription) async {
+    final response = await http.get(Uri.parse(videoUrl));
+    if (response.statusCode == 200) {
+      final directory = await getTemporaryDirectory();
+      final filePath = '${directory.path}/video.mp4';
+      final file = File(filePath);
+      await file.writeAsBytes(response.bodyBytes);
+
+      final xFile = XFile(filePath);
+      final shareText = 'Mira este video: $videoName\n$videoDescription';
+
+      await Share.shareXFiles(
+        [xFile],
+        text: shareText,
+        subject: videoName,
+        fileNameOverrides: [videoName],
+        sharePositionOrigin: Rect.fromCenter(
+          center: Offset.zero,
+          width: 0,
+          height: 0,
+        ),
+      );
+    } else {
+      StoyCoLogger.error('Error downloading video: ${response.statusCode}');
+      throw Exception('Error downloading video');
     }
   }
 
