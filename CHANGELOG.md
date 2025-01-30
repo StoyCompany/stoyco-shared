@@ -1,3 +1,7 @@
+## 13.4.0
+
+- **feat:** refactor ShareVideoWidget to separate web sharing functionality into ShareVideoWidgetWeb
+
 ## 13.2.1
 
 - **feat:** add support for video sharing on web and mobile devices in ShareVideoWidget
