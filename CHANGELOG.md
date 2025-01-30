@@ -1,3 +1,7 @@
+## 13.4.3
+
+- **feat:** reset like and dislike states when user reaction type is null in VideoInteractionsWidget
+
 ## 13.4.2
 
 - **feat:**  reset userToken when setting function to update token in VideoPlayerService

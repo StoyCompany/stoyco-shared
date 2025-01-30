@@ -117,6 +117,13 @@ class VideoInteractionsWidgetState extends State<VideoInteractionsWidgetWeb> {
         isDisliked = widget.userVideoReaction?.reactionType == 'Dislike';
       });
     }
+
+    if (widget.userVideoReaction?.reactionType == null) {
+      setState(() {
+        isLiked = false;
+        isDisliked = false;
+      });
+    }
   }
 
   /// Calculates the animation duration based on the score.
