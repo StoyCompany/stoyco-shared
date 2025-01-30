@@ -1,3 +1,7 @@
+## 13.4.2
+
+- **feat:**  reset userToken when setting function to update token in VideoPlayerService
+
 ## 13.4.1
 
 - **feat:** rename VideoInteractionsWidget a VideoInteractionsWidgetWeb

@@ -71,6 +71,7 @@ class VideoPlayerService {
   /// [function] The function to set.
   void setFunctionToUpdateToken(Future<String?> function) {
     functionToUpdateToken = function;
+    userToken = '';
   }
 
   /// The environment configuration used for initializing data sources and repositories.
