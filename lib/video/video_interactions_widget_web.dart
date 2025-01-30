@@ -10,7 +10,7 @@ import 'package:stoyco_shared/video/share_video_widget_web.dart';
 ///
 /// Example:
 /// ```dart
-/// VideoInteractionsWidget(
+/// VideoInteractionsWidgetWeb(
 ///   video: videoModel,
 ///   totalScore: '100',
 ///   onLike: () {},
@@ -19,9 +19,9 @@ import 'package:stoyco_shared/video/share_video_widget_web.dart';
 ///   loading: false,
 /// )
 /// ```
-class VideoInteractionsWidget extends StatefulWidget {
-  /// Creates a [VideoInteractionsWidget].
-  const VideoInteractionsWidget({
+class VideoInteractionsWidgetWeb extends StatefulWidget {
+  /// Creates a [VideoInteractionsWidgetWeb].
+  const VideoInteractionsWidgetWeb({
     super.key,
     this.userVideoReaction,
     required this.video,
@@ -92,8 +92,8 @@ class VideoInteractionsWidget extends StatefulWidget {
   VideoInteractionsWidgetState createState() => VideoInteractionsWidgetState();
 }
 
-/// State for [VideoInteractionsWidget].
-class VideoInteractionsWidgetState extends State<VideoInteractionsWidget> {
+/// State for [VideoInteractionsWidgetWeb].
+class VideoInteractionsWidgetState extends State<VideoInteractionsWidgetWeb> {
   bool isLiked = false;
   bool isDisliked = false;
 
@@ -108,7 +108,7 @@ class VideoInteractionsWidgetState extends State<VideoInteractionsWidget> {
   }
 
   @override
-  void didUpdateWidget(VideoInteractionsWidget oldWidget) {
+  void didUpdateWidget(VideoInteractionsWidgetWeb oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.userVideoReaction?.reactionType !=
         widget.userVideoReaction?.reactionType) {

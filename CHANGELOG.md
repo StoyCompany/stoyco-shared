@@ -1,3 +1,7 @@
+## 13.4.1
+
+- **feat:** rename VideoInteractionsWidget a VideoInteractionsWidgetWeb
+
 ## 13.4.0
 
 - **feat:** refactor ShareVideoWidget to separate web sharing functionality into ShareVideoWidgetWeb
