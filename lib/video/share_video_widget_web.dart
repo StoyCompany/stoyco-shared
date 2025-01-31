@@ -4,7 +4,6 @@ import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:gap/gap.dart';
 
 import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/stoyco_shared.dart';
@@ -16,7 +15,7 @@ import 'package:stoyco_shared/stoyco_shared.dart';
 ///
 /// Example:
 /// ```dart
-/// ShareVideoWidget(
+/// ShareVideoWidgetWeb(
 ///   video: myVideoModel,
 ///   onResultAction: () {
 ///     // Handle the result action
@@ -92,11 +91,11 @@ class ShareVideoWidgetWeb extends StatefulWidget {
   final Color? iconColor;
 
   @override
-  ShareVideoWidgetState createState() => ShareVideoWidgetState();
+  ShareVideoWidgetWebState createState() => ShareVideoWidgetWebState();
 }
 
-/// State for [ShareVideoWidget].
-class ShareVideoWidgetState extends State<ShareVideoWidget> {
+/// State for [ShareVideoWidgetWeb].
+class ShareVideoWidgetWebState extends State<ShareVideoWidgetWeb> {
   String loadingText = 'Compartiendo';
   Timer? _timer;
   bool _isSharing = false;
@@ -207,6 +206,7 @@ class ShareVideoWidgetState extends State<ShareVideoWidget> {
             vertical: widget.paddingVertical,
           ),
           child: Row(
+            spacing: StoycoScreenSize.width(context, widget.spacing),
             children: [
               SvgPicture.asset(
                 'packages/stoyco_shared/lib/assets/icons/share_outlined_icon.svg',
@@ -214,7 +214,6 @@ class ShareVideoWidgetState extends State<ShareVideoWidget> {
                 color:
                     widget.iconColor ?? (widget.loading ? Colors.grey : null),
               ),
-              Gap(StoycoScreenSize.width(context, widget.spacing)),
               Text(
                 _isSharing
                     ? loadingText

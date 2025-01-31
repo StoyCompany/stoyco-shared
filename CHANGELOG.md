@@ -1,5 +1,9 @@
 ## 13.4.4
 
+- **feat:** Renombrar ShareVideoWidget a ShareVideoWidgetWeb y VideoInteractionsWidget a VideoInteractionsWidgetWeb
+
+## 13.4.4
+
 - **feat:** Add Gap for space in interaction widgets and video sharing
 
 ## 13.4.3

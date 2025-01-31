@@ -90,11 +90,11 @@ class VideoInteractionsWidgetWeb extends StatefulWidget {
   final double dividerHeight;
 
   @override
-  VideoInteractionsWidgetState createState() => VideoInteractionsWidgetState();
+  VideoInteractionsWidgetWebState createState() => VideoInteractionsWidgetWebState();
 }
 
 /// State for [VideoInteractionsWidgetWeb].
-class VideoInteractionsWidgetState extends State<VideoInteractionsWidgetWeb> {
+class VideoInteractionsWidgetWebState extends State<VideoInteractionsWidgetWeb> {
   bool isLiked = false;
   bool isDisliked = false;
 
