@@ -4,6 +4,7 @@ import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
 
 import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/stoyco_shared.dart';
@@ -206,7 +207,6 @@ class ShareVideoWidgetState extends State<ShareVideoWidget> {
             vertical: widget.paddingVertical,
           ),
           child: Row(
-            spacing: StoycoScreenSize.width(context, widget.spacing),
             children: [
               SvgPicture.asset(
                 'packages/stoyco_shared/lib/assets/icons/share_outlined_icon.svg',
@@ -214,6 +214,7 @@ class ShareVideoWidgetState extends State<ShareVideoWidget> {
                 color:
                     widget.iconColor ?? (widget.loading ? Colors.grey : null),
               ),
+              Gap(StoycoScreenSize.width(context, widget.spacing)),
               Text(
                 _isSharing
                     ? loadingText

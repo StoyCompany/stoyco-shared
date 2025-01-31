@@ -1,10 +1,14 @@
+## 13.4.4
+
+- **feat:** Add Gap for space in interaction widgets and video sharing
+
 ## 13.4.3
 
 - **feat:** reset like and dislike states when user reaction type is null in VideoInteractionsWidget
 
 ## 13.4.2
 
-- **feat:**  reset userToken when setting function to update token in VideoPlayerService
+- **feat:** reset userToken when setting function to update token in VideoPlayerService
 
 ## 13.4.1
 

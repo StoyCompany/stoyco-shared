@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
 
 import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/video/models/video_player_model.dart';
@@ -175,7 +176,6 @@ class VideoInteractionsWidgetState extends State<VideoInteractionsWidgetWeb> {
           Row(
             children: [
               Row(
-                spacing: StoycoScreenSize.width(context, widget.spacing),
                 children: [
                   InkWell(
                     onTap: widget.loading ? null : handleLike,
@@ -204,6 +204,7 @@ class VideoInteractionsWidgetState extends State<VideoInteractionsWidgetWeb> {
                       ),
                     ),
                   ),
+                  Gap(StoycoScreenSize.width(context, widget.spacing)),
                   TweenAnimationBuilder<int>(
                     tween: IntTween(
                       begin: 0,
@@ -226,6 +227,7 @@ class VideoInteractionsWidgetState extends State<VideoInteractionsWidgetWeb> {
                       ),
                     ),
                   ),
+                  Gap(StoycoScreenSize.width(context, widget.spacing)),
                   InkWell(
                     onTap: widget.loading ? null : handleDislike,
                     splashColor: widget.iconSplashColor,
