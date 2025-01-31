@@ -1,6 +1,6 @@
 name: stoyco_shared
 description: A set of shared components for Stoyco Flutter projects.
-version: 13.4.8
+version: 13.4.9
 
 environment:
   sdk: ">=3.1.2 <4.0.0"
