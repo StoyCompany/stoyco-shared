@@ -246,7 +246,7 @@ class VideoInteractionsWidgetState extends State<VideoInteractionsWidget> {
               ShareVideoWidget(
                 video: widget.video,
                 onResultAction: widget.onResultAction,
-                loading: widget.loading,
+                loading: false,
               ),
             ],
           ),

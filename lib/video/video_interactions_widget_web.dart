@@ -248,7 +248,7 @@ class VideoInteractionsWidgetWebState
               ShareVideoWidgetWeb(
                 video: widget.video,
                 onResultAction: widget.onResultAction,
-                loading: widget.loading,
+                loading: false,
               ),
             ],
           ),
