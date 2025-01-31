@@ -235,12 +235,13 @@ class VideoPlayerService {
   /// Returns an [Either] containing a [Failure] or a boolean indicating success.
   Future<Either<Failure, bool>> shareVideo({
     required String videoId,
+    bool isWeb = false,
   }) async {
     try {
       await verifyToken();
       return await _repository!.shareVideo(
         videoId,
-        getPlatform(),
+        !isWeb ? getPlatform() : 'web',
       );
     } catch (e) {
       StoyCoLogger.error('Error: $e');

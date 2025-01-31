@@ -1,3 +1,7 @@
+## 13.4.10
+
+- **feat:** Añadir soporte para compartir videos en la web en VideoPlayerService
+
 ## 13.4.8
 
 - _feat:_ Simplificar la visualización del puntaje total en VideoInteractionsWidget y VideoInteractionsWidgetWeb
