@@ -1,3 +1,7 @@
+## 13.4.8
+
+- _feat:_ Simplificar la visualización del puntaje total en VideoInteractionsWidget y VideoInteractionsWidgetWeb
+
 ## 13.4.6
 
 - **feat:** Reemplazar InkWell por GestureDetector en widgets de video para mejorar la interacción

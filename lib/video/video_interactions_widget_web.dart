@@ -90,11 +90,13 @@ class VideoInteractionsWidgetWeb extends StatefulWidget {
   final double dividerHeight;
 
   @override
-  VideoInteractionsWidgetWebState createState() => VideoInteractionsWidgetWebState();
+  VideoInteractionsWidgetWebState createState() =>
+      VideoInteractionsWidgetWebState();
 }
 
 /// State for [VideoInteractionsWidgetWeb].
-class VideoInteractionsWidgetWebState extends State<VideoInteractionsWidgetWeb> {
+class VideoInteractionsWidgetWebState
+    extends State<VideoInteractionsWidgetWeb> {
   bool isLiked = false;
   bool isDisliked = false;
 
@@ -200,25 +202,16 @@ class VideoInteractionsWidgetWebState extends State<VideoInteractionsWidgetWeb> 
                     ),
                   ),
                   Gap(StoycoScreenSize.width(context, widget.spacing)),
-                  TweenAnimationBuilder<int>(
-                    tween: IntTween(
-                      begin: 0,
-                      end: int.parse(widget.totalScore),
-                    ),
-                    duration: calculateDuration(
-                      int.parse(widget.totalScore),
-                    ),
-                    builder: (context, value, child) => Text(
-                      '$value',
-                      style: TextStyle(
-                        color: widget.loading
-                            ? widget.loadingTextColor
-                            : widget.textColor,
-                        fontWeight: FontWeight.w400,
-                        fontSize: StoycoScreenSize.width(
-                          context,
-                          widget.textFontSize,
-                        ),
+                  Text(
+                    widget.totalScore,
+                    style: TextStyle(
+                      color: widget.loading
+                          ? widget.loadingTextColor
+                          : widget.textColor,
+                      fontWeight: FontWeight.w400,
+                      fontSize: StoycoScreenSize.width(
+                        context,
+                        widget.textFontSize,
                       ),
                     ),
                   ),

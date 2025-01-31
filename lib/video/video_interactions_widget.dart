@@ -200,25 +200,16 @@ class VideoInteractionsWidgetState extends State<VideoInteractionsWidget> {
                     ),
                   ),
                   Gap(StoycoScreenSize.width(context, widget.spacing)),
-                  TweenAnimationBuilder<int>(
-                    tween: IntTween(
-                      begin: 0,
-                      end: int.parse(widget.totalScore),
-                    ),
-                    duration: calculateDuration(
-                      int.parse(widget.totalScore),
-                    ),
-                    builder: (context, value, child) => Text(
-                      '$value',
-                      style: TextStyle(
-                        color: widget.loading
-                            ? widget.loadingTextColor
-                            : widget.textColor,
-                        fontWeight: FontWeight.w400,
-                        fontSize: StoycoScreenSize.width(
-                          context,
-                          widget.textFontSize,
-                        ),
+                  Text(
+                    '${widget.totalScore}',
+                    style: TextStyle(
+                      color: widget.loading
+                          ? widget.loadingTextColor
+                          : widget.textColor,
+                      fontWeight: FontWeight.w400,
+                      fontSize: StoycoScreenSize.width(
+                        context,
+                        widget.textFontSize,
                       ),
                     ),
                   ),
