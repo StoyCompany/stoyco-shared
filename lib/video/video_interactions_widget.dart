@@ -177,13 +177,8 @@ class VideoInteractionsWidgetState extends State<VideoInteractionsWidget> {
             children: [
               Row(
                 children: [
-                  InkWell(
+                  GestureDetector(
                     onTap: widget.loading ? null : handleLike,
-                    splashColor: widget.iconSplashColor,
-                    highlightColor: Colors.transparent,
-                    borderRadius: BorderRadius.circular(
-                      StoycoScreenSize.radius(context, widget.iconBorderRadius),
-                    ),
                     child: Padding(
                       padding:
                           StoycoScreenSize.all(context, widget.iconPadding),
@@ -228,13 +223,8 @@ class VideoInteractionsWidgetState extends State<VideoInteractionsWidget> {
                     ),
                   ),
                   Gap(StoycoScreenSize.width(context, widget.spacing)),
-                  InkWell(
+                  GestureDetector(
                     onTap: widget.loading ? null : handleDislike,
-                    splashColor: widget.iconSplashColor,
-                    highlightColor: Colors.transparent,
-                    borderRadius: BorderRadius.circular(
-                      StoycoScreenSize.radius(context, widget.iconBorderRadius),
-                    ),
                     child: Padding(
                       padding:
                           StoycoScreenSize.all(context, widget.iconPadding),

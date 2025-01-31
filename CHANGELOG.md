@@ -1,4 +1,8 @@
-## 13.4.4
+## 13.4.6
+
+- **feat:** Reemplazar InkWell por GestureDetector en widgets de video para mejorar la interacción
+
+## 13.4.5
 
 - **feat:** Renombrar ShareVideoWidget a ShareVideoWidgetWeb y VideoInteractionsWidget a VideoInteractionsWidgetWeb
 

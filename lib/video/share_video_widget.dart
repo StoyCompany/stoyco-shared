@@ -209,13 +209,8 @@ class ShareVideoWidgetState extends State<ShareVideoWidget> {
   }
 
   @override
-  Widget build(BuildContext context) => InkWell(
+  Widget build(BuildContext context) => GestureDetector(
         onTap: widget.loading || _isSharing ? null : _shareVideo,
-        splashColor: widget.splashColor,
-        highlightColor: widget.highlightColor,
-        borderRadius: BorderRadius.circular(
-          StoycoScreenSize.radius(context, widget.borderRadius),
-        ),
         child: Padding(
           padding: StoycoScreenSize.symmetric(
             context,
