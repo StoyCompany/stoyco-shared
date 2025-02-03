@@ -44,7 +44,7 @@ class CoachMarkDataSource {
     required String type,
   }) async {
     final cancelToken = CancelToken();
-    final String url = '${environment.baseUrl}onboarding/$type';
+    final String url = '${environment.baseUrl()}onboarding/$type';
     return await _dio.post(
       url,
       cancelToken: cancelToken,
@@ -65,7 +65,7 @@ class CoachMarkDataSource {
     required bool isCompleted,
   }) async {
     final cancelToken = CancelToken();
-    final String url = '${environment.baseUrl}onboarding/$type';
+    final String url = '${environment.baseUrl()}onboarding/$type';
     return await _dio.put(
       url,
       data: {
@@ -86,7 +86,7 @@ class CoachMarkDataSource {
     required String type,
   }) async {
     final cancelToken = CancelToken();
-    final String url = '${environment.baseUrl}onboarding/$type';
+    final String url = '${environment.baseUrl()}onboarding/$type';
     return await _dio.get(
       url,
       cancelToken: cancelToken,
@@ -99,7 +99,7 @@ class CoachMarkDataSource {
   /// Returns a `Response` object from the Dio request
   Future<Response> getOnboardingsByUserCoachMarkData() async {
     final cancelToken = CancelToken();
-    final String url = '${environment.baseUrl}onboarding/user';
+    final String url = '${environment.baseUrl()}onboarding/user';
     return await _dio.get(
       url,
       cancelToken: cancelToken,
@@ -112,7 +112,7 @@ class CoachMarkDataSource {
   /// Returns a `Response` object from the Dio request
   Future<Response> resetOnboardingCoachMarkData() async {
     final cancelToken = CancelToken();
-    final String url = '${environment.baseUrl}onboarding/user/reset';
+    final String url = '${environment.baseUrl()}onboarding/user/reset';
     return await _dio.delete(
       url,
       cancelToken: cancelToken,

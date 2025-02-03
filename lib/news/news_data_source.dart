@@ -15,7 +15,7 @@ class NewsDataSource {
   }) async {
     final cancelToken = CancelToken();
     final response = await _dio.get(
-      '${environment.baseUrl}news/paged',
+      '${environment.baseUrl()}news/paged',
       queryParameters: {
         'pageNumber': pageNumber,
         'pageSize': pageSize,
@@ -31,7 +31,7 @@ class NewsDataSource {
   Future<Response> markAsViewed(String id) async {
     final cancelToken = CancelToken();
     final response = await _dio.post(
-      '${environment.baseUrl}news/$id/view',
+      '${environment.baseUrl()}news/$id/view',
       data: {
         'id': id,
       },
@@ -44,7 +44,7 @@ class NewsDataSource {
   Future<Response> getById(String id) async {
     final cancelToken = CancelToken();
     final response = await _dio.get(
-      '${environment.baseUrl}news/$id',
+      '${environment.baseUrl()}news/$id',
       cancelToken: cancelToken,
     );
 

@@ -1,3 +1,7 @@
+## 13.4.12
+
+- **feat:** Fix URL construction in NewsDataSource and CoachMarkDataSource
+
 ## 13.4.10
 
 - **feat:** Añadir soporte para compartir videos en la web en VideoPlayerService
