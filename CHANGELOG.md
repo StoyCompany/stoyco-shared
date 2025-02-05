@@ -1,3 +1,7 @@
+## 13.5.2
+
+- **feat:** Update the notification filtering method to use the notification model
+
 ## 13.5.1
 
 - **feat:** Add method to filter allowed notifications on the web

@@ -1,3 +1,4 @@
+import 'package:stoyco_shared/notification/model/notification_model.dart';
 import 'package:stoyco_shared/notification/types/notification_type.dart';
 
 /// Utility class for handling notification-related operations.
@@ -47,10 +48,11 @@ abstract class NotificationsUtils {
   ///
   /// @param notifications The list of notifications to filter
   /// @return A new list containing only the notifications that are allowed for web
-  static List<NotificationType> filterNotificationsForWeb(
-    List<NotificationType> notifications,
+  static List<NotificationModel> filterNotificationsForWeb(
+    List<NotificationModel> notifications,
   ) =>
       notifications
-          .where((notification) => isNotificationAllowedForWeb(notification))
+          .where(
+              (n) => n.type != null && isNotificationAllowedForWebById(n.type!))
           .toList();
 }
