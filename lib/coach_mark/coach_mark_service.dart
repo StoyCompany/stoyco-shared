@@ -125,7 +125,7 @@ class CoachMarkService {
       throw GetCoachMarksContentException();
     } catch (e) {
       StoyCoLogger.error('Error getting coach marks content: $e');
-      throw GetCoachMarksContentException();
+      rethrow;
     }
   }
 

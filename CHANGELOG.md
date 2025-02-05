@@ -1,3 +1,7 @@
+## 13.4.13
+
+- **feat:** Improve exception handling in CoachMarkService
+
 ## 13.4.12
 
 - **feat:** Fix URL construction in NewsDataSource and CoachMarkDataSource
