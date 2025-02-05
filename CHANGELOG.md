@@ -1,3 +1,7 @@
+## 13.5.0
+
+-**feat:** Refactor notification model and types structure for better organization
+
 ## 13.4.13
 
 - **feat:** Improve exception handling in CoachMarkService
@@ -8,19 +12,19 @@
 
 ## 13.4.10
 
-- **feat:** Añadir soporte para compartir videos en la web en VideoPlayerService
+- **feat:** Add support for video sharing on web in VideoPlayerService
 
 ## 13.4.8
 
-- _feat:_ Simplificar la visualización del puntaje total en VideoInteractionsWidget y VideoInteractionsWidgetWeb
+- **feat:** Simplify total score display in VideoInteractionsWidget and VideoInteractionsWidgetWeb
 
 ## 13.4.6
 
-- **feat:** Reemplazar InkWell por GestureDetector en widgets de video para mejorar la interacción
+- **feat:** Replace InkWell with GestureDetector in video widgets to improve interaction
 
 ## 13.4.5
 
-- **feat:** Renombrar ShareVideoWidget a ShareVideoWidgetWeb y VideoInteractionsWidget a VideoInteractionsWidgetWeb
+- **feat:** Rename ShareVideoWidget to ShareVideoWidgetWeb and VideoInteractionsWidget to VideoInteractionsWidgetWeb
 
 ## 13.4.4
 
@@ -315,9 +319,9 @@
 
 ## 8.0.5
 
-- **feat:** Update "Como llegar" button style in LaunchLocationWidget
+- **feat:** Update "Get Directions" button style in LaunchLocationWidget
 
-  The style of the "Como llegar" button in LaunchLocationWidget has been updated to handle different styles depending on the platform. A condition was added to apply specific styles when running on the web. In addition, the padding, background color, text color, and minimum button size styles were adjusted.
+  The style of the "Get Directions" button in LaunchLocationWidget has been updated to handle different styles depending on the platform. A condition was added to apply specific styles when running on the web. In addition, the padding, background color, text color, and minimum button size styles were adjusted.
 
 ## 8.0.4
 

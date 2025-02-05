@@ -8,3 +8,4 @@ export 'package:stoyco_shared/notification/widgets/notification_action_widget.da
 export 'package:stoyco_shared/errors/error_handling/error_handling.dart';
 export 'package:stoyco_shared/notification/model/model.dart';
 export 'package:stoyco_shared/external_packages/pin_code_fields/pin_code_fields.dart';
+export 'package:stoyco_shared/notification/notification.dart';

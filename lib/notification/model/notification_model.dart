@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:stoyco_shared/extensions/hex_color.dart';
-import 'package:stoyco_shared/notification/model/notification_type.dart';
+import 'package:stoyco_shared/notification/types/notification_type.dart';
 
 part 'notification_model.g.dart';
 
