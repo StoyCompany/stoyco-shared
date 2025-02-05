@@ -41,4 +41,16 @@ abstract class NotificationsUtils {
   /// @return true if the notification type corresponding to the ID is allowed for web, false otherwise
   static bool isNotificationAllowedForWebById(int id) =>
       notificationsAllowedForWeb.contains(NotificationType.fromInt(id));
+
+  /// Filters a list of notifications to only include those that are allowed for web platform.
+  /// This method is useful for filtering out notifications that are not supported on web.
+  ///
+  /// @param notifications The list of notifications to filter
+  /// @return A new list containing only the notifications that are allowed for web
+  static List<NotificationType> filterNotificationsForWeb(
+    List<NotificationType> notifications,
+  ) =>
+      notifications
+          .where((notification) => isNotificationAllowedForWeb(notification))
+          .toList();
 }

@@ -1,3 +1,7 @@
+## 13.5.1
+
+- **feat:** Add method to filter allowed notifications on the web
+
 ## 13.5.0
 
 -**feat:** Refactor notification model and types structure for better organization
