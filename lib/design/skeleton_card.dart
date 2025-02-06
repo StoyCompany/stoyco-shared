@@ -29,7 +29,6 @@ class SkeletonCard extends StatelessWidget {
                 highlightColor: const Color.fromARGB(255, 20, 35, 88),
                 child: Container(
                   height: height,
-                  color: Colors.white,
                 ),
               ),
             ],

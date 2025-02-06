@@ -1,3 +1,7 @@
+## 13.5.3
+
+- **feat:** Remove background color from SkeletonCard for improved design consistency
+
 ## 13.5.2
 
 - **feat:** Update the notification filtering method to use the notification model
