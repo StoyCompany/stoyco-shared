@@ -13,7 +13,7 @@ import 'package:stoyco_shared/video/video_with_metada/video_with_metadata.dart';
 ///
 /// Example:
 /// ```dart
-/// VideoInteractionsWidget(
+/// VideoInteractionsWidgetV2(
 ///   video: videoModel,
 ///   totalScore: '100',
 ///   onLike: () {},
@@ -22,9 +22,9 @@ import 'package:stoyco_shared/video/video_with_metada/video_with_metadata.dart';
 ///   loading: false,
 /// )
 /// ```
-class VideoInteractionsWidget extends StatefulWidget {
-  /// Creates a [VideoInteractionsWidget].
-  const VideoInteractionsWidget({
+class VideoInteractionsWidgetV2 extends StatefulWidget {
+  /// Creates a [VideoInteractionsWidgetV2].
+  const VideoInteractionsWidgetV2({
     super.key,
     this.userVideoReaction,
     required this.video,
@@ -88,11 +88,11 @@ class VideoInteractionsWidget extends StatefulWidget {
   final double dividerHeight;
 
   @override
-  VideoInteractionsWidgetState createState() => VideoInteractionsWidgetState();
+  VideoInteractionsWidgetV2State createState() => VideoInteractionsWidgetV2State();
 }
 
-/// State for [VideoInteractionsWidget].
-class VideoInteractionsWidgetState extends State<VideoInteractionsWidget> {
+/// State for [VideoInteractionsWidgetV2].
+class VideoInteractionsWidgetV2State extends State<VideoInteractionsWidgetV2> {
   bool isLiked = false;
   bool isDisliked = false;
 
@@ -107,7 +107,7 @@ class VideoInteractionsWidgetState extends State<VideoInteractionsWidget> {
   }
 
   @override
-  void didUpdateWidget(VideoInteractionsWidget oldWidget) {
+  void didUpdateWidget(VideoInteractionsWidgetV2 oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.userVideoReaction?.reactionType !=
         widget.userVideoReaction?.reactionType) {
