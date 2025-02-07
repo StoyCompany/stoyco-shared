@@ -1,4 +1,9 @@
+## 13.6.3
+
+- **feat:** Enhance score handling in VideoInteractionsWidgetV2
+
 ## 13.6.1
+
 - **feat:** Add ShareVideoWidgetV2 for sharing videos with customizable options
 
 ## 13.6.0

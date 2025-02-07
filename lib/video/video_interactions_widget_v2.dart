@@ -3,9 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
 import 'package:stoyco_shared/design/screen_size.dart';
-import 'package:stoyco_shared/video/models/video_player_model.dart';
 import 'package:stoyco_shared/video/models/video_reaction/user_video_reaction.dart';
-import 'package:stoyco_shared/video/share_video_widget.dart';
 import 'package:stoyco_shared/video/share_video_widget_v2.dart';
 import 'package:stoyco_shared/video/video_with_metada/video_with_metadata.dart';
 
@@ -88,17 +86,20 @@ class VideoInteractionsWidgetV2 extends StatefulWidget {
   final double dividerHeight;
 
   @override
-  VideoInteractionsWidgetV2State createState() => VideoInteractionsWidgetV2State();
+  VideoInteractionsWidgetV2State createState() =>
+      VideoInteractionsWidgetV2State();
 }
 
 /// State for [VideoInteractionsWidgetV2].
 class VideoInteractionsWidgetV2State extends State<VideoInteractionsWidgetV2> {
   bool isLiked = false;
   bool isDisliked = false;
+  late int currentScore;
 
   @override
   void initState() {
     super.initState();
+    currentScore = widget.video.videoMetadata?.totalScore ?? 0;
     if (widget.userVideoReaction?.reactionType == 'Like') {
       isLiked = true;
     } else if (widget.userVideoReaction?.reactionType == 'Dislike') {
@@ -123,6 +124,11 @@ class VideoInteractionsWidgetV2State extends State<VideoInteractionsWidgetV2> {
         isDisliked = false;
       });
     }
+
+    if (oldWidget.video.videoMetadata?.totalScore !=
+        widget.video.videoMetadata?.totalScore) {
+      currentScore = widget.video.videoMetadata?.totalScore ?? 0;
+    }
   }
 
   /// Calculates the animation duration based on the score.
@@ -146,7 +152,12 @@ class VideoInteractionsWidgetV2State extends State<VideoInteractionsWidgetV2> {
     setState(() {
       if (!isLiked) {
         isLiked = true;
-        isDisliked = false;
+        if (isDisliked) {
+          isDisliked = false;
+          currentScore += 2; // Remove dislike (+1) and add like (+1)
+        } else {
+          currentScore += 1; // Just add like
+        }
       }
     });
     widget.onLike();
@@ -158,7 +169,12 @@ class VideoInteractionsWidgetV2State extends State<VideoInteractionsWidgetV2> {
     setState(() {
       if (!isDisliked) {
         isDisliked = true;
-        isLiked = false;
+        if (isLiked) {
+          isLiked = false;
+          currentScore -= 2; // Remove like (-1) and add dislike (-1)
+        } else {
+          currentScore -= 1; // Just add dislike
+        }
       }
     });
     widget.onDislike();
@@ -199,7 +215,7 @@ class VideoInteractionsWidgetV2State extends State<VideoInteractionsWidgetV2> {
                   ),
                   Gap(StoycoScreenSize.width(context, widget.spacing)),
                   Text(
-                    '${widget.video.videoMetadata?.totalScore ?? 0}',
+                    '$currentScore',
                     style: TextStyle(
                       color: widget.loading
                           ? widget.loadingTextColor
