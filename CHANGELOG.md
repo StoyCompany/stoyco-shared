@@ -1,3 +1,6 @@
+## 13.6.1
+- **feat:** Add ShareVideoWidgetV2 for sharing videos with customizable options
+
 ## 13.6.0
 
 - **feat:** feat: functionality to fetch videos with metadata
