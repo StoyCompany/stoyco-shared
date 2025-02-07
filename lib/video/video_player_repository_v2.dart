@@ -7,6 +7,7 @@ import 'package:stoyco_shared/video/models/video_interaction/video_interaction.d
 import 'package:stoyco_shared/video/models/video_reaction/user_video_reaction.dart';
 import 'package:stoyco_shared/video/models/video_player_model.dart';
 import 'package:stoyco_shared/video/video_player_ds_impl_v2.dart';
+import 'package:stoyco_shared/video/video_with_metada/video_with_metadata.dart';
 
 /// Repository for managing video player interactions.
 class VideoPlayerRepositoryV2 {
@@ -108,4 +109,14 @@ class VideoPlayerRepositoryV2 {
         (_) => true,
         'Error sharing video',
       );
+
+  /// Fetches a list of videos with metadata.
+  Future<Either<Failure, List<VideoWithMetadata>>>
+      getVideosWithMetadata() async => _handleApiCall(
+            () => _dataSource.getVideosWithMetadata(),
+            (data) => (data as List)
+                .map((item) => VideoWithMetadata.fromJson(item))
+                .toList(),
+            'Error getting videos with metadata',
+          );
 }

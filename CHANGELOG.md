@@ -1,3 +1,7 @@
+## 13.6.0
+
+- **feat:** feat: functionality to fetch videos with metadata
+
 ## 13.5.3
 
 - **feat:** Remove background color from SkeletonCard for improved design consistency

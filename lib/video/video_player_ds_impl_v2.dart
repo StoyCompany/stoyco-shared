@@ -98,4 +98,13 @@ class VideoPlayerDataSourceV2 {
       options: Options(headers: _getHeaders()),
     );
   }
+
+  Future<Response> getVideosWithMetadata() async {
+    final String uri = _buildUri('short-video/list');
+    return _dio.get(
+      uri,
+      cancelToken: cancelToken,
+      options: Options(headers: _getHeaders()),
+    );
+  }
 }

@@ -14,6 +14,7 @@ import 'dart:collection';
 
 import 'package:stoyco_shared/video/video_player_ds_impl_v2.dart';
 import 'package:stoyco_shared/video/video_player_repository_v2.dart';
+import 'package:stoyco_shared/video/video_with_metada/video_with_metadata.dart';
 
 /// Service responsible for managing video playback and reactions.
 ///
@@ -262,6 +263,21 @@ class VideoPlayerService {
       return await _repository!.getUserVideoInteractionData(
         videoId,
       );
+    } catch (e) {
+      StoyCoLogger.error('Error: $e');
+      return Left(ExceptionFailure.decode(Exception(e)));
+    }
+  }
+
+  //getVideosWithMetadata
+  /// Retrieves a list of videos with metadata.
+  ///
+  /// Returns an [Either] containing a [Failure] or a list of [VideoWithMetadata].
+  Future<Either<Failure, List<VideoWithMetadata>>>
+      getVideosWithMetadata() async {
+    try {
+      await verifyToken();
+      return await _repository!.getVideosWithMetadata();
     } catch (e) {
       StoyCoLogger.error('Error: $e');
       return Left(ExceptionFailure.decode(Exception(e)));
