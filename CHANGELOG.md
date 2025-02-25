@@ -1,3 +1,7 @@
+## 13.6.4
+
+- **feat:** Update material_person.svg icon color to black for improved visibility
+
 ## 13.6.3
 
 - **feat:** Enhance score handling in VideoInteractionsWidgetV2
