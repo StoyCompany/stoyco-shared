@@ -127,12 +127,13 @@ class CoachMarkUtils {
     required List<TargetFocus> targets,
     FutureOr<void> Function(TargetFocus)? onClickTarget,
     FutureOr<void> Function(TargetFocus)? onClickOverlay,
+    Color colorShadow = const Color(0xFF0e1925),
     double opacityShadow = 0.8,
     ImageFilter? imageFilter,
   }) =>
       TutorialCoachMark(
         targets: targets,
-        colorShadow: const Color(0xFF0e1925),
+        colorShadow: colorShadow,
         paddingFocus: 0,
         opacityShadow: opacityShadow,
         imageFilter: imageFilter ?? ImageFilter.blur(sigmaX: 8, sigmaY: 8),

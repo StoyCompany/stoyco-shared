@@ -1,3 +1,7 @@
+## 13.6.6
+
+- **feat:** Allow customizable shadow color in TutorialCoachMark
+
 ## 13.6.5
 
 - **feat:** Enhance TutorialCoachMark with customizable shadow opacity and image filter options
