@@ -127,19 +127,23 @@ class CoachMarkUtils {
     required List<TargetFocus> targets,
     FutureOr<void> Function(TargetFocus)? onClickTarget,
     FutureOr<void> Function(TargetFocus)? onClickOverlay,
+    double opacityShadow = 0.8,
+    ImageFilter? imageFilter,
   }) =>
       TutorialCoachMark(
+        targets: targets,
         colorShadow: const Color(0xFF0e1925),
         paddingFocus: 0,
-        opacityShadow: 0.5,
-        imageFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+        opacityShadow: opacityShadow,
+        imageFilter: imageFilter ?? ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+        focusAnimationDuration: const Duration(milliseconds: 300),
+        unFocusAnimationDuration: const Duration(milliseconds: 300),
         useSafeArea: useSafeArea,
         hideSkip: hideSkip,
         onSkip: onSkip,
         onFinish: onFinish,
         onClickTarget: onClickTarget,
         onClickOverlay: onClickOverlay,
-        targets: targets,
         showSkipInLastTarget: false,
       );
 

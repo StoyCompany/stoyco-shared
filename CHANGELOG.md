@@ -1,3 +1,7 @@
+## 13.6.5
+
+- **feat:** Enhance TutorialCoachMark with customizable shadow opacity and image filter options
+
 ## 13.6.4
 
 - **feat:** Update material_person.svg icon color to black for improved visibility
