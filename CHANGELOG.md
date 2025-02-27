@@ -1,3 +1,7 @@
+## 13.7.0
+
+- **feat:** Update SVG icons for improved design and add reaction_arrow_down icon
+
 ## 13.6.6
 
 - **feat:** Allow customizable shadow color in TutorialCoachMark

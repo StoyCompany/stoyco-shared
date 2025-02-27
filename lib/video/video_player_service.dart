@@ -276,7 +276,6 @@ class VideoPlayerService {
   Future<Either<Failure, List<VideoWithMetadata>>>
       getVideosWithMetadata() async {
     try {
-      await verifyToken();
       return await _repository!.getVideosWithMetadata();
     } catch (e) {
       StoyCoLogger.error('Error: $e');
@@ -294,6 +293,17 @@ class VideoPlayerService {
     if (Platform.isWindows) return 'windows';
     if (Platform.isLinux) return 'linux';
     return 'unknown';
+  }
+
+  /// Resets the service to its initial state.
+  ///
+  /// This method:
+  /// - Clears the user token
+  /// - Removes the function to update token
+  void reset() {
+    userToken = '';
+    functionToUpdateToken = null;
+    _repository?.token = '';
   }
 }
 
