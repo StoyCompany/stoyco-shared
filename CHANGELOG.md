@@ -1,3 +1,7 @@
+## 14.0.1
+
+- **feat:** Add optional width and height parameters to VideoSlider for customizable dimensions
+
 ## 14.0.0
 
 - **feat:** Add video player support with caching and user interaction models

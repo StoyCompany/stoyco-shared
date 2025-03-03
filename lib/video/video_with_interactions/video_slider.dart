@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:either_dart/either.dart';
+import 'package:gap/gap.dart';
 import 'package:get_thumbnail_video/index.dart';
 import 'package:get_thumbnail_video/video_thumbnail.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:stoyco_shared/design/skeleton_card.dart';
 import 'package:stoyco_shared/utils/logger.dart';
 import 'package:stoyco_shared/video/models/video_info_with_user_interaction.dart';
@@ -36,6 +38,8 @@ class VideoSlider extends StatefulWidget {
     this.onDislike,
     this.onShare,
     this.showInteractions = true,
+    this.width,
+    this.height,
     required this.getVideosWithMetadata,
     required this.getUserVideoInteractionData,
   });
@@ -67,6 +71,12 @@ class VideoSlider extends StatefulWidget {
   final Future<Either<Failure, UserVideoReaction>> Function({
     required String videoId,
   }) getUserVideoInteractionData;
+
+  /// Optional width of the slider. If not provided, uses screen width.
+  final double? width;
+
+  /// Optional height of the slider. If not provided, uses screen width.
+  final double? height;
 
   @override
   State<VideoSlider> createState() => _VideoSliderState();
@@ -306,11 +316,41 @@ class _VideoSliderState extends State<VideoSlider> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final sliderWidth = widget.width ?? screenWidth;
+    final sliderHeight = widget.height ?? screenWidth;
+
     return isLoading
-        ? SkeletonCard()
+        ? Container(
+            width: sliderWidth,
+            height: sliderHeight,
+            //padding: padding ?? StoycoScreenSize.all(context, 4.5),
+            child: Column(
+              children: [
+                Shimmer.fromColors(
+                  baseColor: const Color.fromARGB(255, 11, 18, 44),
+                  highlightColor: const Color.fromARGB(255, 20, 35, 88),
+                  child: LayoutBuilder(
+                    builder: (context, constraints2) {
+                      final width = constraints2.maxWidth;
+                      return SizedBox(
+                        width: width,
+                        height: width,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Container(
+                            color: Colors.grey,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          )
         : SizedBox(
-            width: screenWidth,
-            height: screenWidth,
+            width: sliderWidth,
+            height: sliderHeight,
             child: CarouselSlider.builder(
               carouselController: _carouselController,
               options: CarouselOptions(
@@ -323,8 +363,8 @@ class _VideoSliderState extends State<VideoSlider> {
               itemBuilder: (context, index, realIndex) => Column(
                 children: [
                   SizedBox(
-                    width: screenWidth,
-                    height: screenWidth,
+                    width: sliderWidth,
+                    height: sliderHeight,
                     child: ParallaxVideoCard(
                       videoInfo: videosList[index],
                       thumbnail: videoThumbnails[index],
