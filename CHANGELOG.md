@@ -1,3 +1,7 @@
+## 14.0.0
+
+- **feat:** Add video player support with caching and user interaction models
+
 ## 13.7.0
 
 - **feat:** Update SVG icons for improved design and add reaction_arrow_down icon

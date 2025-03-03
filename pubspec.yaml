@@ -1,6 +1,6 @@
 name: stoyco_shared
 description: A set of shared components for Stoyco Flutter projects.
-version: 13.7.1
+version: 14.0.0
 
 environment:
   sdk: ">=3.1.2 <4.0.0"
@@ -36,6 +36,10 @@ dependencies:
   collection: ^1.18.0
   path_provider: ^2.1.1
   share_plus: ^10.0.2
+  video_player: ^2.7.2
+  carousel_slider: ^5.0.0
+  get_thumbnail_video: ^0.7.3
+  visibility_detector: ^0.4.0+2
 
 dev_dependencies:
   flutter_test:
