@@ -119,6 +119,12 @@ class _VideoSliderState extends State<VideoSlider> {
         });
       },
       (videos) async {
+        videos.sort((a, b) {
+          final orderA = a.order ?? 0;
+          final orderB = b.order ?? 0;
+          return orderA.compareTo(orderB);
+        });
+
         final List<VideoInfoWithUserInteraction> newVideosList = [];
         bool isFirstVideoProcessed = false;
 

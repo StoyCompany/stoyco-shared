@@ -1,3 +1,7 @@
+## 14.0.3
+
+- **feat:** Sort videos by order in VideoSlider for improved playback sequence
+
 ## 14.0.2
 
 - **feat:** Add showErrors parameter to StoycoDatePickerModal for error display control
