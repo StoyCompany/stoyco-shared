@@ -1,3 +1,7 @@
+## 14.0.2
+
+- **feat:** Add showErrors parameter to StoycoDatePickerModal for error display control
+
 ## 14.0.1
 
 - **feat:** Add optional width and height parameters to VideoSlider for customizable dimensions
