@@ -3,13 +3,12 @@ import 'dart:async';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:either_dart/either.dart';
-import 'package:gap/gap.dart';
 import 'package:get_thumbnail_video/index.dart';
 import 'package:get_thumbnail_video/video_thumbnail.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:stoyco_shared/design/skeleton_card.dart';
 import 'package:stoyco_shared/utils/logger.dart';
 import 'package:stoyco_shared/video/models/video_info_with_user_interaction.dart';
+
 import 'package:stoyco_shared/video/video_with_interactions/parallax_video_card.dart';
 import 'package:stoyco_shared/video/video_with_interactions/video_cache_service.dart';
 import 'package:stoyco_shared/video/video_with_metada/video_with_metadata.dart';
@@ -84,13 +83,14 @@ class VideoSlider extends StatefulWidget {
 
 class _VideoSliderState extends State<VideoSlider> {
   List<VideoInfoWithUserInteraction> videosList = [];
-  List<Image?> videoThumbnails = [];
+  Map<String, Image?> videoThumbnails = {}; // Cambiar a Map
   bool isLoading = true;
   final CarouselSliderController _carouselController =
       CarouselSliderController();
   int currentIndex = 0;
   bool isMuted = true;
   final _videoCacheService = VideoCacheService();
+  bool allVideosLoaded = false;
 
   @override
   void initState() {
@@ -100,7 +100,6 @@ class _VideoSliderState extends State<VideoSlider> {
 
   /// Loads videos and their associated interaction data.
   ///
-  /// This method performs the following steps:
   /// 1. Fetches video list
   /// 2. For each video, fetches user interaction data
   /// 3. Generates thumbnails progressively
@@ -125,14 +124,13 @@ class _VideoSliderState extends State<VideoSlider> {
           return orderA.compareTo(orderB);
         });
 
-        final List<VideoInfoWithUserInteraction> newVideosList = [];
         bool isFirstVideoProcessed = false;
 
         for (final video in videos) {
           final interactionResult =
               await widget.getUserVideoInteractionData(videoId: video.id ?? '');
 
-          newVideosList.add(
+          videosList.add(
             VideoInfoWithUserInteraction(
               video: video,
               userVideoReaction: interactionResult.fold(
@@ -144,28 +142,28 @@ class _VideoSliderState extends State<VideoSlider> {
 
           if (!isFirstVideoProcessed) {
             setState(() {
-              videosList = List.from(newVideosList);
-              videoThumbnails = List.generate(videos.length, (index) => null);
+              videoThumbnails = {}; // Inicializar Map vacío
               isLoading = false;
               isFirstVideoProcessed = true;
             });
 
             // Initialize thumbnail for the first video immediately
-            if (newVideosList.first.video.appUrl?.isNotEmpty == true) {
-              final thumbnail =
-                  await getVideoThumbnail(newVideosList.first.video.appUrl!);
-              if (mounted) {
-                setState(() {
-                  videoThumbnails[0] = thumbnail;
-                });
+            if (videosList.first.video.appUrl?.isNotEmpty == true) {
+              final videoId = videosList.first.video.id;
+              if (videoId != null) {
+                final thumbnail =
+                    await getVideoThumbnail(videosList.first.video.appUrl!);
+                if (mounted) {
+                  setState(() {
+                    videoThumbnails[videoId] = thumbnail;
+                  });
+                }
               }
             }
           } else {
             // Update the list progressively
             if (mounted) {
-              setState(() {
-                videosList = List.from(newVideosList);
-              });
+              setState(() {});
             }
           }
         }
@@ -173,16 +171,18 @@ class _VideoSliderState extends State<VideoSlider> {
         // Initialize remaining thumbnails
         for (var i = 1; i < videosList.length; i++) {
           final videoUrl = videosList[i].video.appUrl ?? '';
-          if (videoUrl.isNotEmpty) {
-            unawaited(
-              getVideoThumbnail(videoUrl).then((value) {
-                if (mounted && i < videoThumbnails.length) {
-                  setState(() {
-                    videoThumbnails[i] = value;
-                  });
-                }
-              }),
-            );
+          final videoId = videosList[i].video.id;
+          if (videoUrl.isNotEmpty && videoId != null) {
+            unawaited(getVideoThumbnail(videoUrl).then((value) {
+              if (mounted) {
+                setState(() {
+                  videoThumbnails[videoId] = value;
+                  if (i == videosList.length - 1) {
+                    allVideosLoaded = true;
+                  }
+                });
+              }
+            }));
           }
         }
       },
@@ -326,7 +326,7 @@ class _VideoSliderState extends State<VideoSlider> {
     final sliderHeight = widget.height ?? screenWidth;
 
     return isLoading
-        ? Container(
+        ? SizedBox(
             width: sliderWidth,
             height: sliderHeight,
             //padding: padding ?? StoycoScreenSize.all(context, 4.5),
@@ -364,6 +364,7 @@ class _VideoSliderState extends State<VideoSlider> {
                 enlargeStrategy: CenterPageEnlargeStrategy.zoom,
                 viewportFraction: 1,
                 onPageChanged: _onPageChanged,
+                enableInfiniteScroll: allVideosLoaded && videosList.length > 1,
               ),
               itemCount: videosList.length,
               itemBuilder: (context, index, realIndex) => Column(
@@ -373,7 +374,9 @@ class _VideoSliderState extends State<VideoSlider> {
                     height: sliderHeight,
                     child: ParallaxVideoCard(
                       videoInfo: videosList[index],
-                      thumbnail: videoThumbnails[index],
+                      thumbnail: videosList[index].video.id != null
+                          ? videoThumbnails[videosList[index].video.id]
+                          : null,
                       play: currentIndex == index,
                       showInteractions: widget.showInteractions,
                       onLike: () => _handleLike(videosList[index].video),

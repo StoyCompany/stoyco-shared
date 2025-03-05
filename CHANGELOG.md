@@ -1,3 +1,7 @@
+## 14.0.4
+
+- **feat:** Refactor video thumbnail handling to use a Map for improved indexing and loading state management
+
 ## 14.0.3
 
 - **feat:** Sort videos by order in VideoSlider for improved playback sequence
