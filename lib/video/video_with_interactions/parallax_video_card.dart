@@ -40,6 +40,11 @@ class ParallaxVideoCard extends StatefulWidget {
   /// * [onLike] - Callback when like button is pressed
   /// * [onDislike] - Callback when dislike button is pressed
   /// * [onShare] - Callback when share button is pressed
+  /// * [logoWidth] - Width of the watermark logo (default: 100)
+  /// * [logoHeight] - Height of the watermark logo (default: 150)
+  /// * [overlayX] - X position offset of the watermark from right edge (default: 30)
+  /// * [overlayY] - Y position offset of the watermark from bottom edge (default: 30)
+  /// * [shareText] - Custom text to add when sharing (default: video name and URL)
   const ParallaxVideoCard({
     super.key,
     required this.videoInfo,
@@ -53,6 +58,11 @@ class ParallaxVideoCard extends StatefulWidget {
     this.onLike,
     this.onDislike,
     this.onShare,
+    this.logoWidth,
+    this.logoHeight,
+    this.overlayX,
+    this.overlayY,
+    this.shareText,
   });
 
   final VideoInfoWithUserInteraction videoInfo;
@@ -66,6 +76,11 @@ class ParallaxVideoCard extends StatefulWidget {
   final VoidCallback? onLike;
   final VoidCallback? onDislike;
   final VoidCallback? onShare;
+  final int? logoWidth;
+  final int? logoHeight;
+  final int? overlayX;
+  final int? overlayY;
+  final String? shareText;
 
   @override
   State<ParallaxVideoCard> createState() => _ParallaxVideoCardState();
@@ -176,8 +191,8 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
 
   Future<String> _loadGifFromAssets() async {
     if (_cachedGifPath != null) return _cachedGifPath!;
-    final byteData =
-        await rootBundle.load('assets/gifs/stoyco_icon_animated.gif');
+    final byteData = await rootBundle.load(
+        'packages/stoyco_shared/lib/assets/gifs/stoyco_icon_animated.gif');
     final tempDir = await getTemporaryDirectory();
     final logoFile = File('${tempDir.path}/stoyco_icon_animated.gif');
     await logoFile.writeAsBytes(byteData.buffer.asUint8List());
@@ -189,11 +204,15 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
     File? tempFile;
     File? originalFile;
 
-    // Configuration variables for the logo
-    final int logoWidth = 100;
-    final int logoHeight = 150;
-    final String overlayX = '(main_w-overlay_w)-30';
-    final String overlayY = 'main_h-overlay_h-30';
+    // Configuration variables for the logo with fallback values
+    final int logoWidth = widget.logoWidth ?? 100;
+    final int logoHeight = widget.logoHeight ?? 150;
+    final int overlayXOffset = widget.overlayX ?? 30;
+    final int overlayYOffset = widget.overlayY ?? 30;
+
+    // Build the position strings for FFmpeg overlay filter
+    final String overlayX = 'main_w-overlay_w-$overlayXOffset';
+    final String overlayY = 'main_h-overlay_h-$overlayYOffset';
 
     // Build the FFmpeg filter using the variables
     final String filterComplex =
@@ -202,7 +221,8 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
     // Text to share
     final video = widget.videoInfo.video;
     final videoUrl = video.videoUrl;
-    final shareText = '''${video.name}
+    final shareText = widget.shareText ??
+        '''${video.name}
 Watch video: $videoUrl''';
 
     try {
