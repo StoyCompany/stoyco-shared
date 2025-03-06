@@ -237,7 +237,7 @@ Watch video: $videoUrl''';
         _isSharing = true;
       });
 
-      if (videoUrl != videoUrl) {
+      if (videoUrl.isNotEmpty) {
         // Load animated GIF from assets and obtain the path
         final gifPath = await _loadGifFromAssets();
 
