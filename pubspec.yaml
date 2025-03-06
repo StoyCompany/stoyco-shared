@@ -40,6 +40,7 @@ dependencies:
   carousel_slider: ^5.0.0
   get_thumbnail_video: ^0.7.3
   visibility_detector: ^0.4.0+2
+  ffmpeg_kit_flutter_full: ^6.0.3
 
 dev_dependencies:
   flutter_test:
@@ -57,3 +58,4 @@ flutter:
     - lib/assets/
     - lib/assets/icons/
     - lib/assets/home/
+    - lib/assets/gifs/

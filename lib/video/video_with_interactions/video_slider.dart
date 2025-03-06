@@ -1,429 +1,575 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:math';
 
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:ffmpeg_kit_flutter_full/ffmpeg_kit.dart';
+import 'package:ffmpeg_kit_flutter_full/return_code.dart';
 import 'package:flutter/material.dart';
-import 'package:either_dart/either.dart';
-import 'package:get_thumbnail_video/index.dart';
-import 'package:get_thumbnail_video/video_thumbnail.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
+import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/utils/logger.dart';
 import 'package:stoyco_shared/video/models/video_info_with_user_interaction.dart';
-
-import 'package:stoyco_shared/video/video_with_interactions/parallax_video_card.dart';
 import 'package:stoyco_shared/video/video_with_interactions/video_cache_service.dart';
-import 'package:stoyco_shared/video/video_with_metada/video_with_metadata.dart';
-import 'package:stoyco_shared/video/models/video_reaction/user_video_reaction.dart';
-import 'package:stoyco_shared/errors/errors.dart';
+import 'package:video_player/video_player.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:visibility_detector/visibility_detector.dart';
+import 'package:path_provider/path_provider.dart';
 
-/// A widget that displays a carousel of videos with interactive features.
+/// A video card widget that displays video content with interactive features and parallax effects.
 ///
-/// This widget provides a smooth video browsing experience with features like:
-/// * Video preloading and caching
-/// * Thumbnail generation
+/// This widget provides a rich video playback experience with:
+/// * Video playback controls
 /// * Like/Dislike interactions
 /// * Share functionality
-/// * Auto-play for current video
-/// * Mute/unmute controls
-class VideoSlider extends StatefulWidget {
-  /// Creates a VideoSlider widget.
+/// * Mute/Unmute toggle
+/// * Progress indicator
+/// * Video metadata display
+class ParallaxVideoCard extends StatefulWidget {
+  /// Creates a ParallaxVideoCard.
   ///
-  /// [getVideosWithMetadata] and [getUserVideoInteractionData] are required callbacks
-  /// to fetch video data and user interaction data respectively.
-  const VideoSlider({
+  /// * [videoInfo] - Contains video data and user interaction state
+  /// * [play] - Controls if video should play automatically
+  /// * [thumbnail] - Placeholder image shown while video loads
+  /// * [nextVideo] - Callback to load the next video
+  /// * [mute] - Callback to handle mute state changes
+  /// * [isMuted] - Initial mute state
+  /// * [isLooping] - Whether video should loop
+  /// * [showInteractions] - Whether to show interaction buttons
+  /// * [onLike] - Callback when like button is pressed
+  /// * [onDislike] - Callback when dislike button is pressed
+  /// * [onShare] - Callback when share button is pressed
+  const ParallaxVideoCard({
     super.key,
-    this.nextVideo,
-    this.onPageChanged,
+    required this.videoInfo,
+    this.play = false,
+    required this.thumbnail,
+    required this.nextVideo,
+    required this.mute,
+    this.isMuted = false,
+    this.isLooping = false,
+    this.showInteractions = true,
     this.onLike,
     this.onDislike,
     this.onShare,
-    this.showInteractions = true,
-    this.width,
-    this.height,
-    required this.getVideosWithMetadata,
-    required this.getUserVideoInteractionData,
   });
 
-  /// Whether to show interaction buttons (like, dislike, share).
+  final VideoInfoWithUserInteraction videoInfo;
+  final bool play;
+  final Image? thumbnail;
+  final bool isMuted;
+  final void Function() nextVideo;
+  final void Function(bool value) mute;
+  final bool isLooping;
   final bool showInteractions;
-
-  /// Callback triggered when the carousel page changes.
-  final void Function(int index)? onPageChanged;
-
-  /// Callback triggered when proceeding to next video.
-  /// Provides current mute state and video data.
-  final void Function(bool isMute, VideoWithMetadata video)? nextVideo;
-
-  /// Callback triggered when a video is liked.
-  final void Function(VideoWithMetadata video)? onLike;
-
-  /// Callback triggered when a video is disliked.
-  final void Function(VideoWithMetadata video)? onDislike;
-
-  /// Callback triggered when a video is shared.
-  final void Function(VideoWithMetadata video)? onShare;
-
-  /// Callback to fetch the list of videos with their metadata.
-  final Future<Either<Failure, List<VideoWithMetadata>>> Function()
-      getVideosWithMetadata;
-
-  /// Callback to fetch user's interaction data for a specific video.
-  final Future<Either<Failure, UserVideoReaction>> Function({
-    required String videoId,
-  }) getUserVideoInteractionData;
-
-  /// Optional width of the slider. If not provided, uses screen width.
-  final double? width;
-
-  /// Optional height of the slider. If not provided, uses screen width.
-  final double? height;
+  final VoidCallback? onLike;
+  final VoidCallback? onDislike;
+  final VoidCallback? onShare;
 
   @override
-  State<VideoSlider> createState() => _VideoSliderState();
+  State<ParallaxVideoCard> createState() => _ParallaxVideoCardState();
 }
 
-class _VideoSliderState extends State<VideoSlider> {
-  List<VideoInfoWithUserInteraction> videosList = [];
-  Map<String, Image?> videoThumbnails = {}; // Cambiar a Map
-  bool isLoading = true;
-  final CarouselSliderController _carouselController =
-      CarouselSliderController();
-  int currentIndex = 0;
-  bool isMuted = true;
+class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
+  VideoPlayerController? _controller;
+  late Future<void> _initializeVideoPlayerFuture;
+  bool _isPlayerInitialized = false;
   final _videoCacheService = VideoCacheService();
-  bool allVideosLoaded = false;
+  double _currentTime = 0;
+  bool isMuted = false;
+  bool isDisposed = false;
+  bool _isSharing = false; // Add this variable to track sharing state
+  String? _cachedGifPath; // New variable for caching GIF path
 
   @override
   void initState() {
     super.initState();
-    loadVideos();
+    isMuted = widget.isMuted;
+    _initializeVideoPlayerFuture = _initializeController();
   }
 
-  /// Loads videos and their associated interaction data.
+  /// Initializes the video controller and sets up initial playback state.
   ///
-  /// 1. Fetches video list
-  /// 2. For each video, fetches user interaction data
-  /// 3. Generates thumbnails progressively
-  /// 4. Updates UI state accordingly
-  Future<void> loadVideos() async {
-    setState(() {
-      isLoading = true;
-    });
+  /// This method:
+  /// 1. Fetches the video controller from cache
+  /// 2. Sets up video completion listener
+  /// 3. Configures looping and volume settings
+  Future<void> _initializeController() async {
+    try {
+      final videoUrl = widget.videoInfo.video.videoUrl ?? '';
+      final controller = await _videoCacheService.getController(videoUrl);
 
-    final videosResult = await widget.getVideosWithMetadata();
-
-    await videosResult.fold(
-      (failure) {
-        setState(() {
-          isLoading = false;
-        });
-      },
-      (videos) async {
-        videos.sort((a, b) {
-          final orderA = a.order ?? 0;
-          final orderB = b.order ?? 0;
-          return orderA.compareTo(orderB);
-        });
-
-        bool isFirstVideoProcessed = false;
-
-        for (final video in videos) {
-          final interactionResult =
-              await widget.getUserVideoInteractionData(videoId: video.id ?? '');
-
-          videosList.add(
-            VideoInfoWithUserInteraction(
-              video: video,
-              userVideoReaction: interactionResult.fold(
-                (failure) => UserVideoReaction(),
-                (reaction) => reaction,
-              ),
-            ),
-          );
-
-          if (!isFirstVideoProcessed) {
-            setState(() {
-              videoThumbnails = {}; // Inicializar Map vacío
-              isLoading = false;
-              isFirstVideoProcessed = true;
-            });
-
-            // Initialize thumbnail for the first video immediately
-            if (videosList.first.video.appUrl?.isNotEmpty == true) {
-              final videoId = videosList.first.video.id;
-              if (videoId != null) {
-                final thumbnail =
-                    await getVideoThumbnail(videosList.first.video.appUrl!);
-                if (mounted) {
-                  setState(() {
-                    videoThumbnails[videoId] = thumbnail;
-                  });
-                }
-              }
-            }
-          } else {
-            // Update the list progressively
-            if (mounted) {
-              setState(() {});
-            }
-          }
-        }
-
-        // Initialize remaining thumbnails
-        for (var i = 1; i < videosList.length; i++) {
-          final videoUrl = videosList[i].video.appUrl ?? '';
-          final videoId = videosList[i].video.id;
-          if (videoUrl.isNotEmpty && videoId != null) {
-            unawaited(getVideoThumbnail(videoUrl).then((value) {
-              if (mounted) {
-                setState(() {
-                  videoThumbnails[videoId] = value;
-                  if (i == videosList.length - 1) {
-                    allVideosLoaded = true;
-                  }
-                });
-              }
-            }));
-          }
-        }
-      },
-    );
-  }
-
-  /// Handles the like action for a video.
-  ///
-  /// Updates local state optimistically and triggers the onLike callback.
-  void _handleLike(VideoWithMetadata video) {
-    final videoIndex = videosList.indexWhere((v) => v.video.id == video.id);
-    if (videoIndex != -1) {
-      final currentVideo = videosList[videoIndex];
-      final currentMetadata = currentVideo.video.videoMetadata;
-      final wasDisliked = currentVideo.hasDisliked;
-
-      final updatedMetadata = currentMetadata?.copyWith(
-        likes: (currentMetadata.likes ?? 0) + (currentVideo.hasLiked ? -1 : 1),
-        dislikes: wasDisliked
-            ? (currentMetadata.dislikes ?? 0) - 1
-            : (currentMetadata.dislikes ?? 0),
-      );
-
-      final updatedVideo = currentVideo.video.copyWith(
-        videoMetadata: updatedMetadata,
-      );
+      if (!mounted) return;
 
       setState(() {
-        videosList[videoIndex] = currentVideo.copyWith(
-          video: updatedVideo,
-          userVideoReaction: UserVideoReaction(
-            reactionType: currentVideo.hasLiked ? '' : 'Like',
-          ),
-        );
+        _controller = controller;
+        _isPlayerInitialized = true;
+        _currentTime = 0;
       });
-    }
-    widget.onLike?.call(video);
-  }
 
-  /// Handles the dislike action for a video.
-  ///
-  /// Updates local state optimistically and triggers the onDislike callback.
-  void _handleDislike(VideoWithMetadata video) {
-    final videoIndex = videosList.indexWhere((v) => v.video.id == video.id);
-    if (videoIndex != -1) {
-      final currentVideo = videosList[videoIndex];
-      final currentMetadata = currentVideo.video.videoMetadata;
-      final wasLiked = currentVideo.hasLiked;
+      _controller?.addListener(checkVideoCompletion);
+      _controller?.setLooping(widget.isLooping);
+      _controller?.setVolume(widget.isMuted ? 0 : 1);
 
-      final updatedMetadata = currentMetadata?.copyWith(
-        dislikes: (currentMetadata.dislikes ?? 0) +
-            (currentVideo.hasDisliked ? -1 : 1),
-        likes: wasLiked
-            ? (currentMetadata.likes ?? 0) - 1
-            : (currentMetadata.likes ?? 0),
-      );
-
-      final updatedVideo = currentVideo.video.copyWith(
-        videoMetadata: updatedMetadata,
-      );
-
-      setState(() {
-        videosList[videoIndex] = currentVideo.copyWith(
-          video: updatedVideo,
-          userVideoReaction: UserVideoReaction(
-            reactionType: currentVideo.hasDisliked ? '' : 'Dislike',
-          ),
-        );
-      });
-    }
-    widget.onDislike?.call(video);
-  }
-
-  /// Handles the share action for a video.
-  ///
-  /// Updates local share count and triggers the onShare callback.
-  void _handleShare(VideoWithMetadata video) {
-    final videoIndex = videosList.indexWhere((v) => v.video.id == video.id);
-    if (videoIndex != -1) {
-      final currentVideo = videosList[videoIndex];
-      final currentMetadata = currentVideo.video.videoMetadata;
-
-      final updatedMetadata = currentMetadata?.copyWith(
-        shared: (currentMetadata.shared ?? 0) + 1,
-      );
-
-      final updatedVideo = currentVideo.video.copyWith(
-        videoMetadata: updatedMetadata,
-      );
-
-      setState(() {
-        videosList[videoIndex] = currentVideo.copyWith(
-          video: updatedVideo,
-        );
-      });
-    }
-    widget.onShare?.call(video);
-  }
-
-  /// Handles carousel page changes.
-  ///
-  /// Manages video playback states:
-  /// * Pauses non-adjacent videos
-  /// * Preloads next video
-  /// * Updates current index
-  void _onPageChanged(int index, CarouselPageChangedReason reason) {
-    final previousIndex = currentIndex;
-    widget.onPageChanged?.call(index);
-
-    setState(() {
-      currentIndex = index;
-    });
-
-    // Pause previous video if it's not adjacent to current
-    if ((index - previousIndex).abs() > 1) {
-      final videoUrl = videosList[previousIndex].video.videoUrl;
-      if (videoUrl != null) {
-        _videoCacheService.pauseController(videoUrl);
+      if (widget.play) {
+        _controller?.play();
       }
+    } catch (e) {
+      debugPrint('Error initializing video controller: $e');
+    }
+  }
+
+  /// Monitors video playback completion and updates progress.
+  ///
+  /// When video completes:
+  /// * Pauses the video
+  /// * Triggers the next video callback
+  /// * Updates the progress indicator
+  void checkVideoCompletion() {
+    if (_controller == null || !mounted || isDisposed) return;
+
+    if (_controller!.value.isCompleted && !isDisposed) {
+      _controller?.pause();
+      // Schedule the next video call for the next frame
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && !isDisposed) {
+          widget.nextVideo();
+        }
+      });
     }
 
-    // Preload next video
-    if (index < videosList.length - 1) {
-      final nextVideoUrl = videosList[index + 1].video.videoUrl;
-      if (nextVideoUrl != null) {
-        _videoCacheService.preloadNext(nextVideoUrl);
-      }
+    // Schedule state update for the next frame
+    if (mounted && !isDisposed) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && !isDisposed) {
+          setState(() {
+            _currentTime = _controller!.value.position.inMilliseconds /
+                max(_controller!.value.duration.inMilliseconds, 1);
+          });
+        }
+      });
     }
   }
 
   @override
   void dispose() {
-    _videoCacheService.clearCache();
+    if (_controller != null) {
+      _controller!.removeListener(checkVideoCompletion);
+    }
+    isDisposed = true;
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final sliderWidth = widget.width ?? screenWidth;
-    final sliderHeight = widget.height ?? screenWidth;
+  /// Handles the mute/unmute toggle functionality.
+  ///
+  /// Updates both local state and parent widget's mute state.
+  void toggleMute() {
+    if (_controller == null) return;
 
-    return isLoading
-        ? SizedBox(
-            width: sliderWidth,
-            height: sliderHeight,
-            //padding: padding ?? StoycoScreenSize.all(context, 4.5),
-            child: Column(
-              children: [
-                Shimmer.fromColors(
-                  baseColor: const Color.fromARGB(255, 11, 18, 44),
-                  highlightColor: const Color.fromARGB(255, 20, 35, 88),
-                  child: LayoutBuilder(
-                    builder: (context, constraints2) {
-                      final width = constraints2.maxWidth;
-                      return SizedBox(
-                        width: width,
-                        height: width,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Container(
-                            color: Colors.grey,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          )
-        : SizedBox(
-            width: sliderWidth,
-            height: sliderHeight,
-            child: CarouselSlider.builder(
-              carouselController: _carouselController,
-              options: CarouselOptions(
-                enlargeCenterPage: true,
-                enlargeStrategy: CenterPageEnlargeStrategy.zoom,
-                viewportFraction: 1,
-                onPageChanged: _onPageChanged,
-                enableInfiniteScroll: allVideosLoaded && videosList.length > 1,
-              ),
-              itemCount: videosList.length,
-              itemBuilder: (context, index, realIndex) => Column(
-                children: [
-                  SizedBox(
-                    width: sliderWidth,
-                    height: sliderHeight,
-                    child: ParallaxVideoCard(
-                      videoInfo: videosList[index],
-                      thumbnail: videosList[index].video.id != null
-                          ? videoThumbnails[videosList[index].video.id]
-                          : null,
-                      play: currentIndex == index,
-                      showInteractions: widget.showInteractions,
-                      onLike: () => _handleLike(videosList[index].video),
-                      onDislike: () => _handleDislike(videosList[index].video),
-                      onShare: widget.onShare != null
-                          ? () => _handleShare(videosList[index].video)
-                          : null,
-                      nextVideo: () {
-                        widget.nextVideo
-                            ?.call(isMuted, videosList[index].video);
-                        if (videosList.length > 1) {
-                          _carouselController.nextPage();
-                          if (currentIndex == videosList.length - 1) {
-                            currentIndex = 0;
-                          } else {
-                            currentIndex++;
-                          }
-                        }
-                      },
-                      mute: (value) {
-                        isMuted = value;
-                      },
-                      isMuted: isMuted,
-                      isLooping: videosList.length == 1,
+    setState(() {
+      isMuted = !isMuted;
+    });
+    _controller?.setVolume(isMuted ? 0 : 1);
+    widget.mute(isMuted);
+  }
+
+  Future<String> _loadGifFromAssets() async {
+    if (_cachedGifPath != null) return _cachedGifPath!;
+    final byteData = await rootBundle.load(
+        'packages/stoyco_shared/lib/assets/gifs/stoyco_icon_animated.gif');
+    final tempDir = await getTemporaryDirectory();
+    final logoFile = File('${tempDir.path}/stoyco_icon_animated.gif');
+    await logoFile.writeAsBytes(byteData.buffer.asUint8List());
+    _cachedGifPath = logoFile.path;
+    return _cachedGifPath!;
+  }
+
+  Future<void> _handleShare() async {
+    File? tempFile;
+    File? originalFile;
+
+    // Configuration variables for the logo
+    final int logoWidth = 100;
+    final int logoHeight = 150;
+    final String overlayX = '(main_w-overlay_w)-30';
+    final String overlayY = 'main_h-overlay_h-30';
+
+    // Build the FFmpeg filter using the variables
+    final String filterComplex =
+        '[1:v]scale=$logoWidth:$logoHeight[logo];[0:v][logo]overlay=$overlayX:$overlayY:shortest=1';
+
+    // Text to share
+    final video = widget.videoInfo.video;
+    final videoUrl = video.videoUrl;
+    final shareText = '''${video.name}
+Watch video: $videoUrl''';
+
+    try {
+      setState(() {
+        _isSharing = true;
+      });
+
+      if (videoUrl != null) {
+        // Load animated GIF from assets and obtain the path
+        final gifPath = await _loadGifFromAssets();
+
+        final outputPath =
+            '${(await getTemporaryDirectory()).path}/${video.name?.replaceAll(' ', '_') ?? 'video${video.id}'}_with_watermark.mp4';
+        debugPrint('Output path: $outputPath');
+        tempFile = File(outputPath);
+
+        // Local function that executes a command and shares the video if successful
+        Future<bool> tryExecuteCommand(String command) async {
+          final session = await FFmpegKit.execute(command);
+          final returnCode = await session.getReturnCode();
+          if (ReturnCode.isSuccess(returnCode) && await tempFile!.exists()) {
+            await _controller?.pause();
+            await Share.shareXFiles([XFile(tempFile!.path)], text: shareText);
+            return true;
+          }
+          return false;
+        }
+
+        // First attempt: using h264_mediacodec
+        final command1 =
+            '-i $videoUrl -stream_loop -1 -i $gifPath -filter_complex "$filterComplex" -c:v h264_mediacodec -c:a copy $outputPath';
+        if (!(await tryExecuteCommand(command1))) {
+          // Second attempt: using mpeg4 codec
+          final command2 =
+              '-i $videoUrl -stream_loop -1 -i $gifPath -filter_complex "$filterComplex" -c:v mpeg4 -q:v 3 -c:a copy $outputPath';
+          if (!(await tryExecuteCommand(command2))) {
+            // Third attempt: share original video without watermark
+            final tempOrigPath =
+                '${(await getTemporaryDirectory()).path}/original_${video.name?.replaceAll(' ', '_') ?? 'video${video.id}'}.mp4';
+            originalFile = File(tempOrigPath);
+            final result =
+                await FFmpegKit.execute('-i $videoUrl -c copy $tempOrigPath');
+            final origReturnCode = await result.getReturnCode();
+            if (ReturnCode.isSuccess(origReturnCode) &&
+                await originalFile.exists()) {
+              await Share.shareXFiles([XFile(originalFile.path)],
+                  text: shareText);
+            }
+          }
+        }
+      }
+
+      if (widget.play) {
+        await _controller?.play();
+      }
+      if (widget.onShare != null) {
+        widget.onShare!();
+      }
+    } catch (e) {
+      if (widget.play) {
+        await _controller?.play();
+      }
+      debugPrint('Error sharing video: $e');
+    } finally {
+      try {
+        if (tempFile != null && await tempFile.exists()) {
+          await tempFile.delete();
+        }
+        if (originalFile != null && await originalFile.exists()) {
+          await originalFile.delete();
+        }
+      } catch (e) {
+        StoyCoLogger.error('Error deleting temporary files: $e');
+      }
+      if (mounted && !isDisposed) {
+        setState(() {
+          _isSharing = false;
+        });
+      }
+    }
+  }
+
+  /// Updates video playback state when widget properties change.
+  ///
+  /// Manages play/pause state transitions based on [widget.play] changes.
+  @override
+  void didUpdateWidget(ParallaxVideoCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (_controller == null || isDisposed) return;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && !isDisposed) {
+        if (widget.play && !oldWidget.play) {
+          _controller?.play();
+        } else if (!widget.play && oldWidget.play) {
+          _controller?.pause();
+        }
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+        builder: (context, constraints) {
+          final size = constraints.maxWidth;
+          return SizedBox(
+            width: size,
+            height: size,
+            child: VisibilityDetector(
+              key: Key('video-card-${widget.videoInfo.videoUrl}'),
+              onVisibilityChanged: (visibilityInfo) {
+                if (_controller == null) return;
+
+                final double visiblePercentage =
+                    visibilityInfo.visibleFraction * 100;
+
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted && !isDisposed) {
+                    if (visiblePercentage == 0) {
+                      _controller?.pause();
+                    } else if (widget.play) {
+                      _controller?.play();
+                    }
+                  }
+                });
+              },
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      offset: const Offset(0, 6),
+                      blurRadius: 8,
                     ),
-                  ),
-                ],
+                  ],
+                  image: widget.thumbnail != null
+                      ? DecorationImage(
+                          image: widget.thumbnail!.image,
+                          fit: BoxFit.cover,
+                          opacity: 0.3,
+                        )
+                      : null,
+                ),
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: FutureBuilder(
+                        future: _initializeVideoPlayerFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                                  ConnectionState.done &&
+                              _isPlayerInitialized &&
+                              _controller != null) {
+                            return VideoPlayer(_controller!);
+                          }
+                          return const Center(
+                            child: CircularProgressIndicator(
+                              color: Color(0xFF4f1fe6),
+                              backgroundColor: Colors.white,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    Positioned(
+                      left: 20,
+                      top: 20,
+                      child: Stack(
+                        children: [
+                          Transform.scale(
+                            scale: 0.7,
+                            child: CircularProgressIndicator(
+                              value: _currentTime,
+                              backgroundColor: Colors.white,
+                              color: const Color(0xFF4f1fe6),
+                            ),
+                          ),
+                          Positioned.fill(
+                            child: Center(
+                              child: Text(
+                                _controller?.value.isInitialized == true
+                                    ? (_controller!.value.duration.inSeconds -
+                                            _controller!
+                                                .value.position.inSeconds)
+                                        .toString()
+                                    : '0',
+                                textScaler: TextScaler.noScaling,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize:
+                                      StoycoScreenSize.fontSize(context, 12),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                      left: 20,
+                      bottom: 20,
+                      right: 60,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.videoInfo.video.name ?? '',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: StoycoScreenSize.fontSize(context, 16),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            widget.videoInfo.video.description ?? '',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: StoycoScreenSize.fontSize(context, 14),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                      top: 20,
+                      right: 20,
+                      bottom: 20,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                            onTap: toggleMute,
+                            child: Icon(
+                              isMuted ? Icons.volume_off : Icons.volume_up,
+                              color: Colors.white,
+                              size: 24,
+                            ),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              if (widget.showInteractions) ...[
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    InkWell(
+                                      onTap: widget.onLike,
+                                      child: SvgPicture.asset(
+                                        !widget.videoInfo.hasLiked
+                                            ? 'packages/stoyco_shared/lib/assets/icons/reaction_arrow_up.svg'
+                                            : 'packages/stoyco_shared/lib/assets/icons/reaction_arrow_up_filled.svg',
+                                        width:
+                                            StoycoScreenSize.width(context, 20),
+                                      ),
+                                    ),
+                                    Gap(StoycoScreenSize.width(context, 8.05)),
+                                    Text(
+                                      '${widget.videoInfo.video.videoMetadata?.likes ?? 0}',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: StoycoScreenSize.fontSize(
+                                          context,
+                                          14,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Gap(StoycoScreenSize.width(context, 10)),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    InkWell(
+                                      onTap: widget.onDislike,
+                                      child: Transform(
+                                        alignment: Alignment.center,
+                                        transform: Matrix4.rotationZ(3.14159),
+                                        child: SvgPicture.asset(
+                                          !widget.videoInfo.hasDisliked
+                                              ? 'packages/stoyco_shared/lib/assets/icons/reaction_arrow_up.svg'
+                                              : 'packages/stoyco_shared/lib/assets/icons/reaction_arrow_up_filled.svg',
+                                          width: StoycoScreenSize.width(
+                                            context,
+                                            20,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Gap(StoycoScreenSize.width(context, 8.05)),
+                                    Text(
+                                      '${widget.videoInfo.video.videoMetadata?.dislikes ?? 0}',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: StoycoScreenSize.fontSize(
+                                          context,
+                                          14,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Gap(StoycoScreenSize.width(context, 10)),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    InkWell(
+                                      onTap: _isSharing ? null : _handleShare,
+                                      child: _isSharing
+                                          ? SizedBox(
+                                              width: StoycoScreenSize.width(
+                                                context,
+                                                20,
+                                              ),
+                                              height: StoycoScreenSize.width(
+                                                context,
+                                                20,
+                                              ),
+                                              child:
+                                                  const CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                                color: Colors.white,
+                                              ),
+                                            )
+                                          : SvgPicture.asset(
+                                              'packages/stoyco_shared/lib/assets/icons/share_outlined_icon.svg',
+                                              width: StoycoScreenSize.width(
+                                                context,
+                                                20,
+                                              ),
+                                              color: Colors.white,
+                                            ),
+                                    ),
+                                    Gap(StoycoScreenSize.width(context, 8.05)),
+                                    Text(
+                                      '${widget.videoInfo.video.videoMetadata?.shared ?? 0}',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: StoycoScreenSize.fontSize(
+                                          context,
+                                          14,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
-  }
-
-  /// Generates a thumbnail for a video URL.
-  ///
-  /// Returns null if thumbnail generation fails.
-  Future<Image?> getVideoThumbnail(
-    String url,
-  ) async {
-    try {
-      final uint8list = await VideoThumbnail.thumbnailData(
-        video: url,
-        imageFormat: ImageFormat.JPEG,
+        },
       );
-      return Image.memory(uint8list);
-    } catch (e) {
-      StoyCoLogger.error('Error getting video thumbnail: $e');
-    }
-    return null;
-  }
 }

@@ -1,15 +1,21 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
+import 'package:ffmpeg_kit_flutter_full/ffmpeg_kit.dart';
+import 'package:ffmpeg_kit_flutter_full/return_code.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
+import 'package:stoyco_shared/utils/logger.dart';
 import 'package:stoyco_shared/video/models/video_info_with_user_interaction.dart';
 import 'package:stoyco_shared/video/video_with_interactions/video_cache_service.dart';
 import 'package:video_player/video_player.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:path_provider/path_provider.dart';
 
 /// A video card widget that displays video content with interactive features and parallax effects.
 ///
@@ -73,6 +79,8 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
   double _currentTime = 0;
   bool isMuted = false;
   bool isDisposed = false;
+  bool _isSharing = false; // Add this variable to track sharing state
+  String? _cachedGifPath; // New variable for caching GIF path
 
   @override
   void initState() {
@@ -166,39 +174,114 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
     widget.mute(isMuted);
   }
 
-  /// Handles the share functionality for the video.
-  ///
-  /// This method:
-  /// 1. Pauses the video
-  /// 2. Shares the video information
-  /// 3. Resumes playback if needed
-  /// 4. Handles any errors during sharing
+  Future<String> _loadGifFromAssets() async {
+    if (_cachedGifPath != null) return _cachedGifPath!;
+    final byteData =
+        await rootBundle.load('assets/gifs/stoyco_icon_animated.gif');
+    final tempDir = await getTemporaryDirectory();
+    final logoFile = File('${tempDir.path}/stoyco_icon_animated.gif');
+    await logoFile.writeAsBytes(byteData.buffer.asUint8List());
+    _cachedGifPath = logoFile.path;
+    return _cachedGifPath!;
+  }
+
   Future<void> _handleShare() async {
+    File? tempFile;
+    File? originalFile;
+
+    // Configuration variables for the logo
+    final int logoWidth = 100;
+    final int logoHeight = 150;
+    final String overlayX = '(main_w-overlay_w)-30';
+    final String overlayY = 'main_h-overlay_h-30';
+
+    // Build the FFmpeg filter using the variables
+    final String filterComplex =
+        '[1:v]scale=$logoWidth:$logoHeight[logo];[0:v][logo]overlay=$overlayX:$overlayY:shortest=1';
+
+    // Text to share
+    final video = widget.videoInfo.video;
+    final videoUrl = video.videoUrl;
+    final shareText = '''${video.name}
+Watch video: $videoUrl''';
+
     try {
-      // Pause video before sharing
-      unawaited(_controller?.pause());
+      setState(() {
+        _isSharing = true;
+      });
 
-      final video = widget.videoInfo.video;
-      final String text = '''Mira este video: ${video.name}
-${video.description}
+      if (videoUrl != null) {
+        // Load animated GIF from assets and obtain the path
+        final gifPath = await _loadGifFromAssets();
 
-Ver video: ${video.videoUrl}''';
+        final outputPath =
+            '${(await getTemporaryDirectory()).path}/${video.name?.replaceAll(' ', '_') ?? 'video${video.id}'}_with_watermark.mp4';
+        debugPrint('Output path: $outputPath');
+        tempFile = File(outputPath);
 
-      await Share.share(subject: 'Mira este video en Stoyco', text);
-      // Resume video playback if it was playing before
-      if (widget.play) {
-        unawaited(_controller?.play());
+        // Local function that executes a command and shares the video if successful
+        Future<bool> tryExecuteCommand(String command) async {
+          final session = await FFmpegKit.execute(command);
+          final returnCode = await session.getReturnCode();
+          if (ReturnCode.isSuccess(returnCode) && await tempFile!.exists()) {
+            await _controller?.pause();
+            await Share.shareXFiles([XFile(tempFile!.path)], text: shareText);
+            return true;
+          }
+          return false;
+        }
+
+        // First attempt: using h264_mediacodec
+        final command1 =
+            '-i $videoUrl -stream_loop -1 -i $gifPath -filter_complex "$filterComplex" -c:v h264_mediacodec -c:a copy $outputPath';
+        if (!(await tryExecuteCommand(command1))) {
+          // Second attempt: using mpeg4 codec
+          final command2 =
+              '-i $videoUrl -stream_loop -1 -i $gifPath -filter_complex "$filterComplex" -c:v mpeg4 -q:v 3 -c:a copy $outputPath';
+          if (!(await tryExecuteCommand(command2))) {
+            // Third attempt: share original video without watermark
+            final tempOrigPath =
+                '${(await getTemporaryDirectory()).path}/original_${video.name?.replaceAll(' ', '_') ?? 'video${video.id}'}.mp4';
+            originalFile = File(tempOrigPath);
+            final result =
+                await FFmpegKit.execute('-i $videoUrl -c copy $tempOrigPath');
+            final origReturnCode = await result.getReturnCode();
+            if (ReturnCode.isSuccess(origReturnCode) &&
+                await originalFile.exists()) {
+              await Share.shareXFiles([XFile(originalFile.path)],
+                  text: shareText);
+            }
+          }
+        }
       }
 
+      if (widget.play) {
+        await _controller?.play();
+      }
       if (widget.onShare != null) {
         widget.onShare!();
       }
     } catch (e) {
-      // Resume video playback even if sharing fails
       if (widget.play) {
-        unawaited(_controller?.play());
+        await _controller?.play();
       }
       debugPrint('Error sharing video: $e');
+    } finally {
+      try {
+        if (tempFile != null && await tempFile.exists()) {
+          await tempFile.delete();
+        }
+        if (originalFile != null && await originalFile.exists()) {
+          await originalFile.delete();
+        }
+      } catch (e) {
+        StoyCoLogger.error('Error deleting temporary files: $e');
+      }
+      if (mounted && !isDisposed) {
+        setState(() {
+          _isSharing = false;
+        });
+      }
     }
   }
 
@@ -436,13 +519,31 @@ Ver video: ${video.videoUrl}''';
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     InkWell(
-                                      onTap: _handleShare,
-                                      child: SvgPicture.asset(
-                                        'packages/stoyco_shared/lib/assets/icons/share_outlined_icon.svg',
-                                        width:
-                                            StoycoScreenSize.width(context, 20),
-                                        color: Colors.white,
-                                      ),
+                                      onTap: _isSharing ? null : _handleShare,
+                                      child: _isSharing
+                                          ? SizedBox(
+                                              width: StoycoScreenSize.width(
+                                                context,
+                                                20,
+                                              ),
+                                              height: StoycoScreenSize.width(
+                                                context,
+                                                20,
+                                              ),
+                                              child:
+                                                  const CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                                color: Colors.white,
+                                              ),
+                                            )
+                                          : SvgPicture.asset(
+                                              'packages/stoyco_shared/lib/assets/icons/share_outlined_icon.svg',
+                                              width: StoycoScreenSize.width(
+                                                context,
+                                                20,
+                                              ),
+                                              color: Colors.white,
+                                            ),
                                     ),
                                     Gap(StoycoScreenSize.width(context, 8.05)),
                                     Text(
