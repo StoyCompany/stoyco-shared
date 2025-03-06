@@ -6,6 +6,7 @@ import 'package:either_dart/either.dart';
 import 'package:get_thumbnail_video/index.dart';
 import 'package:get_thumbnail_video/video_thumbnail.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:stoyco_shared/envs/envs.dart';
 import 'package:stoyco_shared/utils/logger.dart';
 import 'package:stoyco_shared/video/models/video_info_with_user_interaction.dart';
 
@@ -41,6 +42,7 @@ class VideoSlider extends StatefulWidget {
     this.height,
     required this.getVideosWithMetadata,
     required this.getUserVideoInteractionData,
+    required this.env,
   });
 
   /// Whether to show interaction buttons (like, dislike, share).
@@ -76,6 +78,9 @@ class VideoSlider extends StatefulWidget {
 
   /// Optional height of the slider. If not provided, uses screen width.
   final double? height;
+
+  /// The current environment.
+  final StoycoEnvironment env;
 
   @override
   State<VideoSlider> createState() => _VideoSliderState();
@@ -401,6 +406,7 @@ class _VideoSliderState extends State<VideoSlider> {
                       },
                       isMuted: isMuted,
                       isLooping: videosList.length == 1,
+                      env: widget.env,
                     ),
                   ),
                 ],

@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
+import 'package:stoyco_shared/envs/envs.dart';
 import 'package:stoyco_shared/utils/logger.dart';
 import 'package:stoyco_shared/video/models/video_info_with_user_interaction.dart';
 import 'package:stoyco_shared/video/video_with_interactions/video_cache_service.dart';
@@ -45,6 +46,7 @@ class ParallaxVideoCard extends StatefulWidget {
   /// * [overlayX] - X position offset of the watermark from right edge (default: 30)
   /// * [overlayY] - Y position offset of the watermark from bottom edge (default: 30)
   /// * [shareText] - Custom text to add when sharing (default: video name and URL)
+  /// * [env] - StoycoEnvironment for environment-specific configurations
   const ParallaxVideoCard({
     super.key,
     required this.videoInfo,
@@ -63,6 +65,7 @@ class ParallaxVideoCard extends StatefulWidget {
     this.overlayX,
     this.overlayY,
     this.shareText,
+    required this.env,
   });
 
   final VideoInfoWithUserInteraction videoInfo;
@@ -81,6 +84,7 @@ class ParallaxVideoCard extends StatefulWidget {
   final int? overlayX;
   final int? overlayY;
   final String? shareText;
+  final StoycoEnvironment env;
 
   @override
   State<ParallaxVideoCard> createState() => _ParallaxVideoCardState();
@@ -97,6 +101,9 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
   bool _isSharing = false; // Add this variable to track sharing state
   String? _cachedGifPath; // New variable for caching GIF path
 
+  /// Gets the video base URL based on the current environment
+  String _getVideoBaseUrl() => widget.env.videoBaseUrl;
+
   @override
   void initState() {
     super.initState();
@@ -112,7 +119,8 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
   /// 3. Configures looping and volume settings
   Future<void> _initializeController() async {
     try {
-      final videoUrl = widget.videoInfo.video.videoUrl ?? '';
+      final videoUrl =
+          _getVideoBaseUrl() + (widget.videoInfo.video.appUrl ?? '');
       final controller = await _videoCacheService.getController(videoUrl);
 
       if (!mounted) return;
@@ -220,7 +228,7 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
 
     // Text to share
     final video = widget.videoInfo.video;
-    final videoUrl = video.videoUrl;
+    final videoUrl = _getVideoBaseUrl() + (widget.videoInfo.video.appUrl ?? '');
     final shareText = widget.shareText ??
         '''${video.name}
 Watch video: $videoUrl''';
@@ -230,7 +238,7 @@ Watch video: $videoUrl''';
         _isSharing = true;
       });
 
-      if (videoUrl != null) {
+      if (videoUrl != _getVideoBaseUrl()) {
         // Load animated GIF from assets and obtain the path
         final gifPath = await _loadGifFromAssets();
 

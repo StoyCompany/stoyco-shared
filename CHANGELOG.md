@@ -1,3 +1,7 @@
+## 15.0.0
+
+- **feat:** Add environment-specific video base URL handling in ParallaxVideoCard
+
 ## 14.0.4
 
 - **feat:** Refactor video thumbnail handling to use a Map for improved indexing and loading state management

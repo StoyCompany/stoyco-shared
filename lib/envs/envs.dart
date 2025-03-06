@@ -45,4 +45,15 @@ extension StoycoEnvironmentExtension on StoycoEnvironment {
         return 'https://5ug8wcd6a1.execute-api.us-east-1.amazonaws.com/prod/v1/';
     }
   }
+
+  String get videoBaseUrl {
+    switch (this) {
+      case StoycoEnvironment.development:
+        return 'https://videos.app.stoyco.io/';
+      case StoycoEnvironment.production:
+        return 'https://prod.videos.app.stoyco.io/';
+      case StoycoEnvironment.testing:
+        return 'https://videos.app.stoyco.io/';
+    }
+  }
 }
