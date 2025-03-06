@@ -230,7 +230,7 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
     final videoUrl = (widget.videoInfo.video.appUrl ?? '');
     final shareText = widget.shareText ??
         '''${video.name}
-Watch video: $videoUrl''';
+Ver video: $videoUrl''';
 
     try {
       setState(() {
