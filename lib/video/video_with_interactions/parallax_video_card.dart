@@ -119,8 +119,7 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
   /// 3. Configures looping and volume settings
   Future<void> _initializeController() async {
     try {
-      final videoUrl =
-          _getVideoBaseUrl() + (widget.videoInfo.video.appUrl ?? '');
+      final videoUrl = (widget.videoInfo.video.appUrl ?? '');
       final controller = await _videoCacheService.getController(videoUrl);
 
       if (!mounted) return;
@@ -228,7 +227,7 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
 
     // Text to share
     final video = widget.videoInfo.video;
-    final videoUrl = _getVideoBaseUrl() + (widget.videoInfo.video.appUrl ?? '');
+    final videoUrl = (widget.videoInfo.video.appUrl ?? '');
     final shareText = widget.shareText ??
         '''${video.name}
 Watch video: $videoUrl''';
@@ -238,7 +237,7 @@ Watch video: $videoUrl''';
         _isSharing = true;
       });
 
-      if (videoUrl != _getVideoBaseUrl()) {
+      if (videoUrl != videoUrl) {
         // Load animated GIF from assets and obtain the path
         final gifPath = await _loadGifFromAssets();
 
