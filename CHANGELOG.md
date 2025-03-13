@@ -1,3 +1,7 @@
+## 15.1.0
+
+- **feat:** Add new parameters for responsive behavior in a single method call
+
 ## 15.0.0
 
 - **feat:** Add environment-specific video base URL handling in ParallaxVideoCard
