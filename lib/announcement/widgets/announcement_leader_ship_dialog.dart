@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:stoyco_shared/announcement/models/announcement_leaderboard_item.dart';
-import 'package:stoyco_shared/announcement/utils/announcement_deatils_uitls.dart';
+import 'package:stoyco_shared/announcement/utils/announcement_details_utils.dart';
 import 'package:stoyco_shared/announcement/widgets/gradient_container.dart';
 
 import 'package:stoyco_shared/design/colors.dart';
@@ -48,7 +48,7 @@ class _AnnouncementLeaderShipDialogState
   void initState() {
     super.initState();
     endDateText =
-        'Ultima actualización: ${AnnouncementDeatilsUitls.formatDate(widget.updatedDate)}';
+        'Ultima actualización: ${AnnouncementDetailsUtils.formatDate(widget.updatedDate)}';
     _loadInitialData();
     _scrollController.addListener(_scrollListener);
   }

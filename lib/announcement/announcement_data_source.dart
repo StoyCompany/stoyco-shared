@@ -18,7 +18,6 @@ class AnnouncementDataSource {
     return response;
   }
 
-  ///api/announcement/{announcement_id}
   Future<Response> getById({required String announcementId}) async {
     final cancelToken = CancelToken();
     final response = await _dio.get(

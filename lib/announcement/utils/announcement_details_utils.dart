@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/utils/logger.dart';
 
-class AnnouncementDeatilsUitls {
+class AnnouncementDetailsUtils {
   static String formatDate(String dateString) {
     if (dateString.isEmpty) return '';
 
