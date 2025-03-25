@@ -1,3 +1,7 @@
+## 16.2.0
+
+- **feat:** Implement getAnnouncementById method in AnnouncementDataSource and update repository and service layers
+
 ## 16.1.0
 
 - **feat:** Add AnnouncementDataSource for fetching announcements; update models and generated files

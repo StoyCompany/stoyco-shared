@@ -93,11 +93,10 @@ class AnnouncementService {
     }
   }
 
-  static Future<Either<Failure, AnnouncementModel>> getAnnouncementById(
+  Future<Either<Failure, AnnouncementModel>> getAnnouncementById(
     String newId,
-  ) async {
-    throw UnimplementedError();
-  }
+  ) async =>
+      _announcementRepository!.getAnnouncementById(newId);
 
   static Future<Either<Failure, bool>> markAsViewed(String newId) async {
     throw UnimplementedError();

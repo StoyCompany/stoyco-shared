@@ -36,4 +36,25 @@ class AnnouncementRepository {
       return Left(ExceptionFailure.decode(error));
     }
   }
+
+  Future<Either<Failure, AnnouncementModel>> getAnnouncementById(
+    String announcementId,
+  ) async {
+    try {
+      final response = await _announcementDataSource.getById(
+        announcementId: announcementId,
+      );
+
+      final AnnouncementModel announcement = AnnouncementMapper.fromDto(
+        AnnouncementDto.fromJson(response.data as Map<String, dynamic>),
+      );
+      return Right(announcement);
+    } on DioException catch (error) {
+      return Left(DioFailure.decode(error));
+    } on Error catch (error) {
+      return Left(ErrorFailure.decode(error));
+    } on Exception catch (error) {
+      return Left(ExceptionFailure.decode(error));
+    }
+  }
 }
