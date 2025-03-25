@@ -1,3 +1,7 @@
+## 16.0.0
+
+- **feat:** Add AnnouncementModel with JSON serialization and megaphone icon asset
+
 ## 15.1.0
 
 - **feat:** Add new parameters for responsive behavior in a single method call
