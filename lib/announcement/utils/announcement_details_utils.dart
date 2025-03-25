@@ -72,6 +72,14 @@ class AnnouncementDetailsUtils {
     final bool containsImage =
         element.children.any((child) => child.localName == 'img');
 
+    // Base styles - set all text to white
+    final Map<String, String> baseStyles = {
+      'color': 'white',
+    };
+
+    // Element-specific styles
+    Map<String, String> elementSpecificStyles = {};
+
     switch (element.localName) {
       case 'p':
         String textAlign = 'justify';
@@ -82,7 +90,7 @@ class AnnouncementDetailsUtils {
             textAlign = 'center';
           }
         }
-        return {
+        elementSpecificStyles = {
           'font-size': '${StoycoScreenSize.fontSize(
             context,
             14,
@@ -105,7 +113,7 @@ class AnnouncementDetailsUtils {
           'object-fit': 'cover',
         };
       case 'h1':
-        return {
+        elementSpecificStyles = {
           'font-size': '${StoycoScreenSize.fontSize(
             context,
             isPhone ? 16 : 24,
@@ -116,7 +124,7 @@ class AnnouncementDetailsUtils {
           'font-weight': 'bold',
         };
       case 'h2':
-        return {
+        elementSpecificStyles = {
           'font-size': '${StoycoScreenSize.fontSize(
             context,
             isPhone ? 15 : 20,
@@ -127,7 +135,7 @@ class AnnouncementDetailsUtils {
           'font-weight': 'bold',
         };
       case 'h3':
-        return {
+        elementSpecificStyles = {
           'font-size': '${StoycoScreenSize.fontSize(
             context,
             isPhone ? 14 : 16,
@@ -138,7 +146,7 @@ class AnnouncementDetailsUtils {
           'font-weight': 'bold',
         };
       case 'h4':
-        return {
+        elementSpecificStyles = {
           'font-size': '${StoycoScreenSize.fontSize(
             context,
             isPhone ? 13 : 14,
@@ -149,7 +157,8 @@ class AnnouncementDetailsUtils {
           'font-weight': 'bold',
         };
       case 'a':
-        return {
+        elementSpecificStyles = {
+          // Links can keep their blue color
           'color': '#579dff',
           'font-weight': 'bold',
           'text-decoration': 'none',
@@ -163,10 +172,14 @@ class AnnouncementDetailsUtils {
         };
       default:
         if (element.classes.contains('ql-align-right')) {
-          return {'text-align': 'right'};
+          elementSpecificStyles = {
+            'text-align': 'right',
+          };
         }
-        return null;
     }
+
+    // Merge base styles with element-specific styles
+    return {...baseStyles, ...elementSpecificStyles};
   }
 
   static int calculateCrossAxisCount(
