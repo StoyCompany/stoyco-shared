@@ -182,6 +182,32 @@ class AnnouncementDetailsUtils {
     return {...baseStyles, ...elementSpecificStyles};
   }
 
+  static String removeBackgroundColors(String htmlContent) {
+    // Remove background-color inline styles
+    final RegExp backgroundColorRegex = RegExp(
+      r'background-color:\s*[^;]*;',
+      caseSensitive: false,
+    );
+    String result = htmlContent.replaceAll(backgroundColorRegex, '');
+
+    // Remove background inline styles
+    final RegExp backgroundRegex = RegExp(
+      r'background:\s*[^;]*;',
+      caseSensitive: false,
+    );
+    result = result.replaceAll(backgroundRegex, '');
+
+    // Replace all text colors with white
+    final RegExp colorRegex = RegExp(
+      r'color:\s*[^;]*;',
+      caseSensitive: false,
+    );
+    result = result.replaceAll(colorRegex, 'color: white;');
+
+    return result;
+  }
+
+
   static int calculateCrossAxisCount(
     double maxWidth,
     double minCardWidth,

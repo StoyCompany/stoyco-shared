@@ -35,7 +35,7 @@ class _AnnouncementPrizePanelState extends State<AnnouncementPrizePanel> {
             desktopLarge: 24,
           ),
           child: HtmlWidget(
-            widget.prizeText,
+            AnnouncementDetailsUtils.removeBackgroundColors(widget.prizeText),
             customStylesBuilder: _buildHtmlCustomStyles,
             onTapUrl: _handleUrlTap,
           ),
