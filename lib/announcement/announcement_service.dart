@@ -103,8 +103,7 @@ class AnnouncementService {
     throw UnimplementedError();
   }
 
-  //getAnnouncementPaginated
-  static Future<Either<Failure, PageResult<AnnouncementModel>>>
+  Future<Either<Failure, PageResult<AnnouncementModel>>>
       getAnnouncementPaginated(FilterRequest filters) async =>
           _instance!._announcementRepository!.getAnnouncementsPaginated(
             filters,
