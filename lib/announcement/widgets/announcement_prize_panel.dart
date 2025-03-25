@@ -17,6 +17,7 @@ class AnnouncementPrizePanel extends StatefulWidget {
     this.reverse = false,
     this.primary,
     this.padding,
+    this.showScrollbar = false,
   });
 
   final String prizeText;
@@ -28,6 +29,7 @@ class AnnouncementPrizePanel extends StatefulWidget {
   final bool reverse;
   final bool? primary;
   final EdgeInsetsGeometry? padding;
+  final bool showScrollbar;
   static const double _defaultBorderRadius = 20.0;
 
   @override
@@ -35,6 +37,14 @@ class AnnouncementPrizePanel extends StatefulWidget {
 }
 
 class _AnnouncementPrizePanelState extends State<AnnouncementPrizePanel> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) => SizedBox(
         width: double.infinity,
@@ -56,21 +66,7 @@ class _AnnouncementPrizePanelState extends State<AnnouncementPrizePanel> {
           child: widget.maxHeight != null
               ? ConstrainedBox(
                   constraints: BoxConstraints(maxHeight: widget.maxHeight!),
-                  child: SingleChildScrollView(
-                    scrollDirection: widget.scrollDirection,
-                    physics: widget.scrollPhysics,
-                    clipBehavior: widget.clipBehavior,
-                    keyboardDismissBehavior: widget.keyboardDismissBehavior,
-                    reverse: widget.reverse,
-                    primary: widget.primary,
-                    padding: widget.padding,
-                    child: HtmlWidget(
-                      AnnouncementDetailsUtils.removeBackgroundColors(
-                          widget.prizeText),
-                      customStylesBuilder: _buildHtmlCustomStyles,
-                      onTapUrl: _handleUrlTap,
-                    ),
-                  ),
+                  child: _buildScrollableContent(),
                 )
               : HtmlWidget(
                   AnnouncementDetailsUtils.removeBackgroundColors(
@@ -80,6 +76,32 @@ class _AnnouncementPrizePanelState extends State<AnnouncementPrizePanel> {
                 ),
         ),
       );
+
+  Widget _buildScrollableContent() {
+    final scrollView = SingleChildScrollView(
+      controller: _scrollController,
+      scrollDirection: widget.scrollDirection,
+      physics: widget.scrollPhysics,
+      clipBehavior: widget.clipBehavior,
+      keyboardDismissBehavior: widget.keyboardDismissBehavior,
+      reverse: widget.reverse,
+      primary: widget.primary,
+      padding: widget.padding,
+      child: HtmlWidget(
+        AnnouncementDetailsUtils.removeBackgroundColors(widget.prizeText),
+        customStylesBuilder: _buildHtmlCustomStyles,
+        onTapUrl: _handleUrlTap,
+      ),
+    );
+
+    return widget.showScrollbar
+        ? Scrollbar(
+            controller: _scrollController,
+            thumbVisibility: true,
+            child: scrollView,
+          )
+        : scrollView;
+  }
 
   double _responsiveRadius(
     double radius, {
