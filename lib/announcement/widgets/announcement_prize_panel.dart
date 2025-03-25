@@ -6,9 +6,28 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class AnnouncementPrizePanel extends StatefulWidget {
-  const AnnouncementPrizePanel({super.key, required this.prizeText});
+  const AnnouncementPrizePanel({
+    super.key,
+    required this.prizeText,
+    this.maxHeight,
+    this.scrollDirection = Axis.vertical,
+    this.scrollPhysics,
+    this.clipBehavior = Clip.hardEdge,
+    this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
+    this.reverse = false,
+    this.primary,
+    this.padding,
+  });
 
   final String prizeText;
+  final double? maxHeight;
+  final Axis scrollDirection;
+  final ScrollPhysics? scrollPhysics;
+  final Clip clipBehavior;
+  final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
+  final bool reverse;
+  final bool? primary;
+  final EdgeInsetsGeometry? padding;
   static const double _defaultBorderRadius = 20.0;
 
   @override
@@ -34,11 +53,31 @@ class _AnnouncementPrizePanelState extends State<AnnouncementPrizePanel> {
             tablet: 18,
             desktopLarge: 24,
           ),
-          child: HtmlWidget(
-            AnnouncementDetailsUtils.removeBackgroundColors(widget.prizeText),
-            customStylesBuilder: _buildHtmlCustomStyles,
-            onTapUrl: _handleUrlTap,
-          ),
+          child: widget.maxHeight != null
+              ? ConstrainedBox(
+                  constraints: BoxConstraints(maxHeight: widget.maxHeight!),
+                  child: SingleChildScrollView(
+                    scrollDirection: widget.scrollDirection,
+                    physics: widget.scrollPhysics,
+                    clipBehavior: widget.clipBehavior,
+                    keyboardDismissBehavior: widget.keyboardDismissBehavior,
+                    reverse: widget.reverse,
+                    primary: widget.primary,
+                    padding: widget.padding,
+                    child: HtmlWidget(
+                      AnnouncementDetailsUtils.removeBackgroundColors(
+                          widget.prizeText),
+                      customStylesBuilder: _buildHtmlCustomStyles,
+                      onTapUrl: _handleUrlTap,
+                    ),
+                  ),
+                )
+              : HtmlWidget(
+                  AnnouncementDetailsUtils.removeBackgroundColors(
+                      widget.prizeText),
+                  customStylesBuilder: _buildHtmlCustomStyles,
+                  onTapUrl: _handleUrlTap,
+                ),
         ),
       );
 
