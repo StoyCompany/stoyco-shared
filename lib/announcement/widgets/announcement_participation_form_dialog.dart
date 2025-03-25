@@ -99,7 +99,7 @@ class _ParticipationFormDialogState<T>
                   child: GestureDetector(
                     onTap: Navigator.of(context).pop,
                     child: SvgPicture.asset(
-                      'packages/stoyco_shared/lib/assets/icons/closeIcon.svg',
+                      'packages/stoyco_shared/lib/assets/icons/close_icon.svg',
                       width: StoycoScreenSize.width(context, 14),
                       height: StoycoScreenSize.height(context, 14),
                       color: const Color(0xFFFAFAFA),
