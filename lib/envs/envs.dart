@@ -56,4 +56,15 @@ extension StoycoEnvironmentExtension on StoycoEnvironment {
         return 'https://videos.app.stoyco.io/';
     }
   }
+
+  String get urlAnnouncement {
+    switch (this) {
+      case StoycoEnvironment.development:
+        return 'https://4ll60y4zfk.execute-api.us-east-1.amazonaws.com/dev/api/';
+      case StoycoEnvironment.production:
+        return 'https://4ll60y4zfk.execute-api.us-east-1.amazonaws.com/prod/api/';
+      case StoycoEnvironment.testing:
+        return 'https://4ll60y4zfk.execute-api.us-east-1.amazonaws.com/qa/api/';
+    }
+  }
 }

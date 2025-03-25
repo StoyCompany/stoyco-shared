@@ -6,7 +6,6 @@ import 'package:map_launcher/map_launcher.dart';
 
 import 'package:stoyco_shared/design/colors.dart';
 
-
 /// A class to hold latitude and longitude data.
 class Coordinates {
   /// Constructs an instance of [Coordinates].

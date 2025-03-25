@@ -1,4 +1,3 @@
-
 import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -54,8 +53,10 @@ class PageResult<T> {
     if (identical(other, this)) return true;
     if (other is! PageResult<T>) return false;
     final mapEquals = const DeepCollectionEquality().equals;
-    return mapEquals(other.toJson((value) => value as Object),
-        toJson((value) => value as Object),);
+    return mapEquals(
+      other.toJson((value) => value as Object),
+      toJson((value) => value as Object),
+    );
   }
 
   @override

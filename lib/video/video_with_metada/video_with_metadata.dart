@@ -34,7 +34,7 @@ class VideoWithMetadata {
   String toString() =>
       'VideoWithMetadata(videoMetadata: $videoMetadata, id: $id, videoUrl: $videoUrl, appUrl: $appUrl, name: $name, description: $description, order: $order, active: $active, createAt: $createAt)';
 
-  Map<String, dynamic> toJson() => _$VideoWithMetadaToJson(this);
+  Map<String, dynamic> toJson() => _$VideoWithMetadataToJson(this);
 
   VideoWithMetadata copyWith({
     VideoMetadata? videoMetadata,

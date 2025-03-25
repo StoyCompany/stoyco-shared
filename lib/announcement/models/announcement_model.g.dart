@@ -13,7 +13,9 @@ AnnouncementModel _$AnnouncementModelFromJson(Map<String, dynamic> json) =>
       mainImage: json['mainImage'] as String?,
       images:
           (json['images'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      content: json['content'] as String?,
+      content: json['content'] == null
+          ? null
+          : Content.fromJson(json['content'] as Map<String, dynamic>),
       shortDescription: json['shortDescription'] as String?,
       isDraft: json['isDraft'] as bool?,
       isPublished: json['isPublished'] as bool?,

@@ -1,3 +1,7 @@
+## 16.1.0
+
+- **feat:** Add AnnouncementDataSource for fetching announcements; update models and generated files
+
 ## 16.0.1
 
 - **feat:** feat: Add AnnouncementLeaderboardItem model and new SVG icons; update pubspec.yaml dependencies

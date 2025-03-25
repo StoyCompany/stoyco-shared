@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:stoyco_shared/announcement/models/announcement_dto/content.dart';
 
 part 'announcement_model.g.dart';
 
@@ -33,7 +34,7 @@ class AnnouncementModel {
   final String? title;
   final String? mainImage;
   final List<String>? images;
-  final String? content;
+  final Content? content;
   final String? shortDescription;
   final bool? isDraft;
   final bool? isPublished;
@@ -76,7 +77,7 @@ class AnnouncementModel {
     String? title,
     String? mainImage,
     List<String>? images,
-    String? content,
+    Content? content,
     String? shortDescription,
     bool? isDraft,
     bool? isPublished,
