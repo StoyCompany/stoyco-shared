@@ -1,3 +1,7 @@
+## 16.0.1
+
+- **feat:** feat: Add AnnouncementLeaderboardItem model and new SVG icons; update pubspec.yaml dependencies
+
 ## 16.0.0
 
 - **feat:** Add AnnouncementModel with JSON serialization and megaphone icon asset
