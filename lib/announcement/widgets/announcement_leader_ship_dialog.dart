@@ -200,7 +200,7 @@ class _AnnouncementLeaderShipDialogState
                   child: GestureDetector(
                     onTap: Navigator.of(context).pop,
                     child: SvgPicture.asset(
-                      'packages/stoyco_shared/lib/assets/icons/close_icon.svg',
+                      'packages/stoyco_shared/lib/assets/icons/simple_close_icon.svg',
                       width: StoycoScreenSize.width(
                         context,
                         14,
