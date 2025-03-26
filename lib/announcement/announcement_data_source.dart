@@ -36,7 +36,7 @@ class AnnouncementDataSource {
     final cancelToken = CancelToken();
     final response = await _dio.post(
       '${environment.urlAnnouncement}announcement/$announcementId/publications',
-      data: data,
+      data: data.toJson(),
       cancelToken: cancelToken,
     );
 

@@ -8,7 +8,7 @@ class AnnouncementParticipationViewConfig {
     this.usernamePatternMessage = 'El nombre de usuario no es válido',
     this.urlRequiredMessage = 'Este campo es requerido',
     this.urlPatternMessage = 'La URL no es válida',
-    this.buttonText = 'Particpar',
+    this.buttonText = 'Participar',
     this.buttonTextNotLogged = 'Registrarse',
     this.termsText =
         'Al presionar enviar, aceptas los Términos de Servicio y confirmas haber leído y seguido las Directrices.',
@@ -36,7 +36,7 @@ class AnnouncementParticipationViewConfig {
         urlRequiredMessage:
             json['urlRequiredMessage'] ?? 'Este campo es requerido',
         urlPatternMessage: json['urlPatternMessage'] ?? 'La URL no es válida',
-        buttonText: json['buttonText'] ?? 'Particpar',
+        buttonText: json['buttonText'] ?? 'Participar',
         buttonTextNotLogged: json['buttonTextNotLogged'] ?? 'Registrarse',
         termsText: json['termsText'] ??
             'Al presionar enviar, aceptas los Términos de Servicio y confirmas haber leído y seguido las Directrices.',
