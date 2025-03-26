@@ -12,11 +12,11 @@ import 'package:stoyco_shared/utils/logger.dart';
 import 'package:stoyco_shared/utils/text_button.dart';
 
 class AnnouncementParticipationFormDialog<T> extends StatefulWidget {
-  AnnouncementParticipationFormDialog({
+  const AnnouncementParticipationFormDialog({
     super.key,
     required this.onSubmit,
-    AnnouncementParticipationViewConfig? config,
-  }) : config = config ?? AnnouncementParticipationViewConfig();
+    config,
+  }) : config = config ?? const AnnouncementParticipationViewConfig();
 
   final Future<T> Function(Map<String, dynamic>) onSubmit;
   final AnnouncementParticipationViewConfig config;
@@ -161,18 +161,18 @@ class _ParticipationFormDialogState<T>
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Color(0xFFF8F9FA).withOpacity(0.5),
+                        color: const Color(0xFFF8F9FA).withOpacity(0.5),
                       ),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Color(0xFFF8F9FA).withOpacity(0.8),
+                        color: const Color(0xFFF8F9FA).withOpacity(0.8),
                       ),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     border: OutlineInputBorder(
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         color: Color(0xFFF8F9FA),
                       ),
                       borderRadius: BorderRadius.circular(16),
@@ -196,18 +196,18 @@ class _ParticipationFormDialogState<T>
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Color(0xFFF8F9FA).withOpacity(0.5),
+                        color: const Color(0xFFF8F9FA).withOpacity(0.5),
                       ),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Color(0xFFF8F9FA).withOpacity(0.8),
+                        color: const Color(0xFFF8F9FA).withOpacity(0.8),
                       ),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     border: OutlineInputBorder(
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         color: Color(0xFFF8F9FA),
                       ),
                       borderRadius: BorderRadius.circular(16),

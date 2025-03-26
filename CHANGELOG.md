@@ -1,3 +1,7 @@
+## 16.4.0
+
+feat: Add announcement participation models and data source methods
+
 ## 16.2.0
 
 - **feat:** Implement getAnnouncementById method in AnnouncementDataSource and update repository and service layers

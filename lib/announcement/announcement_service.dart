@@ -6,6 +6,8 @@ import 'package:stoyco_shared/announcement/announcement_data_source.dart';
 import 'package:stoyco_shared/announcement/announcement_repository.dart';
 import 'package:stoyco_shared/announcement/models/announcement_form_config.dart';
 import 'package:stoyco_shared/announcement/models/announcement_model.dart';
+import 'package:stoyco_shared/announcement/models/announcement_participation/announcement_participation.dart';
+import 'package:stoyco_shared/announcement/models/announcement_participation_response/announcement_participation_response.dart';
 import 'package:stoyco_shared/envs/envs.dart';
 import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
 import 'package:stoyco_shared/models/page_result/page_result.dart';
@@ -108,10 +110,19 @@ class AnnouncementService {
             filters,
           );
 
-  //relatedAnnouncement
   static Future<Either<Failure, List<AnnouncementModel>>> relatedAnnouncement(
     String newId,
   ) async {
     throw UnimplementedError();
   }
+
+  Future<Either<Failure, AnnouncementParticipationResponse>>
+      participateOnTiktokAnnouncement(
+    String announcementId,
+    AnnouncementParticipation data,
+  ) async =>
+          _announcementRepository!.participate(
+            announcementId,
+            data,
+          );
 }

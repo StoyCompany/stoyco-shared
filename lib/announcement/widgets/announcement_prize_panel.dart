@@ -18,6 +18,7 @@ class AnnouncementPrizePanel extends StatefulWidget {
     this.primary,
     this.padding,
     this.showScrollbar = false,
+    this.paddingScrollBar,
   });
 
   final String prizeText;
@@ -30,6 +31,7 @@ class AnnouncementPrizePanel extends StatefulWidget {
   final bool? primary;
   final EdgeInsetsGeometry? padding;
   final bool showScrollbar;
+  final EdgeInsetsGeometry? paddingScrollBar;
   static const double _defaultBorderRadius = 20.0;
 
   @override
@@ -98,7 +100,10 @@ class _AnnouncementPrizePanelState extends State<AnnouncementPrizePanel> {
         ? Scrollbar(
             controller: _scrollController,
             thumbVisibility: true,
-            child: scrollView,
+            child: Padding(
+              padding: widget.paddingScrollBar ?? EdgeInsets.zero,
+              child: scrollView,
+            ),
           )
         : scrollView;
   }

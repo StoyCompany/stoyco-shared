@@ -207,7 +207,6 @@ class AnnouncementDetailsUtils {
     return result;
   }
 
-
   static int calculateCrossAxisCount(
     double maxWidth,
     double minCardWidth,

@@ -3,6 +3,8 @@ import 'package:either_dart/either.dart';
 import 'package:stoyco_shared/announcement/announcement_data_source.dart';
 import 'package:stoyco_shared/announcement/models/announcement_dto/announcement_dto.dart';
 import 'package:stoyco_shared/announcement/models/announcement_model.dart';
+import 'package:stoyco_shared/announcement/models/announcement_participation/announcement_participation.dart';
+import 'package:stoyco_shared/announcement/models/announcement_participation_response/announcement_participation_response.dart';
 import 'package:stoyco_shared/announcement/utils/announcement_mappers.dart';
 import 'package:stoyco_shared/errors/errors.dart';
 import 'package:stoyco_shared/models/page_result/page_result.dart';
@@ -48,6 +50,28 @@ class AnnouncementRepository {
       final AnnouncementModel announcement = AnnouncementMapper.fromDto(
         AnnouncementDto.fromJson(response.data as Map<String, dynamic>),
       );
+      return Right(announcement);
+    } on DioException catch (error) {
+      return Left(DioFailure.decode(error));
+    } on Error catch (error) {
+      return Left(ErrorFailure.decode(error));
+    } on Exception catch (error) {
+      return Left(ExceptionFailure.decode(error));
+    }
+  }
+
+  Future<Either<Failure, AnnouncementParticipationResponse>> participate(
+    String announcementId,
+    AnnouncementParticipation data,
+  ) async {
+    try {
+      final response = await _announcementDataSource.participate(
+        announcementId: announcementId,
+        data: data,
+      );
+
+      final AnnouncementParticipationResponse announcement =
+          AnnouncementParticipationResponse.fromJson(response.data);
       return Right(announcement);
     } on DioException catch (error) {
       return Left(DioFailure.decode(error));
