@@ -24,8 +24,11 @@ class StoycoContentSwitch extends StatefulWidget {
   /// The [initialIndex] determines which option is selected initially.
   /// It must be less than the length of [options].
   ///
-  /// The [width] parameter sets the total width of the widget on desktop.
-  /// For mobile and tablet, the width will be adjusted automatically.
+  /// The [width] parameter sets the total width of the widget.
+  /// When [useResponsiveWidth] is true, this value will be automatically adjusted based on the screen size.
+  ///
+  /// The [height] parameter sets the total height of the widget.
+  /// When [useResponsiveHeight] is true, this value will be automatically adjusted based on the screen size.
   const StoycoContentSwitch({
     super.key,
     this.options = const ['Noticias', 'Convocatorias'],
@@ -33,6 +36,9 @@ class StoycoContentSwitch extends StatefulWidget {
     this.onItemChanged,
     this.initialIndex = 0,
     this.width = 528,
+    this.height = 41,
+    this.useResponsiveWidth = true,
+    this.useResponsiveHeight = true,
   }) : assert(options.length >= 2, 'Se requieren al menos dos opciones');
 
   /// The list of options to display.
@@ -59,6 +65,23 @@ class StoycoContentSwitch extends StatefulWidget {
   ///
   /// Defaults to 528 pixels, but can be adjusted for different layouts.
   final double width;
+
+  /// The total height of the widget.
+  ///
+  /// Defaults to 41 pixels.
+  final double height;
+
+  /// Whether to apply responsive sizing to the width.
+  ///
+  /// When true, the width will adjust based on screen size.
+  /// When false, the exact width provided will be used.
+  final bool useResponsiveWidth;
+
+  /// Whether to apply responsive sizing to the height.
+  ///
+  /// When true, the height will adjust based on screen size.
+  /// When false, the exact height provided will be used.
+  final bool useResponsiveHeight;
 
   @override
   State<StoycoContentSwitch> createState() => _StoycoContentSwitchState();
@@ -161,21 +184,27 @@ class _StoycoContentSwitchState extends State<StoycoContentSwitch>
 
   @override
   Widget build(BuildContext context) {
-    // Calculate responsive width based on screen size
-    final responsiveWidth = StoycoScreenSize.width(
-      context,
-      widget.width,
-      phone: widget.width * 0.5,
-      tablet: widget.width * 0.8,
-    );
+    // Calculate width based on responsiveness preference
+    final calculatedWidth = widget.useResponsiveWidth
+        ? StoycoScreenSize.width(
+            context,
+            widget.width,
+            phone: widget.width * 0.5,
+            tablet: widget.width * 0.8,
+          )
+        : widget.width;
 
-    // Calculate responsive height based on screen size
-    final responsiveHeight = StoycoScreenSize.height(
-      context,
-      41,
-      phone: 30,
-      tablet: 38,
-    );
+    // Calculate height based on responsiveness preference
+    final calculatedHeight = widget.useResponsiveHeight
+        ? StoycoScreenSize.height(
+            context,
+            widget.height,
+            phone: widget.height *
+                0.73, // Approximate ratio based on original values
+            tablet: widget.height *
+                0.93, // Approximate ratio based on original values
+          )
+        : widget.height;
 
     // Calculate responsive stroke width
     final strokeWidth = StoycoScreenSize.width(
@@ -196,8 +225,8 @@ class _StoycoContentSwitchState extends State<StoycoContentSwitch>
       strokeWidth: strokeWidth,
       padding: EdgeInsets.all(strokeWidth),
       child: Container(
-        height: responsiveHeight,
-        width: responsiveWidth,
+        height: calculatedHeight,
+        width: calculatedWidth,
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             begin: Alignment.topCenter,
@@ -215,7 +244,7 @@ class _StoycoContentSwitchState extends State<StoycoContentSwitch>
               animation: _animation,
               builder: (context, child) {
                 // Calculate the position of the slider
-                final optionWidth = responsiveWidth / widget.options.length;
+                final optionWidth = calculatedWidth / widget.options.length;
                 final startPosition = _previousIndex * optionWidth;
                 final endPosition = _selectedIndex * optionWidth;
                 final currentPosition = startPosition +
