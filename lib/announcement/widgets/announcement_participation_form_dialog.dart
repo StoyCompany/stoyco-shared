@@ -11,14 +11,67 @@ import 'package:stoyco_shared/utils/dialog_container.dart';
 import 'package:stoyco_shared/utils/logger.dart';
 import 'package:stoyco_shared/utils/text_button.dart';
 
+/// A dialog widget that displays a form for participation in announcements.
+///
+/// This dialog collects TikTok username and post URL from users who want to
+/// participate in an announcement or campaign.
+///
+/// ## Features:
+/// - Configurable validation patterns for username and URL
+/// - Customizable labels, hints, and error messages
+/// - Loading state management for form submission
+/// - Responsive design that adapts to different screen sizes
+///
+/// ## Example:
+///
+/// ```dart
+/// showDialog(
+///   context: context,
+///   builder: (context) => AnnouncementParticipationFormDialog<bool>(
+///     onSubmit: (formData) async {
+///       // Process the form data (e.g., send to API)
+///       final username = formData['tiktok_username'];
+///       final postUrl = formData['post_url'];
+///       return await participationService.submit(username, postUrl);
+///     },
+///     config: AnnouncementParticipationViewConfig(
+///       dialogTitle: 'Join Our Campaign',
+///       buttonText: 'Submit Entry',
+///     ),
+///   ),
+/// );
+/// ```
 class AnnouncementParticipationFormDialog<T> extends StatefulWidget {
+  /// Creates an announcement participation form dialog.
+  ///
+  /// The [onSubmit] callback is required and will be called when the user
+  /// submits the form with valid data.
+  ///
+  /// The [onPop] callback is optional and can be used to handle custom
+  /// navigation when the dialog is closed.
+  ///
+  /// The [config] parameter allows customization of the form appearance and
+  /// behavior. If not provided, default values will be used.
   const AnnouncementParticipationFormDialog({
     super.key,
     required this.onSubmit,
+    this.onPop,
     config,
   }) : config = config ?? const AnnouncementParticipationViewConfig();
 
+  /// Callback function that processes the form data when submitted.
+  ///
+  /// This function receives a map containing the form values and should return
+  /// a Future of type T (the result of the submission).
   final Future<T> Function(Map<String, dynamic>) onSubmit;
+
+  /// Optional callback to handle navigation when the dialog is closed.
+  ///
+  /// If provided, this function will be called instead of the default
+  /// Navigator.pop() with the result parameter.
+  final Function(dynamic result)? onPop;
+
+  /// Configuration options for customizing the dialog appearance and behavior.
   final AnnouncementParticipationViewConfig config;
 
   @override
@@ -26,9 +79,15 @@ class AnnouncementParticipationFormDialog<T> extends StatefulWidget {
       _ParticipationFormDialogState<T>();
 }
 
+/// State management class for the AnnouncementParticipationFormDialog.
+///
+/// Handles form creation, validation, submission, and UI state management.
 class _ParticipationFormDialogState<T>
     extends State<AnnouncementParticipationFormDialog<T>> {
+  /// Flag to track if the form is currently submitting data.
   bool _isLoading = false;
+
+  /// Form group containing the input fields and their validation rules.
   late FormGroup form;
 
   @override
@@ -40,6 +99,7 @@ class _ParticipationFormDialogState<T>
     final urlPattern = widget.config.urlPattern ??
         r'^(?:https?:\/\/(?:[\w-]+\.)*tiktok\.com(?:\/(?:@[\w.-]+\/video\/\d+(?:\?.*)?|\w+\/?)))$';
 
+    // Initialize the form with validation rules for both fields
     form = FormGroup({
       'tiktok_username': FormControl<String>(
         validators: [
@@ -56,6 +116,28 @@ class _ParticipationFormDialogState<T>
     });
   }
 
+  /// Handles closing the dialog with an optional result.
+  ///
+  /// Uses the custom onPop callback if provided, otherwise uses Navigator.pop().
+  /// Default result is false if not specified.
+  void _handlePop([dynamic result = false]) {
+    try {
+      if (widget.onPop != null) {
+        widget.onPop!(result);
+      } else {
+        Navigator.of(context).pop(result);
+      }
+    } catch (e) {
+      StoyCoLogger.error('Error during navigation pop: $e');
+      throw Exception(
+          'Navigation pop failed. Please check your navigation implementation: $e');
+    }
+  }
+
+  /// Handles the form submission process.
+  ///
+  /// Validates the form, shows loading state, calls the onSubmit callback,
+  /// and handles success or error states appropriately.
   Future<void> _handleSubmit() async {
     if (!form.valid || _isLoading) return;
 
@@ -64,14 +146,11 @@ class _ParticipationFormDialogState<T>
     });
 
     try {
-      Navigator.of(context).pop([
-        await widget.onSubmit(form.value),
-      ]);
-      //Get.back(result: await widget.onSubmit(form.value), closeOverlays: true);
+      final result = await widget.onSubmit(form.value);
+      _handlePop([result]);
     } catch (e) {
       StoyCoLogger.error('Error submitting: $e');
-      Navigator.of(context).pop(false);
-      //Get.back(result: false, closeOverlays: true);
+      _handlePop(false);
     } finally {
       if (mounted) {
         setState(() {
@@ -97,7 +176,7 @@ class _ParticipationFormDialogState<T>
                 MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
-                    onTap: Navigator.of(context).pop,
+                    onTap: () => _handlePop(),
                     child: SvgPicture.asset(
                       'packages/stoyco_shared/lib/assets/icons/simple_close_icon.svg',
                       width: StoycoScreenSize.width(context, 14),
