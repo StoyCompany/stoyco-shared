@@ -1,13 +1,30 @@
 import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'configuration.dart';
-import 'content.dart';
+import 'package:stoyco_shared/announcement/models/announcement_dto/configuration.dart';
+import 'package:stoyco_shared/announcement/models/announcement_dto/content.dart';
 
 part 'announcement_dto.g.dart';
 
 @JsonSerializable()
 class AnnouncementDto {
+
+  const AnnouncementDto({
+    this.id,
+    this.contentType,
+    this.title,
+    this.shortDescription,
+    this.content,
+    this.createdBy,
+    this.urlPrincipalImage,
+    this.state,
+    this.isClosedCampaign,
+    this.publishedDate,
+    this.endDate,
+    this.configuration,
+  });
+
+  factory AnnouncementDto.fromJson(Map<String, dynamic> json) => _$AnnouncementDtoFromJson(json);
   final String? id;
   @JsonKey(name: 'content_type')
   final String? contentType;
@@ -28,29 +45,8 @@ class AnnouncementDto {
   final String? endDate;
   final Configuration? configuration;
 
-  const AnnouncementDto({
-    this.id,
-    this.contentType,
-    this.title,
-    this.shortDescription,
-    this.content,
-    this.createdBy,
-    this.urlPrincipalImage,
-    this.state,
-    this.isClosedCampaign,
-    this.publishedDate,
-    this.endDate,
-    this.configuration,
-  });
-
   @override
-  String toString() {
-    return 'AnnouncementDto(id: $id, contentType: $contentType, title: $title, shortDescription: $shortDescription, content: $content, createdBy: $createdBy, urlPrincipalImage: $urlPrincipalImage, state: $state, isClosedCampaign: $isClosedCampaign, publishedDate: $publishedDate, endDate: $endDate, configuration: $configuration)';
-  }
-
-  factory AnnouncementDto.fromJson(Map<String, dynamic> json) {
-    return _$AnnouncementDtoFromJson(json);
-  }
+  String toString() => 'AnnouncementDto(id: $id, contentType: $contentType, title: $title, shortDescription: $shortDescription, content: $content, createdBy: $createdBy, urlPrincipalImage: $urlPrincipalImage, state: $state, isClosedCampaign: $isClosedCampaign, publishedDate: $publishedDate, endDate: $endDate, configuration: $configuration)';
 
   Map<String, dynamic> toJson() => _$AnnouncementDtoToJson(this);
 
@@ -67,8 +63,7 @@ class AnnouncementDto {
     String? publishedDate,
     String? endDate,
     Configuration? configuration,
-  }) {
-    return AnnouncementDto(
+  }) => AnnouncementDto(
       id: id ?? this.id,
       contentType: contentType ?? this.contentType,
       title: title ?? this.title,
@@ -82,7 +77,6 @@ class AnnouncementDto {
       endDate: endDate ?? this.endDate,
       configuration: configuration ?? this.configuration,
     );
-  }
 
   @override
   bool operator ==(Object other) {

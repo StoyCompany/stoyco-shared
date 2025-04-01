@@ -26,7 +26,7 @@ class ModalCompleteProfile extends StatelessWidget {
       this.subtitle =
           '¡No olvides completar tu perfil en StoyCo para disfrutar de una experiencia personalizada al máximo!',
       this.buttonText = 'Completar mi perfil',
-      this.onTap});
+      this.onTap,});
 
   /// Custom padding for the modal content.
   /// If null, default padding will be applied using [StoycoScreenSize].
@@ -83,7 +83,7 @@ class ModalCompleteProfile extends StatelessWidget {
               width: double.infinity,
               height: 60,
               text: buttonText,
-              onTap: onTap ?? () {}),
+              onTap: onTap ?? () {},),
         ],
       );
 }

@@ -3,11 +3,43 @@ import 'package:stoyco_shared/announcement/models/announcement_participation/ann
 import 'package:stoyco_shared/envs/envs.dart';
 import 'package:stoyco_shared/utils/filter_request.dart';
 
+/// A data source class for handling announcement-related API operations.
+///
+/// This class provides methods to fetch, view, and participate in announcements
+/// by interfacing with the announcement backend API.
+///
+/// Example:
+/// ```dart
+/// final dataSource = AnnouncementDataSource(environment: environment);
+/// final response = await dataSource.getPaged(filters: FilterRequest());
+/// ```
 class AnnouncementDataSource {
+  /// Creates an instance of [AnnouncementDataSource].
+  ///
+  /// Requires a [StoycoEnvironment] to determine the appropriate API endpoints.
   AnnouncementDataSource({required this.environment});
+
   final Dio _dio = Dio();
+
+  /// The environment configuration used for API endpoints.
   final StoycoEnvironment environment;
 
+  /// Retrieves a paginated list of announcements based on provided filters.
+  ///
+  /// [filters] - The filter criteria to apply to the announcement search.
+  ///
+  /// Returns a [Response] containing the paginated announcement data.
+  ///
+  /// Example:
+  /// ```dart
+  /// final filters = FilterRequest(
+  ///   page: 1,
+  ///   pageSize: 10,
+  ///   filter: {'status': 'active'}
+  /// );
+  /// final response = await dataSource.getPaged(filters: filters);
+  /// final announcements = response.data;
+  /// ```
   Future<Response> getPaged({required FilterRequest filters}) async {
     final cancelToken = CancelToken();
     final response = await _dio.get(
@@ -19,6 +51,18 @@ class AnnouncementDataSource {
     return response;
   }
 
+  /// Retrieves a specific announcement by its ID.
+  ///
+  /// [announcementId] - The unique identifier of the announcement to retrieve.
+  ///
+  /// Returns a [Response] containing the announcement data.
+  ///
+  /// Example:
+  /// ```dart
+  /// final announcementId = '12345';
+  /// final response = await dataSource.getById(announcementId: announcementId);
+  /// final announcementDetails = response.data;
+  /// ```
   Future<Response> getById({required String announcementId}) async {
     final cancelToken = CancelToken();
     final response = await _dio.get(
@@ -29,6 +73,26 @@ class AnnouncementDataSource {
     return response;
   }
 
+  /// Registers a participation in a specific announcement.
+  ///
+  /// [announcementId] - The unique identifier of the announcement to participate in.
+  /// [data] - The participation details including user information and submission data.
+  ///
+  /// Returns a [Response] containing the result of the participation request.
+  ///
+  /// Example:
+  /// ```dart
+  /// final announcementId = '12345';
+  /// final participation = AnnouncementParticipation(
+  ///   userId: 'user123',
+  ///   submissionData: {'answer': 'My submission'},
+  /// );
+  /// final response = await dataSource.participate(
+  ///   announcementId: announcementId,
+  ///   data: participation,
+  /// );
+  /// final result = response.data;
+  /// ```
   Future<Response> participate({
     required String announcementId,
     required AnnouncementParticipation data,

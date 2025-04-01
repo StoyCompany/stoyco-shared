@@ -199,7 +199,7 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
   Future<String> _loadGifFromAssets() async {
     if (_cachedGifPath != null) return _cachedGifPath!;
     final byteData = await rootBundle.load(
-        'packages/stoyco_shared/lib/assets/gifs/stoyco_icon_animated.gif');
+        'packages/stoyco_shared/lib/assets/gifs/stoyco_icon_animated.gif',);
     final tempDir = await getTemporaryDirectory();
     final logoFile = File('${tempDir.path}/stoyco_icon_animated.gif');
     await logoFile.writeAsBytes(byteData.buffer.asUint8List());
@@ -252,7 +252,7 @@ Ver video: $videoUrl''';
           final returnCode = await session.getReturnCode();
           if (ReturnCode.isSuccess(returnCode) && await tempFile!.exists()) {
             await _controller?.pause();
-            await Share.shareXFiles([XFile(tempFile!.path)], text: shareText);
+            await Share.shareXFiles([XFile(tempFile.path)], text: shareText);
             return true;
           }
           return false;
@@ -276,7 +276,7 @@ Ver video: $videoUrl''';
             if (ReturnCode.isSuccess(origReturnCode) &&
                 await originalFile.exists()) {
               await Share.shareXFiles([XFile(originalFile.path)],
-                  text: shareText);
+                  text: shareText,);
             }
           }
         }

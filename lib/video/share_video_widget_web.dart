@@ -177,7 +177,7 @@ class ShareVideoWidgetWebState extends State<ShareVideoWidgetWeb> {
   }
 
   Future<void> _shareOnWeb(
-      String videoUrl, String videoName, String videoDescription) async {
+      String videoUrl, String videoName, String videoDescription,) async {
     final shareData = {
       'title': videoName,
       'text': 'Mira este video: $videoName\n$videoDescription',

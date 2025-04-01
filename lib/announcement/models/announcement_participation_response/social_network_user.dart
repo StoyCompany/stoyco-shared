@@ -5,17 +5,17 @@ part 'social_network_user.g.dart';
 
 @JsonSerializable()
 class SocialNetworkUser {
-  final String? username;
-  final String? platform;
 
   const SocialNetworkUser({this.username, this.platform});
+
+  factory SocialNetworkUser.fromJson(Map<String, dynamic> json) =>
+      _$SocialNetworkUserFromJson(json);
+  final String? username;
+  final String? platform;
 
   @override
   String toString() =>
       'SocialNetworkUser(username: $username, platform: $platform)';
-
-  factory SocialNetworkUser.fromJson(Map<String, dynamic> json) =>
-      _$SocialNetworkUserFromJson(json);
 
   Map<String, dynamic> toJson() => _$SocialNetworkUserToJson(this);
 
