@@ -1,6 +1,14 @@
+## 16.5.0
+
+- **feat:** Add paddingScrollBar property to AnnouncementPrizePanel and enhance documentation for AnnouncementDataSource and AnnouncementRepository methods
+
+## 16.4.4
+
+- **feat:** Enhance AnnouncementParticipationFormDialog and CoverImageWithFade with improved validation, loading states, and customizable styles
+
 ## 16.4.0
 
-feat: Add announcement participation models and data source methods
+- **feat:** Add announcement participation models and data source methods
 
 ## 16.2.0
 

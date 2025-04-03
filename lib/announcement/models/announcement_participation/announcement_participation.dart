@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'publication.dart';
-import 'social_network_user.dart';
+import 'package:stoyco_shared/announcement/models/announcement_participation/publication.dart';
+import 'package:stoyco_shared/announcement/models/announcement_participation/social_network_user.dart';
 
 part 'announcement_participation.g.dart';
 

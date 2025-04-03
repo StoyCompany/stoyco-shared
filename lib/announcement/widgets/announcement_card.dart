@@ -7,16 +7,63 @@ import 'package:stoyco_shared/design/colors.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/design/skeleton_card.dart';
 
-/// A widget that displays a announcements card with an image, title, description, and other details.
+/// A customizable card widget that displays announcement information with rich styling.
 ///
-/// The [AnnouncementCard] can be in a loading state, in which case it shows skeleton placeholders.
-/// When not loading, it displays the data provided by [announcementData].
+/// The [AnnouncementCard] displays announcements with an image, title, description, and view count.
+/// It supports a loading state with skeleton placeholders and can be configured with various
+/// visual properties.
 ///
-/// The card is tappable if [onTap] is provided and [isLoading] is false.
+/// ## Features:
+/// - Loading state with skeleton placeholders
+/// - Customizable dimensions and styling
+/// - Active/Inactive status indicator
+/// - View count display
+/// - Tap interaction
+///
+/// ## Example usage:
+///
+/// ```dart
+/// // Display a loading announcement card
+/// AnnouncementCard(
+///   isLoading: true,
+///   height: 144.0,
+/// )
+///
+/// // Display an announcement with data
+/// AnnouncementCard(
+///   announcementData: AnnouncementModel(
+///     id: '1',
+///     title: 'Important Update',
+///     shortDescription: 'New features have been added to the platform.',
+///     mainImage: 'https://example.com/image.jpg',
+///     isActive: true,
+///     viewCount: 123,
+///   ),
+///   onTap: () => print('Announcement tapped'),
+/// )
+///
+/// // Customized announcement card
+/// AnnouncementCard(
+///   announcementData: announcement,
+///   height: 160.0,
+///   borderRadius: 16.0,
+///   titleFontSize: 18.0,
+///   onTap: () => Navigator.push(
+///     context,
+///     MaterialPageRoute(
+///       builder: (context) => AnnouncementDetailScreen(id: announcement.id),
+///     ),
+///   ),
+/// )
+/// ```
 class AnnouncementCard extends StatelessWidget {
-  /// Creates a [AnnouncementCard].
+  /// Creates a customizable announcement card.
   ///
   /// The [announcementData] must be provided if [isLoading] is false.
+  /// If [isLoading] is true, the card will display skeleton placeholders.
+  ///
+  /// The [onTap] callback will be triggered when the card is tapped, unless
+  /// [isLoading] is true.
   const AnnouncementCard({
     super.key,
     this.onTap,
@@ -33,40 +80,75 @@ class AnnouncementCard extends StatelessWidget {
     this.titleMaxLines = 4,
   }) : assert(announcementData != null || isLoading);
 
-  /// Callback when the card is tapped.
+  /// Callback function triggered when the card is tapped.
+  ///
+  /// This callback is only active when [isLoading] is false.
+  /// Typically used to navigate to a detail page or show more information.
   final VoidCallback? onTap;
 
-  /// Whether the card is in a loading state.
+  /// Determines if the card is in a loading state.
+  ///
+  /// When true, skeleton placeholders are shown instead of announcement content.
+  /// Default is false.
   final bool isLoading;
 
-  /// The data to display in the card.
+  /// The announcement data to display in the card.
+  ///
+  /// Must be provided when [isLoading] is false. Contains information such as
+  /// title, description, image URL, and view count.
   final AnnouncementModel? announcementData;
 
-  /// The height of the card.
+  /// The height of the card in logical pixels.
+  ///
+  /// This will be adapted based on the device screen size using [StoycoScreenSize].
+  /// Default is 144.0.
   final double height;
 
-  /// The border radius of the card.
+  /// The border radius of the card corners in logical pixels.
+  ///
+  /// This will be adapted based on the device screen size using [StoycoScreenSize].
+  /// Default is 20.0.
   final double borderRadius;
 
-  /// The spacing between elements in the card.
+  /// The horizontal spacing between the image and text content in logical pixels.
+  ///
+  /// This will be adapted based on the device screen size using [StoycoScreenSize].
+  /// Default is 16.0.
   final double spacing;
 
-  /// The size of the icon displayed in the card.
+  /// The size of the status icon (e.g., megaphone) in logical pixels.
+  ///
+  /// Default is 14.85.
   final double iconSize;
 
-  /// The font size of the title text.
+  /// The font size for the announcement title in logical pixels.
+  ///
+  /// This will be adapted based on the device screen size using [StoycoScreenSize].
+  /// Default is 16.0.
   final double titleFontSize;
 
-  /// The font size of the description text.
+  /// The font size for the announcement description in logical pixels.
+  ///
+  /// This will be adapted based on the device screen size using [StoycoScreenSize].
+  /// Default is 10.0.
   final double descriptionFontSize;
 
-  /// The font size of the views text.
+  /// The font size for the views count text in logical pixels.
+  ///
+  /// This will be adapted based on the device screen size using [StoycoScreenSize].
+  /// Default is 10.0.
   final double viewsFontSize;
 
-  /// The height of the skeleton placeholders.
+  /// The height of skeleton placeholder elements when in loading state.
+  ///
+  /// This will be adapted based on the device screen size using [StoycoScreenSize].
+  /// Default is 16.0.
   final double skeletonHeight;
 
-  /// The maximum number of lines for the title text.
+  /// The maximum number of lines to display for the title text.
+  ///
+  /// When the text exceeds this number of lines, it will be truncated with an ellipsis.
+  /// Default is 4.
   final int titleMaxLines;
 
   @override

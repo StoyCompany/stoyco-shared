@@ -4,6 +4,19 @@ import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/utils/logger.dart';
 
 class AnnouncementDetailsUtils {
+  /// Formats a UTC date string to a more readable format.
+  ///
+  /// Takes a date string in ISO 8601 format (e.g., "2023-09-15T10:30:00Z")
+  /// and converts it to a user-friendly format with month abbreviation,
+  /// day with suffix, and 12-hour time format with am/pm.
+  ///
+  /// Returns an empty string if [dateString] is empty.
+  ///
+  /// Example:
+  /// ```dart
+  /// // Returns "Sep 15th, 10:30 am" (adjusted to local timezone)
+  /// final formattedDate = AnnouncementDetailsUtils.formatDate("2023-09-15T10:30:00Z");
+  /// ```
   static String formatDate(String dateString) {
     if (dateString.isEmpty) return '';
 
@@ -47,6 +60,21 @@ class AnnouncementDetailsUtils {
     }
   }
 
+  /// Adds the appropriate suffix to a day number.
+  ///
+  /// Handles special cases for 11th, 12th, and 13th, and then
+  /// applies the appropriate suffix (st, nd, rd, th) based on
+  /// the last digit of the day.
+  ///
+  /// Examples:
+  /// ```dart
+  /// AnnouncementDetailsUtils._getDayWithSuffix(1);  // Returns "1st"
+  /// AnnouncementDetailsUtils._getDayWithSuffix(2);  // Returns "2nd"
+  /// AnnouncementDetailsUtils._getDayWithSuffix(3);  // Returns "3rd"
+  /// AnnouncementDetailsUtils._getDayWithSuffix(4);  // Returns "4th"
+  /// AnnouncementDetailsUtils._getDayWithSuffix(11); // Returns "11th"
+  /// AnnouncementDetailsUtils._getDayWithSuffix(21); // Returns "21st"
+  /// ```
   static String _getDayWithSuffix(int day) {
     if (day >= 11 && day <= 13) {
       return '${day}th';

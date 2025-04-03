@@ -5,14 +5,6 @@ part 'publication.g.dart';
 
 @JsonSerializable()
 class Publication {
-  final String? url;
-  final int? likes;
-  final int? shares;
-  final int? views;
-  @JsonKey(name: 'review_status')
-  final String? reviewStatus;
-  @JsonKey(name: 'publication_date')
-  final DateTime? publicationDate;
 
   const Publication({
     this.url,
@@ -23,12 +15,20 @@ class Publication {
     this.publicationDate,
   });
 
+  factory Publication.fromJson(Map<String, dynamic> json) =>
+      _$PublicationFromJson(json);
+  final String? url;
+  final int? likes;
+  final int? shares;
+  final int? views;
+  @JsonKey(name: 'review_status')
+  final String? reviewStatus;
+  @JsonKey(name: 'publication_date')
+  final DateTime? publicationDate;
+
   @override
   String toString() =>
       'Publication(url: $url, likes: $likes, shares: $shares, views: $views, reviewStatus: $reviewStatus, publicationDate: $publicationDate)';
-
-  factory Publication.fromJson(Map<String, dynamic> json) =>
-      _$PublicationFromJson(json);
 
   Map<String, dynamic> toJson() => _$PublicationToJson(this);
 

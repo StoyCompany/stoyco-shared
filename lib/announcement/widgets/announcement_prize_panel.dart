@@ -31,7 +31,29 @@ class AnnouncementPrizePanel extends StatefulWidget {
   final bool? primary;
   final EdgeInsetsGeometry? padding;
   final bool showScrollbar;
+
+  /// Padding applied to the content when the scrollbar is visible.
+  ///
+  /// This property allows adding space between the scrollbar and the content.
+  /// If null, [EdgeInsets.zero] will be used.
+  ///
+  /// This property is only applicable when [showScrollbar] is set to true.
+  ///
+  /// Example:
+  /// ```dart
+  /// AnnouncementPrizePanel(
+  ///   prizeText: 'Your prize details here',
+  ///   showScrollbar: true,
+  ///   paddingScrollBar: EdgeInsets.only(right: 8.0),
+  /// )
+  /// ```
+  ///
+  /// When used with RTL languages, consider using [EdgeInsetsDirectional]:
+  /// ```dart
+  /// paddingScrollBar: EdgeInsetsDirectional.only(end: 8.0)
+  /// ```
   final EdgeInsetsGeometry? paddingScrollBar;
+
   static const double _defaultBorderRadius = 20.0;
 
   @override
@@ -72,7 +94,7 @@ class _AnnouncementPrizePanelState extends State<AnnouncementPrizePanel> {
                 )
               : HtmlWidget(
                   AnnouncementDetailsUtils.removeBackgroundColors(
-                      widget.prizeText),
+                      widget.prizeText,),
                   customStylesBuilder: _buildHtmlCustomStyles,
                   onTapUrl: _handleUrlTap,
                 ),

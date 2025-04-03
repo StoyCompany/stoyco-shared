@@ -10,7 +10,7 @@ part 'announcement_participation_response.g.dart';
 @JsonSerializable()
 class AnnouncementParticipationResponse {
   factory AnnouncementParticipationResponse.fromJson(
-          Map<String, dynamic> json) =>
+          Map<String, dynamic> json,) =>
       _$AnnouncementParticipationResponseFromJson(json);
 
   const AnnouncementParticipationResponse({

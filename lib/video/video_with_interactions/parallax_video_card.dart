@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:ffmpeg_kit_flutter_full/ffmpeg_kit.dart';
-import 'package:ffmpeg_kit_flutter_full/return_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -199,7 +197,8 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
   Future<String> _loadGifFromAssets() async {
     if (_cachedGifPath != null) return _cachedGifPath!;
     final byteData = await rootBundle.load(
-        'packages/stoyco_shared/lib/assets/gifs/stoyco_icon_animated.gif');
+      'packages/stoyco_shared/lib/assets/gifs/stoyco_icon_animated.gif',
+    );
     final tempDir = await getTemporaryDirectory();
     final logoFile = File('${tempDir.path}/stoyco_icon_animated.gif');
     await logoFile.writeAsBytes(byteData.buffer.asUint8List());
@@ -237,50 +236,50 @@ Ver video: $videoUrl''';
         _isSharing = true;
       });
 
-      if (videoUrl.isNotEmpty) {
-        // Load animated GIF from assets and obtain the path
-        final gifPath = await _loadGifFromAssets();
+      // if (videoUrl.isNotEmpty) {
+      //   // Load animated GIF from assets and obtain the path
+      //   final gifPath = await _loadGifFromAssets();
 
-        final outputPath =
-            '${(await getTemporaryDirectory()).path}/${video.name?.replaceAll(' ', '_') ?? 'video${video.id}'}_with_watermark.mp4';
-        debugPrint('Output path: $outputPath');
-        tempFile = File(outputPath);
+      //   final outputPath =
+      //       '${(await getTemporaryDirectory()).path}/${video.name?.replaceAll(' ', '_') ?? 'video${video.id}'}_with_watermark.mp4';
+      //   debugPrint('Output path: $outputPath');
+      //   tempFile = File(outputPath);
 
-        // Local function that executes a command and shares the video if successful
-        Future<bool> tryExecuteCommand(String command) async {
-          final session = await FFmpegKit.execute(command);
-          final returnCode = await session.getReturnCode();
-          if (ReturnCode.isSuccess(returnCode) && await tempFile!.exists()) {
-            await _controller?.pause();
-            await Share.shareXFiles([XFile(tempFile!.path)], text: shareText);
-            return true;
-          }
-          return false;
-        }
+      //   // Local function that executes a command and shares the video if successful
+      //   Future<bool> tryExecuteCommand(String command) async {
+      //     final session = await FFmpegKit.execute(command);
+      //     final returnCode = await session.getReturnCode();
+      //     if (ReturnCode.isSuccess(returnCode) && await tempFile!.exists()) {
+      //       await _controller?.pause();
+      //       await Share.shareXFiles([XFile(tempFile.path)], text: shareText);
+      //       return true;
+      //     }
+      //     return false;
+      //   }
 
-        // First attempt: using h264_mediacodec
-        final command1 =
-            '-i $videoUrl -stream_loop -1 -i $gifPath -filter_complex "$filterComplex" -c:v h264_mediacodec -c:a copy $outputPath';
-        if (!(await tryExecuteCommand(command1))) {
-          // Second attempt: using mpeg4 codec
-          final command2 =
-              '-i $videoUrl -stream_loop -1 -i $gifPath -filter_complex "$filterComplex" -c:v mpeg4 -q:v 3 -c:a copy $outputPath';
-          if (!(await tryExecuteCommand(command2))) {
-            // Third attempt: share original video without watermark
-            final tempOrigPath =
-                '${(await getTemporaryDirectory()).path}/original_${video.name?.replaceAll(' ', '_') ?? 'video${video.id}'}.mp4';
-            originalFile = File(tempOrigPath);
-            final result =
-                await FFmpegKit.execute('-i $videoUrl -c copy $tempOrigPath');
-            final origReturnCode = await result.getReturnCode();
-            if (ReturnCode.isSuccess(origReturnCode) &&
-                await originalFile.exists()) {
-              await Share.shareXFiles([XFile(originalFile.path)],
-                  text: shareText);
-            }
-          }
-        }
-      }
+      //   // First attempt: using h264_mediacodec
+      //   final command1 =
+      //       '-i $videoUrl -stream_loop -1 -i $gifPath -filter_complex "$filterComplex" -c:v h264_mediacodec -c:a copy $outputPath';
+      //   if (!(await tryExecuteCommand(command1))) {
+      //     // Second attempt: using mpeg4 codec
+      //     final command2 =
+      //         '-i $videoUrl -stream_loop -1 -i $gifPath -filter_complex "$filterComplex" -c:v mpeg4 -q:v 3 -c:a copy $outputPath';
+      //     if (!(await tryExecuteCommand(command2))) {
+      //       // Third attempt: share original video without watermark
+      //       final tempOrigPath =
+      //           '${(await getTemporaryDirectory()).path}/original_${video.name?.replaceAll(' ', '_') ?? 'video${video.id}'}.mp4';
+      //       originalFile = File(tempOrigPath);
+      //       final result =
+      //           await FFmpegKit.execute('-i $videoUrl -c copy $tempOrigPath');
+      //       final origReturnCode = await result.getReturnCode();
+      //       if (ReturnCode.isSuccess(origReturnCode) &&
+      //           await originalFile.exists()) {
+      //         await Share.shareXFiles([XFile(originalFile.path)],
+      //             text: shareText,);
+      //       }
+      //     }
+      //   }
+      // }
 
       if (widget.play) {
         await _controller?.play();

@@ -139,7 +139,7 @@ class _VideoSliderState extends State<VideoSlider> {
             VideoInfoWithUserInteraction(
               video: video,
               userVideoReaction: interactionResult.fold(
-                (failure) => UserVideoReaction(),
+                (failure) => const UserVideoReaction(),
                 (reaction) => reaction,
               ),
             ),
@@ -187,7 +187,7 @@ class _VideoSliderState extends State<VideoSlider> {
                   }
                 });
               }
-            }));
+            }),);
           }
         }
       },
