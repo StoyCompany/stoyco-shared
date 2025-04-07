@@ -91,7 +91,9 @@ class VideoPlayerDataSourceV2 {
 
   Future<Response> shareVideo(String videoId, String platform) async {
     final uri = _buildUri(
-        'video-interaction/share', {'videoId': videoId, 'platform': platform},);
+      'video-interaction/share',
+      {'videoId': videoId, 'platform': platform},
+    );
     return _dio.post(
       uri,
       cancelToken: cancelToken,

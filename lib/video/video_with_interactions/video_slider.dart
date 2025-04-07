@@ -178,16 +178,18 @@ class _VideoSliderState extends State<VideoSlider> {
           final videoUrl = videosList[i].video.appUrl ?? '';
           final videoId = videosList[i].video.id;
           if (videoUrl.isNotEmpty && videoId != null) {
-            unawaited(getVideoThumbnail(videoUrl).then((value) {
-              if (mounted) {
-                setState(() {
-                  videoThumbnails[videoId] = value;
-                  if (i == videosList.length - 1) {
-                    allVideosLoaded = true;
-                  }
-                });
-              }
-            }),);
+            unawaited(
+              getVideoThumbnail(videoUrl).then((value) {
+                if (mounted) {
+                  setState(() {
+                    videoThumbnails[videoId] = value;
+                    if (i == videosList.length - 1) {
+                      allVideosLoaded = true;
+                    }
+                  });
+                }
+              }),
+            );
           }
         }
       },

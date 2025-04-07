@@ -9,6 +9,7 @@ import 'package:stoyco_shared/announcement/utils/announcement_mappers.dart';
 import 'package:stoyco_shared/errors/errors.dart';
 import 'package:stoyco_shared/models/page_result/page_result.dart';
 import 'package:stoyco_shared/utils/filter_request.dart';
+import 'package:stoyco_shared/announcement/models/user_announcement/user_announcement.dart';
 
 /// Repository for managing announcements.
 ///
@@ -145,6 +146,55 @@ class AnnouncementRepository {
       final AnnouncementParticipationResponse announcement =
           AnnouncementParticipationResponse.fromJson(response.data);
       return Right(announcement);
+    } on DioException catch (error) {
+      return Left(DioFailure.decode(error));
+    } on Error catch (error) {
+      return Left(ErrorFailure.decode(error));
+    } on Exception catch (error) {
+      return Left(ExceptionFailure.decode(error));
+    }
+  }
+
+  /// Retrieves the leadership board for a specific announcement.
+  ///
+  /// Returns an [Either] containing either a [Failure] or a [PageResult] of [UserAnnouncement]s.
+  ///
+  /// Parameters:
+  /// - [announcementId]: The unique identifier of the announcement
+  /// - [pageNumber]: The page number for pagination
+  /// - [pageSize]: The number of items per page
+  ///
+  /// Example:
+  /// ```dart
+  /// final result = await announcementRepo.getLeadershipBoard(
+  ///   announcementId: 'announcement123',
+  ///   pageNumber: 1,
+  ///   pageSize: 10,
+  /// );
+  ///
+  /// result.fold(
+  ///   (failure) => print('Error: ${failure.message}'),
+  ///   (pageResult) => pageResult.items.forEach((user) => print(user.score)),
+  /// );
+  /// ```
+  Future<Either<Failure, PageResult<UserAnnouncement>>> getLeadershipBoard({
+    required String announcementId,
+    required int pageNumber,
+    required int pageSize,
+  }) async {
+    try {
+      final response = await _announcementDataSource.getLeadershipBoard(
+        announcementId: announcementId,
+        pageNumber: pageNumber,
+        pageSize: pageSize,
+      );
+
+      final PageResult<UserAnnouncement> pageResult =
+          PageResult<UserAnnouncement>.fromJson(
+        response.data,
+        (item) => UserAnnouncement.fromJson(item as Map<String, dynamic>),
+      );
+      return Right(pageResult);
     } on DioException catch (error) {
       return Left(DioFailure.decode(error));
     } on Error catch (error) {

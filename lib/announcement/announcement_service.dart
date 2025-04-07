@@ -8,6 +8,7 @@ import 'package:stoyco_shared/announcement/models/announcement_form_config.dart'
 import 'package:stoyco_shared/announcement/models/announcement_model.dart';
 import 'package:stoyco_shared/announcement/models/announcement_participation/announcement_participation.dart';
 import 'package:stoyco_shared/announcement/models/announcement_participation_response/announcement_participation_response.dart';
+import 'package:stoyco_shared/announcement/models/user_announcement/user_announcement.dart';
 import 'package:stoyco_shared/envs/envs.dart';
 import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
 import 'package:stoyco_shared/models/page_result/page_result.dart';
@@ -62,11 +63,15 @@ class AnnouncementService {
         remoteConfig != _instance!.remoteConfig &&
         environment != _instance!.environment) {
       return AnnouncementService._(
-          remoteConfig: remoteConfig, environment: environment,);
+        remoteConfig: remoteConfig,
+        environment: environment,
+      );
     }
 
     _instance ??= AnnouncementService._(
-        remoteConfig: remoteConfig, environment: environment,);
+      remoteConfig: remoteConfig,
+      environment: environment,
+    );
     return _instance!;
   }
 
@@ -77,13 +82,16 @@ class AnnouncementService {
   /// Parameters:
   /// - [remoteConfig]: The Firebase Remote Config instance.
   /// - [environment]: The environment configuration.
-  AnnouncementService._(
-      {required this.remoteConfig, required this.environment,}) {
+  AnnouncementService._({
+    required this.remoteConfig,
+    required this.environment,
+  }) {
     _announcementDataSource = AnnouncementDataSource(
       environment: environment,
     );
     _announcementRepository = AnnouncementRepository(
-        announcementDataSource: _announcementDataSource!,);
+      announcementDataSource: _announcementDataSource!,
+    );
 
     _instance = this;
   }
@@ -138,7 +146,9 @@ class AnnouncementService {
     required StoycoEnvironment environment,
   }) {
     _instance ??= AnnouncementService._(
-        remoteConfig: remoteConfig, environment: environment,);
+      remoteConfig: remoteConfig,
+      environment: environment,
+    );
     return _instance!;
   }
 
@@ -308,4 +318,37 @@ class AnnouncementService {
             announcementId,
             data,
           );
+
+  /// Gets the leadership board for a specific announcement.
+
+  ///
+  /// Parameters:
+  /// - [announcementId]: The ID of the announcement
+  /// - [pageNumber]: The page number for pagination
+  /// - [pageSize]: The number of items per page
+  ///
+  /// Returns an [Either] containing either a [Failure] or a [PageResult] of [UserAnnouncement].
+  ///
+  /// Example:
+  /// ```dart
+  /// final result = await announcementService.getLeadershipBoard(
+  ///   announcementId: 'ann123',
+  ///   pageNumber: 1,
+  ///   pageSize: 10,
+  /// );
+  /// result.fold(
+  ///   (failure) => print('Error: ${failure.message}'),
+  ///   (pageResult) => print('Total participants: ${pageResult.total}')
+  /// );
+  /// ```
+  Future<Either<Failure, PageResult<UserAnnouncement>>> getLeadershipBoard({
+    required String announcementId,
+    required int pageNumber,
+    required int pageSize,
+  }) async =>
+      _announcementRepository!.getLeadershipBoard(
+        announcementId: announcementId,
+        pageNumber: pageNumber,
+        pageSize: pageSize,
+      );
 }

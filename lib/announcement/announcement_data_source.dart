@@ -106,4 +106,39 @@ class AnnouncementDataSource {
 
     return response;
   }
+
+  /// Retrieves the leadership board for a specific announcement.
+  ///
+  /// [announcementId] - The unique identifier of the announcement
+  /// [pageNumber] - The page number for pagination
+  /// [pageSize] - The number of items per page
+  ///
+  /// Returns a [Response] containing the leadership board data.
+  ///
+  /// Example:
+  /// ```dart
+  /// final response = await dataSource.getLeadershipBoard(
+  ///   announcementId: '67dc8ae8b51fdb2a8a7ec637',
+  ///   pageNumber: 1,
+  ///   pageSize: 5,
+  /// );
+  /// final leaderboardData = response.data;
+  /// ```
+  Future<Response> getLeadershipBoard({
+    required String announcementId,
+    required int pageNumber,
+    required int pageSize,
+  }) async {
+    final cancelToken = CancelToken();
+    final response = await _dio.get(
+      '${environment.urlAnnouncement}announcement/$announcementId/leadership-board',
+      queryParameters: {
+        'page_number': pageNumber,
+        'page_size': pageSize,
+      },
+      cancelToken: cancelToken,
+    );
+
+    return response;
+  }
 }

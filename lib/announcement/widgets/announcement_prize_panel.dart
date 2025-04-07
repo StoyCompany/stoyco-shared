@@ -94,7 +94,8 @@ class _AnnouncementPrizePanelState extends State<AnnouncementPrizePanel> {
                 )
               : HtmlWidget(
                   AnnouncementDetailsUtils.removeBackgroundColors(
-                      widget.prizeText,),
+                    widget.prizeText,
+                  ),
                   customStylesBuilder: _buildHtmlCustomStyles,
                   onTapUrl: _handleUrlTap,
                 ),

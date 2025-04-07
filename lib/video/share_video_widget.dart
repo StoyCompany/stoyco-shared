@@ -180,7 +180,10 @@ class ShareVideoWidgetState extends State<ShareVideoWidget> {
   }
 
   Future<void> _shareOnMobile(
-      String videoUrl, String videoName, String videoDescription,) async {
+    String videoUrl,
+    String videoName,
+    String videoDescription,
+  ) async {
     final response = await http.get(Uri.parse(videoUrl));
     if (response.statusCode == 200) {
       final directory = await getTemporaryDirectory();

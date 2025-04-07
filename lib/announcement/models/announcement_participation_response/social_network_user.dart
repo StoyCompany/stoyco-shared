@@ -5,7 +5,6 @@ part 'social_network_user.g.dart';
 
 @JsonSerializable()
 class SocialNetworkUser {
-
   const SocialNetworkUser({this.username, this.platform});
 
   factory SocialNetworkUser.fromJson(Map<String, dynamic> json) =>

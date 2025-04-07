@@ -165,7 +165,8 @@ class _ParticipationFormDialogState<T>
     } catch (e) {
       StoyCoLogger.error('Error during navigation pop: $e');
       throw Exception(
-          'Navigation pop failed. Please check your navigation implementation: $e',);
+        'Navigation pop failed. Please check your navigation implementation: $e',
+      );
     }
   }
 
@@ -184,7 +185,8 @@ class _ParticipationFormDialogState<T>
     } catch (e) {
       StoyCoLogger.error('Error during navigation pop: $e');
       throw Exception(
-          'Navigation pop failed. Please check your navigation implementation: $e',);
+        'Navigation pop failed. Please check your navigation implementation: $e',
+      );
     }
   }
 

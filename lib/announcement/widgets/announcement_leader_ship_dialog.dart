@@ -358,8 +358,10 @@ class _AnnouncementLeaderShipDialogState
                 ),
             ],
           ),
-          Gap(widget.listVerticalSpacing ??
-              StoycoScreenSize.height(context, 32, phone: 20, tablet: 30),),
+          Gap(
+            widget.listVerticalSpacing ??
+                StoycoScreenSize.height(context, 32, phone: 20, tablet: 30),
+          ),
           Row(
             mainAxisAlignment: _getCachedValue<bool>(
               'isPhone',
@@ -375,15 +377,18 @@ class _AnnouncementLeaderShipDialogState
               ),
             ],
           ),
-          Gap(widget.listVerticalSpacing ??
-              StoycoScreenSize.height(context, 42, phone: 20, tablet: 30),),
+          Gap(
+            widget.listVerticalSpacing ??
+                StoycoScreenSize.height(context, 42, phone: 20, tablet: 30),
+          ),
           if (_isLoading)
             Center(
-                child: SizedBox(
-              width: widget.loadingIndicatorSize,
-              height: widget.loadingIndicatorSize,
-              child: const CircularProgressIndicator(),
-            ),)
+              child: SizedBox(
+                width: widget.loadingIndicatorSize,
+                height: widget.loadingIndicatorSize,
+                child: const CircularProgressIndicator(),
+              ),
+            )
           else
             SizedBox(
               height: widget.dialogHeight ??
@@ -442,8 +447,12 @@ class _AnnouncementLeaderShipDialogState
                   fontSize: widget.positionFontSize ??
                       _getCachedValue<double>(
                         'position_font_size',
-                        () => StoycoScreenSize.fontSize(context, 14,
-                            phone: 11, tablet: 12,),
+                        () => StoycoScreenSize.fontSize(
+                          context,
+                          14,
+                          phone: 11,
+                          tablet: 12,
+                        ),
                       ),
                   fontWeight: widget.positionFontWeight,
                   color: widget.dateTextColor ?? StoycoColors.text,
@@ -475,8 +484,12 @@ class _AnnouncementLeaderShipDialogState
                   fontSize: widget.usernameFontSize ??
                       _getCachedValue<double>(
                         'username_font_size',
-                        () => StoycoScreenSize.fontSize(context, 14,
-                            phone: 11, tablet: 12,),
+                        () => StoycoScreenSize.fontSize(
+                          context,
+                          14,
+                          phone: 11,
+                          tablet: 12,
+                        ),
                       ),
                   fontWeight: widget.usernameFontWeight,
                   color: widget.dateTextColor ?? StoycoColors.text,
@@ -495,8 +508,12 @@ class _AnnouncementLeaderShipDialogState
                   fontSize: widget.countersFontSize ??
                       _getCachedValue<double>(
                         'counters_font_size',
-                        () => StoycoScreenSize.fontSize(context, 14,
-                            phone: 11, tablet: 12,),
+                        () => StoycoScreenSize.fontSize(
+                          context,
+                          14,
+                          phone: 11,
+                          tablet: 12,
+                        ),
                       ),
                   fontWeight: widget.countersFontWeight,
                   color: widget.dateTextColor ?? StoycoColors.text,
@@ -514,8 +531,12 @@ class _AnnouncementLeaderShipDialogState
                     fontSize: widget.countersFontSize ??
                         _getCachedValue<double>(
                           'counters_font_size',
-                          () => StoycoScreenSize.fontSize(context, 14,
-                              phone: 11, tablet: 12,),
+                          () => StoycoScreenSize.fontSize(
+                            context,
+                            14,
+                            phone: 11,
+                            tablet: 12,
+                          ),
                         ),
                     fontWeight: widget.countersFontWeight,
                     color: widget.dateTextColor ?? StoycoColors.text,
