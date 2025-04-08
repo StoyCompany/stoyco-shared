@@ -203,4 +203,41 @@ class AnnouncementRepository {
       return Left(ExceptionFailure.decode(error));
     }
   }
+
+  /// Checks if there are any active announcements.
+  ///
+  /// This method retrieves a paginated list of announcements and checks if there
+  /// are any active announcements available.
+  ///
+  /// Returns an [Either] containing either a [Failure] or a [bool].
+  /// - [true]: If there are active announcements.
+  /// - [false]: If there are no active announcements.
+  ///
+  /// Example:
+  /// ```dart
+  /// final result = await announcementRepo.hasActiveAnnouncements();
+  ///
+  /// result.fold(
+  ///   (failure) => print('Error: ${failure.message}'),
+  ///   (hasActive) => print('Has active announcements: $hasActive'),
+  /// );
+  /// ```
+  Future<Either<Failure, bool>> hasActiveAnnouncements() async {
+    try {
+      final response = await getAnnouncementsPaginated(const FilterRequest());
+      return response.isRight && (response.right.items?.isNotEmpty ?? false)
+          ? const Right(true)
+          : Left(
+              ExceptionFailure.decode(
+                Exception('No hay convocatorias activas'),
+              ),
+            );
+    } on DioException catch (error) {
+      return Left(DioFailure.decode(error));
+    } on Error catch (error) {
+      return Left(ErrorFailure.decode(error));
+    } on Exception catch (error) {
+      return Left(ExceptionFailure.decode(error));
+    }
+  }
 }

@@ -351,4 +351,33 @@ class AnnouncementService {
         pageNumber: pageNumber,
         pageSize: pageSize,
       );
+
+  /// Checks if there are active announcements.
+  ///
+  /// This method reads the 'enable_announcement' flag from Firebase Remote Config
+  /// to determine if there are active announcements in the system.
+  ///
+  /// Returns a [Future] containing a [bool]:
+  /// - `true` if there are active announcements.
+  /// - `false` if there are no active announcements or an error occurs.
+  ///
+  /// Example:
+  /// ```dart
+  /// final hasActive = await announcementService.hasActiveAnnouncements();
+  /// if (hasActive) {
+  ///   print('There are active announcements.');
+  /// } else {
+  ///   print('No active announcements.');
+  /// }
+  /// ```
+  Future<bool> hasActiveAnnouncements() async {
+    try {
+      final bool enableAnnouncement =
+          remoteConfig.getBool('enable_announcement');
+      return enableAnnouncement;
+    } catch (e) {
+      StoyCoLogger.error('Error checking active calls for applications: $e');
+      return false;
+    }
+  }
 }
