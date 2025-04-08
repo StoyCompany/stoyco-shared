@@ -158,6 +158,10 @@ class _ParticipationFormDialogState<T>
     }
   }
 
+  void _closeDialog() {
+    Navigator.of(context).pop({});
+  }
+
   @override
   Widget build(BuildContext context) => DialogContainer(
         padding: widget.dialogPadding ??
@@ -184,7 +188,9 @@ class _ParticipationFormDialogState<T>
                 MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
-                    onTap: Navigator.of(context).pop,
+                    onTap: () {
+                      _closeDialog();
+                    },
                     child: SvgPicture.asset(
                       'packages/stoyco_shared/lib/assets/icons/simple_close_icon.svg',
                       width: widget.closeIconSize?.width ??
