@@ -7,14 +7,8 @@ part 'user_announcement.g.dart';
 
 @JsonSerializable()
 class UserAnnouncement {
-  @JsonKey(name: 'user_id')
-  final String? userId;
-  @JsonKey(name: 'user_photo')
-  final String? userPhoto;
-  final String? username;
-  final String? platform;
-  final Metrics? metrics;
-  final int? puntos;
+  factory UserAnnouncement.fromJson(Map<String, dynamic> json) =>
+      _$UserAnnouncementFromJson(json);
 
   const UserAnnouncement({
     this.userId,
@@ -24,15 +18,18 @@ class UserAnnouncement {
     this.metrics,
     this.puntos,
   });
+  @JsonKey(name: 'user_id')
+  final String? userId;
+  @JsonKey(name: 'user_photo')
+  final String? userPhoto;
+  final String? username;
+  final String? platform;
+  final Metrics? metrics;
+  final int? puntos;
 
   @override
-  String toString() {
-    return 'UserAnnouncement(userId: $userId, userPhoto: $userPhoto, username: $username, platform: $platform, metrics: $metrics, puntos: $puntos)';
-  }
-
-  factory UserAnnouncement.fromJson(Map<String, dynamic> json) {
-    return _$UserAnnouncementFromJson(json);
-  }
+  String toString() =>
+      'UserAnnouncement(userId: $userId, userPhoto: $userPhoto, username: $username, platform: $platform, metrics: $metrics, puntos: $puntos)';
 
   Map<String, dynamic> toJson() => _$UserAnnouncementToJson(this);
 
@@ -43,16 +40,15 @@ class UserAnnouncement {
     String? platform,
     Metrics? metrics,
     int? puntos,
-  }) {
-    return UserAnnouncement(
-      userId: userId ?? this.userId,
-      userPhoto: userPhoto ?? this.userPhoto,
-      username: username ?? this.username,
-      platform: platform ?? this.platform,
-      metrics: metrics ?? this.metrics,
-      puntos: puntos ?? this.puntos,
-    );
-  }
+  }) =>
+      UserAnnouncement(
+        userId: userId ?? this.userId,
+        userPhoto: userPhoto ?? this.userPhoto,
+        username: username ?? this.username,
+        platform: platform ?? this.platform,
+        metrics: metrics ?? this.metrics,
+        puntos: puntos ?? this.puntos,
+      );
 
   @override
   bool operator ==(Object other) {

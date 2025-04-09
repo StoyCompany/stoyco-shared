@@ -10,27 +10,36 @@ import 'package:stoyco_shared/announcement/widgets/gradient_container.dart';
 
 import 'package:stoyco_shared/design/colors.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
+import 'package:stoyco_shared/models/page_result/page_result.dart';
 import 'package:stoyco_shared/utils/dialog_container.dart';
 
 /// A callback function for loading paginated leaderboard data.
 ///
 /// This function is called when additional leaderboard data needs to be loaded.
-/// It returns a Future of a list of [AnnouncementLeaderboardItem] objects.
+/// It returns a Future of a [PageResult] containing a list of [AnnouncementLeaderboardItem] objects.
 ///
 /// * [page] - The page number to be loaded, starting from 1.
 ///
 /// Example:
 /// ```dart
-/// Future<List<AnnouncementLeaderboardItem>> loadLeaderboardData(int page) async {
+/// Future<PageResult<AnnouncementLeaderboardItem>> loadLeaderboardData(int page) async {
 ///   final response = await apiClient.getLeaderboard(
 ///     campaignId: 'campaign-123',
 ///     page: page,
 ///     limit: 20,
 ///   );
-///   return response.map((item) => AnnouncementLeaderboardItem.fromJson(item)).toList();
+///   return PageResult<AnnouncementLeaderboardItem>(
+///     pageNumber: response.page,
+///     pageSize: response.limit,
+///     totalItems: response.total,
+///     totalPages: response.totalPages,
+///     updatedAt: response.updatedAt,
+///     items: response.items.map((item) => AnnouncementLeaderboardItem.fromJson(item)).toList(),
+///   );
 /// }
 /// ```
-typedef LoadMoreCallback = Future<List<AnnouncementLeaderboardItem>> Function(
+typedef LoadMoreCallback = Future<PageResult<AnnouncementLeaderboardItem>>
+    Function(
   int page,
 );
 
@@ -44,14 +53,13 @@ typedef LoadMoreCallback = Future<List<AnnouncementLeaderboardItem>> Function(
 /// * Responsive layout for different screen sizes
 /// * Pagination with infinite scrolling
 /// * Display of user avatar, TikTok username, posts count, and likes count
-/// * Last updated date display
+/// * Last updated date display (uses the `updatedAt` field from the first page result)
 ///
 /// Example:
 /// ```dart
 /// showDialog(
 ///   context: context,
 ///   builder: (context) => AnnouncementLeaderShipDialog(
-///     updatedDate: '2023-05-15T10:30:00Z',
 ///     loadMoreCallback: (page) => apiService.fetchLeaderboardData(
 ///       campaignId: 'abc123',
 ///       page: page,
@@ -62,16 +70,12 @@ typedef LoadMoreCallback = Future<List<AnnouncementLeaderboardItem>> Function(
 class AnnouncementLeaderShipDialog extends StatefulWidget {
   /// Creates an AnnouncementLeaderShipDialog.
   ///
-  /// The [updatedDate] parameter should be a date string that can be formatted
-  /// by [AnnouncementDetailsUtils.formatDate].
-  ///
   /// The [loadMoreCallback] is used to fetch paginated leaderboard data.
   ///
   /// Visual properties can be customized through various parameters like
   /// [titleFontSize], [contentFontSize], [dialogPadding], etc.
   const AnnouncementLeaderShipDialog({
     super.key,
-    required this.updatedDate,
     required this.loadMoreCallback,
     // Dialog customization
     this.dialogPadding,
@@ -103,10 +107,6 @@ class AnnouncementLeaderShipDialog extends StatefulWidget {
     this.loadingIndicatorSize = 24.0,
     this.itemSpacing,
   });
-
-  /// The date when the leaderboard was last updated.
-  /// This should be a string that can be formatted by [AnnouncementDetailsUtils.formatDate].
-  final String updatedDate;
 
   /// Callback function to load paginated leaderboard data.
   /// The function receives a page number and should return a list of [AnnouncementLeaderboardItem].
@@ -158,8 +158,11 @@ class _AnnouncementLeaderShipDialogState
   /// Indicates if more data is being loaded during pagination.
   bool _isLoadingMore = false;
 
-  /// The list of leaderboard items to display.
-  List<AnnouncementLeaderboardItem> _leaderboardItems = [];
+  /// The paginated leaderboard data.
+  PageResult<AnnouncementLeaderboardItem>? _leaderboardPage;
+
+  /// Stores the updated date from the first loadMoreCallback call.
+  DateTime? _updatedAt;
 
   /// Controller for the scrollable list view to detect scroll position.
   final ScrollController _scrollController = ScrollController();
@@ -171,7 +174,11 @@ class _AnnouncementLeaderShipDialogState
   bool _hasMoreData = true;
 
   /// Formatted text showing the last update date.
-  late final String endDateText;
+  String get endDateText {
+    final dateToFormat =
+        _updatedAt ?? DateTime.now(); // Use current date if null.
+    return 'Ultima actualización: ${AnnouncementDetailsUtils.formatDate(dateToFormat.toIso8601String())}';
+  }
 
   /// Cache to store commonly used responsive values to optimize performance.
   final _cachedValues = <String, dynamic>{};
@@ -179,8 +186,6 @@ class _AnnouncementLeaderShipDialogState
   @override
   void initState() {
     super.initState();
-    endDateText =
-        'Ultima actualización: ${AnnouncementDetailsUtils.formatDate(widget.updatedDate)}';
     _loadInitialData();
     _scrollController.addListener(_scrollListener);
   }
@@ -212,13 +217,16 @@ class _AnnouncementLeaderShipDialogState
     });
 
     try {
-      final items = await widget.loadMoreCallback(1);
+      final pageResult = await widget.loadMoreCallback(1);
 
       if (mounted) {
         setState(() {
-          _leaderboardItems = items;
-          _currentPage = 1;
-          _hasMoreData = items.isNotEmpty;
+          _leaderboardPage = pageResult;
+          _updatedAt =
+              pageResult.updatedAt; // Set updatedAt from the first call.
+          _currentPage = pageResult.pageNumber ?? 1;
+          _hasMoreData = (pageResult.items?.isNotEmpty ?? false) &&
+              (_currentPage < (pageResult.totalPages ?? 1));
         });
       }
     } catch (e) {
@@ -241,10 +249,10 @@ class _AnnouncementLeaderShipDialogState
 
     try {
       final nextPage = _currentPage + 1;
-      final moreItems = await widget.loadMoreCallback(nextPage);
+      final pageResult = await widget.loadMoreCallback(nextPage);
 
       if (mounted) {
-        if (moreItems.isEmpty) {
+        if (pageResult.items?.isEmpty ?? true) {
           setState(() {
             _hasMoreData = false;
             _isLoadingMore = false;
@@ -253,8 +261,14 @@ class _AnnouncementLeaderShipDialogState
         }
 
         setState(() {
-          _leaderboardItems.addAll(moreItems);
-          _currentPage = nextPage;
+          _leaderboardPage = _leaderboardPage?.copyWith(
+            items: [
+              ...?_leaderboardPage?.items,
+              ...?pageResult.items,
+            ],
+          );
+          _currentPage = pageResult.pageNumber ?? nextPage;
+          _hasMoreData = _currentPage < (pageResult.totalPages ?? 1);
         });
       }
     } catch (e) {
@@ -395,10 +409,11 @@ class _AnnouncementLeaderShipDialogState
                   StoycoScreenSize.screenHeight(context) * 0.5,
               child: ListView.builder(
                 controller: _scrollController,
-                itemCount: _leaderboardItems.length + (_isLoadingMore ? 1 : 0),
+                itemCount: (_leaderboardPage?.items?.length ?? 0) +
+                    (_isLoadingMore ? 1 : 0),
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 itemBuilder: (context, index) {
-                  if (index == _leaderboardItems.length) {
+                  if (index == _leaderboardPage?.items?.length) {
                     return Center(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -411,7 +426,11 @@ class _AnnouncementLeaderShipDialogState
                     );
                   }
 
-                  final item = _leaderboardItems[index];
+                  final item = _leaderboardPage?.items?[index];
+                  if (item == null) {
+                    return const SizedBox.shrink();
+                  }
+
                   return _buildLeaderboardItem(item, index);
                 },
               ),
