@@ -10,27 +10,36 @@ import 'package:stoyco_shared/announcement/widgets/gradient_container.dart';
 
 import 'package:stoyco_shared/design/colors.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
+import 'package:stoyco_shared/models/page_result/page_result.dart';
 import 'package:stoyco_shared/utils/dialog_container.dart';
 
 /// A callback function for loading paginated leaderboard data.
 ///
 /// This function is called when additional leaderboard data needs to be loaded.
-/// It returns a Future of a list of [AnnouncementLeaderboardItem] objects.
+/// It returns a Future of a [PageResult] containing a list of [AnnouncementLeaderboardItem] objects.
 ///
 /// * [page] - The page number to be loaded, starting from 1.
 ///
 /// Example:
 /// ```dart
-/// Future<List<AnnouncementLeaderboardItem>> loadLeaderboardData(int page) async {
+/// Future<PageResult<AnnouncementLeaderboardItem>> loadLeaderboardData(int page) async {
 ///   final response = await apiClient.getLeaderboard(
 ///     campaignId: 'campaign-123',
 ///     page: page,
 ///     limit: 20,
 ///   );
-///   return response.map((item) => AnnouncementLeaderboardItem.fromJson(item)).toList();
+///   return PageResult<AnnouncementLeaderboardItem>(
+///     pageNumber: response.page,
+///     pageSize: response.limit,
+///     totalItems: response.total,
+///     totalPages: response.totalPages,
+///     updatedAt: response.updatedAt,
+///     items: response.items.map((item) => AnnouncementLeaderboardItem.fromJson(item)).toList(),
+///   );
 /// }
 /// ```
-typedef LoadMoreCallback = Future<List<AnnouncementLeaderboardItem>> Function(
+typedef LoadMoreCallback = Future<PageResult<AnnouncementLeaderboardItem>>
+    Function(
   int page,
 );
 
@@ -44,14 +53,13 @@ typedef LoadMoreCallback = Future<List<AnnouncementLeaderboardItem>> Function(
 /// * Responsive layout for different screen sizes
 /// * Pagination with infinite scrolling
 /// * Display of user avatar, TikTok username, posts count, and likes count
-/// * Last updated date display
+/// * Last updated date display (uses the `updatedAt` field from the first page result)
 ///
 /// Example:
 /// ```dart
 /// showDialog(
 ///   context: context,
 ///   builder: (context) => AnnouncementLeaderShipDialog(
-///     updatedDate: '2023-05-15T10:30:00Z',
 ///     loadMoreCallback: (page) => apiService.fetchLeaderboardData(
 ///       campaignId: 'abc123',
 ///       page: page,
@@ -62,16 +70,12 @@ typedef LoadMoreCallback = Future<List<AnnouncementLeaderboardItem>> Function(
 class AnnouncementLeaderShipDialog extends StatefulWidget {
   /// Creates an AnnouncementLeaderShipDialog.
   ///
-  /// The [updatedDate] parameter should be a date string that can be formatted
-  /// by [AnnouncementDetailsUtils.formatDate].
-  ///
   /// The [loadMoreCallback] is used to fetch paginated leaderboard data.
   ///
   /// Visual properties can be customized through various parameters like
   /// [titleFontSize], [contentFontSize], [dialogPadding], etc.
   const AnnouncementLeaderShipDialog({
     super.key,
-    required this.updatedDate,
     required this.loadMoreCallback,
     // Dialog customization
     this.dialogPadding,
@@ -103,10 +107,6 @@ class AnnouncementLeaderShipDialog extends StatefulWidget {
     this.loadingIndicatorSize = 24.0,
     this.itemSpacing,
   });
-
-  /// The date when the leaderboard was last updated.
-  /// This should be a string that can be formatted by [AnnouncementDetailsUtils.formatDate].
-  final String updatedDate;
 
   /// Callback function to load paginated leaderboard data.
   /// The function receives a page number and should return a list of [AnnouncementLeaderboardItem].
@@ -158,8 +158,11 @@ class _AnnouncementLeaderShipDialogState
   /// Indicates if more data is being loaded during pagination.
   bool _isLoadingMore = false;
 
-  /// The list of leaderboard items to display.
-  List<AnnouncementLeaderboardItem> _leaderboardItems = [];
+  /// The paginated leaderboard data.
+  PageResult<AnnouncementLeaderboardItem>? _leaderboardPage;
+
+  /// Stores the updated date from the first loadMoreCallback call.
+  DateTime? _updatedAt;
 
   /// Controller for the scrollable list view to detect scroll position.
   final ScrollController _scrollController = ScrollController();
@@ -171,7 +174,11 @@ class _AnnouncementLeaderShipDialogState
   bool _hasMoreData = true;
 
   /// Formatted text showing the last update date.
-  late final String endDateText;
+  String get endDateText {
+    final dateToFormat =
+        _updatedAt ?? DateTime.now(); // Use current date if null.
+    return 'Ultima actualización: ${AnnouncementDetailsUtils.formatDate(dateToFormat.toIso8601String())}';
+  }
 
   /// Cache to store commonly used responsive values to optimize performance.
   final _cachedValues = <String, dynamic>{};
@@ -179,8 +186,6 @@ class _AnnouncementLeaderShipDialogState
   @override
   void initState() {
     super.initState();
-    endDateText =
-        'Ultima actualización: ${AnnouncementDetailsUtils.formatDate(widget.updatedDate)}';
     _loadInitialData();
     _scrollController.addListener(_scrollListener);
   }
@@ -212,13 +217,16 @@ class _AnnouncementLeaderShipDialogState
     });
 
     try {
-      final items = await widget.loadMoreCallback(1);
+      final pageResult = await widget.loadMoreCallback(1);
 
       if (mounted) {
         setState(() {
-          _leaderboardItems = items;
-          _currentPage = 1;
-          _hasMoreData = items.isNotEmpty;
+          _leaderboardPage = pageResult;
+          _updatedAt =
+              pageResult.updatedAt; // Set updatedAt from the first call.
+          _currentPage = pageResult.pageNumber ?? 1;
+          _hasMoreData = (pageResult.items?.isNotEmpty ?? false) &&
+              (_currentPage < (pageResult.totalPages ?? 1));
         });
       }
     } catch (e) {
@@ -241,10 +249,10 @@ class _AnnouncementLeaderShipDialogState
 
     try {
       final nextPage = _currentPage + 1;
-      final moreItems = await widget.loadMoreCallback(nextPage);
+      final pageResult = await widget.loadMoreCallback(nextPage);
 
       if (mounted) {
-        if (moreItems.isEmpty) {
+        if (pageResult.items?.isEmpty ?? true) {
           setState(() {
             _hasMoreData = false;
             _isLoadingMore = false;
@@ -253,8 +261,14 @@ class _AnnouncementLeaderShipDialogState
         }
 
         setState(() {
-          _leaderboardItems.addAll(moreItems);
-          _currentPage = nextPage;
+          _leaderboardPage = _leaderboardPage?.copyWith(
+            items: [
+              ...?_leaderboardPage?.items,
+              ...?pageResult.items,
+            ],
+          );
+          _currentPage = pageResult.pageNumber ?? nextPage;
+          _hasMoreData = _currentPage < (pageResult.totalPages ?? 1);
         });
       }
     } catch (e) {
@@ -295,7 +309,6 @@ class _AnnouncementLeaderShipDialogState
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            spacing: StoycoScreenSize.width(context, 7),
             children: [
               SvgPicture.asset(
                 'packages/stoyco_shared/lib/assets/icons/champion_icon.svg',
@@ -316,6 +329,7 @@ class _AnnouncementLeaderShipDialogState
                       desktopLarge: 24,
                     ),
               ),
+              Gap(StoycoScreenSize.width(context, 7)),
               Text(
                 'Leadership Board',
                 style: TextStyle(
@@ -358,8 +372,10 @@ class _AnnouncementLeaderShipDialogState
                 ),
             ],
           ),
-          Gap(widget.listVerticalSpacing ??
-              StoycoScreenSize.height(context, 32, phone: 20, tablet: 30),),
+          Gap(
+            widget.listVerticalSpacing ??
+                StoycoScreenSize.height(context, 32, phone: 20, tablet: 30),
+          ),
           Row(
             mainAxisAlignment: _getCachedValue<bool>(
               'isPhone',
@@ -372,28 +388,33 @@ class _AnnouncementLeaderShipDialogState
                 text: endDateText,
                 iconPath:
                     'packages/stoyco_shared/lib/assets/icons/rounded_calendar_icon.svg',
+                maxWidth: 365,
               ),
             ],
           ),
-          Gap(widget.listVerticalSpacing ??
-              StoycoScreenSize.height(context, 42, phone: 20, tablet: 30),),
+          Gap(
+            widget.listVerticalSpacing ??
+                StoycoScreenSize.height(context, 42, phone: 20, tablet: 30),
+          ),
           if (_isLoading)
             Center(
-                child: SizedBox(
-              width: widget.loadingIndicatorSize,
-              height: widget.loadingIndicatorSize,
-              child: const CircularProgressIndicator(),
-            ),)
+              child: SizedBox(
+                width: widget.loadingIndicatorSize,
+                height: widget.loadingIndicatorSize,
+                child: const CircularProgressIndicator(),
+              ),
+            )
           else
             SizedBox(
               height: widget.dialogHeight ??
                   StoycoScreenSize.screenHeight(context) * 0.5,
               child: ListView.builder(
                 controller: _scrollController,
-                itemCount: _leaderboardItems.length + (_isLoadingMore ? 1 : 0),
+                itemCount: (_leaderboardPage?.items?.length ?? 0) +
+                    (_isLoadingMore ? 1 : 0),
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 itemBuilder: (context, index) {
-                  if (index == _leaderboardItems.length) {
+                  if (index == _leaderboardPage?.items?.length) {
                     return Center(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -406,7 +427,11 @@ class _AnnouncementLeaderShipDialogState
                     );
                   }
 
-                  final item = _leaderboardItems[index];
+                  final item = _leaderboardPage?.items?[index];
+                  if (item == null) {
+                    return const SizedBox.shrink();
+                  }
+
                   return _buildLeaderboardItem(item, index);
                 },
               ),
@@ -428,13 +453,8 @@ class _AnnouncementLeaderShipDialogState
             vertical: StoycoScreenSize.height(context, 8, phone: 6, tablet: 7),
           ),
       child: Row(
-        spacing: widget.itemSpacing ??
-            StoycoScreenSize.width(context, 78, phone: 10, tablet: 20),
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
-            spacing: widget.itemSpacing ??
-                _responsiveWidth(16, phone: 12, tablet: 14),
             children: [
               Text(
                 '${item.position < 10 ? '0' : ''}${item.position}.',
@@ -442,12 +462,20 @@ class _AnnouncementLeaderShipDialogState
                   fontSize: widget.positionFontSize ??
                       _getCachedValue<double>(
                         'position_font_size',
-                        () => StoycoScreenSize.fontSize(context, 14,
-                            phone: 11, tablet: 12,),
+                        () => StoycoScreenSize.fontSize(
+                          context,
+                          14,
+                          phone: 11,
+                          tablet: 12,
+                        ),
                       ),
                   fontWeight: widget.positionFontWeight,
                   color: widget.dateTextColor ?? StoycoColors.text,
                 ),
+              ),
+              Gap(
+                widget.itemSpacing ??
+                    _responsiveWidth(16, phone: 12, tablet: 14),
               ),
               CircleAvatar(
                 radius: widget.avatarRadius ??
@@ -457,9 +485,10 @@ class _AnnouncementLeaderShipDialogState
               ),
             ],
           ),
+          Gap(
+            widget.itemSpacing ?? _responsiveWidth(16, phone: 12, tablet: 14),
+          ),
           Row(
-            spacing: widget.itemSpacing ??
-                _responsiveWidth(16, phone: 12, tablet: 14),
             children: [
               SvgPicture.asset(
                 'packages/stoyco_shared/lib/assets/icons/titok_circle_icon.svg',
@@ -468,6 +497,10 @@ class _AnnouncementLeaderShipDialogState
                 height: widget.dateIconSize ??
                     _responsiveWidth(32, phone: 24, tablet: 28),
               ),
+              Gap(
+                widget.itemSpacing ??
+                    _responsiveWidth(16, phone: 12, tablet: 14),
+              ),
               Text(
                 '@${item.tiktokUserName}',
                 overflow: TextOverflow.ellipsis,
@@ -475,8 +508,12 @@ class _AnnouncementLeaderShipDialogState
                   fontSize: widget.usernameFontSize ??
                       _getCachedValue<double>(
                         'username_font_size',
-                        () => StoycoScreenSize.fontSize(context, 14,
-                            phone: 11, tablet: 12,),
+                        () => StoycoScreenSize.fontSize(
+                          context,
+                          14,
+                          phone: 11,
+                          tablet: 12,
+                        ),
                       ),
                   fontWeight: widget.usernameFontWeight,
                   color: widget.dateTextColor ?? StoycoColors.text,
@@ -495,8 +532,12 @@ class _AnnouncementLeaderShipDialogState
                   fontSize: widget.countersFontSize ??
                       _getCachedValue<double>(
                         'counters_font_size',
-                        () => StoycoScreenSize.fontSize(context, 14,
-                            phone: 11, tablet: 12,),
+                        () => StoycoScreenSize.fontSize(
+                          context,
+                          14,
+                          phone: 11,
+                          tablet: 12,
+                        ),
                       ),
                   fontWeight: widget.countersFontWeight,
                   color: widget.dateTextColor ?? StoycoColors.text,
@@ -514,8 +555,12 @@ class _AnnouncementLeaderShipDialogState
                     fontSize: widget.countersFontSize ??
                         _getCachedValue<double>(
                           'counters_font_size',
-                          () => StoycoScreenSize.fontSize(context, 14,
-                              phone: 11, tablet: 12,),
+                          () => StoycoScreenSize.fontSize(
+                            context,
+                            14,
+                            phone: 11,
+                            tablet: 12,
+                          ),
                         ),
                     fontWeight: widget.countersFontWeight,
                     color: widget.dateTextColor ?? StoycoColors.text,
@@ -587,23 +632,25 @@ class _AnnouncementLeaderShipDialogState
               height: iconSize,
             ),
             Gap(_responsiveWidth(10, phone: 10, tablet: 9, desktopLarge: 12)),
-            Text(
-              text,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: widget.dateFontSize ??
-                    _getCachedValue<double>(
-                      'date_font_size',
-                      () => StoycoScreenSize.fontSize(
-                        context,
-                        14,
-                        phone: 10,
-                        tablet: 12,
-                        desktopLarge: 16,
+            Expanded(
+              child: Text(
+                text,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: widget.dateFontSize ??
+                      _getCachedValue<double>(
+                        'date_font_size',
+                        () => StoycoScreenSize.fontSize(
+                          context,
+                          14,
+                          phone: 10,
+                          tablet: 12,
+                          desktopLarge: 16,
+                        ),
                       ),
-                    ),
-                fontWeight: widget.dateFontWeight,
-                color: widget.dateTextColor ?? StoycoColors.text,
+                  fontWeight: widget.dateFontWeight,
+                  color: widget.dateTextColor ?? StoycoColors.text,
+                ),
               ),
             ),
           ],

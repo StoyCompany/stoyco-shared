@@ -5,7 +5,6 @@ part 'metrics.g.dart';
 
 @JsonSerializable()
 class Metrics {
-
   const Metrics({
     this.totalPublications,
     this.totalLikes,

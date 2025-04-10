@@ -139,6 +139,10 @@ class $LibAssetsIconsGen {
   String get reactionArrowUpFilled =>
       'lib/assets/icons/reaction_arrow_up_filled.svg';
 
+  /// File path: lib/assets/icons/rounded_calendar_icon.svg
+  String get roundedCalendarIcon =>
+      'lib/assets/icons/rounded_calendar_icon.svg';
+
   /// File path: lib/assets/icons/sent_icon.svg
   String get sentIcon => 'lib/assets/icons/sent_icon.svg';
 
@@ -153,37 +157,38 @@ class $LibAssetsIconsGen {
 
   /// List of all assets
   List<String> get values => [
-        arrowDownIcon,
-        arrowDown,
-        arrowUp,
-        arrowBack,
-        arrowForwardIcon,
-        calendar,
-        calendarIcon,
-        camera,
-        championIcon,
-        checkIcon,
-        checkIconCoachMark,
-        closeIcon,
-        closeIconOutlined,
-        doneWhite18dp,
-        downArrowIcon,
-        editIcon,
-        keyboardArrowDownWhite18dp,
-        locationIcon,
-        materialCheck,
-        materialPerson,
-        materialSearch,
-        megaphoneIcon,
-        person,
-        reactionArrowDown,
-        reactionArrowUp,
-        reactionArrowUpFilled,
-        sentIcon,
-        shareOutlinedIcon,
-        simpleCloseIcon,
-        titokCircleIcon,
-      ];
+    arrowDownIcon,
+    arrowDown,
+    arrowUp,
+    arrowBack,
+    arrowForwardIcon,
+    calendar,
+    calendarIcon,
+    camera,
+    championIcon,
+    checkIcon,
+    checkIconCoachMark,
+    closeIcon,
+    closeIconOutlined,
+    doneWhite18dp,
+    downArrowIcon,
+    editIcon,
+    keyboardArrowDownWhite18dp,
+    locationIcon,
+    materialCheck,
+    materialPerson,
+    materialSearch,
+    megaphoneIcon,
+    person,
+    reactionArrowDown,
+    reactionArrowUp,
+    reactionArrowUpFilled,
+    roundedCalendarIcon,
+    sentIcon,
+    shareOutlinedIcon,
+    simpleCloseIcon,
+    titokCircleIcon,
+  ];
 }
 
 class Assets {

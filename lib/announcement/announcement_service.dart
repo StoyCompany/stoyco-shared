@@ -8,6 +8,7 @@ import 'package:stoyco_shared/announcement/models/announcement_form_config.dart'
 import 'package:stoyco_shared/announcement/models/announcement_model.dart';
 import 'package:stoyco_shared/announcement/models/announcement_participation/announcement_participation.dart';
 import 'package:stoyco_shared/announcement/models/announcement_participation_response/announcement_participation_response.dart';
+import 'package:stoyco_shared/announcement/models/user_announcement/user_announcement.dart';
 import 'package:stoyco_shared/envs/envs.dart';
 import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
 import 'package:stoyco_shared/models/page_result/page_result.dart';
@@ -62,11 +63,15 @@ class AnnouncementService {
         remoteConfig != _instance!.remoteConfig &&
         environment != _instance!.environment) {
       return AnnouncementService._(
-          remoteConfig: remoteConfig, environment: environment,);
+        remoteConfig: remoteConfig,
+        environment: environment,
+      );
     }
 
     _instance ??= AnnouncementService._(
-        remoteConfig: remoteConfig, environment: environment,);
+      remoteConfig: remoteConfig,
+      environment: environment,
+    );
     return _instance!;
   }
 
@@ -77,13 +82,16 @@ class AnnouncementService {
   /// Parameters:
   /// - [remoteConfig]: The Firebase Remote Config instance.
   /// - [environment]: The environment configuration.
-  AnnouncementService._(
-      {required this.remoteConfig, required this.environment,}) {
+  AnnouncementService._({
+    required this.remoteConfig,
+    required this.environment,
+  }) {
     _announcementDataSource = AnnouncementDataSource(
       environment: environment,
     );
     _announcementRepository = AnnouncementRepository(
-        announcementDataSource: _announcementDataSource!,);
+      announcementDataSource: _announcementDataSource!,
+    );
 
     _instance = this;
   }
@@ -138,7 +146,9 @@ class AnnouncementService {
     required StoycoEnvironment environment,
   }) {
     _instance ??= AnnouncementService._(
-        remoteConfig: remoteConfig, environment: environment,);
+      remoteConfig: remoteConfig,
+      environment: environment,
+    );
     return _instance!;
   }
 
@@ -193,7 +203,7 @@ class AnnouncementService {
   /// Fetches an announcement by its ID.
   ///
   /// Parameters:
-  /// - [newId]: The ID of the announcement to fetch.
+  /// - [announcementId]: The ID of the announcement to fetch.
   ///
   /// Returns an [Either] containing either a [Failure] or the [AnnouncementModel].
   ///
@@ -206,16 +216,16 @@ class AnnouncementService {
   /// );
   /// ```
   Future<Either<Failure, AnnouncementModel>> getAnnouncementById(
-    String newId,
+    String announcementId,
   ) async =>
-      _announcementRepository!.getAnnouncementById(newId);
+      _announcementRepository!.getAnnouncementById(announcementId);
 
   /// Marks an announcement as viewed.
   ///
   /// This is a placeholder method that currently throws [UnimplementedError].
   ///
   /// Parameters:
-  /// - [newId]: The ID of the announcement to mark as viewed.
+  /// - [announcementId]: The ID of the announcement to mark as viewed.
   ///
   /// Returns an [Either] that would contain either a [Failure] or a boolean.
   ///
@@ -227,9 +237,8 @@ class AnnouncementService {
   ///   (success) => print('Marked as viewed: $success')
   /// );
   /// ```
-  static Future<Either<Failure, bool>> markAsViewed(String newId) async {
-    throw UnimplementedError();
-  }
+  Future<Either<Failure, bool>> markAsViewed(String announcementId) async =>
+      _announcementRepository!.markAsViewed(announcementId);
 
   /// Gets a paginated list of announcements based on the provided filters.
   ///
@@ -252,29 +261,6 @@ class AnnouncementService {
           _instance!._announcementRepository!.getAnnouncementsPaginated(
             filters,
           );
-
-  /// Gets a list of announcements related to the specified announcement.
-  ///
-  /// This is a placeholder method that currently throws [UnimplementedError].
-  ///
-  /// Parameters:
-  /// - [newId]: The ID of the announcement to find related announcements for.
-  ///
-  /// Returns an [Either] that would contain either a [Failure] or a list of [AnnouncementModel].
-  ///
-  /// Example of future usage:
-  /// ```dart
-  /// final result = await AnnouncementService.relatedAnnouncement('ann123');
-  /// result.fold(
-  ///   (failure) => print('Error: ${failure.message}'),
-  ///   (announcements) => print('Related count: ${announcements.length}')
-  /// );
-  /// ```
-  static Future<Either<Failure, List<AnnouncementModel>>> relatedAnnouncement(
-    String newId,
-  ) async {
-    throw UnimplementedError();
-  }
 
   /// Submits a participation for a TikTok announcement.
   ///
@@ -308,4 +294,66 @@ class AnnouncementService {
             announcementId,
             data,
           );
+
+  /// Gets the leadership board for a specific announcement.
+
+  ///
+  /// Parameters:
+  /// - [announcementId]: The ID of the announcement
+  /// - [pageNumber]: The page number for pagination
+  /// - [pageSize]: The number of items per page
+  ///
+  /// Returns an [Either] containing either a [Failure] or a [PageResult] of [UserAnnouncement].
+  ///
+  /// Example:
+  /// ```dart
+  /// final result = await announcementService.getLeadershipBoard(
+  ///   announcementId: 'ann123',
+  ///   pageNumber: 1,
+  ///   pageSize: 10,
+  /// );
+  /// result.fold(
+  ///   (failure) => print('Error: ${failure.message}'),
+  ///   (pageResult) => print('Total participants: ${pageResult.total}')
+  /// );
+  /// ```
+  Future<Either<Failure, PageResult<UserAnnouncement>>> getLeadershipBoard({
+    required String announcementId,
+    required int pageNumber,
+    required int pageSize,
+  }) async =>
+      _announcementRepository!.getLeadershipBoard(
+        announcementId: announcementId,
+        pageNumber: pageNumber,
+        pageSize: pageSize,
+      );
+
+  /// Checks if there are active announcements.
+  ///
+  /// This method reads the 'enable_announcement' flag from Firebase Remote Config
+  /// to determine if there are active announcements in the system.
+  ///
+  /// Returns a [Future] containing a [bool]:
+  /// - `true` if there are active announcements.
+  /// - `false` if there are no active announcements or an error occurs.
+  ///
+  /// Example:
+  /// ```dart
+  /// final hasActive = await announcementService.hasActiveAnnouncements();
+  /// if (hasActive) {
+  ///   print('There are active announcements.');
+  /// } else {
+  ///   print('No active announcements.');
+  /// }
+  /// ```
+  Future<bool> hasActiveAnnouncements() async {
+    try {
+      final bool enableAnnouncement =
+          remoteConfig.getBool('enable_announcement');
+      return enableAnnouncement;
+    } catch (e) {
+      StoyCoLogger.error('Error checking active calls for applications: $e');
+      return false;
+    }
+  }
 }

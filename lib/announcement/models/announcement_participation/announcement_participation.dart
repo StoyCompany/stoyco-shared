@@ -6,7 +6,6 @@ import 'package:stoyco_shared/announcement/models/announcement_participation/soc
 
 part 'announcement_participation.g.dart';
 
-
 @JsonSerializable()
 class AnnouncementParticipation {
   const AnnouncementParticipation({

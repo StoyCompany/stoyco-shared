@@ -5,7 +5,6 @@ part 'publication.g.dart';
 
 @JsonSerializable()
 class Publication {
-
   const Publication({
     this.url,
     this.likes,

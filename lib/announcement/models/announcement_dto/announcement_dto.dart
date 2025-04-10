@@ -8,7 +8,6 @@ part 'announcement_dto.g.dart';
 
 @JsonSerializable()
 class AnnouncementDto {
-
   const AnnouncementDto({
     this.id,
     this.contentType,
@@ -22,9 +21,11 @@ class AnnouncementDto {
     this.publishedDate,
     this.endDate,
     this.configuration,
+    this.views,
   });
 
-  factory AnnouncementDto.fromJson(Map<String, dynamic> json) => _$AnnouncementDtoFromJson(json);
+  factory AnnouncementDto.fromJson(Map<String, dynamic> json) =>
+      _$AnnouncementDtoFromJson(json);
   final String? id;
   @JsonKey(name: 'content_type')
   final String? contentType;
@@ -44,9 +45,12 @@ class AnnouncementDto {
   @JsonKey(name: 'end_date')
   final String? endDate;
   final Configuration? configuration;
+  @JsonKey(name: 'views')
+  final int? views;
 
   @override
-  String toString() => 'AnnouncementDto(id: $id, contentType: $contentType, title: $title, shortDescription: $shortDescription, content: $content, createdBy: $createdBy, urlPrincipalImage: $urlPrincipalImage, state: $state, isClosedCampaign: $isClosedCampaign, publishedDate: $publishedDate, endDate: $endDate, configuration: $configuration)';
+  String toString() =>
+      'AnnouncementDto(id: $id, contentType: $contentType, title: $title, shortDescription: $shortDescription, content: $content, createdBy: $createdBy, urlPrincipalImage: $urlPrincipalImage, state: $state, isClosedCampaign: $isClosedCampaign, publishedDate: $publishedDate, endDate: $endDate, configuration: $configuration, views: $views)';
 
   Map<String, dynamic> toJson() => _$AnnouncementDtoToJson(this);
 
@@ -63,20 +67,23 @@ class AnnouncementDto {
     String? publishedDate,
     String? endDate,
     Configuration? configuration,
-  }) => AnnouncementDto(
-      id: id ?? this.id,
-      contentType: contentType ?? this.contentType,
-      title: title ?? this.title,
-      shortDescription: shortDescription ?? this.shortDescription,
-      content: content ?? this.content,
-      createdBy: createdBy ?? this.createdBy,
-      urlPrincipalImage: urlPrincipalImage ?? this.urlPrincipalImage,
-      state: state ?? this.state,
-      isClosedCampaign: isClosedCampaign ?? this.isClosedCampaign,
-      publishedDate: publishedDate ?? this.publishedDate,
-      endDate: endDate ?? this.endDate,
-      configuration: configuration ?? this.configuration,
-    );
+    int? views,
+  }) =>
+      AnnouncementDto(
+        id: id ?? this.id,
+        contentType: contentType ?? this.contentType,
+        title: title ?? this.title,
+        shortDescription: shortDescription ?? this.shortDescription,
+        content: content ?? this.content,
+        createdBy: createdBy ?? this.createdBy,
+        urlPrincipalImage: urlPrincipalImage ?? this.urlPrincipalImage,
+        state: state ?? this.state,
+        isClosedCampaign: isClosedCampaign ?? this.isClosedCampaign,
+        publishedDate: publishedDate ?? this.publishedDate,
+        endDate: endDate ?? this.endDate,
+        configuration: configuration ?? this.configuration,
+        views: views ?? this.views,
+      );
 
   @override
   bool operator ==(Object other) {
@@ -99,5 +106,6 @@ class AnnouncementDto {
       isClosedCampaign.hashCode ^
       publishedDate.hashCode ^
       endDate.hashCode ^
-      configuration.hashCode;
+      configuration.hashCode ^
+      views.hashCode;
 }

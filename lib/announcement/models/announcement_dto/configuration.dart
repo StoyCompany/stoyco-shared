@@ -5,27 +5,29 @@ part 'configuration.g.dart';
 
 @JsonSerializable()
 class Configuration {
-
   const Configuration({this.pointsPerLike, this.pointsPerVideo});
 
-  factory Configuration.fromJson(Map<String, dynamic> json) => _$ConfigurationFromJson(json);
+  factory Configuration.fromJson(Map<String, dynamic> json) =>
+      _$ConfigurationFromJson(json);
   @JsonKey(name: 'points_per_like')
   final int? pointsPerLike;
   @JsonKey(name: 'points_per_video')
   final int? pointsPerVideo;
 
   @override
-  String toString() => 'Configuration(pointsPerLike: $pointsPerLike, pointsPerVideo: $pointsPerVideo)';
+  String toString() =>
+      'Configuration(pointsPerLike: $pointsPerLike, pointsPerVideo: $pointsPerVideo)';
 
   Map<String, dynamic> toJson() => _$ConfigurationToJson(this);
 
   Configuration copyWith({
     int? pointsPerLike,
     int? pointsPerVideo,
-  }) => Configuration(
-      pointsPerLike: pointsPerLike ?? this.pointsPerLike,
-      pointsPerVideo: pointsPerVideo ?? this.pointsPerVideo,
-    );
+  }) =>
+      Configuration(
+        pointsPerLike: pointsPerLike ?? this.pointsPerLike,
+        pointsPerVideo: pointsPerVideo ?? this.pointsPerVideo,
+      );
 
   @override
   bool operator ==(Object other) {
