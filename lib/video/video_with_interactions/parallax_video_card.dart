@@ -204,7 +204,6 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
   }
 
   Future<void> _handleShare() async {
-    // Obtén la URL del video y el texto para compartir
     final video = widget.videoInfo.video;
     final videoUrl = (widget.videoInfo.video.appUrl ?? '');
     final shareText = widget.shareText ??
@@ -227,7 +226,6 @@ Ver video: $videoUrl''';
         widget.onShare!();
       }
     } catch (e) {
-      // Manejo de errores
       if (widget.play) {
         await _controller?.play();
       }
