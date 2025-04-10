@@ -388,6 +388,7 @@ class _AnnouncementLeaderShipDialogState
                 text: endDateText,
                 iconPath:
                     'packages/stoyco_shared/lib/assets/icons/rounded_calendar_icon.svg',
+                maxWidth: 365,
               ),
             ],
           ),
@@ -627,23 +628,25 @@ class _AnnouncementLeaderShipDialogState
               height: iconSize,
             ),
             Gap(_responsiveWidth(10, phone: 10, tablet: 9, desktopLarge: 12)),
-            Text(
-              text,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: widget.dateFontSize ??
-                    _getCachedValue<double>(
-                      'date_font_size',
-                      () => StoycoScreenSize.fontSize(
-                        context,
-                        14,
-                        phone: 10,
-                        tablet: 12,
-                        desktopLarge: 16,
+            Expanded(
+              child: Text(
+                text,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: widget.dateFontSize ??
+                      _getCachedValue<double>(
+                        'date_font_size',
+                        () => StoycoScreenSize.fontSize(
+                          context,
+                          14,
+                          phone: 10,
+                          tablet: 12,
+                          desktopLarge: 16,
+                        ),
                       ),
-                    ),
-                fontWeight: widget.dateFontWeight,
-                color: widget.dateTextColor ?? StoycoColors.text,
+                  fontWeight: widget.dateFontWeight,
+                  color: widget.dateTextColor ?? StoycoColors.text,
+                ),
               ),
             ),
           ],
