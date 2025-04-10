@@ -88,11 +88,12 @@ class VideoSlider extends StatefulWidget {
 
 class _VideoSliderState extends State<VideoSlider> {
   List<VideoInfoWithUserInteraction> videosList = [];
-  Map<String, Image?> videoThumbnails = {}; // Cambiar a Map
-  bool isLoading = true;
+  final ValueNotifier<Map<String, Image?>> videoThumbnails =
+  ValueNotifier<Map<String, Image?>>({});
+  final ValueNotifier<bool> isLoading = ValueNotifier<bool>(true);
   final CarouselSliderController _carouselController =
       CarouselSliderController();
-  int currentIndex = 0;
+  final ValueNotifier<int> currentIndex = ValueNotifier<int>(0);
   bool isMuted = true;
   final _videoCacheService = VideoCacheService();
   bool allVideosLoaded = false;
@@ -110,17 +111,13 @@ class _VideoSliderState extends State<VideoSlider> {
   /// 3. Generates thumbnails progressively
   /// 4. Updates UI state accordingly
   Future<void> loadVideos() async {
-    setState(() {
-      isLoading = true;
-    });
+    isLoading.value = true;
 
     final videosResult = await widget.getVideosWithMetadata();
 
     await videosResult.fold(
       (failure) {
-        setState(() {
-          isLoading = false;
-        });
+        isLoading.value = false;
       },
       (videos) async {
         videos.sort((a, b) {
@@ -146,11 +143,9 @@ class _VideoSliderState extends State<VideoSlider> {
           );
 
           if (!isFirstVideoProcessed) {
-            setState(() {
-              videoThumbnails = {}; // Inicializar Map vacío
-              isLoading = false;
-              isFirstVideoProcessed = true;
-            });
+            videoThumbnails.value = {};
+            isLoading.value = false;
+            isFirstVideoProcessed = true;
 
             // Initialize thumbnail for the first video immediately
             if (videosList.first.video.appUrl?.isNotEmpty == true) {
@@ -159,9 +154,10 @@ class _VideoSliderState extends State<VideoSlider> {
                 final thumbnail =
                     await getVideoThumbnail(videosList.first.video.appUrl!);
                 if (mounted) {
-                  setState(() {
-                    videoThumbnails[videoId] = thumbnail;
-                  });
+                  videoThumbnails.value = {
+                    ...videoThumbnails.value,
+                    videoId: thumbnail,
+                  };
                 }
               }
             }
@@ -180,12 +176,13 @@ class _VideoSliderState extends State<VideoSlider> {
           if (videoUrl.isNotEmpty && videoId != null) {
             unawaited(getVideoThumbnail(videoUrl).then((value) {
               if (mounted) {
-                setState(() {
-                  videoThumbnails[videoId] = value;
-                  if (i == videosList.length - 1) {
-                    allVideosLoaded = true;
-                  }
-                });
+                videoThumbnails.value = {
+                  ...videoThumbnails.value,
+                  videoId: value,
+                };
+                if (i == videosList.length - 1) {
+                  allVideosLoaded = true;
+                }
               }
             }),);
           }
@@ -297,13 +294,11 @@ class _VideoSliderState extends State<VideoSlider> {
     final previousIndex = currentIndex;
     widget.onPageChanged?.call(index);
 
-    setState(() {
-      currentIndex = index;
-    });
+      currentIndex.value = index;
 
     // Pause previous video if it's not adjacent to current
-    if ((index - previousIndex).abs() > 1) {
-      final videoUrl = videosList[previousIndex].video.videoUrl;
+    if ((index - previousIndex.value).abs() > 1) {
+      final videoUrl = videosList[previousIndex.value].video.videoUrl;
       if (videoUrl != null) {
         _videoCacheService.pauseController(videoUrl);
       }
@@ -320,6 +315,9 @@ class _VideoSliderState extends State<VideoSlider> {
 
   @override
   void dispose() {
+    isLoading.dispose();
+    currentIndex.dispose();
+    videoThumbnails.dispose();
     _videoCacheService.clearCache();
     super.dispose();
   }
@@ -330,89 +328,96 @@ class _VideoSliderState extends State<VideoSlider> {
     final sliderWidth = widget.width ?? screenWidth;
     final sliderHeight = widget.height ?? screenWidth;
 
-    return isLoading
-        ? SizedBox(
+    return ValueListenableBuilder<bool>(
+      valueListenable: isLoading,
+      builder: (context, isLoadingValue, child) {
+        if (isLoadingValue) {
+          return SizedBox(
             width: sliderWidth,
             height: sliderHeight,
-            //padding: padding ?? StoycoScreenSize.all(context, 4.5),
-            child: Column(
-              children: [
-                Shimmer.fromColors(
-                  baseColor: const Color.fromARGB(255, 11, 18, 44),
-                  highlightColor: const Color.fromARGB(255, 20, 35, 88),
-                  child: LayoutBuilder(
-                    builder: (context, constraints2) {
-                      final width = constraints2.maxWidth;
-                      return SizedBox(
-                        width: width,
-                        height: width,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Container(
-                            color: Colors.grey,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          )
-        : SizedBox(
-            width: sliderWidth,
-            height: sliderHeight,
-            child: CarouselSlider.builder(
-              carouselController: _carouselController,
-              options: CarouselOptions(
-                enlargeCenterPage: true,
-                enlargeStrategy: CenterPageEnlargeStrategy.zoom,
-                viewportFraction: 1,
-                onPageChanged: _onPageChanged,
-                enableInfiniteScroll: allVideosLoaded && videosList.length > 1,
-              ),
-              itemCount: videosList.length,
-              itemBuilder: (context, index, realIndex) => Column(
-                children: [
-                  SizedBox(
-                    width: sliderWidth,
-                    height: sliderHeight,
-                    child: ParallaxVideoCard(
-                      videoInfo: videosList[index],
-                      thumbnail: videosList[index].video.id != null
-                          ? videoThumbnails[videosList[index].video.id]
-                          : null,
-                      play: currentIndex == index,
-                      showInteractions: widget.showInteractions,
-                      onLike: () => _handleLike(videosList[index].video),
-                      onDislike: () => _handleDislike(videosList[index].video),
-                      onShare: widget.onShare != null
-                          ? () => _handleShare(videosList[index].video)
-                          : null,
-                      nextVideo: () {
-                        widget.nextVideo
-                            ?.call(isMuted, videosList[index].video);
-                        if (videosList.length > 1) {
-                          _carouselController.nextPage();
-                          if (currentIndex == videosList.length - 1) {
-                            currentIndex = 0;
-                          } else {
-                            currentIndex++;
-                          }
-                        }
-                      },
-                      mute: (value) {
-                        isMuted = value;
-                      },
-                      isMuted: isMuted,
-                      isLooping: videosList.length == 1,
-                      env: widget.env,
+            child: Shimmer.fromColors(
+              baseColor: const Color.fromARGB(255, 11, 18, 44),
+              highlightColor: const Color.fromARGB(255, 20, 35, 88),
+              child: LayoutBuilder(
+                builder: (context, constraints2) {
+                  final width = constraints2.maxWidth;
+                  return SizedBox(
+                    width: width,
+                    height: width,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Container(
+                        color: Colors.grey,
+                      ),
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
             ),
           );
+        }
+
+        return ValueListenableBuilder<int>(
+          valueListenable: currentIndex,
+          builder: (context, currentIndexValue, child) => SizedBox(
+              width: sliderWidth,
+              height: sliderHeight,
+              child: CarouselSlider.builder(
+                carouselController: _carouselController,
+                options: CarouselOptions(
+                  enlargeCenterPage: true,
+                  enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                  viewportFraction: 1,
+                  onPageChanged: (index, reason) {
+                    currentIndex.value = index;
+                    _onPageChanged(index, reason);
+                  },
+                  enableInfiniteScroll:
+                  allVideosLoaded && videosList.length > 1,
+                ),
+                itemCount: videosList.length,
+                itemBuilder: (context, index, realIndex) => ValueListenableBuilder<Map<String, Image?>>(
+                    valueListenable: videoThumbnails,
+                    builder: (context, thumbnails, child) => ParallaxVideoCard(
+                        videoInfo: videosList[index],
+                        thumbnail: videosList[index].video.id != null
+                            ? thumbnails[videosList[index].video.id]
+                            : null,
+                        play: currentIndexValue == index,
+                        showInteractions: widget.showInteractions,
+                        onLike: () =>
+                            _handleLike(videosList[index].video),
+                        onDislike: () =>
+                            _handleDislike(videosList[index].video),
+                        onShare: widget.onShare != null
+                            ? () => _handleShare(videosList[index].video)
+                            : null,
+                        nextVideo: () {
+                          widget.nextVideo
+                              ?.call(isMuted, videosList[index].video);
+                          if (videosList.length > 1) {
+                            _carouselController.nextPage();
+                            if (currentIndexValue == videosList.length - 1) {
+                              currentIndex.value = 0;
+                            } else {
+                              currentIndex.value++;
+                            }
+                          }
+                        },
+                        mute: (value) {
+                          isMuted = value;
+                        },
+                        isMuted: isMuted,
+                        isLooping: videosList.length == 1,
+                        env: widget.env,
+                      ),
+                  ),
+              ),
+            ),
+        );
+      },
+    );
+
   }
 
   /// Generates a thumbnail for a video URL.
