@@ -203,7 +203,7 @@ class AnnouncementService {
   /// Fetches an announcement by its ID.
   ///
   /// Parameters:
-  /// - [newId]: The ID of the announcement to fetch.
+  /// - [announcementId]: The ID of the announcement to fetch.
   ///
   /// Returns an [Either] containing either a [Failure] or the [AnnouncementModel].
   ///
@@ -216,16 +216,16 @@ class AnnouncementService {
   /// );
   /// ```
   Future<Either<Failure, AnnouncementModel>> getAnnouncementById(
-    String newId,
+    String announcementId,
   ) async =>
-      _announcementRepository!.getAnnouncementById(newId);
+      _announcementRepository!.getAnnouncementById(announcementId);
 
   /// Marks an announcement as viewed.
   ///
   /// This is a placeholder method that currently throws [UnimplementedError].
   ///
   /// Parameters:
-  /// - [newId]: The ID of the announcement to mark as viewed.
+  /// - [announcementId]: The ID of the announcement to mark as viewed.
   ///
   /// Returns an [Either] that would contain either a [Failure] or a boolean.
   ///
@@ -237,9 +237,8 @@ class AnnouncementService {
   ///   (success) => print('Marked as viewed: $success')
   /// );
   /// ```
-  static Future<Either<Failure, bool>> markAsViewed(String newId) async {
-    throw UnimplementedError();
-  }
+  Future<Either<Failure, bool>> markAsViewed(String announcementId) async =>
+      _announcementRepository!.markAsViewed(announcementId);
 
   /// Gets a paginated list of announcements based on the provided filters.
   ///
@@ -262,29 +261,6 @@ class AnnouncementService {
           _instance!._announcementRepository!.getAnnouncementsPaginated(
             filters,
           );
-
-  /// Gets a list of announcements related to the specified announcement.
-  ///
-  /// This is a placeholder method that currently throws [UnimplementedError].
-  ///
-  /// Parameters:
-  /// - [newId]: The ID of the announcement to find related announcements for.
-  ///
-  /// Returns an [Either] that would contain either a [Failure] or a list of [AnnouncementModel].
-  ///
-  /// Example of future usage:
-  /// ```dart
-  /// final result = await AnnouncementService.relatedAnnouncement('ann123');
-  /// result.fold(
-  ///   (failure) => print('Error: ${failure.message}'),
-  ///   (announcements) => print('Related count: ${announcements.length}')
-  /// );
-  /// ```
-  static Future<Either<Failure, List<AnnouncementModel>>> relatedAnnouncement(
-    String newId,
-  ) async {
-    throw UnimplementedError();
-  }
 
   /// Submits a participation for a TikTok announcement.
   ///

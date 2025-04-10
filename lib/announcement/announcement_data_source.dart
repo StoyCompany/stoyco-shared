@@ -141,4 +141,26 @@ class AnnouncementDataSource {
 
     return response;
   }
+
+  /// Marks a specific announcement as viewed.
+  ///
+  /// [announcementId] - The unique identifier of the announcement to mark as viewed.
+  ///
+  /// Returns a [Response] indicating the success or failure of the operation.
+  ///
+  /// Example:
+  /// ```dart
+  /// final announcementId = '12345';
+  /// final response = await dataSource.markAsViewed(announcementId);
+  /// final result = response.data;
+  /// ```
+  Future<Response> markAsViewed(String announcementId) async {
+    final cancelToken = CancelToken();
+    final response = await _dio.post(
+      '${environment.urlAnnouncement}announcement/$announcementId/view',
+      cancelToken: cancelToken,
+    );
+
+    return response;
+  }
 }

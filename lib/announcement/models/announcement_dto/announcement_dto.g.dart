@@ -25,6 +25,7 @@ AnnouncementDto _$AnnouncementDtoFromJson(Map<String, dynamic> json) =>
           ? null
           : Configuration.fromJson(
               json['configuration'] as Map<String, dynamic>),
+      views: (json['views'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$AnnouncementDtoToJson(AnnouncementDto instance) =>
@@ -41,4 +42,5 @@ Map<String, dynamic> _$AnnouncementDtoToJson(AnnouncementDto instance) =>
       'published_date': instance.publishedDate,
       'end_date': instance.endDate,
       'configuration': instance.configuration,
+      'views': instance.views,
     };

@@ -240,4 +240,37 @@ class AnnouncementRepository {
       return Left(ExceptionFailure.decode(error));
     }
   }
+
+  /// Marks an announcement as viewed.
+  ///
+  /// Returns an [Either] containing either a [Failure] or a [bool].
+  /// - [true]: If the announcement was successfully marked as viewed.
+  /// - [false]: If the operation failed.
+  ///
+  /// Parameters:
+  /// - [announcementId]: The unique identifier of the announcement to mark as viewed.
+  ///
+  /// Example:
+  /// ```dart
+  /// final announcementId = 'announcement123';
+  /// final result = await announcementRepo.markAsViewed(announcementId);
+  ///
+  /// result.fold(
+  ///   (failure) => print('Error: ${failure.message}'),
+  ///   (success) => print('Announcement marked as viewed: $success'),
+  /// );
+  /// ```
+  Future<Either<Failure, bool>> markAsViewed(String announcementId) async {
+    try {
+      final response =
+          await _announcementDataSource.markAsViewed(announcementId);
+      return Right(response.statusCode == 200);
+    } on DioException catch (error) {
+      return Left(DioFailure.decode(error));
+    } on Error catch (error) {
+      return Left(ErrorFailure.decode(error));
+    } on Exception catch (error) {
+      return Left(ExceptionFailure.decode(error));
+    }
+  }
 }

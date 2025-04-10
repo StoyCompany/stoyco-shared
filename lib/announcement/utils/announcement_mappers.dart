@@ -49,7 +49,7 @@ class AnnouncementMapper {
         startDate: dto.publishedDate,
         endDate: dto.endDate,
         createdBy: dto.createdBy,
-        viewCount: 0,
+        viewCount: dto.views,
         images: [],
       );
 
@@ -92,6 +92,7 @@ class AnnouncementMapper {
       createdBy: model.createdBy,
       publishedDate: model.startDate,
       endDate: model.endDate,
+      views: model.viewCount,
     );
   }
 
