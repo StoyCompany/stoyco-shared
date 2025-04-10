@@ -309,7 +309,6 @@ class _AnnouncementLeaderShipDialogState
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            spacing: StoycoScreenSize.width(context, 7),
             children: [
               SvgPicture.asset(
                 'packages/stoyco_shared/lib/assets/icons/champion_icon.svg',
@@ -330,6 +329,7 @@ class _AnnouncementLeaderShipDialogState
                       desktopLarge: 24,
                     ),
               ),
+              Gap(StoycoScreenSize.width(context, 7)),
               Text(
                 'Leadership Board',
                 style: TextStyle(
@@ -453,13 +453,8 @@ class _AnnouncementLeaderShipDialogState
             vertical: StoycoScreenSize.height(context, 8, phone: 6, tablet: 7),
           ),
       child: Row(
-        spacing: widget.itemSpacing ??
-            StoycoScreenSize.width(context, 78, phone: 10, tablet: 20),
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
-            spacing: widget.itemSpacing ??
-                _responsiveWidth(16, phone: 12, tablet: 14),
             children: [
               Text(
                 '${item.position < 10 ? '0' : ''}${item.position}.',
@@ -478,6 +473,10 @@ class _AnnouncementLeaderShipDialogState
                   color: widget.dateTextColor ?? StoycoColors.text,
                 ),
               ),
+              Gap(
+                widget.itemSpacing ??
+                    _responsiveWidth(16, phone: 12, tablet: 14),
+              ),
               CircleAvatar(
                 radius: widget.avatarRadius ??
                     _responsiveWidth(16, phone: 12, tablet: 14),
@@ -486,9 +485,10 @@ class _AnnouncementLeaderShipDialogState
               ),
             ],
           ),
+          Gap(
+            widget.itemSpacing ?? _responsiveWidth(16, phone: 12, tablet: 14),
+          ),
           Row(
-            spacing: widget.itemSpacing ??
-                _responsiveWidth(16, phone: 12, tablet: 14),
             children: [
               SvgPicture.asset(
                 'packages/stoyco_shared/lib/assets/icons/titok_circle_icon.svg',
@@ -496,6 +496,10 @@ class _AnnouncementLeaderShipDialogState
                     _responsiveWidth(32, phone: 24, tablet: 28),
                 height: widget.dateIconSize ??
                     _responsiveWidth(32, phone: 24, tablet: 28),
+              ),
+              Gap(
+                widget.itemSpacing ??
+                    _responsiveWidth(16, phone: 12, tablet: 14),
               ),
               Text(
                 '@${item.tiktokUserName}',

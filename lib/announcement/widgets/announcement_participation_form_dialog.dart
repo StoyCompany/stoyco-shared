@@ -250,12 +250,9 @@ class _ParticipationFormDialogState<T>
           ReactiveForm(
             formGroup: form,
             child: Column(
-              spacing: widget.formFieldSpacing ??
-                  StoycoScreenSize.height(context, 16),
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: StoycoScreenSize.width(context, 8),
                   children: [
                     SvgPicture.asset(
                       'packages/stoyco_shared/lib/assets/icons/sent_icon.svg',
@@ -272,6 +269,7 @@ class _ParticipationFormDialogState<T>
                             phone: 14,
                           ),
                     ),
+                    Gap(StoycoScreenSize.width(context, 8)),
                     Text(
                       widget.config.dialogTitle,
                       style: TextStyle(
@@ -285,6 +283,10 @@ class _ParticipationFormDialogState<T>
                       ),
                     ),
                   ],
+                ),
+                Gap(
+                  widget.formFieldSpacing ??
+                      StoycoScreenSize.height(context, 16),
                 ),
                 StoyCoTextFormField(
                   formControlName: 'tiktok_username',
@@ -323,6 +325,10 @@ class _ParticipationFormDialogState<T>
                           BorderRadius.circular(widget.inputBorderRadius),
                     ),
                   ),
+                ),
+                Gap(
+                  widget.formFieldSpacing ??
+                      StoycoScreenSize.height(context, 16),
                 ),
                 StoyCoTextFormField(
                   formControlName: 'post_url',
