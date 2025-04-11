@@ -13,12 +13,14 @@ class TikTokRepository {
     required String code,
     required String codeVerifier,
     required String userId,
+    required String platform,
   }) async {
     try {
       final response = await _dataSource.processAuthCode(
         code: code,
         userId: userId,
-        codeVerifier: codeVerifier
+        codeVerifier: codeVerifier,
+        platform: platform,
       );
       return Right(response.data);
     } on DioException catch (error) {
