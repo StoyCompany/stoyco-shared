@@ -43,9 +43,9 @@ class AnnouncementMapper {
         mainImage: dto.urlPrincipalImage,
         content: dto.content, // Assuming Content has a text property
         shortDescription: dto.shortDescription,
-        isDraft: dto.state?.toLowerCase() == 'draft',
-        isPublished: dto.state?.toLowerCase() == 'published',
-        isDeleted: dto.state?.toLowerCase() == 'deleted',
+        isDraft: AnnouncementState.isDraft(dto.state),
+        isPublished: AnnouncementState.isPublished(dto.state),
+        isDeleted: AnnouncementState.isDeleted(dto.state),
         startDate: dto.publishedDate,
         endDate: dto.endDate,
         createdBy: dto.createdBy,

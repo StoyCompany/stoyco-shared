@@ -6,6 +6,40 @@ import 'package:stoyco_shared/announcement/models/announcement_dto/content.dart'
 
 part 'announcement_dto.g.dart';
 
+/// Represents the state of an announcement.
+enum AnnouncementState {
+  /// Announcement has been published and is visible to users
+  published('published'),
+
+  /// Announcement is unpublished
+  unpublished('unpublished'),
+
+  /// Announcement is saved but not yet published
+  draft('draft'),
+
+  /// Announcement has been deleted
+  deleted('deleted'),
+
+  /// Announcement has been closed
+  closed('closed');
+
+  const AnnouncementState(this.value);
+
+  final String value;
+
+  static bool isDraft(String? state) => state?.toLowerCase() == draft.value;
+
+  static bool isPublished(String? state) =>
+      state?.toLowerCase() == published.value;
+
+  static bool isDeleted(String? state) => state?.toLowerCase() == deleted.value;
+
+  static bool isClosed(String? state) => state?.toLowerCase() == closed.value;
+
+  static bool isUnpublished(String? state) =>
+      state?.toLowerCase() == unpublished.value;
+}
+
 @JsonSerializable()
 class AnnouncementDto {
   const AnnouncementDto({

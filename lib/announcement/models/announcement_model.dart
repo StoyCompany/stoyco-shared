@@ -49,22 +49,7 @@ class AnnouncementModel {
   final String? createdBy;
   final String? createdAt;
 
-  bool get isActive {
-    try {
-      if (startDate == null || endDate == null) return false;
-
-      final now = DateTime.now().toUtc();
-      final start = DateTime.tryParse(startDate!)?.toUtc();
-      final end = DateTime.tryParse(endDate!)?.toUtc();
-
-      if (start == null || end == null) return false;
-
-      return now.isAfter(start) && now.isBefore(end);
-    } catch (e) {
-      // In case of any exception, return false as the state cannot be determined
-      return false;
-    }
-  }
+  bool get isActive => isPublished ?? false;
 
   @override
   String toString() =>

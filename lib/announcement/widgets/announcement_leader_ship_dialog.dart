@@ -384,11 +384,15 @@ class _AnnouncementLeaderShipDialogState
                 ? MainAxisAlignment.center
                 : MainAxisAlignment.spaceBetween,
             children: [
-              _buildActionButton(
-                text: endDateText,
-                iconPath:
-                    'packages/stoyco_shared/lib/assets/icons/rounded_calendar_icon.svg',
-                maxWidth: 365,
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) => _buildActionButton(
+                      text: endDateText,
+                      iconPath:
+                          'packages/stoyco_shared/lib/assets/icons/rounded_calendar_icon.svg',
+                      maxWidth: constraints.maxWidth,
+                    ),
+                ),
               ),
             ],
           ),
@@ -453,6 +457,8 @@ class _AnnouncementLeaderShipDialogState
             vertical: StoycoScreenSize.height(context, 8, phone: 6, tablet: 7),
           ),
       child: Row(
+        mainAxisAlignment:
+            isPhone ? MainAxisAlignment.spaceBetween : MainAxisAlignment.start,
         children: [
           Row(
             children: [
