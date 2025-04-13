@@ -140,8 +140,6 @@ class _ParticipationFormDialogState<T>
     });
 
     try {
-      await Future.delayed(const Duration(seconds: 5));
-
       if (widget.onSubmit != null) {
         await widget.onSubmit!({});
       }
