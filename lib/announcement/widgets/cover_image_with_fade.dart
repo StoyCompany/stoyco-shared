@@ -35,12 +35,16 @@ class CoverImageWithFade extends StatelessWidget {
   /// parent constraints, with mobile screens using 80% of the available width.
   ///
   /// The [child] parameter can be used to overlay content on top of the image.
+  ///
+  /// The [enableFade] parameter controls whether the fade gradient effect is applied.
+  /// By default, it is set to true.
   const CoverImageWithFade({
     super.key,
     required this.imageUrl,
     this.child,
     this.width,
     this.height,
+    this.enableFade = false,
   });
 
   /// The URL of the image to be displayed.
@@ -57,6 +61,10 @@ class CoverImageWithFade extends StatelessWidget {
   /// Optional explicit height of the image container.
   /// If null, height will be calculated based on the width using a 0.88571 aspect ratio.
   final double? height;
+
+  /// Whether to apply the fade gradient effect.
+  /// If false, no gradient overlay will be applied to the image.
+  final bool enableFade;
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
@@ -95,24 +103,25 @@ class CoverImageWithFade extends StatelessWidget {
                   ),
                 ),
                 if (child != null) child!,
-                Positioned.fill(
-                  child: Container(
-                    height: calculatedHeight,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        stops: const [0.0, 0.3, 0.7, 1.0],
-                        colors: [
-                          Colors.transparent,
-                          StoycoColors.deepCharcoal.withOpacity(0.2),
-                          StoycoColors.deepCharcoal.withOpacity(0.6),
-                          StoycoColors.deepCharcoal,
-                        ],
+                if (enableFade)
+                  Positioned.fill(
+                    child: Container(
+                      height: calculatedHeight,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          stops: const [0.0, 0.3, 0.7, 1.0],
+                          colors: [
+                            Colors.transparent,
+                            StoycoColors.deepCharcoal.withOpacity(0.2),
+                            StoycoColors.deepCharcoal.withOpacity(0.6),
+                            StoycoColors.deepCharcoal,
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
               ],
             ),
           );
