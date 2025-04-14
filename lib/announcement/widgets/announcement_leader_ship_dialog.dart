@@ -455,8 +455,7 @@ class _AnnouncementLeaderShipDialogState
             vertical: StoycoScreenSize.height(context, 8, phone: 6, tablet: 7),
           ),
       child: Row(
-        mainAxisAlignment:
-            isPhone ? MainAxisAlignment.spaceBetween : MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             children: [
@@ -478,8 +477,7 @@ class _AnnouncementLeaderShipDialogState
                 ),
               ),
               Gap(
-                widget.itemSpacing ??
-                    _responsiveWidth(16, phone: 12, tablet: 14),
+                _responsiveWidth(16, phone: 12, tablet: 14),
               ),
               CircleAvatar(
                 radius: widget.avatarRadius ??
@@ -489,57 +487,62 @@ class _AnnouncementLeaderShipDialogState
               ),
             ],
           ),
-          Gap(
-            widget.itemSpacing ?? _responsiveWidth(16, phone: 12, tablet: 14),
-          ),
-          GestureDetector(
-            onTap: () async {
-              try {
-                final url = Uri.parse(item.urlPlatform);
-                if (await canLaunchUrl(url)) {
-                  await launchUrl(url, mode: LaunchMode.externalApplication);
-                }
-              } catch (e) {
-                StoyCoLogger.error(
-                  'Error launching URL: ${item.urlPlatform}',
-                  error: e,
-                );
-              }
-            },
-            child: Row(
-              children: [
-                SvgPicture.asset(
-                  'packages/stoyco_shared/lib/assets/icons/titok_circle_icon.svg',
-                  width: widget.dateIconSize ??
-                      _responsiveWidth(32, phone: 24, tablet: 28),
-                  height: widget.dateIconSize ??
-                      _responsiveWidth(32, phone: 24, tablet: 28),
+          Gap(widget.itemSpacing ?? _responsiveWidth(16)),
+          Expanded(
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () async {
+                  try {
+                    final url = Uri.parse(item.urlPlatform);
+                    if (await canLaunchUrl(url)) {
+                      await launchUrl(url,
+                          mode: LaunchMode.externalApplication);
+                    }
+                  } catch (e) {
+                    StoyCoLogger.error(
+                      'Error launching URL: ${item.urlPlatform}',
+                      error: e,
+                    );
+                  }
+                },
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      'packages/stoyco_shared/lib/assets/icons/titok_circle_icon.svg',
+                      width: widget.dateIconSize ??
+                          _responsiveWidth(32, phone: 24, tablet: 28),
+                      height: widget.dateIconSize ??
+                          _responsiveWidth(32, phone: 24, tablet: 28),
+                    ),
+                    Gap(
+                      widget.itemSpacing ??
+                          _responsiveWidth(16, phone: 12, tablet: 14),
+                    ),
+                    Text(
+                      '@${item.tiktokUserName}',
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: widget.usernameFontSize ??
+                            _getCachedValue<double>(
+                              'username_font_size',
+                              () => StoycoScreenSize.fontSize(
+                                context,
+                                14,
+                                phone: 11,
+                                tablet: 12,
+                              ),
+                            ),
+                        fontWeight: widget.usernameFontWeight,
+                        color: widget.dateTextColor ?? StoycoColors.text,
+                      ),
+                    ),
+                  ],
                 ),
-                Gap(
-                  widget.itemSpacing ??
-                      _responsiveWidth(16, phone: 12, tablet: 14),
-                ),
-                Text(
-                  '@${item.tiktokUserName}',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: widget.usernameFontSize ??
-                        _getCachedValue<double>(
-                          'username_font_size',
-                          () => StoycoScreenSize.fontSize(
-                            context,
-                            14,
-                            phone: 11,
-                            tablet: 12,
-                          ),
-                        ),
-                    fontWeight: widget.usernameFontWeight,
-                    color: widget.dateTextColor ?? StoycoColors.text,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
+          Gap(widget.itemSpacing ?? _responsiveWidth(16)),
           if (!isPhone)
             SizedBox(
               width:
