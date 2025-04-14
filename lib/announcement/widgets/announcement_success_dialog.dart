@@ -192,19 +192,9 @@ class _ParticipationFormDialogState<T>
                     child: SvgPicture.asset(
                       'packages/stoyco_shared/lib/assets/icons/simple_close_icon.svg',
                       width: widget.closeIconSize?.width ??
-                          StoycoScreenSize.width(
-                            context,
-                            14,
-                            phone: 10,
-                            tablet: 12,
-                          ),
+                          StoycoScreenSize.width(context, 14),
                       height: widget.closeIconSize?.height ??
-                          StoycoScreenSize.height(
-                            context,
-                            14,
-                            phone: 10,
-                            tablet: 12,
-                          ),
+                          StoycoScreenSize.height(context, 14),
                       color: const Color(0xFFFAFAFA),
                     ),
                   ),
