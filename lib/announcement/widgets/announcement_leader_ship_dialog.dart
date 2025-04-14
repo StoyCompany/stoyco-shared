@@ -358,15 +358,11 @@ class _AnnouncementLeaderShipDialogState
                           StoycoScreenSize.width(
                             context,
                             14,
-                            phone: 10,
-                            tablet: 12,
                           ),
                       height: widget.closeIconSize ??
                           StoycoScreenSize.height(
                             context,
                             14,
-                            phone: 10,
-                            tablet: 12,
                           ),
                       color: const Color(0xFFFAFAFA),
                     ),
