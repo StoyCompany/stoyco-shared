@@ -7,6 +7,8 @@ import 'package:gap/gap.dart';
 import 'package:stoyco_shared/announcement/models/announcement_leaderboard_item.dart';
 import 'package:stoyco_shared/announcement/utils/announcement_details_utils.dart';
 import 'package:stoyco_shared/announcement/widgets/gradient_container.dart';
+import 'package:stoyco_shared/stoyco_shared.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:stoyco_shared/design/colors.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
@@ -387,11 +389,11 @@ class _AnnouncementLeaderShipDialogState
               Expanded(
                 child: LayoutBuilder(
                   builder: (context, constraints) => _buildActionButton(
-                      text: endDateText,
-                      iconPath:
-                          'packages/stoyco_shared/lib/assets/icons/rounded_calendar_icon.svg',
-                      maxWidth: constraints.maxWidth,
-                    ),
+                    text: endDateText,
+                    iconPath:
+                        'packages/stoyco_shared/lib/assets/icons/rounded_calendar_icon.svg',
+                    maxWidth: constraints.maxWidth,
+                  ),
                 ),
               ),
             ],
@@ -494,38 +496,53 @@ class _AnnouncementLeaderShipDialogState
           Gap(
             widget.itemSpacing ?? _responsiveWidth(16, phone: 12, tablet: 14),
           ),
-          Row(
-            children: [
-              SvgPicture.asset(
-                'packages/stoyco_shared/lib/assets/icons/titok_circle_icon.svg',
-                width: widget.dateIconSize ??
-                    _responsiveWidth(32, phone: 24, tablet: 28),
-                height: widget.dateIconSize ??
-                    _responsiveWidth(32, phone: 24, tablet: 28),
-              ),
-              Gap(
-                widget.itemSpacing ??
-                    _responsiveWidth(16, phone: 12, tablet: 14),
-              ),
-              Text(
-                '@${item.tiktokUserName}',
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: widget.usernameFontSize ??
-                      _getCachedValue<double>(
-                        'username_font_size',
-                        () => StoycoScreenSize.fontSize(
-                          context,
-                          14,
-                          phone: 11,
-                          tablet: 12,
-                        ),
-                      ),
-                  fontWeight: widget.usernameFontWeight,
-                  color: widget.dateTextColor ?? StoycoColors.text,
+          GestureDetector(
+            onTap: () async {
+              try {
+                final url = Uri.parse(item.urlPlatform);
+                if (await canLaunchUrl(url)) {
+                  await launchUrl(url, mode: LaunchMode.externalApplication);
+                }
+              } catch (e) {
+                StoyCoLogger.error(
+                  'Error launching URL: ${item.urlPlatform}',
+                  error: e,
+                );
+              }
+            },
+            child: Row(
+              children: [
+                SvgPicture.asset(
+                  'packages/stoyco_shared/lib/assets/icons/titok_circle_icon.svg',
+                  width: widget.dateIconSize ??
+                      _responsiveWidth(32, phone: 24, tablet: 28),
+                  height: widget.dateIconSize ??
+                      _responsiveWidth(32, phone: 24, tablet: 28),
                 ),
-              ),
-            ],
+                Gap(
+                  widget.itemSpacing ??
+                      _responsiveWidth(16, phone: 12, tablet: 14),
+                ),
+                Text(
+                  '@${item.tiktokUserName}',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: widget.usernameFontSize ??
+                        _getCachedValue<double>(
+                          'username_font_size',
+                          () => StoycoScreenSize.fontSize(
+                            context,
+                            14,
+                            phone: 11,
+                            tablet: 12,
+                          ),
+                        ),
+                    fontWeight: widget.usernameFontWeight,
+                    color: widget.dateTextColor ?? StoycoColors.text,
+                  ),
+                ),
+              ],
+            ),
           ),
           if (!isPhone)
             SizedBox(
