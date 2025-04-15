@@ -17,6 +17,7 @@ class UserAnnouncement {
     this.platform,
     this.metrics,
     this.puntos,
+    this.bestPost,
   });
   @JsonKey(name: 'user_id')
   final String? userId;
@@ -26,10 +27,12 @@ class UserAnnouncement {
   final String? platform;
   final Metrics? metrics;
   final int? puntos;
+  @JsonKey(name: 'best_post')
+  final String? bestPost;
 
   @override
   String toString() =>
-      'UserAnnouncement(userId: $userId, userPhoto: $userPhoto, username: $username, platform: $platform, metrics: $metrics, puntos: $puntos)';
+      'UserAnnouncement(userId: $userId, userPhoto: $userPhoto, username: $username, platform: $platform, metrics: $metrics, puntos: $puntos, bestPost: $bestPost)';
 
   Map<String, dynamic> toJson() => _$UserAnnouncementToJson(this);
 
@@ -40,6 +43,7 @@ class UserAnnouncement {
     String? platform,
     Metrics? metrics,
     int? puntos,
+    String? bestPost,
   }) =>
       UserAnnouncement(
         userId: userId ?? this.userId,
@@ -48,6 +52,7 @@ class UserAnnouncement {
         platform: platform ?? this.platform,
         metrics: metrics ?? this.metrics,
         puntos: puntos ?? this.puntos,
+        bestPost: bestPost ?? this.bestPost,
       );
 
   @override
@@ -65,5 +70,6 @@ class UserAnnouncement {
       username.hashCode ^
       platform.hashCode ^
       metrics.hashCode ^
-      puntos.hashCode;
+      puntos.hashCode ^
+      bestPost.hashCode;
 }

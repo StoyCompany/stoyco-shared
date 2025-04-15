@@ -16,6 +16,7 @@ UserAnnouncement _$UserAnnouncementFromJson(Map<String, dynamic> json) =>
           ? null
           : Metrics.fromJson(json['metrics'] as Map<String, dynamic>),
       puntos: (json['puntos'] as num?)?.toInt(),
+      bestPost: json['best_post'] as String?,
     );
 
 Map<String, dynamic> _$UserAnnouncementToJson(UserAnnouncement instance) =>
@@ -26,4 +27,5 @@ Map<String, dynamic> _$UserAnnouncementToJson(UserAnnouncement instance) =>
       'platform': instance.platform,
       'metrics': instance.metrics,
       'puntos': instance.puntos,
+      'best_post': instance.bestPost,
     };

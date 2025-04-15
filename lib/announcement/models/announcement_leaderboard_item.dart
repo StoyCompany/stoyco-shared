@@ -2,7 +2,9 @@ import 'package:stoyco_shared/announcement/models/user_announcement/user_announc
 
 class AnnouncementLeaderboardItem {
   factory AnnouncementLeaderboardItem.fromUserAnnouncement(
-          UserAnnouncement userAnnouncement, int position) =>
+    UserAnnouncement userAnnouncement,
+    int position,
+  ) =>
       AnnouncementLeaderboardItem(
         position: position,
         userImageUrl: userAnnouncement.userPhoto ?? '',
@@ -11,6 +13,7 @@ class AnnouncementLeaderboardItem {
         totalLikes: userAnnouncement.metrics?.totalLikes ?? 0,
         userId: userAnnouncement.userId ?? '',
         platform: userAnnouncement.platform ?? '',
+        bestPost: userAnnouncement.bestPost ?? '',
       );
   AnnouncementLeaderboardItem({
     required this.position,
@@ -20,6 +23,7 @@ class AnnouncementLeaderboardItem {
     required this.totalLikes,
     required this.userId,
     required this.platform,
+    required this.bestPost,
   });
   final int position;
   final String userImageUrl;
@@ -28,19 +32,26 @@ class AnnouncementLeaderboardItem {
   final int totalLikes;
   final String userId;
   final String platform;
+  final String bestPost;
 
   String get urlPlatform => _buildUrlPlatform(
         platform,
         tiktokUserName,
+        bestPost,
       );
 
   static List<AnnouncementLeaderboardItem> fromUserAnnouncements(
-          List<UserAnnouncement> userAnnouncements) =>
+    List<UserAnnouncement> userAnnouncements,
+  ) =>
       userAnnouncements
           .asMap()
           .entries
-          .map((entry) => AnnouncementLeaderboardItem.fromUserAnnouncement(
-              entry.value, entry.key + 1))
+          .map(
+            (entry) => AnnouncementLeaderboardItem.fromUserAnnouncement(
+              entry.value,
+              entry.key + 1,
+            ),
+          )
           .toList();
 
   /// Builds a URL for a social media platform based on the platform name and username.
@@ -57,7 +68,10 @@ class AnnouncementLeaderboardItem {
   /// // Returns "https://www.instagram.com/username"
   /// final url = AnnouncementDetailsUtils.buildUrlPlatform('instagram', '@username');
   /// ```
-  String _buildUrlPlatform(String platform, String userName) {
+  String _buildUrlPlatform(String platform, String userName, String bestPost) {
+    if(bestPost.isNotEmpty) {
+      return bestPost;
+    }
     String url = '';
     final String normalizedPlatform = platform.toLowerCase();
 

@@ -253,7 +253,7 @@ class AnnouncementCard extends StatelessWidget {
                                 if (!announcementData!.isActive) ...[
                                   Gap(StoycoScreenSize.width(context, 5)),
                                   Text(
-                                    'CERRADO',
+                                    'CERRADA',
                                     style: TextStyle(
                                       color: StoycoColors.white2,
                                       fontSize:
