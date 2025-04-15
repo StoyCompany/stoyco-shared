@@ -519,22 +519,24 @@ class _AnnouncementLeaderShipDialogState
                       widget.itemSpacing ??
                           _responsiveWidth(16, phone: 12, tablet: 14),
                     ),
-                    Text(
-                      '@${item.tiktokUserName}',
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: widget.usernameFontSize ??
-                            _getCachedValue<double>(
-                              'username_font_size',
-                              () => StoycoScreenSize.fontSize(
-                                context,
-                                14,
-                                phone: 11,
-                                tablet: 12,
+                    Expanded(
+                      child: Text(
+                        '@${item.tiktokUserName}',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: widget.usernameFontSize ??
+                              _getCachedValue<double>(
+                                'username_font_size',
+                                () => StoycoScreenSize.fontSize(
+                                  context,
+                                  14,
+                                  phone: 11,
+                                  tablet: 12,
+                                ),
                               ),
-                            ),
-                        fontWeight: widget.usernameFontWeight,
-                        color: widget.dateTextColor ?? StoycoColors.text,
+                          fontWeight: widget.usernameFontWeight,
+                          color: widget.dateTextColor ?? StoycoColors.text,
+                        ),
                       ),
                     ),
                   ],
@@ -542,7 +544,7 @@ class _AnnouncementLeaderShipDialogState
               ),
             ),
           ),
-          Gap(widget.itemSpacing ?? _responsiveWidth(16)),
+          Gap(_responsiveWidth(16)),
           if (!isPhone)
             SizedBox(
               width:
@@ -567,7 +569,7 @@ class _AnnouncementLeaderShipDialogState
               ),
             ),
           SizedBox(
-            width: StoycoScreenSize.width(context, 100, phone: 70, tablet: 90),
+            width: StoycoScreenSize.width(context, 100, phone: 50, tablet: 90),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
