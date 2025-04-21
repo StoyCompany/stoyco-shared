@@ -2,13 +2,16 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/envs/envs.dart';
+import 'package:stoyco_shared/utils/logger.dart';
 import 'package:stoyco_shared/video/models/video_info_with_user_interaction.dart';
+import 'package:stoyco_shared/video/video_with_interactions/dowload_and_save_file.dart';
 import 'package:stoyco_shared/video/video_with_interactions/video_cache_service.dart';
 import 'package:video_player/video_player.dart';
 import 'package:share_plus/share_plus.dart';
@@ -203,37 +206,69 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
     return _cachedGifPath!;
   }
 
+  /// Downloads a video file in an isolate to avoid blocking the main thread.
+  Future<File> _downloadFileInIsolate(String videoUrl, String fileName) async {
+    final tempDir = await getTemporaryDirectory();
+    final tempFilePath = '${tempDir.path}/$fileName';
+
+    final filePath = await compute(
+      downloadAndSaveFile,
+      DownloadFileParams(
+        videoUrl: videoUrl,
+        filePath: tempFilePath,
+      ),
+    );
+
+    return File(filePath);
+  }
+
   Future<void> _handleShare() async {
     final video = widget.videoInfo.video;
     final videoUrl = (widget.videoInfo.video.appUrl ?? '');
-    final shareText = widget.shareText ??
-        '''${video.name}
-Ver video: $videoUrl''';
+    final shareText = widget.shareText ?? '''${video.name} Ver video: $videoUrl''';
+
+    File? tempFile;
 
     try {
       _isSharing.value = true;
+
       if (videoUrl.isNotEmpty) {
+        final fileName = '${video.name?.replaceAll(' ', '_') ?? 'video${video.id}'}.mp4';
+        tempFile = await _downloadFileInIsolate(videoUrl, fileName);
+
         await _controller?.pause();
 
-        await Share.share(shareText);
-      }
+        await Share.shareXFiles([XFile(tempFile.path)], text: shareText);
 
-      if (widget.play) {
-        await _controller?.play();
-      }
-
-      if (widget.onShare != null) {
-        widget.onShare!();
+        if (widget.onShare != null) {
+          widget.onShare!();
+        }
       }
     } catch (e) {
+      StoyCoLogger.error(
+        'Error sharing video: $e',
+      );
+    } finally {
       if (widget.play) {
         await _controller?.play();
       }
-      debugPrint('Error sharing video: $e');
-    } finally {
+      await  _deleteTempFile(tempFile);
       if (mounted && !isDisposed) {
         _isSharing.value = false;
       }
+    }
+  }
+
+  /// Deletes the temporary file if it exists.
+  Future<void> _deleteTempFile(File? tempFile) async {
+    try {
+      if (tempFile != null && await tempFile.exists()) {
+        await tempFile.delete();
+      }
+    } catch (e) {
+      StoyCoLogger.error(
+        'Error deleting temporary file: $e',
+      );
     }
   }
 
