@@ -9,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/envs/envs.dart';
+import 'package:stoyco_shared/utils/logger.dart';
 import 'package:stoyco_shared/video/models/video_info_with_user_interaction.dart';
 import 'package:stoyco_shared/video/video_with_interactions/dowload_and_save_file.dart';
 import 'package:stoyco_shared/video/video_with_interactions/video_cache_service.dart';
@@ -236,30 +237,35 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
 
         await Share.shareXFiles([XFile(tempFile.path)], text: shareText);
 
-        if (widget.play) {
-          await _controller?.play();
-        }
-
         if (widget.onShare != null) {
           widget.onShare!();
         }
       }
     } catch (e) {
+      StoyCoLogger.error(
+        'Error sharing video: $e',
+      );
+    } finally {
       if (widget.play) {
         await _controller?.play();
       }
-      debugPrint('Error sharing video: $e');
-    } finally {
-      try {
-        if (tempFile != null && await tempFile.exists()) {
-          await tempFile.delete();
-        }
-      } catch (e) {
-        debugPrint('Error deleting temporary file: $e');
-      }
+      await  _deleteTempFile(tempFile);
       if (mounted && !isDisposed) {
         _isSharing.value = false;
       }
+    }
+  }
+
+  /// Deletes the temporary file if it exists.
+  Future<void> _deleteTempFile(File? tempFile) async {
+    try {
+      if (tempFile != null && await tempFile.exists()) {
+        await tempFile.delete();
+      }
+    } catch (e) {
+      StoyCoLogger.error(
+        'Error deleting temporary file: $e',
+      );
     }
   }
 
