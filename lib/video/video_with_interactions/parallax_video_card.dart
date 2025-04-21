@@ -213,7 +213,10 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
 
     final filePath = await compute(
       downloadAndSaveFile,
-      {'videoUrl': videoUrl, 'filePath': tempFilePath},
+      DownloadFileParams(
+        videoUrl: videoUrl,
+        filePath: tempFilePath,
+      ),
     );
 
     return File(filePath);

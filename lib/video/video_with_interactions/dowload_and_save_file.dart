@@ -1,13 +1,17 @@
 import 'dart:io';
 
-Future<String> downloadAndSaveFile(Map<String, String> params) async {
-  final videoUrl = params['videoUrl']!;
-  final filePath = params['filePath']!;
+class DownloadFileParams {
+  DownloadFileParams({required this.videoUrl, required this.filePath});
 
-  final response = await HttpClient().getUrl(Uri.parse(videoUrl));
+  final String videoUrl;
+  final String filePath;
+}
+
+Future<String> downloadAndSaveFile(DownloadFileParams params) async {
+  final response = await HttpClient().getUrl(Uri.parse(params.videoUrl));
   final fileStream = await response.close();
-  final file = File(filePath);
+  final file = File(params.filePath);
   await fileStream.pipe(file.openWrite());
 
-  return filePath;
+  return params.filePath;
 }
