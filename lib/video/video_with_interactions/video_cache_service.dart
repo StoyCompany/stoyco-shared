@@ -43,7 +43,10 @@ class VideoCacheService {
       await _cache[oldestUrl]?.pause();
     }
 
-    final controller = VideoPlayerController.networkUrl(Uri.parse(url));
+    final controller = VideoPlayerController.networkUrl(
+        Uri.parse(url),
+        videoPlayerOptions:VideoPlayerOptions(mixWithOthers: true),
+    );
     await controller.initialize();
     _cache[url] = controller;
     return controller;

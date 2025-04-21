@@ -37,6 +37,8 @@ class VideoSlider extends StatefulWidget {
     this.onLike,
     this.onDislike,
     this.onShare,
+    this.onMute,
+    this.isMute,
     this.showInteractions = true,
     this.width,
     this.height,
@@ -63,6 +65,12 @@ class VideoSlider extends StatefulWidget {
 
   /// Callback triggered when a video is shared.
   final void Function(VideoWithMetadata video)? onShare;
+
+  /// CallBack triggered mute/unmute video
+  final void Function(bool isMuted)? onMute;
+
+  /// Function to check if the video is muted.
+  final bool Function()? isMute;
 
   /// Callback to fetch the list of videos with their metadata.
   final Future<Either<Failure, List<VideoWithMetadata>>> Function()
@@ -94,13 +102,14 @@ class _VideoSliderState extends State<VideoSlider> {
   final CarouselSliderController _carouselController =
       CarouselSliderController();
   final ValueNotifier<int> currentIndex = ValueNotifier<int>(0);
-  bool isMuted = true;
+  ValueNotifier<bool> isMuted = ValueNotifier<bool>(true);
   final _videoCacheService = VideoCacheService();
   bool allVideosLoaded = false;
 
   @override
   void initState() {
     super.initState();
+   widget.onMute!= null? widget.onMute!(isMuted.value): null;
     loadVideos();
   }
 
@@ -394,7 +403,7 @@ class _VideoSliderState extends State<VideoSlider> {
                             : null,
                         nextVideo: () {
                           widget.nextVideo
-                              ?.call(isMuted, videosList[index].video);
+                              ?.call(isMuted.value, videosList[index].video);
                           if (videosList.length > 1) {
                             _carouselController.nextPage();
                             if (currentIndexValue == videosList.length - 1) {
@@ -405,9 +414,10 @@ class _VideoSliderState extends State<VideoSlider> {
                           }
                         },
                         mute: (value) {
-                          isMuted = value;
+                          isMuted.value = value;
+                          widget.onMute?.call(isMuted.value);
                         },
-                        isMuted: isMuted,
+                        isMuted: isMuted.value,
                         isLooping: videosList.length == 1,
                         env: widget.env,
                       ),
