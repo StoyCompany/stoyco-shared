@@ -337,8 +337,8 @@ class _VideoSliderState extends State<VideoSlider> {
 
 @override
 Widget build(BuildContext context) {
-  final sliderWidth = widget.width ?? StoycoScreenSize.width(context, MediaQuery.of(context).size.width);
-  final sliderHeight = widget.height ?? StoycoScreenSize.width(context, MediaQuery.of(context).size.width);
+  final sliderWidth = widget.width ?? StoycoScreenSize.screenWidth(context);
+  final sliderHeight = widget.height ?? StoycoScreenSize.screenHeight(context);
 
   return ValueListenableBuilder<bool>(
     valueListenable: isLoading,
