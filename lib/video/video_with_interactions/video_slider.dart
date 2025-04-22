@@ -201,8 +201,17 @@ class _VideoSliderState extends State<VideoSlider> {
 
   //// Toggles the mute state of the video slider
   void toggleMute() {
-    isMuted.value = !isMuted.value;
-    widget.onMute?.call(isMuted.value);
+    final newMuteState = !isMuted.value;
+    isMuted.value = newMuteState;
+
+    widget.onMute?.call(newMuteState);
+
+    for (var i = 0; i < videosList.length; i++) {
+      final videoUrl = videosList[i].video.videoUrl;
+      if (videoUrl != null && videoUrl.isNotEmpty) {
+        _videoCacheService.setMute(videoUrl, newMuteState);
+      }
+    }
   }
 
   /// Loads videos and their associated interaction data.
@@ -490,39 +499,51 @@ class _VideoSliderState extends State<VideoSlider> {
                             ValueListenableBuilder<Map<String, Image?>>(
                           valueListenable: videoThumbnails,
                           builder: (context, thumbnails, child) =>
-                              ParallaxVideoCard(
-                            videoInfo: videosList[index],
-                            thumbnail: videosList[index].video.id != null
-                                ? thumbnails[videosList[index].video.id]
-                                : null,
-                            play: currentIndexValue == index,
-                            showInteractions: widget.showInteractions,
-                            onLike: () => _handleLike(videosList[index].video),
-                            onDislike: () =>
-                                _handleDislike(videosList[index].video),
-                            onShare: widget.onShare != null
-                                ? () => _handleShare(videosList[index].video)
-                                : null,
-                            nextVideo: () {
-                              widget.nextVideo?.call(
-                                  isMuted.value, videosList[index].video);
-                              if (videosList.length > 1) {
-                                _carouselController.nextPage();
-                                if (currentIndexValue ==
-                                    videosList.length - 1) {
-                                  currentIndex.value = 0;
-                                } else {
-                                  currentIndex.value++;
+                              ValueListenableBuilder<bool>(
+                            valueListenable: isMuted,
+                            builder: (context, isMutedValue, _) =>
+                                ParallaxVideoCard(
+                              videoInfo: videosList[index],
+                              thumbnail: videosList[index].video.id != null
+                                  ? thumbnails[videosList[index].video.id]
+                                  : null,
+                              play: currentIndexValue == index,
+                              showInteractions: widget.showInteractions,
+                              onLike: () =>
+                                  _handleLike(videosList[index].video),
+                              onDislike: () =>
+                                  _handleDislike(videosList[index].video),
+                              onShare: widget.onShare != null
+                                  ? () => _handleShare(videosList[index].video)
+                                  : null,
+                              nextVideo: () {
+                                widget.nextVideo?.call(
+                                    isMuted.value, videosList[index].video);
+                                if (videosList.length > 1) {
+                                  _carouselController.nextPage();
+                                  if (currentIndexValue ==
+                                      videosList.length - 1) {
+                                    currentIndex.value = 0;
+                                  } else {
+                                    currentIndex.value++;
+                                  }
                                 }
-                              }
-                            },
-                            mute: (value) {
-                              isMuted.value = value;
-                              widget.onMute?.call(isMuted.value);
-                            },
-                            isMuted: isMuted.value,
-                            isLooping: videosList.length == 1,
-                            env: widget.env,
+                              },
+                              mute: (value) {
+                                isMuted.value = value;
+                                widget.onMute?.call(isMuted.value);
+
+                                for (var i = 0; i < videosList.length; i++) {
+                                  final videoUrl = videosList[i].video.videoUrl;
+                                  if (videoUrl != null && videoUrl.isNotEmpty) {
+                                    _videoCacheService.setMute(videoUrl, value);
+                                  }
+                                }
+                              },
+                              isMuted: isMutedValue,
+                              isLooping: videosList.length == 1,
+                              env: widget.env,
+                            ),
                           ),
                         ),
                       ),
