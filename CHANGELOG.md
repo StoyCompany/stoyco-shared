@@ -1,3 +1,6 @@
+## 16.6.14 
+- **feat:** Add carousel functionality to VideoSlider and implement getCountOfVideos 
+
 ## 16.5.0
 
 - **feat:** Add paddingScrollBar property to AnnouncementPrizePanel and enhance documentation for AnnouncementDataSource and AnnouncementRepository methods
