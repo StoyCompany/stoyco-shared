@@ -7,6 +7,7 @@ import 'package:get_thumbnail_video/index.dart';
 import 'package:get_thumbnail_video/video_thumbnail.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stoyco_shared/design/colors.dart';
+import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/envs/envs.dart';
 import 'package:stoyco_shared/utils/logger.dart';
 import 'package:stoyco_shared/video/models/video_info_with_user_interaction.dart';
@@ -336,9 +337,8 @@ class _VideoSliderState extends State<VideoSlider> {
 
 @override
 Widget build(BuildContext context) {
-  final screenWidth = MediaQuery.of(context).size.width;
-  final sliderWidth = widget.width ?? screenWidth;
-  final sliderHeight = widget.height ?? screenWidth;
+  final sliderWidth = widget.width ?? StoycoScreenSize.width(context, MediaQuery.of(context).size.width);
+  final sliderHeight = widget.height ?? StoycoScreenSize.width(context, MediaQuery.of(context).size.width);
 
   return ValueListenableBuilder<bool>(
     valueListenable: isLoading,
@@ -443,7 +443,13 @@ Widget build(BuildContext context) {
   Widget buildPaginationIndicators() => ValueListenableBuilder<int>(
     valueListenable: currentIndex,
     builder: (context, currentIndexValue, child) => Container(
-      height: 20,
+      height:  StoycoScreenSize.height(
+        context,
+        21.32,
+        phone: 18,
+        tablet: 20,
+        desktopLarge: 24,
+      ),
       alignment: Alignment.center,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -452,9 +458,11 @@ Widget build(BuildContext context) {
         itemBuilder: (context, index) => AnimatedContainer(
           duration: const Duration(milliseconds: 600),
           curve: Curves.easeInOut,
-          margin: const EdgeInsets.symmetric(horizontal: 4.0),
-          width: currentIndexValue == index ? 12.0 : 8.0,
-          height: currentIndexValue == index ? 12.0 : 8.0,
+          margin: EdgeInsets.symmetric(
+            horizontal: StoycoScreenSize.width(context, 4.0),
+          ),
+          width: StoycoScreenSize.width(context, 8.0),
+          height: StoycoScreenSize.height(context, 8.0),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: currentIndexValue == index
