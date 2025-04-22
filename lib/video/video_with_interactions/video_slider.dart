@@ -18,15 +18,69 @@ import 'package:stoyco_shared/video/video_with_metada/video_with_metadata.dart';
 import 'package:stoyco_shared/video/models/video_reaction/user_video_reaction.dart';
 import 'package:stoyco_shared/errors/errors.dart';
 
+/// Controller to interact with the VideoSlider
+///
+/// Allows external control of VideoSlider features such as muting/unmuting.
+
+class VideoSliderController {
+  _VideoSliderState? _state;
+
+  /// Toggles mute state of the video slider
+  ///
+  /// When called, switches between muted and unmuted states
+  void toggleMute() {
+    _state?.toggleMute();
+  }
+
+  /// Gets the current mute state
+  ///
+  /// Returns `true` if videos are currently muted, `false` otherwise
+  /// Returns `null` if the controller is not attached to a VideoSlider
+  bool? getMuteState() => _state?.isMuted.value;
+
+  /// Internal method to attach the state
+  void _attachState(_VideoSliderState state) {
+    _state = state;
+  }
+
+  /// Internal method to detach the state
+  void _detachState() {
+    _state = null;
+  }
+}
+
 /// A widget that displays a carousel of videos with interactive features.
 ///
 /// This widget provides a smooth video browsing experience with features like:
-/// * Video preloading and caching
-/// * Thumbnail generation
-/// * Like/Dislike interactions
-/// * Share functionality
-/// * Auto-play for current video
-/// * Mute/unmute controls
+/// * Video preloading and caching for performance
+/// * Thumbnail generation with loading placeholders
+/// * Interactive controls (like, dislike, share)
+/// * Auto-play for current visible video
+/// * Mute/unmute controls with global state
+/// * Optimistic UI updates for user interactions
+/// * Automatic video disposal for memory management
+///
+/// Example usage:
+/// ```dart
+/// VideoSlider(
+///   getVideosWithMetadata: () async {
+///     // Fetch videos from repository or API
+///     return Right([video1, video2, video3]);
+///   },
+///   getUserVideoInteractionData: ({required String videoId}) async {
+///     // Fetch user's interaction with the video
+///     return Right(UserVideoReaction(reactionType: 'Like'));
+///   },
+///   onLike: (video) {
+///     // Handle like action
+///   },
+///   onDislike: (video) {
+///     // Handle dislike action
+///   },
+///   controller: VideoSliderController(),
+///   env: StoycoEnvironment.development,
+/// )
+/// ```
 class VideoSlider extends StatefulWidget {
   /// Creates a VideoSlider widget.
   ///
@@ -41,6 +95,8 @@ class VideoSlider extends StatefulWidget {
     this.onShare,
     this.onMute,
     this.isMute,
+    this.controller,
+    this.initialMute = false,
     this.showInteractions = true,
     this.width,
     this.height,
@@ -74,6 +130,31 @@ class VideoSlider extends StatefulWidget {
   /// Function to check if the video is muted.
   final bool Function()? isMute;
 
+  /// Controller for the VideoSlider
+  /// /// Example usage:
+  /// ```dart
+  /// final videoSliderController = VideoSliderController();
+  ///
+  /// // Create VideoSlider with controller
+  /// VideoSlider(
+  ///   controller: videoSliderController,
+  ///   // other required parameters...
+  /// )
+  ///
+  /// // Toggle mute state from outside the widget
+  /// ElevatedButton(
+  ///   onPressed: () => videoSliderController.toggleMute(),
+  ///   child: Text('Toggle Mute'),
+  /// )
+  ///
+  /// // Check current mute state
+  /// final isMuted = videoSliderController.getMuteState() ?? false;
+  /// ```
+  final VideoSliderController? controller;
+
+  /// Initial mute state for videos
+  final bool initialMute;
+
   /// Callback to fetch the list of videos with their metadata.
   final Future<Either<Failure, List<VideoWithMetadata>>> Function()
       getVideosWithMetadata;
@@ -99,20 +180,28 @@ class VideoSlider extends StatefulWidget {
 class _VideoSliderState extends State<VideoSlider> {
   List<VideoInfoWithUserInteraction> videosList = [];
   final ValueNotifier<Map<String, Image?>> videoThumbnails =
-  ValueNotifier<Map<String, Image?>>({});
+      ValueNotifier<Map<String, Image?>>({});
   final ValueNotifier<bool> isLoading = ValueNotifier<bool>(true);
   final CarouselSliderController _carouselController =
       CarouselSliderController();
   final ValueNotifier<int> currentIndex = ValueNotifier<int>(0);
-  ValueNotifier<bool> isMuted = ValueNotifier<bool>(true);
+  late ValueNotifier<bool> isMuted;
   final _videoCacheService = VideoCacheService();
   bool allVideosLoaded = false;
   final ValueNotifier<int> videoCount = ValueNotifier<int>(0);
   @override
   void initState() {
     super.initState();
-   widget.onMute!= null? widget.onMute!(isMuted.value): null;
+    isMuted = ValueNotifier<bool>(widget.initialMute);
+    widget.controller?._attachState(this);
+    widget.onMute?.call(isMuted.value);
     loadVideos();
+  }
+
+  //// Toggles the mute state of the video slider
+  void toggleMute() {
+    isMuted.value = !isMuted.value;
+    widget.onMute?.call(isMuted.value);
   }
 
   /// Loads videos and their associated interaction data.
@@ -186,17 +275,19 @@ class _VideoSliderState extends State<VideoSlider> {
           final videoUrl = videosList[i].video.appUrl ?? '';
           final videoId = videosList[i].video.id;
           if (videoUrl.isNotEmpty && videoId != null) {
-            unawaited(getVideoThumbnail(videoUrl).then((value) {
-              if (mounted) {
-                videoThumbnails.value = {
-                  ...videoThumbnails.value,
-                  videoId: value,
-                };
-                if (i == videosList.length - 1) {
-                  allVideosLoaded = true;
+            unawaited(
+              getVideoThumbnail(videoUrl).then((value) {
+                if (mounted) {
+                  videoThumbnails.value = {
+                    ...videoThumbnails.value,
+                    videoId: value,
+                  };
+                  if (i == videosList.length - 1) {
+                    allVideosLoaded = true;
+                  }
                 }
-              }
-            }),);
+              }),
+            );
           }
         }
       },
@@ -306,7 +397,7 @@ class _VideoSliderState extends State<VideoSlider> {
     final previousIndex = currentIndex;
     widget.onPageChanged?.call(index);
 
-      currentIndex.value = index;
+    currentIndex.value = index;
 
     // Pause previous video if it's not adjacent to current
     if ((index - previousIndex.value).abs() > 1) {
@@ -331,70 +422,78 @@ class _VideoSliderState extends State<VideoSlider> {
     currentIndex.dispose();
     videoCount.dispose();
     videoThumbnails.dispose();
+    isMuted.dispose();
+    widget.controller?._detachState();
     _videoCacheService.clearCache();
     super.dispose();
   }
 
-@override
-Widget build(BuildContext context) {
-  final sliderWidth = widget.width ?? StoycoScreenSize.screenWidth(context);
-  final sliderHeight = widget.height ?? StoycoScreenSize.screenHeight(context);
+  @override
+  Widget build(BuildContext context) {
+    final sliderWidth = widget.width ?? StoycoScreenSize.screenWidth(context);
+    final sliderHeight =
+        widget.height ?? StoycoScreenSize.screenHeight(context);
 
-  return ValueListenableBuilder<bool>(
-    valueListenable: isLoading,
-    builder: (context, isLoadingValue, child) {
-      if (isLoadingValue) {
-        return SizedBox(
-          width: sliderWidth,
-          height: sliderHeight,
-          child: Shimmer.fromColors(
-            baseColor: const Color.fromARGB(255, 11, 18, 44),
-            highlightColor: const Color.fromARGB(255, 20, 35, 88),
-            child: LayoutBuilder(
-              builder: (context, constraints2) {
-                final width = constraints2.maxWidth;
-                return SizedBox(
-                  width: width,
-                  height: width,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Container(
-                      color: Colors.grey,
+    return ValueListenableBuilder<bool>(
+      valueListenable: isLoading,
+      builder: (context, isLoadingValue, child) {
+        if (isLoadingValue) {
+          return SizedBox(
+            width: sliderWidth,
+            height: sliderHeight,
+            child: Shimmer.fromColors(
+              baseColor: const Color.fromARGB(255, 11, 18, 44),
+              highlightColor: const Color.fromARGB(255, 20, 35, 88),
+              child: LayoutBuilder(
+                builder: (context, constraints2) {
+                  final width = constraints2.maxWidth;
+                  return SizedBox(
+                    width: width,
+                    height: width,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Container(
+                        color: Colors.grey,
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-        );
-      }
+          );
+        }
 
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Flexible(
-            child: ValueListenableBuilder<int>(
-              valueListenable: currentIndex,
-              builder: (context, currentIndexValue, child) => SizedBox(
-                width: sliderWidth,
-                height: sliderHeight,
-                child: CarouselSlider.builder(
-                  carouselController: _carouselController,
-                  options: CarouselOptions(
-                    enlargeCenterPage: true,
-                    enlargeStrategy: CenterPageEnlargeStrategy.zoom,
-                    viewportFraction: 1,
-                    onPageChanged: (index, reason) {
-                      currentIndex.value = index;
-                      _onPageChanged(index, reason);
-                    },
-                    enableInfiniteScroll: allVideosLoaded && videosList.length > 1,
-                  ),
-                  itemCount: videosList.length,
-                  itemBuilder: (context, index, realIndex) =>
-                      ValueListenableBuilder<Map<String, Image?>>(
-                        valueListenable: videoThumbnails,
-                        builder: (context, thumbnails, child) => ParallaxVideoCard(
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              child: ValueListenableBuilder<int>(
+                valueListenable: currentIndex,
+                builder: (context, currentIndexValue, child) => SizedBox(
+                  width: sliderWidth,
+                  height: sliderHeight,
+                  child: CarouselSlider.builder(
+                    carouselController: _carouselController,
+                    options: CarouselOptions(
+                      enlargeCenterPage: true,
+                      enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                      viewportFraction: 1,
+                      onPageChanged: (index, reason) {
+                        currentIndex.value = index;
+                        _onPageChanged(index, reason);
+                      },
+                      enableInfiniteScroll:
+                          allVideosLoaded && videosList.length > 1,
+                    ),
+                    itemCount: videosList.length,
+                    itemBuilder: (context, index, realIndex) =>
+                        ValueListenableBuilder<Map<String, Image?>>(
+                      valueListenable: videoThumbnails,
+                      builder: (context, thumbnails, child) =>
+                          ValueListenableBuilder<bool>(
+                        valueListenable: isMuted,
+                        builder: (context, isMutedValue, child) =>
+                            ParallaxVideoCard(
                           videoInfo: videosList[index],
                           thumbnail: videosList[index].video.id != null
                               ? thumbnails[videosList[index].video.id]
@@ -402,13 +501,14 @@ Widget build(BuildContext context) {
                           play: currentIndexValue == index,
                           showInteractions: widget.showInteractions,
                           onLike: () => _handleLike(videosList[index].video),
-                          onDislike: () => _handleDislike(videosList[index].video),
+                          onDislike: () =>
+                              _handleDislike(videosList[index].video),
                           onShare: widget.onShare != null
                               ? () => _handleShare(videosList[index].video)
                               : null,
                           nextVideo: () {
                             widget.nextVideo
-                                ?.call(isMuted.value, videosList[index].video);
+                                ?.call(isMutedValue, videosList[index].video);
                             if (videosList.length > 1) {
                               _carouselController.nextPage();
                               if (currentIndexValue == videosList.length - 1) {
@@ -419,58 +519,59 @@ Widget build(BuildContext context) {
                             }
                           },
                           mute: (value) {
-                            isMuted.value = value;
-                            widget.onMute?.call(isMuted.value);
+                            if (isMuted.value != value) {
+                              isMuted.value = value;
+                              widget.onMute?.call(value);
+                            }
                           },
-                          isMuted: isMuted.value,
+                          isMuted: isMutedValue,
                           isLooping: videosList.length == 1,
                           env: widget.env,
                         ),
                       ),
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-          buildPaginationIndicators(),
-        ],
-      );
-    },
-  );
-}
-
-
+            buildPaginationIndicators(),
+          ],
+        );
+      },
+    );
+  }
 
   Widget buildPaginationIndicators() => ValueListenableBuilder<int>(
-    valueListenable: currentIndex,
-    builder: (context, currentIndexValue, child) => Container(
-      height:  StoycoScreenSize.height(
-        context,
-        21.32,
-        phone: 18,
-        tablet: 20,
-        desktopLarge: 24,
-      ),
-      alignment: Alignment.center,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
-        itemCount: videoCount.value,
-        itemBuilder: (context, index) => AnimatedContainer(
-          duration: const Duration(milliseconds: 600),
-          curve: Curves.easeInOut,
-          margin: StoycoScreenSize.symmetric(context, horizontal: 4),
-          width: StoycoScreenSize.width(context, 8.0),
-          height: StoycoScreenSize.height(context, 8.0),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: currentIndexValue == index
-                ? StoycoColors.blue
-                : Colors.white,
+        valueListenable: currentIndex,
+        builder: (context, currentIndexValue, child) => Container(
+          height: StoycoScreenSize.height(
+            context,
+            21.32,
+            phone: 18,
+            tablet: 20,
+            desktopLarge: 24,
+          ),
+          alignment: Alignment.center,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            itemCount: videoCount.value,
+            itemBuilder: (context, index) => AnimatedContainer(
+              duration: const Duration(milliseconds: 600),
+              curve: Curves.easeInOut,
+              margin: StoycoScreenSize.symmetric(context, horizontal: 4),
+              width: StoycoScreenSize.width(context, 8.0),
+              height: StoycoScreenSize.height(context, 8.0),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: currentIndexValue == index
+                    ? StoycoColors.blue
+                    : Colors.white,
+              ),
+            ),
           ),
         ),
-      ),
-    ),
-  );
+      );
 
   /// Generates a thumbnail for a video URL.
   ///

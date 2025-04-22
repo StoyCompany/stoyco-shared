@@ -95,7 +95,7 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
   late Future<void> _initializeVideoPlayerFuture;
   bool _isPlayerInitialized = false;
   final _videoCacheService = VideoCacheService();
-  final ValueNotifier<bool> _isSharing = ValueNotifier(false);// Add this variable to track sharing state
+  final ValueNotifier<bool> _isSharing = ValueNotifier(false);
   final ValueNotifier<bool> isMuted = ValueNotifier(false);
   double _currentTime = 0;
   bool isDisposed = false;
@@ -126,7 +126,7 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
 
       setState(() {
         _controller = controller;
-        _currentTime=0;
+        _currentTime = 0;
         _isPlayerInitialized = true;
       });
 
@@ -189,9 +189,10 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
   void toggleMute() {
     if (_controller == null) return;
 
-    isMuted.value = !isMuted.value;
-    _controller?.setVolume(isMuted.value ? 0 : 1);
-    widget.mute(isMuted.value);
+    final newMuteState = !isMuted.value;
+    isMuted.value = newMuteState;
+    _controller?.setVolume(newMuteState ? 0 : 1);
+    widget.mute(newMuteState);
   }
 
   Future<String> _loadGifFromAssets() async {
@@ -225,7 +226,8 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
   Future<void> _handleShare() async {
     final video = widget.videoInfo.video;
     final videoUrl = (widget.videoInfo.video.appUrl ?? '');
-    final shareText = widget.shareText ?? '''${video.name} Ver video: $videoUrl''';
+    final shareText =
+        widget.shareText ?? '''${video.name} Ver video: $videoUrl''';
 
     File? tempFile;
 
@@ -233,7 +235,8 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
       _isSharing.value = true;
 
       if (videoUrl.isNotEmpty) {
-        final fileName = '${video.name?.replaceAll(' ', '_') ?? 'video${video.id}'}.mp4';
+        final fileName =
+            '${video.name?.replaceAll(' ', '_') ?? 'video${video.id}'}.mp4';
         tempFile = await _downloadFileInIsolate(videoUrl, fileName);
 
         await _controller?.pause();
@@ -252,7 +255,7 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
       if (widget.play) {
         await _controller?.play();
       }
-      await  _deleteTempFile(tempFile);
+      await _deleteTempFile(tempFile);
       if (mounted && !isDisposed) {
         _isSharing.value = false;
       }
@@ -279,6 +282,17 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
   void didUpdateWidget(ParallaxVideoCard oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (_controller == null || isDisposed) return;
+
+    // Update mute state without rebuilding if it changed from parent
+    if (widget.isMuted != oldWidget.isMuted &&
+        widget.isMuted != isMuted.value) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && !isDisposed) {
+          isMuted.value = widget.isMuted;
+          _controller?.setVolume(widget.isMuted ? 0 : 1);
+        }
+      });
+    }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted && !isDisposed) {
@@ -508,35 +522,42 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                   InkWell(
-                                     onTap: _isSharing.value ? null : _handleShare,
-                                     child: ValueListenableBuilder<bool>(
-                                       valueListenable: _isSharing,
-                                       builder: (context, isSharing, child) => isSharing
-                                           ? SizedBox(
-                                               width: StoycoScreenSize.width(
-                                                 context,
-                                                 20,
-                                               ),
-                                               height: StoycoScreenSize.width(
-                                                 context,
-                                                 20,
-                                               ),
-                                               child: const CircularProgressIndicator(
-                                                 strokeWidth: 2,
-                                                 color: Colors.white,
-                                               ),
-                                             )
-                                           : SvgPicture.asset(
-                                               'packages/stoyco_shared/lib/assets/icons/share_outlined_icon.svg',
-                                               width: StoycoScreenSize.width(
-                                                 context,
-                                                 20,
-                                               ),
-                                               color: Colors.white,
-                                             ),
-                                     ),
-                                   ),
+                                    InkWell(
+                                      onTap: _isSharing.value
+                                          ? null
+                                          : _handleShare,
+                                      child: ValueListenableBuilder<bool>(
+                                        valueListenable: _isSharing,
+                                        builder: (context, isSharing, child) =>
+                                            isSharing
+                                                ? SizedBox(
+                                                    width:
+                                                        StoycoScreenSize.width(
+                                                      context,
+                                                      20,
+                                                    ),
+                                                    height:
+                                                        StoycoScreenSize.width(
+                                                      context,
+                                                      20,
+                                                    ),
+                                                    child:
+                                                        const CircularProgressIndicator(
+                                                      strokeWidth: 2,
+                                                      color: Colors.white,
+                                                    ),
+                                                  )
+                                                : SvgPicture.asset(
+                                                    'packages/stoyco_shared/lib/assets/icons/share_outlined_icon.svg',
+                                                    width:
+                                                        StoycoScreenSize.width(
+                                                      context,
+                                                      20,
+                                                    ),
+                                                    color: Colors.white,
+                                                  ),
+                                      ),
+                                    ),
                                     Gap(StoycoScreenSize.width(context, 8.05)),
                                     Text(
                                       '${widget.videoInfo.video.videoMetadata?.shared ?? 0}',
