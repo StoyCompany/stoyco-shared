@@ -328,6 +328,7 @@ class _VideoSliderState extends State<VideoSlider> {
   void dispose() {
     isLoading.dispose();
     currentIndex.dispose();
+    videoCount.dispose();
     videoThumbnails.dispose();
     _videoCacheService.clearCache();
     super.dispose();
