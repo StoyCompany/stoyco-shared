@@ -458,9 +458,7 @@ Widget build(BuildContext context) {
         itemBuilder: (context, index) => AnimatedContainer(
           duration: const Duration(milliseconds: 600),
           curve: Curves.easeInOut,
-          margin: EdgeInsets.symmetric(
-            horizontal: StoycoScreenSize.width(context, 4.0),
-          ),
+          margin: StoycoScreenSize.symmetric(context, horizontal: 4),
           width: StoycoScreenSize.width(context, 8.0),
           height: StoycoScreenSize.height(context, 8.0),
           decoration: BoxDecoration(
