@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:either_dart/either.dart';
+import 'package:gap/gap.dart';
 import 'package:get_thumbnail_video/index.dart';
 import 'package:get_thumbnail_video/video_thumbnail.dart';
 import 'package:shimmer/shimmer.dart';
@@ -429,117 +430,112 @@ class _VideoSliderState extends State<VideoSlider> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final sliderWidth = widget.width ?? StoycoScreenSize.screenWidth(context);
-    final sliderHeight =
-        widget.height ?? StoycoScreenSize.screenHeight(context);
+  Widget build(BuildContext context) => LayoutBuilder(
+        builder: (context, constraints) {
+          final sliderWidth = widget.width ?? constraints.maxWidth;
+          final sliderHeight = widget.height ?? sliderWidth;
 
-    return ValueListenableBuilder<bool>(
-      valueListenable: isLoading,
-      builder: (context, isLoadingValue, child) {
-        if (isLoadingValue) {
-          return SizedBox(
-            width: sliderWidth,
-            height: sliderHeight,
-            child: Shimmer.fromColors(
-              baseColor: const Color.fromARGB(255, 11, 18, 44),
-              highlightColor: const Color.fromARGB(255, 20, 35, 88),
-              child: LayoutBuilder(
-                builder: (context, constraints2) {
-                  final width = constraints2.maxWidth;
-                  return SizedBox(
-                    width: width,
-                    height: width,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Container(
-                        color: Colors.grey,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          );
-        }
-
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Flexible(
-              child: ValueListenableBuilder<int>(
-                valueListenable: currentIndex,
-                builder: (context, currentIndexValue, child) => SizedBox(
+          return ValueListenableBuilder<bool>(
+            valueListenable: isLoading,
+            builder: (context, isLoadingValue, child) {
+              if (isLoadingValue) {
+                return SizedBox(
                   width: sliderWidth,
                   height: sliderHeight,
-                  child: CarouselSlider.builder(
-                    carouselController: _carouselController,
-                    options: CarouselOptions(
-                      enlargeCenterPage: true,
-                      enlargeStrategy: CenterPageEnlargeStrategy.zoom,
-                      viewportFraction: 1,
-                      onPageChanged: (index, reason) {
-                        currentIndex.value = index;
-                        _onPageChanged(index, reason);
+                  child: Shimmer.fromColors(
+                    baseColor: const Color.fromARGB(255, 11, 18, 44),
+                    highlightColor: const Color.fromARGB(255, 20, 35, 88),
+                    child: LayoutBuilder(
+                      builder: (context, constraints2) {
+                        final width = constraints2.maxWidth;
+                        return SizedBox(
+                          width: width,
+                          height: width,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Container(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        );
                       },
-                      enableInfiniteScroll:
-                          allVideosLoaded && videosList.length > 1,
                     ),
-                    itemCount: videosList.length,
-                    itemBuilder: (context, index, realIndex) =>
-                        ValueListenableBuilder<Map<String, Image?>>(
-                      valueListenable: videoThumbnails,
-                      builder: (context, thumbnails, child) =>
-                          ValueListenableBuilder<bool>(
-                        valueListenable: isMuted,
-                        builder: (context, isMutedValue, child) =>
-                            ParallaxVideoCard(
-                          videoInfo: videosList[index],
-                          thumbnail: videosList[index].video.id != null
-                              ? thumbnails[videosList[index].video.id]
-                              : null,
-                          play: currentIndexValue == index,
-                          showInteractions: widget.showInteractions,
-                          onLike: () => _handleLike(videosList[index].video),
-                          onDislike: () =>
-                              _handleDislike(videosList[index].video),
-                          onShare: widget.onShare != null
-                              ? () => _handleShare(videosList[index].video)
-                              : null,
-                          nextVideo: () {
-                            widget.nextVideo
-                                ?.call(isMutedValue, videosList[index].video);
-                            if (videosList.length > 1) {
-                              _carouselController.nextPage();
-                              if (currentIndexValue == videosList.length - 1) {
-                                currentIndex.value = 0;
-                              } else {
-                                currentIndex.value++;
+                  ),
+                );
+              }
+
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ValueListenableBuilder<int>(
+                    valueListenable: currentIndex,
+                    builder: (context, currentIndexValue, child) => SizedBox(
+                      width: sliderWidth,
+                      height: sliderHeight,
+                      child: CarouselSlider.builder(
+                        carouselController: _carouselController,
+                        options: CarouselOptions(
+                          enlargeCenterPage: true,
+                          enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                          viewportFraction: 1,
+                          onPageChanged: (index, reason) {
+                            currentIndex.value = index;
+                            _onPageChanged(index, reason);
+                          },
+                          enableInfiniteScroll:
+                              allVideosLoaded && videosList.length > 1,
+                        ),
+                        itemCount: videosList.length,
+                        itemBuilder: (context, index, realIndex) =>
+                            ValueListenableBuilder<Map<String, Image?>>(
+                          valueListenable: videoThumbnails,
+                          builder: (context, thumbnails, child) =>
+                              ParallaxVideoCard(
+                            videoInfo: videosList[index],
+                            thumbnail: videosList[index].video.id != null
+                                ? thumbnails[videosList[index].video.id]
+                                : null,
+                            play: currentIndexValue == index,
+                            showInteractions: widget.showInteractions,
+                            onLike: () => _handleLike(videosList[index].video),
+                            onDislike: () =>
+                                _handleDislike(videosList[index].video),
+                            onShare: widget.onShare != null
+                                ? () => _handleShare(videosList[index].video)
+                                : null,
+                            nextVideo: () {
+                              widget.nextVideo?.call(
+                                  isMuted.value, videosList[index].video);
+                              if (videosList.length > 1) {
+                                _carouselController.nextPage();
+                                if (currentIndexValue ==
+                                    videosList.length - 1) {
+                                  currentIndex.value = 0;
+                                } else {
+                                  currentIndex.value++;
+                                }
                               }
-                            }
-                          },
-                          mute: (value) {
-                            if (isMuted.value != value) {
+                            },
+                            mute: (value) {
                               isMuted.value = value;
-                              widget.onMute?.call(value);
-                            }
-                          },
-                          isMuted: isMutedValue,
-                          isLooping: videosList.length == 1,
-                          env: widget.env,
+                              widget.onMute?.call(isMuted.value);
+                            },
+                            isMuted: isMuted.value,
+                            isLooping: videosList.length == 1,
+                            env: widget.env,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ),
-            ),
-            buildPaginationIndicators(),
-          ],
-        );
-      },
-    );
-  }
+                  Gap(StoycoScreenSize.height(context, 8.0)),
+                  buildPaginationIndicators(),
+                ],
+              );
+            },
+          );
+        },
+      );
 
   Widget buildPaginationIndicators() => ValueListenableBuilder<int>(
         valueListenable: currentIndex,
