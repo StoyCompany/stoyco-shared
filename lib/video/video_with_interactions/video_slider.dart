@@ -439,10 +439,10 @@ class _VideoSliderState extends State<VideoSlider> {
   }
 
   @override
-  Widget build(BuildContext context) => LayoutBuilder(
-        builder: (context, constraints) {
-          final sliderWidth = widget.width ?? constraints.maxWidth;
-          final sliderHeight = widget.height ?? sliderWidth;
+  Widget build(BuildContext context) {
+    final sliderWidth = widget.width ?? StoycoScreenSize.screenWidth(context);
+    final sliderHeight =
+        widget.height ?? sliderWidth ;
 
           return ValueListenableBuilder<bool>(
             valueListenable: isLoading,
@@ -549,14 +549,14 @@ class _VideoSliderState extends State<VideoSlider> {
                       ),
                     ),
                   ),
-                  Gap(StoycoScreenSize.height(context, 8.0)),
-                  buildPaginationIndicators(),
+                 Gap(StoycoScreenSize.height(context, 8.0)),
+                 buildPaginationIndicators(),
                 ],
               );
             },
           );
-        },
-      );
+        }
+
 
   Widget buildPaginationIndicators() => ValueListenableBuilder<int>(
         valueListenable: currentIndex,
@@ -564,7 +564,7 @@ class _VideoSliderState extends State<VideoSlider> {
           height: StoycoScreenSize.height(
             context,
             21.32,
-            phone: 18,
+            phone: 7,
             tablet: 20,
             desktopLarge: 24,
           ),
