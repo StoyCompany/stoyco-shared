@@ -201,7 +201,7 @@ class VideoInteractionsWidgetState extends State<VideoInteractionsWidget> {
                   ),
                   Gap(StoycoScreenSize.width(context, widget.spacing)),
                   Text(
-                    '${widget.totalScore}',
+                    widget.totalScore,
                     style: TextStyle(
                       color: widget.loading
                           ? widget.loadingTextColor

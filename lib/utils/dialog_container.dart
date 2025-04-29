@@ -15,6 +15,8 @@ class DialogContainer extends StatelessWidget {
   /// * [backgroundColor] - The background color of the dialog container.
   /// * [gradient] - The gradient to apply to the dialog container background.
   /// * [containerWidth] - The width of the dialog container. Defaults to 90% of screen width.
+  /// * [maxWidth] - The maximum width of the dialog container. Defaults to 500.
+  /// * [minHeight] - The minimum height of the dialog container. Defaults to 300.
   const DialogContainer({
     super.key,
     this.padding,
@@ -23,6 +25,8 @@ class DialogContainer extends StatelessWidget {
     this.backgroundColor,
     this.canClose = false,
     required this.children,
+    this.maxWidth = 500,
+    this.minHeight = 300,
   });
 
   /// The widgets to display in the dialog content.
@@ -42,6 +46,12 @@ class DialogContainer extends StatelessWidget {
 
   /// The width of the dialog container.
   final double? containerWidth;
+
+  /// The maximum width of the dialog container.
+  final double maxWidth;
+
+  /// The minimum height of the dialog container.
+  final double minHeight;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -85,8 +95,9 @@ class DialogContainer extends StatelessWidget {
                 child: Container(
                   width:
                       containerWidth ?? MediaQuery.of(context).size.width * 0.9,
-                  constraints: const BoxConstraints(
-                    maxWidth: 500,
+                  constraints: BoxConstraints(
+                    maxWidth: maxWidth,
+                    minHeight: minHeight,
                   ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25),

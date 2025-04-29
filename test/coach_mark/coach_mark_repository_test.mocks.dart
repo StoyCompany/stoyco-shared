@@ -26,13 +26,8 @@ import 'package:stoyco_shared/envs/envs.dart' as _i4;
 // ignore_for_file: subtype_of_sealed_class
 
 class _FakeResponse_0<T> extends _i1.SmartFake implements _i2.Response<T> {
-  _FakeResponse_0(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeResponse_0(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 /// A class which mocks [CoachMarkDataSource].
@@ -45,57 +40,54 @@ class MockCoachMarkDataSource extends _i1.Mock
   }
 
   @override
-  _i4.StoycoEnvironment get environment => (super.noSuchMethod(
-        Invocation.getter(#environment),
-        returnValue: _i4.StoycoEnvironment.development,
-      ) as _i4.StoycoEnvironment);
+  _i4.StoycoEnvironment get environment =>
+      (super.noSuchMethod(
+            Invocation.getter(#environment),
+            returnValue: _i4.StoycoEnvironment.development,
+          )
+          as _i4.StoycoEnvironment);
 
   @override
-  String get userToken => (super.noSuchMethod(
-        Invocation.getter(#userToken),
-        returnValue: _i5.dummyValue<String>(
-          this,
-          Invocation.getter(#userToken),
-        ),
-      ) as String);
+  String get userToken =>
+      (super.noSuchMethod(
+            Invocation.getter(#userToken),
+            returnValue: _i5.dummyValue<String>(
+              this,
+              Invocation.getter(#userToken),
+            ),
+          )
+          as String);
 
   @override
   set userToken(String? _userToken) => super.noSuchMethod(
-        Invocation.setter(
-          #userToken,
-          _userToken,
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.setter(#userToken, _userToken),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void updateUserToken(String? newUserToken) => super.noSuchMethod(
-        Invocation.method(
-          #updateUserToken,
-          [newUserToken],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#updateUserToken, [newUserToken]),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  _i6.Future<_i2.Response<dynamic>> createOnboardingCoachMarkData(
-          {required String? type}) =>
+  _i6.Future<_i2.Response<dynamic>> createOnboardingCoachMarkData({
+    required String? type,
+  }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #createOnboardingCoachMarkData,
-          [],
-          {#type: type},
-        ),
-        returnValue:
-            _i6.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
-          this,
-          Invocation.method(
-            #createOnboardingCoachMarkData,
-            [],
-            {#type: type},
-          ),
-        )),
-      ) as _i6.Future<_i2.Response<dynamic>>);
+            Invocation.method(#createOnboardingCoachMarkData, [], {
+              #type: type,
+            }),
+            returnValue: _i6.Future<_i2.Response<dynamic>>.value(
+              _FakeResponse_0<dynamic>(
+                this,
+                Invocation.method(#createOnboardingCoachMarkData, [], {
+                  #type: type,
+                }),
+              ),
+            ),
+          )
+          as _i6.Future<_i2.Response<dynamic>>);
 
   @override
   _i6.Future<_i2.Response<dynamic>> updateOnboardingCoachMarkData({
@@ -104,97 +96,79 @@ class MockCoachMarkDataSource extends _i1.Mock
     required bool? isCompleted,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #updateOnboardingCoachMarkData,
-          [],
-          {
-            #type: type,
-            #step: step,
-            #isCompleted: isCompleted,
-          },
-        ),
-        returnValue:
-            _i6.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
-          this,
-          Invocation.method(
-            #updateOnboardingCoachMarkData,
-            [],
-            {
+            Invocation.method(#updateOnboardingCoachMarkData, [], {
               #type: type,
               #step: step,
               #isCompleted: isCompleted,
-            },
-          ),
-        )),
-      ) as _i6.Future<_i2.Response<dynamic>>);
+            }),
+            returnValue: _i6.Future<_i2.Response<dynamic>>.value(
+              _FakeResponse_0<dynamic>(
+                this,
+                Invocation.method(#updateOnboardingCoachMarkData, [], {
+                  #type: type,
+                  #step: step,
+                  #isCompleted: isCompleted,
+                }),
+              ),
+            ),
+          )
+          as _i6.Future<_i2.Response<dynamic>>);
 
   @override
-  _i6.Future<_i2.Response<dynamic>> getOnboardingByTypeCoachMarkData(
-          {required String? type}) =>
+  _i6.Future<_i2.Response<dynamic>> getOnboardingByTypeCoachMarkData({
+    required String? type,
+  }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getOnboardingByTypeCoachMarkData,
-          [],
-          {#type: type},
-        ),
-        returnValue:
-            _i6.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
-          this,
-          Invocation.method(
-            #getOnboardingByTypeCoachMarkData,
-            [],
-            {#type: type},
-          ),
-        )),
-      ) as _i6.Future<_i2.Response<dynamic>>);
+            Invocation.method(#getOnboardingByTypeCoachMarkData, [], {
+              #type: type,
+            }),
+            returnValue: _i6.Future<_i2.Response<dynamic>>.value(
+              _FakeResponse_0<dynamic>(
+                this,
+                Invocation.method(#getOnboardingByTypeCoachMarkData, [], {
+                  #type: type,
+                }),
+              ),
+            ),
+          )
+          as _i6.Future<_i2.Response<dynamic>>);
 
   @override
   _i6.Future<_i2.Response<dynamic>> getOnboardingsByUserCoachMarkData() =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getOnboardingsByUserCoachMarkData,
-          [],
-        ),
-        returnValue:
-            _i6.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
-          this,
-          Invocation.method(
-            #getOnboardingsByUserCoachMarkData,
-            [],
-          ),
-        )),
-      ) as _i6.Future<_i2.Response<dynamic>>);
+            Invocation.method(#getOnboardingsByUserCoachMarkData, []),
+            returnValue: _i6.Future<_i2.Response<dynamic>>.value(
+              _FakeResponse_0<dynamic>(
+                this,
+                Invocation.method(#getOnboardingsByUserCoachMarkData, []),
+              ),
+            ),
+          )
+          as _i6.Future<_i2.Response<dynamic>>);
 
   @override
   _i6.Future<_i2.Response<dynamic>> resetOnboardingCoachMarkData() =>
       (super.noSuchMethod(
-        Invocation.method(
-          #resetOnboardingCoachMarkData,
-          [],
-        ),
-        returnValue:
-            _i6.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
-          this,
-          Invocation.method(
-            #resetOnboardingCoachMarkData,
-            [],
-          ),
-        )),
-      ) as _i6.Future<_i2.Response<dynamic>>);
+            Invocation.method(#resetOnboardingCoachMarkData, []),
+            returnValue: _i6.Future<_i2.Response<dynamic>>.value(
+              _FakeResponse_0<dynamic>(
+                this,
+                Invocation.method(#resetOnboardingCoachMarkData, []),
+              ),
+            ),
+          )
+          as _i6.Future<_i2.Response<dynamic>>);
 
   @override
-  _i6.Future<_i2.Response<dynamic>> getCoachMarkData() => (super.noSuchMethod(
-        Invocation.method(
-          #getCoachMarkData,
-          [],
-        ),
-        returnValue:
-            _i6.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
-          this,
-          Invocation.method(
-            #getCoachMarkData,
-            [],
-          ),
-        )),
-      ) as _i6.Future<_i2.Response<dynamic>>);
+  _i6.Future<_i2.Response<dynamic>> getCoachMarkData() =>
+      (super.noSuchMethod(
+            Invocation.method(#getCoachMarkData, []),
+            returnValue: _i6.Future<_i2.Response<dynamic>>.value(
+              _FakeResponse_0<dynamic>(
+                this,
+                Invocation.method(#getCoachMarkData, []),
+              ),
+            ),
+          )
+          as _i6.Future<_i2.Response<dynamic>>);
 }

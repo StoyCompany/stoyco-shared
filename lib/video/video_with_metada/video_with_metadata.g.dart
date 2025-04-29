@@ -24,7 +24,7 @@ VideoWithMetadata _$VideoWithMetadataFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['createAt'] as String),
     );
 
-Map<String, dynamic> _$VideoWithMetadaToJson(VideoWithMetadata instance) =>
+Map<String, dynamic> _$VideoWithMetadataToJson(VideoWithMetadata instance) =>
     <String, dynamic>{
       'videoMetadata': instance.videoMetadata,
       'id': instance.id,

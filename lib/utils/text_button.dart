@@ -19,8 +19,12 @@ import 'package:flutter/material.dart';
 ///   backgroundColor: Colors.blue,
 ///   fontSize: 16,
 ///   fontWeight: FontWeight.w400,
+///   loadingIndicatorSize: 24.0,
 /// )
 /// ```
+///
+/// The `loadingIndicatorSize` parameter controls the size of the circular progress indicator
+/// shown when `isLoading` is true.
 
 class TextButtonStoyco extends StatelessWidget {
   const TextButtonStoyco({
@@ -34,6 +38,8 @@ class TextButtonStoyco extends StatelessWidget {
     this.fontSize = 16,
     this.fontWeight = FontWeight.w400,
     this.boxShadow,
+    this.loadingIndicatorSize = 24.0,
+    this.textStyle,
   });
 
   final String text;
@@ -45,25 +51,32 @@ class TextButtonStoyco extends StatelessWidget {
   final double fontSize;
   final FontWeight fontWeight;
   final List<BoxShadow>? boxShadow;
+  final double loadingIndicatorSize;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
     final center = Center(
       child: isLoading
-          ? const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFAFAFA)),
+          ? SizedBox(
+              width: loadingIndicatorSize,
+              height: loadingIndicatorSize,
+              child: const CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFAFAFA)),
+              ),
             )
           : Text(
               text,
-              style: TextStyle(
-                fontFamily: 'Akkurat_Pro',
-                fontSize: fontSize,
-                fontWeight: fontWeight,
-                height: 1.19,
-                letterSpacing: 0,
-                color: const Color(0xFFFAFAFA),
-                decoration: TextDecoration.none,
-              ),
+              style: textStyle ??
+                  TextStyle(
+                    fontFamily: 'Akkurat_Pro',
+                    fontSize: fontSize,
+                    fontWeight: fontWeight,
+                    height: 1.19,
+                    letterSpacing: 0,
+                    color: const Color(0xFFFAFAFA),
+                    decoration: TextDecoration.none,
+                  ),
             ),
     );
     return SizedBox(
@@ -122,6 +135,7 @@ class OutlinedTextButtonStoyco extends StatelessWidget {
     this.backgroundColor,
     this.fontSize = 16,
     this.fontWeight = FontWeight.w400,
+    this.textStyle,
   });
 
   final String text;
@@ -132,6 +146,7 @@ class OutlinedTextButtonStoyco extends StatelessWidget {
   final Color? backgroundColor;
   final double fontSize;
   final FontWeight fontWeight;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -142,15 +157,16 @@ class OutlinedTextButtonStoyco extends StatelessWidget {
             )
           : Text(
               text,
-              style: TextStyle(
-                fontFamily: 'Akkurat_Pro',
-                fontSize: fontSize,
-                fontWeight: fontWeight,
-                height: 1.19,
-                letterSpacing: 0,
-                color: const Color(0xFFFAFAFA),
-                decoration: TextDecoration.none,
-              ),
+              style: textStyle ??
+                  TextStyle(
+                    fontFamily: 'Akkurat_Pro',
+                    fontSize: fontSize,
+                    fontWeight: fontWeight,
+                    height: 1.19,
+                    letterSpacing: 0,
+                    color: const Color(0xFFFAFAFA),
+                    decoration: TextDecoration.none,
+                  ),
             ),
     );
     return SizedBox(

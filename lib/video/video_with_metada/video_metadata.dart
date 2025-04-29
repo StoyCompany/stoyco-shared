@@ -5,20 +5,6 @@ part 'video_metadata.g.dart';
 
 @JsonSerializable()
 class VideoMetadata {
-  final String? id;
-  final String? videoId;
-  final String? createdBy;
-  final int? stoyCoins;
-  final int? shared;
-  final int? likes;
-  final int? dislikes;
-  final int? totalScore;
-  final bool? enableReward;
-  final int? rewardPoints;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  final DateTime? publicationDate;
-
   const VideoMetadata({
     this.id,
     this.videoId,
@@ -35,14 +21,25 @@ class VideoMetadata {
     this.publicationDate,
   });
 
-  @override
-  String toString() {
-    return 'VideoMetadata(id: $id, videoId: $videoId, createdBy: $createdBy, stoyCoins: $stoyCoins, shared: $shared, likes: $likes, dislikes: $dislikes, totalScore: $totalScore, enableReward: $enableReward, rewardPoints: $rewardPoints, createdAt: $createdAt, updatedAt: $updatedAt, publicationDate: $publicationDate)';
-  }
+  factory VideoMetadata.fromJson(Map<String, dynamic> json) =>
+      _$VideoMetadataFromJson(json);
+  final String? id;
+  final String? videoId;
+  final String? createdBy;
+  final int? stoyCoins;
+  final int? shared;
+  final int? likes;
+  final int? dislikes;
+  final int? totalScore;
+  final bool? enableReward;
+  final int? rewardPoints;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final DateTime? publicationDate;
 
-  factory VideoMetadata.fromJson(Map<String, dynamic> json) {
-    return _$VideoMetadataFromJson(json);
-  }
+  @override
+  String toString() =>
+      'VideoMetadata(id: $id, videoId: $videoId, createdBy: $createdBy, stoyCoins: $stoyCoins, shared: $shared, likes: $likes, dislikes: $dislikes, totalScore: $totalScore, enableReward: $enableReward, rewardPoints: $rewardPoints, createdAt: $createdAt, updatedAt: $updatedAt, publicationDate: $publicationDate)';
 
   Map<String, dynamic> toJson() => _$VideoMetadataToJson(this);
 
@@ -60,23 +57,22 @@ class VideoMetadata {
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? publicationDate,
-  }) {
-    return VideoMetadata(
-      id: id ?? this.id,
-      videoId: videoId ?? this.videoId,
-      createdBy: createdBy ?? this.createdBy,
-      stoyCoins: stoyCoins ?? this.stoyCoins,
-      shared: shared ?? this.shared,
-      likes: likes ?? this.likes,
-      dislikes: dislikes ?? this.dislikes,
-      totalScore: totalScore ?? this.totalScore,
-      enableReward: enableReward ?? this.enableReward,
-      rewardPoints: rewardPoints ?? this.rewardPoints,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
-      publicationDate: publicationDate ?? this.publicationDate,
-    );
-  }
+  }) =>
+      VideoMetadata(
+        id: id ?? this.id,
+        videoId: videoId ?? this.videoId,
+        createdBy: createdBy ?? this.createdBy,
+        stoyCoins: stoyCoins ?? this.stoyCoins,
+        shared: shared ?? this.shared,
+        likes: likes ?? this.likes,
+        dislikes: dislikes ?? this.dislikes,
+        totalScore: totalScore ?? this.totalScore,
+        enableReward: enableReward ?? this.enableReward,
+        rewardPoints: rewardPoints ?? this.rewardPoints,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+        publicationDate: publicationDate ?? this.publicationDate,
+      );
 
   @override
   bool operator ==(Object other) {

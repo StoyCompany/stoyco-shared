@@ -15,13 +15,15 @@ class DialogConfig {
     String? dialogTitle,
     String? negativeText,
     PinCodePlatform? platform,
-  }) => DialogConfig._internal(
-      affirmativeText: affirmativeText ?? 'Paste',
-      dialogContent: dialogContent ?? 'Do you want to paste this code ',
-      dialogTitle: dialogTitle ?? 'Paste Code',
-      negativeText: negativeText ?? 'Cancel',
-      platform: platform ?? PinCodePlatform.other,
-    );
+  }) =>
+      DialogConfig._internal(
+        affirmativeText: affirmativeText ?? 'Paste',
+        dialogContent: dialogContent ?? 'Do you want to paste this code ',
+        dialogTitle: dialogTitle ?? 'Paste Code',
+        negativeText: negativeText ?? 'Cancel',
+        platform: platform ?? PinCodePlatform.other,
+      );
+
   /// title of the [AlertDialog] while pasting the code. Default to [Paste Code]
   final String? dialogTitle;
 

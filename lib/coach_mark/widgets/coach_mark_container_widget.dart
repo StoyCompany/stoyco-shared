@@ -221,7 +221,8 @@ class _CoachMarkContainerWidgetState extends State<CoachMarkContainerWidget> {
                     ? () {
                         if (widget.onFinish != null && counterTapSkip == 0) {
                           print(
-                              'onFinish called $counterTapNext ${widget.key}',);
+                            'onFinish called $counterTapNext ${widget.key}',
+                          );
                           widget.onFinish!();
                           setState(() {
                             counterTapSkip++;

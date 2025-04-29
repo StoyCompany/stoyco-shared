@@ -53,6 +53,7 @@ abstract class NotificationsUtils {
   ) =>
       notifications
           .where(
-              (n) => n.type != null && isNotificationAllowedForWebById(n.type!))
+            (n) => n.type != null && isNotificationAllowedForWebById(n.type!),
+          )
           .toList();
 }

@@ -43,7 +43,10 @@ class VideoCacheService {
       await _cache[oldestUrl]?.pause();
     }
 
-    final controller = VideoPlayerController.networkUrl(Uri.parse(url));
+    final controller = VideoPlayerController.networkUrl(
+      Uri.parse(url),
+      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+    );
     await controller.initialize();
     _cache[url] = controller;
     return controller;
@@ -83,6 +86,16 @@ class VideoCacheService {
   Future<void> preloadNext(String url) async {
     if (!_cache.containsKey(url)) {
       await getController(url);
+    }
+  }
+
+  /// Sets the mute state of the video controller associated with the given URL.
+  ///
+  /// [url] The URL of the video to mute/unmute.
+  /// [muted] Whether to mute the video (true) or unmute it (false).
+  void setMute(String url, bool muted) {
+    if (_cache.containsKey(url)) {
+      _cache[url]?.setVolume(muted ? 0 : 1);
     }
   }
 }

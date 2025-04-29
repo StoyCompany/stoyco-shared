@@ -19,14 +19,15 @@ import 'package:stoyco_shared/utils/text_button.dart';
 /// )
 /// ```
 class ModalCompleteProfile extends StatelessWidget {
-  const ModalCompleteProfile(
-      {super.key,
-      this.padding,
-      this.title = '¡Hola de nuevo!',
-      this.subtitle =
-          '¡No olvides completar tu perfil en StoyCo para disfrutar de una experiencia personalizada al máximo!',
-      this.buttonText = 'Completar mi perfil',
-      this.onTap});
+  const ModalCompleteProfile({
+    super.key,
+    this.padding,
+    this.title = '¡Hola de nuevo!',
+    this.subtitle =
+        '¡No olvides completar tu perfil en StoyCo para disfrutar de una experiencia personalizada al máximo!',
+    this.buttonText = 'Completar mi perfil',
+    this.onTap,
+  });
 
   /// Custom padding for the modal content.
   /// If null, default padding will be applied using [StoycoScreenSize].
@@ -80,10 +81,11 @@ class ModalCompleteProfile extends StatelessWidget {
           ),
           Gap(StoycoScreenSize.height(context, 28)),
           TextButtonStoyco(
-              width: double.infinity,
-              height: 60,
-              text: buttonText,
-              onTap: onTap ?? () {}),
+            width: double.infinity,
+            height: 60,
+            text: buttonText,
+            onTap: onTap ?? () {},
+          ),
         ],
       );
 }

@@ -1,4 +1,3 @@
-
 import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -17,17 +16,20 @@ class PageResult<T> {
     this.pageSize,
     this.totalItems,
     this.totalPages,
+    this.updatedAt,
     this.items,
   });
   final int? pageNumber;
   final int? pageSize;
   final int? totalItems;
+  final DateTime? updatedAt;
   final int? totalPages;
+
   final List<T>? items;
 
   @override
   String toString() =>
-      'PageResult(pageNumber: $pageNumber, pageSize: $pageSize, totalItems: $totalItems, totalPages: $totalPages, items: $items)';
+      'PageResult(pageNumber: $pageNumber, pageSize: $pageSize, totalItems: $totalItems, totalPages: $totalPages, updatedAt: $updatedAt, items: $items)';
 
   Map<String, dynamic> toJson(
     Object Function(T value) toJsonT,
@@ -39,6 +41,7 @@ class PageResult<T> {
     int? pageSize,
     int? totalItems,
     int? totalPages,
+    DateTime? updatedAt,
     List<T>? items,
   }) =>
       PageResult<T>(
@@ -46,6 +49,7 @@ class PageResult<T> {
         pageSize: pageSize ?? this.pageSize,
         totalItems: totalItems ?? this.totalItems,
         totalPages: totalPages ?? this.totalPages,
+        updatedAt: updatedAt ?? this.updatedAt,
         items: items ?? this.items,
       );
 
@@ -54,8 +58,10 @@ class PageResult<T> {
     if (identical(other, this)) return true;
     if (other is! PageResult<T>) return false;
     final mapEquals = const DeepCollectionEquality().equals;
-    return mapEquals(other.toJson((value) => value as Object),
-        toJson((value) => value as Object),);
+    return mapEquals(
+      other.toJson((value) => value as Object),
+      toJson((value) => value as Object),
+    );
   }
 
   @override
@@ -64,5 +70,6 @@ class PageResult<T> {
       pageSize.hashCode ^
       totalItems.hashCode ^
       totalPages.hashCode ^
+      updatedAt.hashCode ^
       items.hashCode;
 }

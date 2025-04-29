@@ -1,3 +1,38 @@
+## 16.6.14 
+- **feat:** Add carousel functionality to VideoSlider and implement getCountOfVideos 
+
+## 16.5.0
+
+- **feat:** Add paddingScrollBar property to AnnouncementPrizePanel and enhance documentation for AnnouncementDataSource and AnnouncementRepository methods
+
+## 16.4.4
+
+- **feat:** Enhance AnnouncementParticipationFormDialog and CoverImageWithFade with improved validation, loading states, and customizable styles
+
+## 16.4.0
+
+- **feat:** Add announcement participation models and data source methods
+
+## 16.2.0
+
+- **feat:** Implement getAnnouncementById method in AnnouncementDataSource and update repository and service layers
+
+## 16.1.0
+
+- **feat:** Add AnnouncementDataSource for fetching announcements; update models and generated files
+
+## 16.0.1
+
+- **feat:** feat: Add AnnouncementLeaderboardItem model and new SVG icons; update pubspec.yaml dependencies
+
+## 16.0.0
+
+- **feat:** Add AnnouncementModel with JSON serialization and megaphone icon asset
+
+## 15.1.0
+
+- **feat:** Add new parameters for responsive behavior in a single method call
+
 ## 15.0.0
 
 - **feat:** Add environment-specific video base URL handling in ParallaxVideoCard
