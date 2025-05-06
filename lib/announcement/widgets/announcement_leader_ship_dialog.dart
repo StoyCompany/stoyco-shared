@@ -568,44 +568,45 @@ class _AnnouncementLeaderShipDialogState
                 ),
               ),
             ),
-          SizedBox(
-            width: StoycoScreenSize.width(context, 100, phone: 50, tablet: 90),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  '${item.totalLikes} Likes',
-                  style: TextStyle(
-                    fontSize: widget.countersFontSize ??
-                        _getCachedValue<double>(
-                          'counters_font_size',
-                          () => StoycoScreenSize.fontSize(
-                            context,
-                            14,
-                            phone: 11,
-                            tablet: 12,
-                          ),
-                        ),
-                    fontWeight: widget.countersFontWeight,
-                    color: widget.dateTextColor ?? StoycoColors.text,
-                  ),
-                ),
-                if (isPhone)
+          Flexible(
+            child: SizedBox(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
                   Text(
-                    '${item.totalPost} Posts',
+                    '${item.totalLikes} Likes',
                     style: TextStyle(
-                      fontSize: widget.countersFontSize != null
-                          ? widget.countersFontSize! * 0.8
-                          : _getCachedValue<double>(
-                              'small_counters_font_size',
-                              () => StoycoScreenSize.fontSize(context, 10),
+                      fontSize: widget.countersFontSize ??
+                          _getCachedValue<double>(
+                            'counters_font_size',
+                            () => StoycoScreenSize.fontSize(
+                              context,
+                              14,
+                              phone: 11,
+                              tablet: 12,
                             ),
+                          ),
                       fontWeight: widget.countersFontWeight,
-                      color: (widget.dateTextColor ?? StoycoColors.text)
-                          .withOpacity(0.7),
+                      color: widget.dateTextColor ?? StoycoColors.text,
                     ),
                   ),
-              ],
+                  if (isPhone)
+                    Text(
+                      '${item.totalPost} Posts',
+                      style: TextStyle(
+                        fontSize: widget.countersFontSize != null
+                            ? widget.countersFontSize! * 0.8
+                            : _getCachedValue<double>(
+                                'small_counters_font_size',
+                                () => StoycoScreenSize.fontSize(context, 10),
+                              ),
+                        fontWeight: widget.countersFontWeight,
+                        color: (widget.dateTextColor ?? StoycoColors.text)
+                            .withOpacity(0.7),
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
         ],
