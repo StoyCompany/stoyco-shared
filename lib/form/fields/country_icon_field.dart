@@ -2,8 +2,8 @@ import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-import 'package:intl_phone_field/countries.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
+import 'package:stoyco_shared/form/data/countries.dart';
 
 /// A custom widget for selecting a country prefix.
 ///
@@ -80,10 +80,10 @@ class _StoycoCountryPrefixIconState extends State<StoycoCountryPrefixIcon> {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  filteredCountries: countries,
+                  filteredCountries: stoycoCountries,
                   searchText: 'Buscar',
-                  countryList: countries,
-                  selectedCountry: countries.first,
+                  countryList: stoycoCountries,
+                  selectedCountry: stoycoCountries.first,
                   onCountryChanged: (Country country) {
                     seletectedCountry.value = country;
                     widget.onCountryChanged.call(country);
