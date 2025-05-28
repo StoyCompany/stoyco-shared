@@ -1,5 +1,14 @@
-## 16.6.14 
-- **feat:** Add carousel functionality to VideoSlider and implement getCountOfVideos 
+## 16.6.18
+
+- **feat:** Refactor code structure for improved readability and maintainability
+
+## 16.6.17
+
+- **feat:** Update layout in AnnouncementLeaderShipDialog for better responsiveness
+
+## 16.6.14
+
+- **feat:** Add carousel functionality to VideoSlider and implement getCountOfVideos
 
 ## 16.5.0
 
