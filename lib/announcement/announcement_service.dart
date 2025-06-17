@@ -356,4 +356,14 @@ class AnnouncementService {
       return false;
     }
   }
+
+  bool isTiktokAuthEnabled() {
+    try {
+      final bool enableTiktokAuth = remoteConfig.getBool('enable_tiktok_auth');
+      return enableTiktokAuth;
+    } catch (e) {
+      StoyCoLogger.error('Error checking TikTok auth: $e');
+      return false;
+    }
+  }
 }

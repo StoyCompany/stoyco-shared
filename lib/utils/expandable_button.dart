@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:stoyco_shared/design/screen_size.dart';
 
 /// A button that can be expanded or collapsed.
 ///
@@ -97,7 +98,11 @@ class _ExpandableButtonState extends State<ExpandableButton> {
         MouseRegion(
           cursor: SystemMouseCursors.click,
           onEnter: (_) {
-            _isExpanded ? _performAction : _toggleExpand;
+            if (_isExpanded) {
+              _performAction();
+            } else {
+              _toggleExpand();
+            }
           },
           child: GestureDetector(
             onTap: _isExpanded ? _performAction : _toggleExpand,
@@ -120,26 +125,50 @@ class _ExpandableButtonState extends State<ExpandableButton> {
                   ),
               width: _isExpanded
                   ? widget.maxWidth ?? screenWidth
-                  : widget.minWidth ?? 50.0,
-              height: widget.height ?? 50.0,
+                  : widget.minWidth ?? StoycoScreenSize.width(context, 50),
+              height: widget.height ?? StoycoScreenSize.height(context, 50),
               alignment: Alignment.center,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  if (_isExpanded)
-                    Flexible(
-                      child: Text(
-                        widget.text ?? 'Click Me',
-                        style: widget.textStyle ??
-                            const TextStyle(
-                              color: Colors.white,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                      ),
-                    ),
-                  if (_isExpanded) const Gap(8),
-                  widget.icon ?? const Icon(Icons.add, color: Colors.white),
-                ],
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  // Calculate minimum width needed for icon and gap
+                  final iconWidth = StoycoScreenSize.width(context, 24);
+                  final gapWidth = StoycoScreenSize.width(context, 8);
+                  final padding = StoycoScreenSize.width(context, 32);
+                  final minWidthForText = iconWidth +
+                      gapWidth +
+                      padding +
+                      StoycoScreenSize.width(context, 50);
+
+                  final showText =
+                      _isExpanded && constraints.maxWidth >= minWidthForText;
+
+                  if (showText) {
+                    return Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            widget.text ?? 'Click Me',
+                            style: widget.textStyle ??
+                                const TextStyle(
+                                  color: Colors.white,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const Gap(8),
+                        widget.icon ??
+                            const Icon(Icons.add, color: Colors.white),
+                      ],
+                    );
+                  } else {
+                    return Center(
+                      child: widget.icon ??
+                          const Icon(Icons.add, color: Colors.white),
+                    );
+                  }
+                },
               ),
             ),
           ),

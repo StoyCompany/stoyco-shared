@@ -1,3 +1,7 @@
+## 17.7.0
+
+- **feat:** Add TikTok authentication check and enhance ExpandableButton layout for better responsiveness
+
 ## 16.6.18
 
 - **feat:** Refactor code structure for improved readability and maintainability
