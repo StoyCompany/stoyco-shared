@@ -31,7 +31,7 @@ extension StoycoEnvironmentExtension on StoycoEnvironment {
       case StoycoEnvironment.production:
         return 'https://stoyco-medias-prod.s3.amazonaws.com/data/coach_mark_data.json';
       case StoycoEnvironment.testing:
-        return 'https://stoyco-medias-qa.s3.amazonaws.com/data/coach_mark_data.json';
+        return 'https://stoyco-medias-dev.s3.amazonaws.com/data/coach_mark_data.json';
     }
   }
 
@@ -62,7 +62,7 @@ extension StoycoEnvironmentExtension on StoycoEnvironment {
       case StoycoEnvironment.development:
         return 'https://4ll60y4zfk.execute-api.us-east-1.amazonaws.com/dev/api/';
       case StoycoEnvironment.production:
-        return 'https://4ll60y4zfk.execute-api.us-east-1.amazonaws.com/prod/api/';
+        return 'https://x0dnk78u0l.execute-api.us-east-1.amazonaws.com/prod/api/';
       case StoycoEnvironment.testing:
         return 'https://4ll60y4zfk.execute-api.us-east-1.amazonaws.com/qa/api/';
     }
