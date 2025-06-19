@@ -73,7 +73,7 @@ extension StoycoEnvironmentExtension on StoycoEnvironment {
       case StoycoEnvironment.development:
         return 'https://4ll60y4zfk.execute-api.us-east-1.amazonaws.com/qa/api/tiktok/user';
       case StoycoEnvironment.production:
-        return 'https://4ll60y4zfk.execute-api.us-east-1.amazonaws.com/qa/api/tiktok/user';
+        return 'https://x0dnk78u0l.execute-api.us-east-1.amazonaws.com/prod/api/tiktok/user';
       case StoycoEnvironment.testing:
         return 'https://4ll60y4zfk.execute-api.us-east-1.amazonaws.com/qa/api/tiktok/user';
     }
