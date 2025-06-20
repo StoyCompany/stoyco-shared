@@ -154,7 +154,7 @@ class AnnouncementService {
 
   /// Checks if there is an active announcement.
   ///
-  /// Reads the 'enable_announcement' flag from Firebase Remote Config.
+  /// Reads the 'enable_announcement_v2' flag from Firebase Remote Config.
   ///
   /// Returns `true` if there is an active announcement, `false` otherwise.
   ///
@@ -167,7 +167,7 @@ class AnnouncementService {
   bool hasActiveAnnouncement() {
     try {
       final bool enableAnnouncement =
-          remoteConfig.getBool('enable_announcement');
+          remoteConfig.getBool('enable_announcement_v2');
       return enableAnnouncement;
     } catch (e) {
       StoyCoLogger.error('Error checking active calls for applications: $e');
@@ -330,7 +330,7 @@ class AnnouncementService {
 
   /// Checks if there are active announcements.
   ///
-  /// This method reads the 'enable_announcement' flag from Firebase Remote Config
+  /// This method reads the 'enable_announcement_v2' flag from Firebase Remote Config
   /// to determine if there are active announcements in the system.
   ///
   /// Returns a [Future] containing a [bool]:
@@ -349,7 +349,7 @@ class AnnouncementService {
   Future<bool> hasActiveAnnouncements() async {
     try {
       final bool enableAnnouncement =
-          remoteConfig.getBool('enable_announcement');
+          remoteConfig.getBool('enable_announcement_v2');
       return enableAnnouncement;
     } catch (e) {
       StoyCoLogger.error('Error checking active calls for applications: $e');
