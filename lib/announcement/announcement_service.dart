@@ -346,10 +346,10 @@ class AnnouncementService {
   ///   print('No active announcements.');
   /// }
   /// ```
-  Future<bool> hasActiveAnnouncements() async {
+  Future<bool> hasActiveAnnouncements({String? platform}) async {
     try {
       final bool enableAnnouncement =
-          remoteConfig.getBool('enable_announcement_v2');
+          remoteConfig.getBool('enable_announcement_$platform');
       return enableAnnouncement;
     } catch (e) {
       StoyCoLogger.error('Error checking active calls for applications: $e');

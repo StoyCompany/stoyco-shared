@@ -1,3 +1,7 @@
+## 18.0.3
+
+- **fix:** Update hasActiveAnnouncements method to accept platform parameter for dynamic configuration
+
 ## 17.7.0
 
 - **feat:** Add TikTok authentication check and enhance ExpandableButton layout for better responsiveness
