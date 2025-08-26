@@ -43,6 +43,8 @@ dependencies:
   firebase_remote_config: ^5.4.2
   outline_gradient_button: ^2.0.1+1
   flutter_widget_from_html: ^0.17.0
+  moengage_flutter: ^10.0.1
+  moengage_flutter_web:  ^ 5.0.0
 
 dev_dependencies:
   flutter_test:
