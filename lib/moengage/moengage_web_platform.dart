@@ -11,8 +11,6 @@ class MoEngageWebPlatform implements MoEngagePlatform {
   Future<void> initialize({String? appId}) async {
     _appId = appId;
 
-
-
     print("MoEngage Web: Plataforma inicializada. "
         "App ID (informativo desde Dart): ${_appId ?? 'NO PROPORCIONADO'}. "
         "CRÍTICO: Asegúrate que Moengage.app_id esté configurado en web/index.html.");
@@ -40,9 +38,6 @@ class MoEngageWebPlatform implements MoEngagePlatform {
   @override
   Future<void> setUserAttribute(String attributeName, dynamic attributeValue) async {
     if (attributeValue is DateTime) {
-      // El SDK web de MoEngage espera un objeto Date de JavaScript o una cadena ISO 8601.
-      // `moengage_flutter_web` debería manejar la conversión de `DateTime` a una cadena ISO.
-      // Para ser explícitos y seguros:
       _moengagePlugin.setUserAttribute(attributeName, attributeValue.toIso8601String(),_appId!);
     } else {
       _moengagePlugin.setUserAttribute(attributeName, attributeValue,_appId!);

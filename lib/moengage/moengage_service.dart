@@ -1,13 +1,13 @@
+// lib/moengage/moengage_service.dart
 import 'package:flutter/foundation.dart';
 import 'package:stoyco_shared/moengage/moengage_platform.dart';
 import 'package:stoyco_shared/moengage/platform_locator.dart'
-if (dart.library.io) 'platform_locator_mobile.dart' // Para móvil (Android, iOS)
-if (dart.library.html) 'platform_locator_web.dart'; // Para web
+if (dart.library.io) 'platform_locator_mobile.dart'
+if (dart.library.html) 'platform_locator_web.dart';
 
 class MoEngageService {
-
-  MoEngageService._internal() {
-    _platform = getMoEngagePlatform();
+  MoEngageService._internal([MoEngagePlatform? platform]) {
+    _platform = platform ?? getMoEngagePlatform();
     debugPrint('MoEngageService: Plataforma seleccionada por el compilador.');
   }
   static MoEngageService? _instance;
@@ -18,10 +18,10 @@ class MoEngageService {
     return _instance!;
   }
 
-  static Future<MoEngageService> init({required String appId}) async {
-    final serviceInstance = MoEngageService.instance;
-    await serviceInstance._platform.initialize(appId: appId);
-    return serviceInstance;
+  static Future<MoEngageService> init({required String appId, MoEngagePlatform? platform}) async {
+    _instance = MoEngageService._internal(platform);
+    await _instance!._platform.initialize(appId: appId);
+    return _instance!;
   }
 
   Future<void> setUniqueId(String uniqueId) async {

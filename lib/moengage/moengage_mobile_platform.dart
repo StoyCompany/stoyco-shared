@@ -3,9 +3,8 @@ import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:stoyco_shared/moengage/moengage_platform.dart';
 
 class MoEngageMobilePlatform implements MoEngagePlatform {
-  // Usamos 'late' porque se inicializará de forma asíncrona en 'initialize'.
   late final MoEngageFlutter _moengagePlugin;
-
+  final MoEInitConfig _initConfig = MoEInitConfig(analyticsConfig: AnalyticsConfig(shouldTrackUserAttributeBooleanAsNumber: true));
   @override
   Future<void> initialize({required String appId}) async {
     // Es buena práctica verificar el appId antes de usarlo.
@@ -14,7 +13,7 @@ class MoEngageMobilePlatform implements MoEngagePlatform {
           'MoEngage Mobile: App ID es crucial para la inicialización y no fue proporcionado.',);
     }
 
-    _moengagePlugin = MoEngageFlutter(appId);
+    _moengagePlugin = MoEngageFlutter(appId,moEInitConfig: _initConfig);
 
     debugPrint("MoEngage Mobile: SDK inicializado con App ID: $appId");
   }
@@ -31,7 +30,6 @@ class MoEngageMobilePlatform implements MoEngagePlatform {
     final MoEProperties properties = MoEProperties();
     if (eventAttributes != null) {
       eventAttributes.forEach((key, value) {
-        // MoEngage recomienda validar los tipos de datos, pero addAttribute es flexible.
         properties.addAttribute(key, value);
       });
     }
