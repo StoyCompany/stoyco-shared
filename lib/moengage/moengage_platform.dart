@@ -1,17 +1,17 @@
 abstract class MoEngagePlatform {
-  /// Inicializa el SDK de MoEngage con el App ID específico.
+  /// Initializes the MoEngage SDK with the specific App ID.
   Future<void> initialize({required String appId});
 
-  /// Identifica al usuario con un ID único.
+  /// Identifies the user with a unique ID.
   Future<void> identifyUser(String uniqueId);
 
-  /// Rastrea un evento personalizado con atributos opcionales.
-  Future<void> trackCustomEvent(
-      String eventName, Map<String, Object>? eventAttributes,);
+  /// Tracks a custom event with optional attributes.
+  Future<void> trackCustomEvent(String eventName,
+      Map<String, Object>? eventAttributes,);
 
-  /// Establece un atributo para el usuario actual.
+  /// Sets an attribute for the current user.
   Future<void> setUserAttribute(String attributeName, dynamic attributeValue);
 
-  /// Cierra la sesión del usuario actual en MoEngage.
+  /// Logs out the current user from MoEngage.
   Future<void> logout();
 }

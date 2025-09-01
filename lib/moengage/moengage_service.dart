@@ -1,4 +1,3 @@
-// lib/moengage/moengage_service.dart
 import 'package:flutter/foundation.dart';
 import 'package:stoyco_shared/moengage/moengage_platform.dart';
 import 'package:stoyco_shared/moengage/platform_locator.dart'
