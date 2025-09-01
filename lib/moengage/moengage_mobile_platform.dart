@@ -7,7 +7,6 @@ class MoEngageMobilePlatform implements MoEngagePlatform {
   final MoEInitConfig _initConfig = MoEInitConfig(analyticsConfig: AnalyticsConfig(shouldTrackUserAttributeBooleanAsNumber: true));
   @override
   Future<void> initialize({required String appId}) async {
-    // Es buena práctica verificar el appId antes de usarlo.
     if (appId.isEmpty) {
       debugPrint(
           'MoEngage Mobile: App ID es crucial para la inicialización y no fue proporcionado.',);
@@ -40,7 +39,6 @@ class MoEngageMobilePlatform implements MoEngagePlatform {
   @override
   Future<void> setUserAttribute(
       String attributeName, dynamic attributeValue) async {
-    // El SDK móvil maneja diferentes tipos de datos, no es necesario convertir a String.
     _moengagePlugin.setUserAttribute(attributeName, attributeValue);
     debugPrint("MoEngage Mobile: Atributo de usuario '$attributeName' establecido.");
   }
