@@ -1,7 +1,6 @@
-// lib/moengage/moengage_web_platform.dart
 import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:moengage_flutter_web/moengage_flutter_web.dart';
-import 'package:stoyco_shared/moengage/moengage_platform.dart'; // Asegúrate de que esta ruta sea correcta
+import 'package:stoyco_shared/moengage/moengage_platform.dart';
 
 class MoEngageWebPlatform implements MoEngagePlatform {
   final MoEngageFlutterWeb _moengagePlugin = MoEngageFlutterWeb();

@@ -1,5 +1,3 @@
-// lib/moengage/platform_locator.dart
-
 import 'package:stoyco_shared/moengage/moengage_platform.dart';
 
 
