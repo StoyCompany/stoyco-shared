@@ -49,4 +49,47 @@ class MoEngageWebPlatform implements MoEngagePlatform {
     _moengagePlugin.logout(_appId!);
     print("MoEngage Web: Usuario deslogueado.");
   }
+
+  @override
+  Future<void> showInAppMessage() async {
+    // NO-OP
+    print("MoEngage Web: showInAppMessage llamado, pero es no-op en Web.");
+    return Future.value();
+  }
+
+  @override
+  Future<void> showNudge() async {
+    // NO-OP
+    print("MoEngage Web: showNudge llamado, pero es no-op en Web.");
+    return Future.value();
+  }
+  @override
+  Future<void> setUserName(String userName) async {
+    _moengagePlugin.setUserName(userName,_appId!);
+    print("MoEngage Mobile: Nombre de usuario establecido a '$userName'.");
+  }
+  @override
+  Future<void> setUserEmail(String email) async {
+    _moengagePlugin.setEmail(email,_appId!);
+    print("MoEngage Mobile: Email de usuario establecido a '$email'.");
+  }
+
+  @override
+  Future<void> setGender(MoEGender gender) async {
+   _moengagePlugin.setGender(gender, _appId!);
+  }
+  @override
+  Future<void> setPhoneNumber(String phoneNumber) async {
+    _moengagePlugin.setPhoneNumber(phoneNumber,_appId!);
+  }
+
+  @override
+  Future<void> setLastName(String lastName) async {
+   _moengagePlugin.setLastName(lastName,_appId!);
+  }
+
+  @override
+  Future<void> setFirstName(String firstName) async {
+   _moengagePlugin.setFirstName(firstName,_appId!);
+  }
 }
