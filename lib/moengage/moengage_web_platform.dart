@@ -7,7 +7,7 @@ class MoEngageWebPlatform implements MoEngagePlatform {
   String? _appId;
 
   @override
-  Future<void> initialize({String? appId}) async {
+  void initialize({String? appId}) {
     _appId = appId;
 
     print("MoEngage Web: Plataforma inicializada. "
@@ -16,7 +16,8 @@ class MoEngageWebPlatform implements MoEngagePlatform {
   }
 
   @override
-  Future<void> trackCustomEvent(String eventName, Map<String, dynamic>? eventAttributes) async {
+  void trackCustomEvent(
+      String eventName, Map<String, dynamic>? eventAttributes) {
     final MoEProperties properties = MoEProperties();
 
     if (eventAttributes != null) {
@@ -24,64 +25,54 @@ class MoEngageWebPlatform implements MoEngagePlatform {
         properties.addAttribute(key, value);
       });
     }
-    _moengagePlugin.trackEvent(eventName, properties,_appId!);
+    _moengagePlugin.trackEvent(eventName, properties, _appId!);
   }
 
   @override
-  Future<void> identifyUser(String uniqueId) async {
-    _moengagePlugin.setUniqueId(uniqueId,_appId!);
-  }
+  void identifyUser(String uniqueId) =>
+      _moengagePlugin.setUniqueId(uniqueId, _appId!);
 
   @override
-  Future<void> setUserAttribute(String attributeName, dynamic attributeValue) async {
+  void setUserAttribute(String attributeName, dynamic attributeValue) {
     if (attributeValue is DateTime) {
-      _moengagePlugin.setUserAttribute(attributeName, attributeValue.toIso8601String(),_appId!);
+      _moengagePlugin.setUserAttribute(
+          attributeName, attributeValue.toIso8601String(), _appId!);
     } else {
-      _moengagePlugin.setUserAttribute(attributeName, attributeValue,_appId!);
+      _moengagePlugin.setUserAttribute(attributeName, attributeValue, _appId!);
     }
   }
 
   @override
-  Future<void> logout() async {
-    _moengagePlugin.logout(_appId!);
-  }
+  void logout() => _moengagePlugin.logout(_appId!);
 
   @override
-  Future<void> showInAppMessage() async {
-    // NO-OP
-    throw UnimplementedError(
-        "MoEngage Web: showInAppMessage no está implementado en Web.");
-  }
+  void showInAppMessage() => throw UnimplementedError(
+      "MoEngage Web: showInAppMessage no está implementado en Web.");
 
   @override
-  Future<void> showNudge() async {
-    throw UnimplementedError("MoEngage Web: showInAppMessage no está implementado en Web.");
-  }
-  @override
-  Future<void> setUserName(String userName) async {
-    _moengagePlugin.setUserName(userName,_appId!);
-  }
-  @override
-  Future<void> setUserEmail(String email) async {
-    _moengagePlugin.setEmail(email,_appId!);
-  }
+  void showNudge() => throw UnimplementedError(
+      "MoEngage Web: showInAppMessage no está implementado en Web.");
 
   @override
-  Future<void> setGender(MoEGender gender) async {
-   _moengagePlugin.setGender(gender, _appId!);
-  }
-  @override
-  Future<void> setPhoneNumber(String phoneNumber) async {
-    _moengagePlugin.setPhoneNumber(phoneNumber,_appId!);
-  }
+  void setUserName(String userName) =>
+      _moengagePlugin.setUserName(userName, _appId!);
 
   @override
-  Future<void> setLastName(String lastName) async {
-   _moengagePlugin.setLastName(lastName,_appId!);
-  }
+  void setUserEmail(String email) => _moengagePlugin.setEmail(email, _appId!);
 
   @override
-  Future<void> setFirstName(String firstName) async {
-   _moengagePlugin.setFirstName(firstName,_appId!);
-  }
+  void setGender(MoEGender gender) =>
+      _moengagePlugin.setGender(gender, _appId!);
+
+  @override
+  void setPhoneNumber(String phoneNumber) =>
+      _moengagePlugin.setPhoneNumber(phoneNumber, _appId!);
+
+  @override
+  void setLastName(String lastName) =>
+      _moengagePlugin.setLastName(lastName, _appId!);
+
+  @override
+  void setFirstName(String firstName) =>
+      _moengagePlugin.setFirstName(firstName, _appId!);
 }

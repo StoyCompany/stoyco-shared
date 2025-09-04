@@ -4,12 +4,16 @@ import 'package:stoyco_shared/moengage/moengage_platform.dart';
 
 class MoEngageMobilePlatform implements MoEngagePlatform {
   late final MoEngageFlutter _moengagePlugin;
-  final MoEInitConfig _initConfig = MoEInitConfig(analyticsConfig: AnalyticsConfig(shouldTrackUserAttributeBooleanAsNumber: true));
+  final MoEInitConfig _initConfig = MoEInitConfig(
+      analyticsConfig:
+          AnalyticsConfig(shouldTrackUserAttributeBooleanAsNumber: true));
+
   @override
-  Future<void> initialize({required String appId}) async {
+  void initialize({required String appId}) {
     if (appId.isEmpty) {
       debugPrint(
-          'MoEngage Mobile: App ID es crucial para la inicialización y no fue proporcionado.',);
+        'MoEngage Mobile: App ID es crucial para la inicialización y no fue proporcionado.',
+      );
     }
 
     _moengagePlugin = MoEngageFlutter(appId, moEInitConfig: _initConfig);
@@ -17,13 +21,13 @@ class MoEngageMobilePlatform implements MoEngagePlatform {
   }
 
   @override
-  Future<void> identifyUser(String uniqueId) async {
+  void identifyUser(String uniqueId) {
     _moengagePlugin.identifyUser(uniqueId);
   }
 
   @override
-  Future<void> trackCustomEvent(
-      String eventName, Map<String, Object>? eventAttributes) async {
+  void trackCustomEvent(
+      String eventName, Map<String, Object>? eventAttributes) {
     final MoEProperties properties = MoEProperties();
     if (eventAttributes != null) {
       eventAttributes.forEach((key, value) {
@@ -32,57 +36,39 @@ class MoEngageMobilePlatform implements MoEngagePlatform {
     }
     _moengagePlugin.trackEvent(eventName, properties);
   }
-  @override
-  Future<void> setUserName(String userName) async {
-    _moengagePlugin.setUserName(userName);
-  }
-  @override
-  Future<void> setUserEmail(String email) async {
-    _moengagePlugin.setEmail(email);
-  }
 
   @override
-  Future<void> setPhoneNumber(String phoneNumber)async {
-   _moengagePlugin.setPhoneNumber(phoneNumber);
-  }
+  void setUserName(String userName) => _moengagePlugin.setUserName(userName);
 
   @override
-  Future<void> setGender(MoEGender gender)async {
-   _moengagePlugin.setGender(gender);
-  }
+  void setUserEmail(String email) => _moengagePlugin.setEmail(email);
 
   @override
-  Future<void> setLastName(String lastName) async{
-   _moengagePlugin.setLastName(lastName);
-  }
+  void setPhoneNumber(String phoneNumber) =>
+      _moengagePlugin.setPhoneNumber(phoneNumber);
 
   @override
-  Future<void> setFirstName(String firstName) async {
-    _moengagePlugin.setFirstName(firstName);
-  }
+  void setGender(MoEGender gender) => _moengagePlugin.setGender(gender);
 
   @override
-  Future<void> setUserAttribute(
-      String attributeName, dynamic attributeValue) async {
-    _moengagePlugin.setUserAttribute(attributeName, attributeValue);
-  }
+  void setLastName(String lastName) => _moengagePlugin.setLastName(lastName);
 
   @override
-  Future<void> logout() async {
-    _moengagePlugin.logout();
-  }
+  void setFirstName(String firstName) =>
+      _moengagePlugin.setFirstName(firstName);
 
   @override
-  Future<void> showInAppMessage() async {
-    _moengagePlugin.showInApp();
-  }
+  void setUserAttribute(String attributeName, dynamic attributeValue) =>
+      _moengagePlugin.setUserAttribute(attributeName, attributeValue);
 
   @override
-  Future<void> showNudge() async {
-    _moengagePlugin.showNudge();
-  }
+  void logout() => _moengagePlugin.logout();
 
+  @override
+  void showInAppMessage() => _moengagePlugin.showInApp();
 
+  @override
+  void showNudge() => _moengagePlugin.showNudge();
 
   void _setupInAppCallbacks() {
     _moengagePlugin.setInAppClickHandler(_onInAppClick);
@@ -93,11 +79,13 @@ class MoEngageMobilePlatform implements MoEngagePlatform {
 
   ///TODO METODOS DE INAPP A IMPLEMENTAR SEGUN NECESIDADES
   void _onInAppClick(ClickData message) {
-    debugPrint("MoEngage Mobile: InApp Clicked. Payload: ${message.toString()}");
+    debugPrint(
+        "MoEngage Mobile: InApp Clicked. Payload: ${message.toString()}");
     final action = message.action;
     if (action is NavigationAction) {
       if (action.navigationType == NavigationType.screenName) {
-        debugPrint("Acción de navegación a la pantalla: ${action.navigationUrl}");
+        debugPrint(
+            "Acción de navegación a la pantalla: ${action.navigationUrl}");
         // Ejemplo: navigatorKey.currentState?.pushNamed(action.navigationUrl);
       } else if (action.navigationType == NavigationType.deeplink) {
         debugPrint("Acción de deep link: ${action.navigationUrl}");
@@ -106,20 +94,20 @@ class MoEngageMobilePlatform implements MoEngagePlatform {
     }
   }
 
-
   void _onInAppShown(InAppData message) {
-    debugPrint("MoEngage Mobile: InApp Shown. Campaign: ${message.campaignData.campaignName}");
+    debugPrint(
+        "MoEngage Mobile: InApp Shown. Campaign: ${message.campaignData.campaignName}");
   }
-
 
   void _onInAppDismissed(InAppData message) {
-    debugPrint("MoEngage Mobile: InApp Dismissed. Campaign: ${message.campaignData.campaignName}");
+    debugPrint(
+        "MoEngage Mobile: InApp Dismissed. Campaign: ${message.campaignData.campaignName}");
   }
-
 
   void _onInAppSelfHandled(SelfHandledCampaignData? message) {
     if (message != null) {
-      debugPrint("MoEngage Mobile: Self-Handled InApp disponible. Payload: ${message.campaign.payload}");
+      debugPrint(
+          "MoEngage Mobile: Self-Handled InApp disponible. Payload: ${message.campaign.payload}");
     }
   }
 }

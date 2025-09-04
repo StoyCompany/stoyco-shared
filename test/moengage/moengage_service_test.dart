@@ -14,40 +14,40 @@ void main() {
     mockPlatform = MockMoEngagePlatform();
   });
 
-  test('init calls initialize on platform', () async {
-    when(mockPlatform.initialize(appId: 'testAppId')).thenAnswer((_) async => null);
-    await MoEngageService.init(appId: 'testAppId', platform: mockPlatform);
+  test('init calls initialize on platform', ()  {
+    when(mockPlatform.initialize(appId: 'testAppId')).thenAnswer((_)  async {});
+     MoEngageService.init(appId: 'testAppId', platform: mockPlatform);
     verify(mockPlatform.initialize(appId: 'testAppId')).called(1);
   });
 
 
-  test('setUniqueId delegates to platform', () async {
-    await MoEngageService.init(appId: 'testAppId', platform: mockPlatform);
+  test('setUniqueId delegates to platform', ()  {
+     MoEngageService.init(appId: 'testAppId', platform: mockPlatform);
     when(mockPlatform.identifyUser('user123')).thenAnswer((_) async {});
-    await MoEngageService.instance.setUniqueId('user123');
+     MoEngageService.instance.setUniqueId('user123');
     verify(mockPlatform.identifyUser('user123')).called(1);
   });
 
-  test('trackCustomEvent delegates to platform', () async {
+  test('trackCustomEvent delegates to platform', ()  {
     final eventName = 'event';
     final attributes = {'key': 'value'};
     when(mockPlatform.trackCustomEvent(eventName, attributes)).thenAnswer((_) async {});
-    await MoEngageService.init(appId: 'testAppId', platform: mockPlatform);
-    await MoEngageService.instance.trackCustomEvent(eventName, attributes: attributes);
+     MoEngageService.init(appId: 'testAppId', platform: mockPlatform);
+     MoEngageService.instance.trackCustomEvent(eventName, attributes: attributes);
     verify(mockPlatform.trackCustomEvent(eventName, attributes)).called(1);
   });
 
-  test('setUserAttribute delegates to platform', () async {
+  test('setUserAttribute delegates to platform', ()  {
     when(mockPlatform.setUserAttribute('attr', 'val')).thenAnswer((_) async {});
-    await MoEngageService.init(appId: 'testAppId', platform: mockPlatform);
-    await MoEngageService.instance.setUserAttribute('attr', 'val');
+     MoEngageService.init(appId: 'testAppId', platform: mockPlatform);
+     MoEngageService.instance.setUserAttribute('attr', 'val');
     verify(mockPlatform.setUserAttribute('attr', 'val')).called(1);
   });
 
-  test('logout delegates to platform', () async {
+  test('logout delegates to platform', ()  {
     when(mockPlatform.logout()).thenAnswer((_) async {});
-    await MoEngageService.init(appId: 'testAppId', platform: mockPlatform);
-    await MoEngageService.instance.logout();
+     MoEngageService.init(appId: 'testAppId', platform: mockPlatform);
+     MoEngageService.instance.logout();
     verify(mockPlatform.logout()).called(1);
   });
 }
