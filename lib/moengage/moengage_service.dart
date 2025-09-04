@@ -2,14 +2,15 @@ import 'package:flutter/foundation.dart';
 import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:stoyco_shared/moengage/moengage_platform.dart';
 import 'package:stoyco_shared/moengage/platform_locator.dart'
-if (dart.library.io) 'platform_locator_mobile.dart'
-if (dart.library.html) 'platform_locator_web.dart';
+    if (dart.library.io) 'platform_locator_mobile.dart'
+    if (dart.library.html) 'platform_locator_web.dart';
 
 class MoEngageService {
   MoEngageService._internal([MoEngagePlatform? platform]) {
     _platform = platform ?? getMoEngagePlatform();
     debugPrint('MoEngageService: Plataforma seleccionada por el compilador.');
   }
+
   static MoEngageService? _instance;
   late final MoEngagePlatform _platform;
 
@@ -18,59 +19,43 @@ class MoEngageService {
     return _instance!;
   }
 
-  static Future<MoEngageService> init({required String appId, MoEngagePlatform? platform}) async {
+  static MoEngageService init(
+      {required String appId, MoEngagePlatform? platform}) {
     _instance = MoEngageService._internal(platform);
-    await _instance!._platform.initialize(appId: appId);
+    _instance!._platform.initialize(appId: appId);
     return _instance!;
   }
 
-  Future<void> setUniqueId(String uniqueId) async {
-    await _platform.identifyUser(uniqueId);
-  }
+  void setUniqueId(String uniqueId) => _platform.identifyUser(uniqueId);
 
-  Future<void> trackCustomEvent(String eventName, {Map<String, Object>? attributes}) async {
-    await _platform.trackCustomEvent(eventName, attributes);
-  }
+  void trackCustomEvent(String eventName, {Map<String, Object>? attributes}) =>
+      _platform.trackCustomEvent(eventName, attributes);
 
-  Future<void> setUserAttribute(String name, dynamic value) async {
-    await _platform.setUserAttribute(name, value);
-  }
+  void setUserAttribute(String name, dynamic value) =>
+      _platform.setUserAttribute(name, value);
 
-  Future<void> showInAppMessage() async {
-    await _platform.showInAppMessage();
-  }
+  void showInAppMessage() => _platform.showInAppMessage();
 
-  Future<void> showNudge() async {
-    await _platform.showNudge();
-  }
+  void showNudge() => _platform.showNudge();
 
-  Future<void> logout() async {
-    await _platform.logout();
-  }
+  void logout() => _platform.logout();
 
-  Future<void> setUserName(String userName) async {
-    await _platform.setUserName(userName);
-  }
-  Future<void> setUserEmail(String email) async {
-    await _platform.setUserEmail(email);
-  }
+  void setUserName(String userName) => _platform.setUserName(userName);
 
-  Future<void> setGender(String gender) async {
+  void setUserEmail(String email) => _platform.setUserEmail(email);
+
+  void setGender(String gender) {
     final MoEGender genderEnum = stringToGender(gender);
-    await _platform.setGender(genderEnum);
+    _platform.setGender(genderEnum);
   }
 
-  Future<void> setPhoneNumber(String phoneNumber) async {
-    await _platform.setPhoneNumber(phoneNumber);
-  }
+  void setPhoneNumber(String phoneNumber) =>
+      _platform.setPhoneNumber(phoneNumber);
 
-  Future<void> setLastName(String lastName) async {
-    await _platform.setLastName(lastName);
-  }
+  void setLastName(String lastName) => _platform.setLastName(lastName);
 
-  Future<void> setFirstName(String firstName) async {
-    await _platform.setFirstName(firstName);
-  }
+  void setFirstName(String firstName) => _platform.setFirstName(firstName);
+
   MoEGender stringToGender(String gender) {
     switch (gender.toLowerCase()) {
       case 'masculino':
@@ -83,5 +68,4 @@ class MoEngageService {
         return MoEGender.other;
     }
   }
-
 }

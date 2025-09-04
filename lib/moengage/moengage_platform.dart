@@ -8,9 +8,9 @@ abstract class MoEngagePlatform {
   ///
   /// Example:
   /// ```dart
-  /// await MoEngagePlatform.instance.initialize(appId: "YOUR_MOENGAGE_APP_ID");
+  ///  MoEngagePlatform.instance.initialize(appId: "YOUR_MOENGAGE_APP_ID");
   /// ```
-  Future<void> initialize({required String appId});
+  void initialize({required String appId});
 
   /// Identifies the user with a unique ID.
   ///
@@ -20,9 +20,9 @@ abstract class MoEngagePlatform {
   ///
   /// Example:
   /// ```dart
-  /// await MoEngagePlatform.instance.identifyUser("user_12345");
+  ///  MoEngagePlatform.instance.identifyUser("user_12345");
   /// ```
-  Future<void> identifyUser(String uniqueId);
+  void identifyUser(String uniqueId);
 
   /// Tracks a custom event with optional attributes.
   ///
@@ -32,7 +32,7 @@ abstract class MoEngagePlatform {
   ///
   /// Example:
   /// ```dart
-  /// await MoEngagePlatform.instance.trackCustomEvent(
+  ///  MoEngagePlatform.instance.trackCustomEvent(
   ///   "Product Viewed",
   ///   {
   ///     "Product Name": "Awesome Gadget",
@@ -43,12 +43,12 @@ abstract class MoEngagePlatform {
   /// );
   ///
   /// // Tracking an event without attributes
-  /// await MoEngagePlatform.instance.trackCustomEvent("App Launched", null);
+  ///  MoEngagePlatform.instance.trackCustomEvent("App Launched", null);
   /// ```
-  Future<void> trackCustomEvent(
-      String eventName,
-      Map<String, Object>? eventAttributes,
-      );
+  void trackCustomEvent(
+    String eventName,
+    Map<String, Object>? eventAttributes,
+  );
 
   /// Sets an attribute for the current user.
   ///
@@ -58,11 +58,11 @@ abstract class MoEngagePlatform {
   ///
   /// Example:
   /// ```dart
-  /// await MoEngagePlatform.instance.setUserAttribute("User Tier", "Premium");
-  /// await MoEngagePlatform.instance.setUserAttribute("Last Login Date", DateTime.now().toIso8601String());
-  /// await MoEngagePlatform.instance.setUserAttribute("Is Subscriber", true);
+  ///  MoEngagePlatform.instance.setUserAttribute("User Tier", "Premium");
+  ///  MoEngagePlatform.instance.setUserAttribute("Last Login Date", DateTime.now().toIso8601String());
+  ///  MoEngagePlatform.instance.setUserAttribute("Is Subscriber", true);
   /// ```
-  Future<void> setUserAttribute(String attributeName, dynamic attributeValue);
+  void setUserAttribute(String attributeName, dynamic attributeValue);
 
   /// Logs out the current user from MoEngage.
   ///
@@ -72,9 +72,9 @@ abstract class MoEngagePlatform {
   ///
   /// Example:
   /// ```dart
-  /// await MoEngagePlatform.instance.logout();
+  ///  MoEngagePlatform.instance.logout();
   /// ```
-  Future<void> logout();
+  void logout();
 
   /// Shows an in-app message if there is any campaign available.
   ///
@@ -83,9 +83,9 @@ abstract class MoEngagePlatform {
   ///
   /// Example:
   /// ```dart
-  /// await MoEngagePlatform.instance.showInAppMessage();
+  ///  MoEngagePlatform.instance.showInAppMessage();
   /// ```
-  Future<void> showInAppMessage();
+  void showInAppMessage();
 
   /// Shows a nudge if there is any campaign available.
   ///
@@ -94,9 +94,9 @@ abstract class MoEngagePlatform {
   ///
   /// Example:
   /// ```dart
-  /// await MoEngagePlatform.instance.showNudge();
+  ///  MoEngagePlatform.instance.showNudge();
   /// ```
-  Future<void> showNudge();
+  void showNudge();
 
   /// Sets the user's full name.
   ///
@@ -104,9 +104,9 @@ abstract class MoEngagePlatform {
   ///
   /// Example:
   /// ```dart
-  /// await MoEngagePlatform.instance.setUserName("John Doe");
+  ///  MoEngagePlatform.instance.setUserName("John Doe");
   /// ```
-  Future<void> setUserName(String userName);
+  void setUserName(String userName);
 
   /// Sets the user's email address.
   ///
@@ -114,9 +114,9 @@ abstract class MoEngagePlatform {
   ///
   /// Example:
   /// ```dart
-  /// await MoEngagePlatform.instance.setUserEmail("john.doe@example.com");
+  ///  MoEngagePlatform.instance.setUserEmail("john.doe@example.com");
   /// ```
-  Future<void> setUserEmail(String email);
+  void setUserEmail(String email);
 
   /// Sets the user's gender.
   ///
@@ -127,22 +127,22 @@ abstract class MoEngagePlatform {
   /// ```dart
   /// import 'package:moengage_flutter/moengage_flutter.dart';
   /// // ...
-  /// await MoEngagePlatform.instance.setGender(MoEGender.male);
+  ///  MoEngagePlatform.instance.setGender(MoEGender.male);
   /// // Or for other options: MoEGender.female, MoEGender.notSpecified
   /// ```
-  Future<void> setGender(MoEGender gender);
+  void setGender(MoEGender gender);
 
-/// Sets the user's phone number.
-///
-/// Use this to store the user's phone number as a standard user attribute in MoEngage.
-///
-/// Example:
-/// ```dart
-/// await MoEngagePlatform.instance.setPhoneNumber("+1-555-123-4567");
-///
-///
-/// ```
-  Future<void> setPhoneNumber(String phoneNumber);
+  /// Sets the user's phone number.
+  ///
+  /// Use this to store the user's phone number as a standard user attribute in MoEngage.
+  ///
+  /// Example:
+  /// ```dart
+  ///  MoEngagePlatform.instance.setPhoneNumber("+1-555-123-4567");
+  ///
+  ///
+  /// ```
+  void setPhoneNumber(String phoneNumber);
 
   /// Sets the user's last name.
   ///
@@ -150,9 +150,9 @@ abstract class MoEngagePlatform {
   ///
   /// Example:
   /// ```dart
-  /// await MoEngagePlatform.instance.setLastName("Doe");
+  ///  MoEngagePlatform.instance.setLastName("Doe");
   /// ```
-  Future<void> setLastName(String lastName);
+  void setLastName(String lastName);
 
   /// Sets the user's first name.
   ///
@@ -160,7 +160,7 @@ abstract class MoEngagePlatform {
   ///
   /// Example:
   /// ```dart
-  /// await MoEngagePlatform.instance.setFirstName("John");
+  ///  MoEngagePlatform.instance.setFirstName("John");
   /// ```
-  Future<void> setFirstName(String firstName);
+  void setFirstName(String firstName);
 }
