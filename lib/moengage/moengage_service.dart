@@ -1,14 +1,16 @@
 import 'package:flutter/foundation.dart';
+import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:stoyco_shared/moengage/moengage_platform.dart';
 import 'package:stoyco_shared/moengage/platform_locator.dart'
-if (dart.library.io) 'platform_locator_mobile.dart'
-if (dart.library.html) 'platform_locator_web.dart';
+    if (dart.library.io) 'platform_locator_mobile.dart'
+    if (dart.library.html) 'platform_locator_web.dart';
 
 class MoEngageService {
   MoEngageService._internal([MoEngagePlatform? platform]) {
     _platform = platform ?? getMoEngagePlatform();
     debugPrint('MoEngageService: Plataforma seleccionada por el compilador.');
   }
+
   static MoEngageService? _instance;
   late final MoEngagePlatform _platform;
 
@@ -17,25 +19,53 @@ class MoEngageService {
     return _instance!;
   }
 
-  static Future<MoEngageService> init({required String appId, MoEngagePlatform? platform}) async {
+  static MoEngageService init(
+      {required String appId, MoEngagePlatform? platform}) {
     _instance = MoEngageService._internal(platform);
-    await _instance!._platform.initialize(appId: appId);
+    _instance!._platform.initialize(appId: appId);
     return _instance!;
   }
 
-  Future<void> setUniqueId(String uniqueId) async {
-    await _platform.identifyUser(uniqueId);
+  void setUniqueId(String uniqueId) => _platform.identifyUser(uniqueId);
+
+  void trackCustomEvent(String eventName, {Map<String, Object>? attributes}) =>
+      _platform.trackCustomEvent(eventName, attributes);
+
+  void setUserAttribute(String name, dynamic value) =>
+      _platform.setUserAttribute(name, value);
+
+  void showInAppMessage() => _platform.showInAppMessage();
+
+  void showNudge() => _platform.showNudge();
+
+  void logout() => _platform.logout();
+
+  void setUserName(String userName) => _platform.setUserName(userName);
+
+  void setUserEmail(String email) => _platform.setUserEmail(email);
+
+  void setGender(String gender) {
+    final MoEGender genderEnum = stringToGender(gender);
+    _platform.setGender(genderEnum);
   }
 
-  Future<void> trackCustomEvent(String eventName, {Map<String, Object>? attributes}) async {
-    await _platform.trackCustomEvent(eventName, attributes);
-  }
+  void setPhoneNumber(String phoneNumber) =>
+      _platform.setPhoneNumber(phoneNumber);
 
-  Future<void> setUserAttribute(String name, dynamic value) async {
-    await _platform.setUserAttribute(name, value);
-  }
+  void setLastName(String lastName) => _platform.setLastName(lastName);
 
-  Future<void> logout() async {
-    await _platform.logout();
+  void setFirstName(String firstName) => _platform.setFirstName(firstName);
+
+  MoEGender stringToGender(String gender) {
+    switch (gender.toLowerCase()) {
+      case 'masculino':
+        return MoEGender.male;
+      case 'femenino':
+        return MoEGender.female;
+      case 'otro':
+        return MoEGender.other;
+      default:
+        return MoEGender.other;
+    }
   }
 }

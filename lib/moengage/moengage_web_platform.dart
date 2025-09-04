@@ -7,7 +7,7 @@ class MoEngageWebPlatform implements MoEngagePlatform {
   String? _appId;
 
   @override
-  Future<void> initialize({String? appId}) async {
+  void initialize({String? appId}) {
     _appId = appId;
 
     print("MoEngage Web: Plataforma inicializada. "
@@ -16,7 +16,8 @@ class MoEngageWebPlatform implements MoEngagePlatform {
   }
 
   @override
-  Future<void> trackCustomEvent(String eventName, Map<String, dynamic>? eventAttributes) async {
+  void trackCustomEvent(
+      String eventName, Map<String, dynamic>? eventAttributes) {
     final MoEProperties properties = MoEProperties();
 
     if (eventAttributes != null) {
@@ -24,29 +25,54 @@ class MoEngageWebPlatform implements MoEngagePlatform {
         properties.addAttribute(key, value);
       });
     }
-    _moengagePlugin.trackEvent(eventName, properties,_appId!);
-    print("MoEngage Web: Evento '$eventName' rastreado con atributos: $eventAttributes");
+    _moengagePlugin.trackEvent(eventName, properties, _appId!);
   }
 
   @override
-  Future<void> identifyUser(String uniqueId) async {
-    _moengagePlugin.setUniqueId(uniqueId,_appId!);
-    print("MoEngage Web: Usuario identificado con ID: $uniqueId");
-  }
+  void identifyUser(String uniqueId) =>
+      _moengagePlugin.setUniqueId(uniqueId, _appId!);
 
   @override
-  Future<void> setUserAttribute(String attributeName, dynamic attributeValue) async {
+  void setUserAttribute(String attributeName, dynamic attributeValue) {
     if (attributeValue is DateTime) {
-      _moengagePlugin.setUserAttribute(attributeName, attributeValue.toIso8601String(),_appId!);
+      _moengagePlugin.setUserAttribute(
+          attributeName, attributeValue.toIso8601String(), _appId!);
     } else {
-      _moengagePlugin.setUserAttribute(attributeName, attributeValue,_appId!);
+      _moengagePlugin.setUserAttribute(attributeName, attributeValue, _appId!);
     }
-    print("MoEngage Web: Atributo de usuario '$attributeName' establecido en '$attributeValue'");
   }
 
   @override
-  Future<void> logout() async {
-    _moengagePlugin.logout(_appId!);
-    print("MoEngage Web: Usuario deslogueado.");
-  }
+  void logout() => _moengagePlugin.logout(_appId!);
+
+  @override
+  void showInAppMessage() => throw UnimplementedError(
+      "MoEngage Web: showInAppMessage no está implementado en Web.");
+
+  @override
+  void showNudge() => throw UnimplementedError(
+      "MoEngage Web: showInAppMessage no está implementado en Web.");
+
+  @override
+  void setUserName(String userName) =>
+      _moengagePlugin.setUserName(userName, _appId!);
+
+  @override
+  void setUserEmail(String email) => _moengagePlugin.setEmail(email, _appId!);
+
+  @override
+  void setGender(MoEGender gender) =>
+      _moengagePlugin.setGender(gender, _appId!);
+
+  @override
+  void setPhoneNumber(String phoneNumber) =>
+      _moengagePlugin.setPhoneNumber(phoneNumber, _appId!);
+
+  @override
+  void setLastName(String lastName) =>
+      _moengagePlugin.setLastName(lastName, _appId!);
+
+  @override
+  void setFirstName(String firstName) =>
+      _moengagePlugin.setFirstName(firstName, _appId!);
 }
