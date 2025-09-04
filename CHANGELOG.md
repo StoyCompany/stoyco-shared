@@ -1,3 +1,6 @@
+## 19.0.0
+- **feat:** Add MoEngage SDK integration for advanced user engagement and analytics
+
 ## 18.0.3
 
 - **fix:** Update hasActiveAnnouncements method to accept platform parameter for dynamic configuration
