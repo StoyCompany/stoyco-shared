@@ -25,13 +25,11 @@ class MoEngageWebPlatform implements MoEngagePlatform {
       });
     }
     _moengagePlugin.trackEvent(eventName, properties,_appId!);
-    print("MoEngage Web: Evento '$eventName' rastreado con atributos: $eventAttributes");
   }
 
   @override
   Future<void> identifyUser(String uniqueId) async {
     _moengagePlugin.setUniqueId(uniqueId,_appId!);
-    print("MoEngage Web: Usuario identificado con ID: $uniqueId");
   }
 
   @override
@@ -41,37 +39,31 @@ class MoEngageWebPlatform implements MoEngagePlatform {
     } else {
       _moengagePlugin.setUserAttribute(attributeName, attributeValue,_appId!);
     }
-    print("MoEngage Web: Atributo de usuario '$attributeName' establecido en '$attributeValue'");
   }
 
   @override
   Future<void> logout() async {
     _moengagePlugin.logout(_appId!);
-    print("MoEngage Web: Usuario deslogueado.");
   }
 
   @override
   Future<void> showInAppMessage() async {
     // NO-OP
-    print("MoEngage Web: showInAppMessage llamado, pero es no-op en Web.");
-    return Future.value();
+    throw UnimplementedError(
+        "MoEngage Web: showInAppMessage no está implementado en Web.");
   }
 
   @override
   Future<void> showNudge() async {
-    // NO-OP
-    print("MoEngage Web: showNudge llamado, pero es no-op en Web.");
-    return Future.value();
+    throw UnimplementedError("MoEngage Web: showInAppMessage no está implementado en Web.");
   }
   @override
   Future<void> setUserName(String userName) async {
     _moengagePlugin.setUserName(userName,_appId!);
-    print("MoEngage Mobile: Nombre de usuario establecido a '$userName'.");
   }
   @override
   Future<void> setUserEmail(String email) async {
     _moengagePlugin.setEmail(email,_appId!);
-    print("MoEngage Mobile: Email de usuario establecido a '$email'.");
   }
 
   @override
