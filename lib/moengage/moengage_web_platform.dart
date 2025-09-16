@@ -1,18 +1,21 @@
 import 'package:moengage_flutter/moengage_flutter.dart';
-import 'package:moengage_flutter_web/moengage_flutter_web.dart';
 import 'package:stoyco_shared/moengage/moengage_platform.dart';
+import 'package:flutter/foundation.dart';
 
 class MoEngageWebPlatform implements MoEngagePlatform {
-  final MoEngageFlutterWeb _moengagePlugin = MoEngageFlutterWeb();
-  String? _appId;
+  late MoEngageFlutter _moengagePlugin;
 
   @override
-  void initialize({String? appId}) {
-    _appId = appId;
+  void initialize({required String appId}) {
+    _moengagePlugin = MoEngageFlutter(appId);
+    _moengagePlugin.initialise();
+    debugPrint(
+        'WebMoEngagePlatform: MoEngageFlutter CREADO e INICIALIZADO con AppID: $appId. Plugin hash: ${_moengagePlugin.hashCode}');
+  }
 
-    print("MoEngage Web: Plataforma inicializada. "
-        "App ID (informativo desde Dart): ${_appId ?? 'NO PROPORCIONADO'}. "
-        "CRÍTICO: Asegúrate que Moengage.app_id esté configurado en web/index.html.");
+  @override
+  void identifyUser(String uniqueId) {
+    _moengagePlugin.identifyUser(uniqueId);
   }
 
   @override
@@ -25,25 +28,16 @@ class MoEngageWebPlatform implements MoEngagePlatform {
         properties.addAttribute(key, value);
       });
     }
-    _moengagePlugin.trackEvent(eventName, properties, _appId!);
+    _moengagePlugin.trackEvent(eventName, properties);
   }
 
   @override
-  void identifyUser(String uniqueId) =>
-      _moengagePlugin.setUniqueId(uniqueId, _appId!);
-
-  @override
-  void setUserAttribute(String attributeName, dynamic attributeValue) {
-    if (attributeValue is DateTime) {
-      _moengagePlugin.setUserAttribute(
-          attributeName, attributeValue.toIso8601String(), _appId!);
-    } else {
-      _moengagePlugin.setUserAttribute(attributeName, attributeValue, _appId!);
-    }
+  void setUserAttribute(String name, dynamic value) {
+    _moengagePlugin.setUserAttribute(name, value);
   }
 
   @override
-  void logout() => _moengagePlugin.logout(_appId!);
+  void logout() => _moengagePlugin.logout();
 
   @override
   void showInAppMessage() => throw UnimplementedError(
@@ -54,25 +48,28 @@ class MoEngageWebPlatform implements MoEngagePlatform {
       "MoEngage Web: showInAppMessage no está implementado en Web.");
 
   @override
-  void setUserName(String userName) =>
-      _moengagePlugin.setUserName(userName, _appId!);
+  void setUserName(String userName) => _moengagePlugin.setUserName(
+        userName,
+      );
 
   @override
-  void setUserEmail(String email) => _moengagePlugin.setEmail(email, _appId!);
+  void setUserEmail(String email) => _moengagePlugin.setEmail(
+        email,
+      );
 
   @override
-  void setGender(MoEGender gender) =>
-      _moengagePlugin.setGender(gender, _appId!);
+  void setGender(MoEGender gender) => _moengagePlugin.setGender(
+        gender,
+      );
 
   @override
   void setPhoneNumber(String phoneNumber) =>
-      _moengagePlugin.setPhoneNumber(phoneNumber, _appId!);
+      _moengagePlugin.setPhoneNumber(phoneNumber);
 
   @override
-  void setLastName(String lastName) =>
-      _moengagePlugin.setLastName(lastName, _appId!);
+  void setLastName(String lastName) => _moengagePlugin.setLastName(lastName);
 
   @override
   void setFirstName(String firstName) =>
-      _moengagePlugin.setFirstName(firstName, _appId!);
+      _moengagePlugin.setFirstName(firstName);
 }
