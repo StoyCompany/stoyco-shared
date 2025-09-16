@@ -1,3 +1,6 @@
+## 19.0.1
+- **fix:** Correct MoEngage SDK initialization to ensure proper setup and functionality
+- 
 ## 19.0.0
 - **feat:** Add MoEngage SDK integration for advanced user engagement and analytics
 
