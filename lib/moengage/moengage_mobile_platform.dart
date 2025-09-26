@@ -5,11 +5,12 @@ import 'package:stoyco_shared/moengage/moengage_platform.dart';
 class MoEngageMobilePlatform implements MoEngagePlatform {
   late final MoEngageFlutter _moengagePlugin;
   final MoEInitConfig _initConfig = MoEInitConfig(
+    pushConfig: PushConfig(shouldDeliverCallbackOnForegroundClick: true),
       analyticsConfig:
-          AnalyticsConfig(shouldTrackUserAttributeBooleanAsNumber: true));
+          AnalyticsConfig(shouldTrackUserAttributeBooleanAsNumber: true),);
 
   @override
-  void initialize({required String appId}) {
+  void initialize({required String appId,required String pushToken}) {
     if (appId.isEmpty) {
       debugPrint(
         'MoEngage Mobile: App ID es crucial para la inicialización y no fue proporcionado.',
@@ -17,6 +18,11 @@ class MoEngageMobilePlatform implements MoEngagePlatform {
     }
 
     _moengagePlugin = MoEngageFlutter(appId, moEInitConfig: _initConfig);
+    _moengagePlugin.initialise();
+    _moengagePlugin.passFCMPushToken(pushToken);
+   // _moengagePlugin.passPushKitPushToken(pushToken);
+    _moengagePlugin.registerForPushNotification();
+   // _moengagePlugin.registerForProvisionalPush();
     _setupInAppCallbacks();
   }
 
@@ -109,5 +115,9 @@ class MoEngageMobilePlatform implements MoEngagePlatform {
       debugPrint(
           "MoEngage Mobile: Self-Handled InApp disponible. Payload: ${message.campaign.payload}");
     }
+  }
+
+  void setPushClickCallbackHandler(Function(PushCampaignData) handler) {
+    _moengagePlugin.setPushClickCallbackHandler(handler);
   }
 }

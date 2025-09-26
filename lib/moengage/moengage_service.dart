@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:moengage_flutter/moengage_flutter.dart';
+import 'package:moengage_geofence/moengage_geofence.dart';
+import 'package:stoyco_shared/moengage/moengage_mobile_platform.dart';
 import 'package:stoyco_shared/moengage/moengage_platform.dart';
 import 'package:stoyco_shared/moengage/platform_locator.dart'
     if (dart.library.io) 'platform_locator_mobile.dart'
@@ -8,11 +10,12 @@ import 'package:stoyco_shared/moengage/platform_locator.dart'
 class MoEngageService {
   MoEngageService._internal([MoEngagePlatform? platform]) {
     _platform = platform ?? getMoEngagePlatform();
-    debugPrint('MoEngageService: Plataforma seleccionada por el compilador.');
+    debugPrint('MoEngageService: Plataforma seleccionada por el compilador es ${_platform.runtimeType}');
   }
 
   static MoEngageService? _instance;
   late final MoEngagePlatform _platform;
+  MoEngageGeofence? _moEngageGeofence;
 
   static MoEngageService get instance {
     _instance ??= MoEngageService._internal();
@@ -20,9 +23,14 @@ class MoEngageService {
   }
 
   static MoEngageService init(
-      {required String appId, MoEngagePlatform? platform}) {
+      {required String appId,required String pushToken, MoEngagePlatform? platform}) {
     _instance = MoEngageService._internal(platform);
-    _instance!._platform.initialize(appId: appId);
+    _instance!._platform.initialize(appId: appId, pushToken: pushToken);
+    // Solo inicializar geofence en mobile
+  /*  if (_instance!._platform is MoEngageMobilePlatform) {
+      _instance!._moEngageGeofence = MoEngageGeofence(appId);
+      _instance!._moEngageGeofence!.startGeofenceMonitoring();
+    }*/
     return _instance!;
   }
 
@@ -38,7 +46,12 @@ class MoEngageService {
 
   void showNudge() => _platform.showNudge();
 
-  void logout() => _platform.logout();
+  void logout()  {
+   /* if (_platform is MoEngageMobilePlatform && _moEngageGeofence != null) {
+      _moEngageGeofence!.stopGeofenceMonitoring();
+    }*/
+    _platform.logout();
+  }
 
   void setUserName(String userName) => _platform.setUserName(userName);
 
@@ -66,6 +79,14 @@ class MoEngageService {
         return MoEGender.other;
       default:
         return MoEGender.other;
+    }
+  }
+
+  /// Registra un callback para el click en notificaciones push
+  void setPushClickCallbackHandler(Function(PushCampaignData) handler) {
+    if (_platform is MoEngageMobilePlatform) {
+      final mobilePlatform = _platform as MoEngageMobilePlatform;
+      mobilePlatform.setPushClickCallbackHandler(handler);
     }
   }
 }
