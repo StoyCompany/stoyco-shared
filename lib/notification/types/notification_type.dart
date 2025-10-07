@@ -126,4 +126,9 @@ enum NotificationType {
   /// @return The corresponding NotificationType, or NotificationType.unknown if the ID is invalid
   static NotificationType fromInt(int? value) =>
       _map[value] ?? NotificationType.unknown;
+
+  static NotificationType fromString(String? value) {
+    if (value == null) return NotificationType.unknown;
+    return _map[int.tryParse(value)] ?? NotificationType.unknown;
+  }
 }
