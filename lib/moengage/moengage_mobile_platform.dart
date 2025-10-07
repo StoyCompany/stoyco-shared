@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:moengage_flutter/moengage_flutter.dart';
+import 'package:moengage_geofence/moengage_geofence.dart';
 import 'package:stoyco_shared/moengage/moengage_platform.dart';
 
 class MoEngageMobilePlatform implements MoEngagePlatform {
   late final MoEngageFlutter _moengagePlugin;
+  late final MoEngageGeofence _moEngageGeofence;
   final MoEInitConfig _initConfig = MoEInitConfig(
     pushConfig: PushConfig(shouldDeliverCallbackOnForegroundClick: true),
       analyticsConfig:
@@ -18,10 +20,12 @@ class MoEngageMobilePlatform implements MoEngagePlatform {
     }
 
     _moengagePlugin = MoEngageFlutter(appId, moEInitConfig: _initConfig);
+    _moEngageGeofence = MoEngageGeofence(appId);
     _moengagePlugin.initialise();
     _moengagePlugin.passFCMPushToken(pushToken);
    // _moengagePlugin.passPushKitPushToken(pushToken);
     _moengagePlugin.registerForPushNotification();
+    _moEngageGeofence.startGeofenceMonitoring();
    // _moengagePlugin.registerForProvisionalPush();
     _setupInAppCallbacks();
   }
