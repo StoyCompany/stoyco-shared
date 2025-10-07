@@ -1,7 +1,20 @@
+## 20.0.0
+
+- **feat(activity):** implement ActivityRepository and ActivityService for notifications and messages
+
+- Added ActivityRepository to handle data operations for notifications and messages.
+- Implemented ActivityService to manage business logic and token handling for activity-related API calls.
+- Created models for ActivitySummary, Message, NotificationStats, MessageStats, and UserUnifiedStats with JSON serialization.
+- Introduced JSON:API helpers for parsing API responses.
+- Updated environment configurations to include Activity service URLs. (See <attachments> above for file contents. You may not need to search or read the file again.)
+
 ## 19.0.1
+
 - **fix:** Correct MoEngage SDK initialization to ensure proper setup and functionality
-- 
+-
+
 ## 19.0.0
+
 - **feat:** Add MoEngage SDK integration for advanced user engagement and analytics
 
 ## 18.0.3
