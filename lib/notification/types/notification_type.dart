@@ -131,4 +131,28 @@ enum NotificationType {
     if (value == null) return NotificationType.unknown;
     return _map[int.tryParse(value)] ?? NotificationType.unknown;
   }
+
+  //is this a stoycoins notification from strign
+  bool get isStoyCoinsNotification {
+    switch (this) {
+      case NotificationType.stoyCoinsAndNftEarned:
+      case NotificationType.stoyCoinsEarnedByLogin:
+      case NotificationType.stoyCoinsEarnedByOpenApp:
+      case NotificationType.stoyCoinsEarnedByWatchVideo:
+      case NotificationType.stoyCoinsEarnedByBuyNFT:
+      case NotificationType.stoyCoinsEarnedByBuyProduct:
+      case NotificationType.stoyCoinsEarnedByBuyExperience:
+      case NotificationType.stoyCoinsEarnedByArtistPartnerFollow:
+      case NotificationType.stoyCoinsEarnedByArtistPartnerSesh:
+      case NotificationType.stoCoinsEarnedByPurchaseNFT:
+      case NotificationType.stoyCoinsEarnedByLoginAndOpenApp:
+      case NotificationType.stoyCoinsEarnedByProfileUpdated:
+      case NotificationType.stoyCoinsEarnedByOpenAppAndCompleteProfile:
+      case NotificationType.stoyCoinsEarnedBySharedVideo:
+        return true;
+      default:
+        return false;
+    }
+  }
+  
 }

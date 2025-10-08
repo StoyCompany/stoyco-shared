@@ -1,3 +1,7 @@
+## 20.0.1
+
+- **feat(notification):** add isStoyCoinsNotification getter to identify StoyCoins-related notifications
+
 ## 20.0.0
 
 - **feat(activity):** implement ActivityRepository and ActivityService for notifications and messages
