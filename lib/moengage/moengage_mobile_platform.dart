@@ -25,7 +25,6 @@ class MoEngageMobilePlatform implements MoEngagePlatform {
     _moengagePlugin.passFCMPushToken(pushToken);
    // _moengagePlugin.passPushKitPushToken(pushToken);
     _moengagePlugin.registerForPushNotification();
-    _moEngageGeofence.startGeofenceMonitoring();
    // _moengagePlugin.registerForProvisionalPush();
     _setupInAppCallbacks();
   }
@@ -85,6 +84,15 @@ class MoEngageMobilePlatform implements MoEngagePlatform {
     _moengagePlugin.setInAppShownCallbackHandler(_onInAppShown);
     _moengagePlugin.setInAppDismissedCallbackHandler(_onInAppDismissed);
     _moengagePlugin.setSelfHandledInAppHandler(_onInAppSelfHandled);
+  }
+
+
+  void startGeofenceMonitoring() {
+    _moEngageGeofence.startGeofenceMonitoring();
+  }
+
+  void stopGeofenceMonitoring() {
+    _moEngageGeofence.stopGeofenceMonitoring();
   }
 
   ///TODO METODOS DE INAPP A IMPLEMENTAR SEGUN NECESIDADES
