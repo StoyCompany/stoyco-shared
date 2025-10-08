@@ -82,7 +82,19 @@ class MoEngageService {
     }
   }
 
-  /// Registra un callback para el click en notificaciones push
+
+  void startGeofenceMonitoring() {
+    if (_platform is MoEngageMobilePlatform) {
+      if (_moEngageGeofence == null) {
+        debugPrint('MoEngageService: Geofence no está inicializado.');
+        return;
+      }
+      _moEngageGeofence!.startGeofenceMonitoring();
+    } else {
+      debugPrint('MoEngageService: Geofence solo está disponible en plataformas móviles.');
+    }
+  }
+
   void setPushClickCallbackHandler(Function(PushCampaignData) handler) {
     if (_platform is MoEngageMobilePlatform) {
       final mobilePlatform = _platform as MoEngageMobilePlatform;
