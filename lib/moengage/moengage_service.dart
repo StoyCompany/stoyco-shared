@@ -26,11 +26,9 @@ class MoEngageService {
       {required String appId,required String pushToken, MoEngagePlatform? platform}) {
     _instance = MoEngageService._internal(platform);
     _instance!._platform.initialize(appId: appId, pushToken: pushToken);
-    // Solo inicializar geofence en mobile
-  /*  if (_instance!._platform is MoEngageMobilePlatform) {
+    if (_instance!._platform is MoEngageMobilePlatform) {
       _instance!._moEngageGeofence = MoEngageGeofence(appId);
-      _instance!._moEngageGeofence!.startGeofenceMonitoring();
-    }*/
+    }
     return _instance!;
   }
 
@@ -47,9 +45,9 @@ class MoEngageService {
   void showNudge() => _platform.showNudge();
 
   void logout()  {
-   /* if (_platform is MoEngageMobilePlatform && _moEngageGeofence != null) {
+    if (_platform is MoEngageMobilePlatform && _moEngageGeofence != null) {
       _moEngageGeofence!.stopGeofenceMonitoring();
-    }*/
+    }
     _platform.logout();
   }
 
