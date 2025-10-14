@@ -1,3 +1,9 @@
+## 20.0.2
+
+- **feat(announcement):** Adding a community owner filter to the announcement service using the ID and adjusting the models
+
+- **feat(news):** Adding a community owner filter to the news service using the ID and adjusting the models
+
 ## 20.0.1
 
 - **feat(notification):** add isStoyCoinsNotification getter to identify StoyCoins-related notifications
