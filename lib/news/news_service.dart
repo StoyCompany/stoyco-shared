@@ -1,10 +1,10 @@
 import 'package:either_dart/either.dart';
 import 'package:stoyco_shared/envs/envs.dart';
-import 'package:stoyco_shared/news/news_repository.dart';
+import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
+import 'package:stoyco_shared/models/page_result/page_result.dart';
 import 'package:stoyco_shared/news/models/new_model.dart';
 import 'package:stoyco_shared/news/news_data_source.dart';
-import 'package:stoyco_shared/models/page_result/page_result.dart';
-import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
+import 'package:stoyco_shared/news/news_repository.dart';
 
 /// A service that handles all operations related to news, including
 /// fetching paginated news, searching for news, retrieving a specific
@@ -56,8 +56,9 @@ class NewsService {
   Future<Either<Failure, PageResult<NewModel>>> getNewsPaginated(
     int pageNumber,
     int pageSize,
+    String? communityOwnerId,
   ) =>
-      _newsRepository!.getNewsPaginated(pageNumber, pageSize);
+      _newsRepository!.getNewsPaginated(pageNumber, pageSize, communityOwnerId);
 
   /// Retrieves a paginated list of news articles based on a search term.
   ///

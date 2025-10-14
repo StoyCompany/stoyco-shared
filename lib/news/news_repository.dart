@@ -16,11 +16,13 @@ class NewsRepository {
   Future<Either<Failure, PageResult<NewModel>>> getNewsPaginated(
     int pageNumber,
     int pageSize,
+    String? communityOwnerId,
   ) async {
     try {
       final response = await _newsDataSource.getPaged(
         pageNumber: pageNumber,
         pageSize: pageSize,
+        communityOwnerId: communityOwnerId,
       );
 
       final PageResult<NewModel> pageResult = PageResult<NewModel>.fromJson(
