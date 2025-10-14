@@ -86,10 +86,11 @@ class MoEngageService {
   void startGeofenceMonitoring() {
     if (_platform is MoEngageMobilePlatform) {
       if (_moEngageGeofence == null) {
-        debugPrint('MoEngageService: Geofence no está inicializado.');
+        debugPrint('MoEngageService: Geofence iniciado.');
+        _moEngageGeofence!.startGeofenceMonitoring();
         return;
       }
-      _moEngageGeofence!.startGeofenceMonitoring();
+      debugPrint('MoEngageService: Geofence ya fue iniciado.');
     } else {
       debugPrint('MoEngageService: Geofence solo está disponible en plataformas móviles.');
     }
