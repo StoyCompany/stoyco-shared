@@ -25,6 +25,7 @@ class AnnouncementModel {
     this.cronJobId,
     this.createdBy,
     this.createdAt,
+    this.communityOwnerId,
   });
 
   factory AnnouncementModel.fromJson(Map<String, dynamic> json) =>
@@ -48,12 +49,13 @@ class AnnouncementModel {
   final dynamic cronJobId;
   final String? createdBy;
   final String? createdAt;
+  final String? communityOwnerId;
 
   bool get isActive => isPublished ?? false;
 
   @override
   String toString() =>
-      'AnnouncementModel(id: $id, title: $title, mainImage: $mainImage, images: $images, content: $content, shortDescription: $shortDescription, isDraft: $isDraft, isPublished: $isPublished, isDeleted: $isDeleted, viewCount: $viewCount, startDate: $startDate, endDate: $endDate, draftCreationDate: $draftCreationDate, lastUpdatedDate: $lastUpdatedDate, deletionDate: $deletionDate, cronJobId: $cronJobId, createdBy: $createdBy, createdAt: $createdAt)';
+      'AnnouncementModel(id: $id, title: $title, mainImage: $mainImage, images: $images, content: $content, shortDescription: $shortDescription, isDraft: $isDraft, isPublished: $isPublished, isDeleted: $isDeleted, viewCount: $viewCount, startDate: $startDate, endDate: $endDate, draftCreationDate: $draftCreationDate, lastUpdatedDate: $lastUpdatedDate, deletionDate: $deletionDate, cronJobId: $cronJobId, createdBy: $createdBy, createdAt: $createdAt, communityOwnerId: $communityOwnerId)';
 
   Map<String, dynamic> toJson() => _$AnnouncementModelToJson(this);
 

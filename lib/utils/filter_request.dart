@@ -6,6 +6,7 @@ class FilterRequest {
     this.direction,
     this.page,
     this.pageSize,
+    this.communityOwnerId,
   });
 
   /// Text to search in title and short_description fields
@@ -35,6 +36,8 @@ class FilterRequest {
   /// Default: 10
   /// Min: 1, Max: 100
   final int? pageSize;
+
+  final String? communityOwnerId;
 }
 
 class FilterRequestHelper {
