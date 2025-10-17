@@ -23,18 +23,25 @@ class MoEngageService {
     return _instance!;
   }
 
-  static MoEngageService init(
-      {required String appId,required String pushToken, MoEngagePlatform? platform}) {
-    _instance = MoEngageService._internal(platform);
-  try {
-    _instance!._platform.initialize(appId: appId, pushToken: pushToken);
-    if (_instance!._platform is MoEngageMobilePlatform) {
-      _instance!._moEngageGeofence = MoEngageGeofence(appId);
+  static MoEngageService init({
+    required String appId,
+    required String pushToken,
+    MoEngagePlatform? platform,
+  }) {
+    final service = _instance ?? MoEngageService._internal(platform);
+    try {
+      service._platform.initialize(appId: appId, pushToken: pushToken);
+      if (service._platform is MoEngageMobilePlatform) {
+        service._moEngageGeofence ??= MoEngageGeofence(appId);
+      }
+
+      StoyCoLogger.info('MoEngageService: Initialization successful.');
+    } catch (e, st) {
+      StoyCoLogger.error('MoEngageService: Error initializing platform/geofence: $e');
+      StoyCoLogger.info('MoEngageService: StackTrace: $st');
     }
-  } catch (e) {
-    StoyCoLogger.error('MoEngageService: Error initializing platform/geofence: $e');
-  }
-    return _instance!;
+    _instance = service;
+    return service;
   }
 
   void setUniqueId(String uniqueId) => _platform.identifyUser(uniqueId);
