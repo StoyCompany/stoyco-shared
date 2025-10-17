@@ -10,7 +10,7 @@ abstract class MoEngagePlatform {
   /// ```dart
   ///  MoEngagePlatform.instance.initialize(appId: "YOUR_MOENGAGE_APP_ID");
   /// ```
-  void initialize({required String appId});
+  void initialize({required String appId,required String pushToken});
 
   /// Identifies the user with a unique ID.
   ///

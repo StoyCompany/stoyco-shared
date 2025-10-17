@@ -1,29 +1,47 @@
 import 'package:flutter/foundation.dart';
 import 'package:moengage_flutter/moengage_flutter.dart';
+import 'package:moengage_geofence/moengage_geofence.dart';
+import 'package:stoyco_shared/moengage/moengage_mobile_platform.dart';
 import 'package:stoyco_shared/moengage/moengage_platform.dart';
 import 'package:stoyco_shared/moengage/platform_locator.dart'
     if (dart.library.io) 'platform_locator_mobile.dart'
     if (dart.library.html) 'platform_locator_web.dart';
+import 'package:stoyco_shared/utils/logger.dart';
 
 class MoEngageService {
   MoEngageService._internal([MoEngagePlatform? platform]) {
     _platform = platform ?? getMoEngagePlatform();
-    debugPrint('MoEngageService: Plataforma seleccionada por el compilador.');
+    StoyCoLogger.info('MoEngageService: Plataforma seleccionada por el compilador es ${_platform.runtimeType}');
   }
 
   static MoEngageService? _instance;
   late final MoEngagePlatform _platform;
+  MoEngageGeofence? _moEngageGeofence;
 
   static MoEngageService get instance {
     _instance ??= MoEngageService._internal();
     return _instance!;
   }
 
-  static MoEngageService init(
-      {required String appId, MoEngagePlatform? platform}) {
-    _instance = MoEngageService._internal(platform);
-    _instance!._platform.initialize(appId: appId);
-    return _instance!;
+  static MoEngageService init({
+    required String appId,
+    required String pushToken,
+    MoEngagePlatform? platform,
+  }) {
+    final service = _instance ?? MoEngageService._internal(platform);
+    try {
+      service._platform.initialize(appId: appId, pushToken: pushToken);
+      if (service._platform is MoEngageMobilePlatform) {
+        service._moEngageGeofence ??= MoEngageGeofence(appId);
+      }
+
+      StoyCoLogger.info('MoEngageService: Initialization successful.');
+    } catch (e, st) {
+      StoyCoLogger.error('MoEngageService: Error initializing platform/geofence: $e');
+      StoyCoLogger.info('MoEngageService: StackTrace: $st');
+    }
+    _instance = service;
+    return service;
   }
 
   void setUniqueId(String uniqueId) => _platform.identifyUser(uniqueId);
@@ -38,7 +56,12 @@ class MoEngageService {
 
   void showNudge() => _platform.showNudge();
 
-  void logout() => _platform.logout();
+  void logout()  {
+    if (_platform is MoEngageMobilePlatform && _moEngageGeofence != null) {
+      _moEngageGeofence!.stopGeofenceMonitoring();
+    }
+    _platform.logout();
+  }
 
   void setUserName(String userName) => _platform.setUserName(userName);
 
@@ -66,6 +89,27 @@ class MoEngageService {
         return MoEGender.other;
       default:
         return MoEGender.other;
+    }
+  }
+
+
+  void startGeofenceMonitoring() {
+    if (_platform is MoEngageMobilePlatform) {
+      if (_moEngageGeofence == null) {
+        StoyCoLogger.info('MoEngageService: Geofence no está inicializado.');
+        return;
+      }
+      _moEngageGeofence!.startGeofenceMonitoring();
+      StoyCoLogger.info('MoEngageService: Geofence iniciado.');
+    } else {
+      StoyCoLogger.info('MoEngageService: Geofence solo está disponible en plataformas móviles.');
+    }
+  }
+
+  void setPushClickCallbackHandler(Function(PushCampaignData) handler) {
+    if (_platform is MoEngageMobilePlatform) {
+      final mobilePlatform = _platform as MoEngageMobilePlatform;
+      mobilePlatform.setPushClickCallbackHandler(handler);
     }
   }
 }

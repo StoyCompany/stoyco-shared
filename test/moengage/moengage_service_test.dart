@@ -16,13 +16,13 @@ void main() {
 
   test('init calls initialize on platform', ()  {
     when(mockPlatform.initialize(appId: 'testAppId')).thenAnswer((_)  async {});
-     MoEngageService.init(appId: 'testAppId', platform: mockPlatform);
+     MoEngageService.init(appId: 'testAppId', platform: mockPlatform, pushToken: '');
     verify(mockPlatform.initialize(appId: 'testAppId')).called(1);
   });
 
 
   test('setUniqueId delegates to platform', ()  {
-     MoEngageService.init(appId: 'testAppId', platform: mockPlatform);
+     MoEngageService.init(appId: 'testAppId', platform: mockPlatform, pushToken: '');
     when(mockPlatform.identifyUser('user123')).thenAnswer((_) async {});
      MoEngageService.instance.setUniqueId('user123');
     verify(mockPlatform.identifyUser('user123')).called(1);
@@ -32,21 +32,21 @@ void main() {
     final eventName = 'event';
     final attributes = {'key': 'value'};
     when(mockPlatform.trackCustomEvent(eventName, attributes)).thenAnswer((_) async {});
-     MoEngageService.init(appId: 'testAppId', platform: mockPlatform);
+     MoEngageService.init(appId: 'testAppId', platform: mockPlatform, pushToken: '');
      MoEngageService.instance.trackCustomEvent(eventName, attributes: attributes);
     verify(mockPlatform.trackCustomEvent(eventName, attributes)).called(1);
   });
 
   test('setUserAttribute delegates to platform', ()  {
     when(mockPlatform.setUserAttribute('attr', 'val')).thenAnswer((_) async {});
-     MoEngageService.init(appId: 'testAppId', platform: mockPlatform);
+     MoEngageService.init(appId: 'testAppId', platform: mockPlatform, pushToken: '');
      MoEngageService.instance.setUserAttribute('attr', 'val');
     verify(mockPlatform.setUserAttribute('attr', 'val')).called(1);
   });
 
   test('logout delegates to platform', ()  {
     when(mockPlatform.logout()).thenAnswer((_) async {});
-     MoEngageService.init(appId: 'testAppId', platform: mockPlatform);
+     MoEngageService.init(appId: 'testAppId', platform: mockPlatform, pushToken: '');
      MoEngageService.instance.logout();
     verify(mockPlatform.logout()).called(1);
   });

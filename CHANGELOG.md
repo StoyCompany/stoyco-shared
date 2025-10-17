@@ -1,3 +1,6 @@
+## 21.0.0
+**feat(notification):** Adding push notificacion with moengage sdk
+
 ## 20.0.2
 
 - **feat(announcement):** Adding a community owner filter to the announcement service using the ID and adjusting the models
