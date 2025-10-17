@@ -78,4 +78,20 @@ extension StoycoEnvironmentExtension on StoycoEnvironment {
         return 'https://4ll60y4zfk.execute-api.us-east-1.amazonaws.com/qa/api/tiktok/user';
     }
   }
+
+  /// Base URL for the Activity service per environment.
+  ///
+  /// QA (testing) uses: https://17lqazupjd.execute-api.us-east-1.amazonaws.com/qa
+  String get urlActivity {
+    switch (this) {
+      case StoycoEnvironment.development:
+        // Fallback/dev URL (adjust if a different dev URL is provided)
+        return 'https://17lqazupjd.execute-api.us-east-1.amazonaws.com/dev';
+      case StoycoEnvironment.production:
+        // Fallback/prod URL (adjust if a different prod URL is provided)
+        return 'https://17lqazupjd.execute-api.us-east-1.amazonaws.com/prod';
+      case StoycoEnvironment.testing:
+        return 'https://17lqazupjd.execute-api.us-east-1.amazonaws.com/qa';
+    }
+  }
 }

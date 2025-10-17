@@ -23,6 +23,7 @@ class NewModel {
     this.cronJobId,
     this.createdBy,
     this.createdAt,
+    this.communityOwnerId,
   });
 
   factory NewModel.fromJson(Map<String, dynamic> json) =>
@@ -45,10 +46,11 @@ class NewModel {
   final dynamic cronJobId;
   final String? createdBy;
   final String? createdAt;
+  final String? communityOwnerId;
 
   @override
   String toString() =>
-      'NewModel(id: $id, title: $title, mainImage: $mainImage, images: $images, content: $content, shortDescription: $shortDescription, isDraft: $isDraft, isPublished: $isPublished, isDeleted: $isDeleted, viewCount: $viewCount, scheduledPublishDate: $scheduledPublishDate, draftCreationDate: $draftCreationDate, lastUpdatedDate: $lastUpdatedDate, deletionDate: $deletionDate, cronJobId: $cronJobId, createdBy: $createdBy, createdAt: $createdAt)';
+      'NewModel(id: $id, title: $title, mainImage: $mainImage, images: $images, content: $content, shortDescription: $shortDescription, isDraft: $isDraft, isPublished: $isPublished, isDeleted: $isDeleted, viewCount: $viewCount, scheduledPublishDate: $scheduledPublishDate, draftCreationDate: $draftCreationDate, lastUpdatedDate: $lastUpdatedDate, deletionDate: $deletionDate, cronJobId: $cronJobId, createdBy: $createdBy, createdAt: $createdAt, communityOwnerId: $communityOwnerId)';
 
   Map<String, dynamic> toJson() => _$NewModelToJson(this);
 

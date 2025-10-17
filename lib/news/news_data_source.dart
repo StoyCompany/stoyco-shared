@@ -12,6 +12,7 @@ class NewsDataSource {
     int pageNumber = 1,
     int pageSize = 10,
     String? searchTerm,
+    String? communityOwnerId,
   }) async {
     final cancelToken = CancelToken();
     final response = await _dio.get(
@@ -20,6 +21,7 @@ class NewsDataSource {
         'pageNumber': pageNumber,
         'pageSize': pageSize,
         'searchTerm': searchTerm,
+        'communityOwnerId': communityOwnerId,
       },
       cancelToken: cancelToken,
     );
