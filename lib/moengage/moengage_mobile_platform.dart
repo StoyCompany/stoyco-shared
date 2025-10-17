@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:moengage_geofence/moengage_geofence.dart';
 import 'package:stoyco_shared/moengage/moengage_platform.dart';
+import 'package:stoyco_shared/stoyco_shared.dart';
 
 class MoEngageMobilePlatform implements MoEngagePlatform {
   late final MoEngageFlutter _moengagePlugin;
@@ -14,18 +15,14 @@ class MoEngageMobilePlatform implements MoEngagePlatform {
   @override
   void initialize({required String appId,required String pushToken}) {
     if (appId.isEmpty) {
-      debugPrint(
-        'MoEngage Mobile: App ID es crucial para la inicialización y no fue proporcionado.',
-      );
+      StoyCoLogger.info('MoEngage Mobile: App ID es crucial para la inicialización y no fue proporcionado.');
     }
 
     _moengagePlugin = MoEngageFlutter(appId, moEInitConfig: _initConfig);
     _moEngageGeofence = MoEngageGeofence(appId);
     _moengagePlugin.initialise();
     _moengagePlugin.passFCMPushToken(pushToken);
-   // _moengagePlugin.passPushKitPushToken(pushToken);
     _moengagePlugin.registerForPushNotification();
-   // _moengagePlugin.registerForProvisionalPush();
     _setupInAppCallbacks();
   }
 
@@ -97,35 +94,34 @@ class MoEngageMobilePlatform implements MoEngagePlatform {
 
   ///TODO METODOS DE INAPP A IMPLEMENTAR SEGUN NECESIDADES
   void _onInAppClick(ClickData message) {
-    debugPrint(
-        "MoEngage Mobile: InApp Clicked. Payload: ${message.toString()}");
+    StoyCoLogger.info('MoEngage Mobile: InApp Clicked. Payload: ${message.toString()}');
     final action = message.action;
     if (action is NavigationAction) {
       if (action.navigationType == NavigationType.screenName) {
-        debugPrint(
-            "Acción de navegación a la pantalla: ${action.navigationUrl}");
+        StoyCoLogger.info(
+            'Acción de navegación a la pantalla: ${action.navigationUrl}');
         // Ejemplo: navigatorKey.currentState?.pushNamed(action.navigationUrl);
       } else if (action.navigationType == NavigationType.deeplink) {
-        debugPrint("Acción de deep link: ${action.navigationUrl}");
+        StoyCoLogger.info('Acción de deep link: ${action.navigationUrl}');
         // Lógica para manejar el deep link
       }
     }
   }
 
   void _onInAppShown(InAppData message) {
-    debugPrint(
-        "MoEngage Mobile: InApp Shown. Campaign: ${message.campaignData.campaignName}");
+    StoyCoLogger.info(
+        'MoEngage Mobile: InApp Shown. Campaign: ${message.campaignData.campaignName}');
   }
 
   void _onInAppDismissed(InAppData message) {
-    debugPrint(
-        "MoEngage Mobile: InApp Dismissed. Campaign: ${message.campaignData.campaignName}");
+    StoyCoLogger.info(
+        'MoEngage Mobile: InApp Dismissed. Campaign: ${message.campaignData.campaignName}');
   }
 
   void _onInAppSelfHandled(SelfHandledCampaignData? message) {
     if (message != null) {
-      debugPrint(
-          "MoEngage Mobile: Self-Handled InApp disponible. Payload: ${message.campaign.payload}");
+      StoyCoLogger.info(
+          'MoEngage Mobile: Self-Handled InApp disponible. Payload: ${message.campaign.payload}');
     }
   }
 

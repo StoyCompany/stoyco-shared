@@ -6,11 +6,12 @@ import 'package:stoyco_shared/moengage/moengage_platform.dart';
 import 'package:stoyco_shared/moengage/platform_locator.dart'
     if (dart.library.io) 'platform_locator_mobile.dart'
     if (dart.library.html) 'platform_locator_web.dart';
+import 'package:stoyco_shared/utils/logger.dart';
 
 class MoEngageService {
   MoEngageService._internal([MoEngagePlatform? platform]) {
     _platform = platform ?? getMoEngagePlatform();
-    debugPrint('MoEngageService: Plataforma seleccionada por el compilador es ${_platform.runtimeType}');
+    StoyCoLogger.info('MoEngageService: Plataforma seleccionada por el compilador es ${_platform.runtimeType}');
   }
 
   static MoEngageService? _instance;
@@ -25,10 +26,14 @@ class MoEngageService {
   static MoEngageService init(
       {required String appId,required String pushToken, MoEngagePlatform? platform}) {
     _instance = MoEngageService._internal(platform);
+  try {
     _instance!._platform.initialize(appId: appId, pushToken: pushToken);
     if (_instance!._platform is MoEngageMobilePlatform) {
       _instance!._moEngageGeofence = MoEngageGeofence(appId);
     }
+  } catch (e) {
+    StoyCoLogger.error('MoEngageService: Error initializing platform/geofence: $e');
+  }
     return _instance!;
   }
 
@@ -84,13 +89,13 @@ class MoEngageService {
   void startGeofenceMonitoring() {
     if (_platform is MoEngageMobilePlatform) {
       if (_moEngageGeofence == null) {
-        debugPrint('MoEngageService: Geofence no está inicializado.');
+        StoyCoLogger.info('MoEngageService: Geofence no está inicializado.');
         return;
       }
       _moEngageGeofence!.startGeofenceMonitoring();
-      debugPrint('MoEngageService: Geofence iniciado.');
+      StoyCoLogger.info('MoEngageService: Geofence iniciado.');
     } else {
-      debugPrint('MoEngageService: Geofence solo está disponible en plataformas móviles.');
+      StoyCoLogger.info('MoEngageService: Geofence solo está disponible en plataformas móviles.');
     }
   }
 
