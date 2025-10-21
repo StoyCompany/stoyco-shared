@@ -26,7 +26,9 @@ class AnnouncementModel {
     this.createdBy,
     this.createdAt,
     this.communityOwnerId,
-  });
+    this.isSubscriberOnly,
+    bool? hasAccess,
+  }) : hasAccess = hasAccess ?? !(isSubscriberOnly ?? false);
 
   factory AnnouncementModel.fromJson(Map<String, dynamic> json) =>
       _$AnnouncementModelFromJson(json);
@@ -50,12 +52,14 @@ class AnnouncementModel {
   final String? createdBy;
   final String? createdAt;
   final String? communityOwnerId;
+  final bool? isSubscriberOnly;
+  final bool hasAccess;
 
   bool get isActive => isPublished ?? false;
 
   @override
   String toString() =>
-      'AnnouncementModel(id: $id, title: $title, mainImage: $mainImage, images: $images, content: $content, shortDescription: $shortDescription, isDraft: $isDraft, isPublished: $isPublished, isDeleted: $isDeleted, viewCount: $viewCount, startDate: $startDate, endDate: $endDate, draftCreationDate: $draftCreationDate, lastUpdatedDate: $lastUpdatedDate, deletionDate: $deletionDate, cronJobId: $cronJobId, createdBy: $createdBy, createdAt: $createdAt, communityOwnerId: $communityOwnerId)';
+      'AnnouncementModel(id: $id, title: $title, mainImage: $mainImage, images: $images, content: $content, shortDescription: $shortDescription, isDraft: $isDraft, isPublished: $isPublished, isDeleted: $isDeleted, viewCount: $viewCount, startDate: $startDate, endDate: $endDate, draftCreationDate: $draftCreationDate, lastUpdatedDate: $lastUpdatedDate, deletionDate: $deletionDate, cronJobId: $cronJobId, createdBy: $createdBy, createdAt: $createdAt, communityOwnerId: $communityOwnerId, isSubscriberOnly: $isSubscriberOnly, hasAccess: $hasAccess)';
 
   Map<String, dynamic> toJson() => _$AnnouncementModelToJson(this);
 
@@ -78,6 +82,9 @@ class AnnouncementModel {
     dynamic cronJobId,
     String? createdBy,
     String? createdAt,
+    String? communityOwnerId,
+    bool? isSubscriberOnly,
+    bool? hasAccess,
   }) =>
       AnnouncementModel(
         id: id ?? this.id,
@@ -98,6 +105,9 @@ class AnnouncementModel {
         cronJobId: cronJobId ?? this.cronJobId,
         createdBy: createdBy ?? this.createdBy,
         createdAt: createdAt ?? this.createdAt,
+        communityOwnerId: communityOwnerId ?? this.communityOwnerId,
+        isSubscriberOnly: isSubscriberOnly ?? this.isSubscriberOnly,
+        hasAccess: hasAccess ?? this.hasAccess,
       );
 
   @override
@@ -127,5 +137,8 @@ class AnnouncementModel {
       deletionDate.hashCode ^
       cronJobId.hashCode ^
       createdBy.hashCode ^
-      createdAt.hashCode;
+      createdAt.hashCode ^
+      communityOwnerId.hashCode ^
+      isSubscriberOnly.hashCode ^
+      hasAccess.hashCode;
 }
