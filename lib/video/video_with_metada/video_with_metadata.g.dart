@@ -22,6 +22,9 @@ VideoWithMetadata _$VideoWithMetadataFromJson(Map<String, dynamic> json) =>
       createAt: json['createAt'] == null
           ? null
           : DateTime.parse(json['createAt'] as String),
+      partnerId: json['partnerId'] as String?,
+      isSubscriberOnly: json['isSubscriberOnly'] as bool?,
+      hasAccess: json['hasAccess'] as bool?,
     );
 
 Map<String, dynamic> _$VideoWithMetadataToJson(VideoWithMetadata instance) =>
@@ -35,4 +38,7 @@ Map<String, dynamic> _$VideoWithMetadataToJson(VideoWithMetadata instance) =>
       'order': instance.order,
       'active': instance.active,
       'createAt': instance.createAt?.toIso8601String(),
+      'partnerId': instance.partnerId,
+      'isSubscriberOnly': instance.isSubscriberOnly,
+      'hasAccess': instance.hasAccess,
     };

@@ -18,8 +18,8 @@ class VideoPlayerDataSourceV2 {
 
   /// Gets the headers for authenticated requests, including the Authorization header
   Map<String, String> _getHeaders() => {
-        'Authorization': 'Bearer $userToken',
-      };
+    'Authorization': 'Bearer $userToken',
+  };
 
   late String baseUrl;
 

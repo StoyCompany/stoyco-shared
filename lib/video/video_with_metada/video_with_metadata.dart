@@ -19,7 +19,11 @@ class VideoWithMetadata {
     this.order,
     this.active,
     this.createAt,
-  });
+    this.partnerId,
+    this.isSubscriberOnly,
+    bool? hasAccess,
+  }) : hasAccess = hasAccess ?? !(isSubscriberOnly ?? false);
+
   final VideoMetadata? videoMetadata;
   final String? id;
   final String? videoUrl;
@@ -29,10 +33,13 @@ class VideoWithMetadata {
   final int? order;
   final bool? active;
   final DateTime? createAt;
+  final String? partnerId;
+  final bool? isSubscriberOnly;
+  final bool hasAccess;
 
   @override
   String toString() =>
-      'VideoWithMetadata(videoMetadata: $videoMetadata, id: $id, videoUrl: $videoUrl, appUrl: $appUrl, name: $name, description: $description, order: $order, active: $active, createAt: $createAt)';
+      'VideoWithMetadata(videoMetadata: $videoMetadata, id: $id, videoUrl: $videoUrl, appUrl: $appUrl, name: $name, description: $description, order: $order, active: $active, createAt: $createAt, partnerId: $partnerId, isSubscriberOnly: $isSubscriberOnly, hasAccess: $hasAccess)';
 
   Map<String, dynamic> toJson() => _$VideoWithMetadataToJson(this);
 
@@ -46,6 +53,9 @@ class VideoWithMetadata {
     int? order,
     bool? active,
     DateTime? createAt,
+    String? partnerId,
+    bool? isSubscriberOnly,
+    bool? hasAccess,
   }) =>
       VideoWithMetadata(
         videoMetadata: videoMetadata ?? this.videoMetadata,
@@ -57,6 +67,9 @@ class VideoWithMetadata {
         order: order ?? this.order,
         active: active ?? this.active,
         createAt: createAt ?? this.createAt,
+        partnerId: partnerId ?? this.partnerId,
+        isSubscriberOnly: isSubscriberOnly ?? this.isSubscriberOnly,
+        hasAccess: hasAccess ?? this.hasAccess,
       );
 
   @override
@@ -77,5 +90,8 @@ class VideoWithMetadata {
       description.hashCode ^
       order.hashCode ^
       active.hashCode ^
-      createAt.hashCode;
+      createAt.hashCode ^
+      partnerId.hashCode ^
+      isSubscriberOnly.hashCode ^
+      hasAccess.hashCode;
 }
