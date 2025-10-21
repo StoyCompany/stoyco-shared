@@ -24,7 +24,9 @@ class NewModel {
     this.createdBy,
     this.createdAt,
     this.communityOwnerId,
-  });
+    this.isSubscriberOnly,
+    bool? hasAccess,
+  }) : hasAccess = hasAccess ?? !(isSubscriberOnly ?? false);
 
   factory NewModel.fromJson(Map<String, dynamic> json) =>
       _$NewModelFromJson(json);
@@ -47,10 +49,12 @@ class NewModel {
   final String? createdBy;
   final String? createdAt;
   final String? communityOwnerId;
+  final bool? isSubscriberOnly;
+  final bool hasAccess;
 
   @override
   String toString() =>
-      'NewModel(id: $id, title: $title, mainImage: $mainImage, images: $images, content: $content, shortDescription: $shortDescription, isDraft: $isDraft, isPublished: $isPublished, isDeleted: $isDeleted, viewCount: $viewCount, scheduledPublishDate: $scheduledPublishDate, draftCreationDate: $draftCreationDate, lastUpdatedDate: $lastUpdatedDate, deletionDate: $deletionDate, cronJobId: $cronJobId, createdBy: $createdBy, createdAt: $createdAt, communityOwnerId: $communityOwnerId)';
+      'NewModel(id: $id, title: $title, mainImage: $mainImage, images: $images, content: $content, shortDescription: $shortDescription, isDraft: $isDraft, isPublished: $isPublished, isDeleted: $isDeleted, viewCount: $viewCount, scheduledPublishDate: $scheduledPublishDate, draftCreationDate: $draftCreationDate, lastUpdatedDate: $lastUpdatedDate, deletionDate: $deletionDate, cronJobId: $cronJobId, createdBy: $createdBy, createdAt: $createdAt, communityOwnerId: $communityOwnerId, isSubscriberOnly: $isSubscriberOnly, hasAccess: $hasAccess)';
 
   Map<String, dynamic> toJson() => _$NewModelToJson(this);
 
@@ -72,6 +76,9 @@ class NewModel {
     dynamic cronJobId,
     String? createdBy,
     String? createdAt,
+    String? communityOwnerId,
+    bool? isSubscriberOnly,
+    bool? hasAccess,
   }) =>
       NewModel(
         id: id ?? this.id,
@@ -91,6 +98,9 @@ class NewModel {
         cronJobId: cronJobId ?? this.cronJobId,
         createdBy: createdBy ?? this.createdBy,
         createdAt: createdAt ?? this.createdAt,
+        communityOwnerId: communityOwnerId ?? this.communityOwnerId,
+        isSubscriberOnly: isSubscriberOnly ?? this.isSubscriberOnly,
+        hasAccess: hasAccess ?? this.hasAccess,
       );
 
   @override
@@ -119,5 +129,8 @@ class NewModel {
       deletionDate.hashCode ^
       cronJobId.hashCode ^
       createdBy.hashCode ^
-      createdAt.hashCode;
+      createdAt.hashCode ^
+      communityOwnerId.hashCode ^
+      isSubscriberOnly.hashCode ^
+      hasAccess.hashCode;
 }
