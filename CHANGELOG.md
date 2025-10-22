@@ -1,7 +1,14 @@
+## 19.0.2
+
+- **refactor:** Simplify video playback and sharing logic in ParallaxVideoCard
+
 ## 19.0.1
+
 - **fix:** Correct MoEngage SDK initialization to ensure proper setup and functionality
-- 
+-
+
 ## 19.0.0
+
 - **feat:** Add MoEngage SDK integration for advanced user engagement and analytics
 
 ## 18.0.3

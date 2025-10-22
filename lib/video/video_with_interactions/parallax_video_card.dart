@@ -167,9 +167,8 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted && !isDisposed) {
           setState(() {
-            _currentTime =
-                _controller!.value.position.inMilliseconds /
-                    max(_controller!.value.duration.inMilliseconds, 1);
+            _currentTime = _controller!.value.position.inMilliseconds /
+                max(_controller!.value.duration.inMilliseconds, 1);
           });
         }
       });
@@ -298,12 +297,11 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
       StoyCoLogger.error('Error sharing video: $e');
     } finally {
       if (widget.play) {
-        await _controller?.play();
+        unawaited(_controller?.play());
       }
-      await _deleteTempFile(tempFile);
-      if (mounted && !isDisposed) {
-        _isSharing.value = false;
-      }
+      unawaited(_deleteTempFile(tempFile));
+
+      _isSharing.value = false;
     }
   }
 
@@ -350,280 +348,289 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
-    builder: (context, constraints) {
-      final size = constraints.maxWidth;
-      return SizedBox(
-        width: size,
-        height: size,
-        child: VisibilityDetector(
-          key: Key('video-card-${widget.videoInfo.videoUrl}'),
-          onVisibilityChanged: (visibilityInfo) {
-            if (_controller == null) return;
+        builder: (context, constraints) {
+          final size = constraints.maxWidth;
+          return SizedBox(
+            width: size,
+            height: size,
+            child: VisibilityDetector(
+              key: Key('video-card-${widget.videoInfo.videoUrl}'),
+              onVisibilityChanged: (visibilityInfo) {
+                if (_controller == null) return;
 
-            final double visiblePercentage =
-                visibilityInfo.visibleFraction * 100;
+                final double visiblePercentage =
+                    visibilityInfo.visibleFraction * 100;
 
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (mounted && !isDisposed) {
-                if (visiblePercentage == 0) {
-                  _controller?.pause();
-                } else if (widget.play) {
-                  _controller?.play();
-                }
-              }
-            });
-          },
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  offset: const Offset(0, 6),
-                  blurRadius: 8,
-                ),
-              ],
-              image: widget.thumbnail != null
-                  ? DecorationImage(
-                image: widget.thumbnail!.image,
-                fit: BoxFit.cover,
-                opacity: 0.3,
-              )
-                  : null,
-            ),
-            child: Stack(
-              children: [
-                ClipRRect(
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted && !isDisposed) {
+                    if (visiblePercentage == 0) {
+                      _controller?.pause();
+                    } else if (widget.play) {
+                      _controller?.play();
+                    }
+                  }
+                });
+              },
+              child: DecoratedBox(
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  child: FutureBuilder(
-                    future: _initializeVideoPlayerFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done &&
-                          _isPlayerInitialized &&
-                          _controller != null) {
-                        return VideoPlayer(_controller!);
-                      }
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: Color(0xFF4f1fe6),
-                          backgroundColor: Colors.white,
-                        ),
-                      );
-                    },
-                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      offset: const Offset(0, 6),
+                      blurRadius: 8,
+                    ),
+                  ],
+                  image: widget.thumbnail != null
+                      ? DecorationImage(
+                          image: widget.thumbnail!.image,
+                          fit: BoxFit.cover,
+                          opacity: 0.3,
+                        )
+                      : null,
                 ),
-                Positioned(
-                  left: 20,
-                  top: 20,
-                  child: Stack(
-                    children: [
-                      Transform.scale(
-                        scale: 0.7,
-                        child: CircularProgressIndicator(
-                          value: _currentTime,
-                          backgroundColor: Colors.white,
-                          color: const Color(0xFF4f1fe6),
-                        ),
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: FutureBuilder(
+                        future: _initializeVideoPlayerFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                                  ConnectionState.done &&
+                              _isPlayerInitialized &&
+                              _controller != null) {
+                            return VideoPlayer(_controller!);
+                          }
+                          return const Center(
+                            child: CircularProgressIndicator(
+                              color: Color(0xFF4f1fe6),
+                              backgroundColor: Colors.white,
+                            ),
+                          );
+                        },
                       ),
-                      Positioned.fill(
-                        child: Center(
-                          child: Text(
-                            _controller?.value.isInitialized == true
-                                ? (_controller!.value.duration.inSeconds -
-                                _controller!.value.position.inSeconds)
-                                .toString()
-                                : '0',
-                            textScaler: TextScaler.noScaling,
+                    ),
+                    Positioned(
+                      left: 20,
+                      top: 20,
+                      child: Stack(
+                        children: [
+                          Transform.scale(
+                            scale: 0.7,
+                            child: CircularProgressIndicator(
+                              value: _currentTime,
+                              backgroundColor: Colors.white,
+                              color: const Color(0xFF4f1fe6),
+                            ),
+                          ),
+                          Positioned.fill(
+                            child: Center(
+                              child: Text(
+                                _controller?.value.isInitialized == true
+                                    ? (_controller!.value.duration.inSeconds -
+                                            _controller!
+                                                .value.position.inSeconds)
+                                        .toString()
+                                    : '0',
+                                textScaler: TextScaler.noScaling,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize:
+                                      StoycoScreenSize.fontSize(context, 12),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                      left: 20,
+                      bottom: 20,
+                      right: 60,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.videoInfo.video.name ?? '',
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: StoycoScreenSize.fontSize(context, 12),
+                              fontSize: StoycoScreenSize.fontSize(context, 16),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  left: 20,
-                  bottom: 20,
-                  right: 60,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.videoInfo.video.name ?? '',
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: StoycoScreenSize.fontSize(context, 16),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        widget.videoInfo.video.description ?? '',
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: StoycoScreenSize.fontSize(context, 14),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  top: 20,
-                  right: 20,
-                  bottom: 20,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      ValueListenableBuilder<bool>(
-                        valueListenable: isMuted,
-                        builder: (context, value, child) => GestureDetector(
-                          onTap: toggleMute,
-                          child: Icon(
-                            value ? Icons.volume_off : Icons.volume_up,
-                            color: Colors.white,
-                            size: 24,
+                          Text(
+                            widget.videoInfo.video.description ?? '',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: StoycoScreenSize.fontSize(context, 14),
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          if (widget.showInteractions) ...[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                InkWell(
-                                  onTap: widget.onLike,
-                                  child: SvgPicture.asset(
-                                    !widget.videoInfo.hasLiked
-                                        ? 'packages/stoyco_shared/lib/assets/icons/reaction_arrow_up.svg'
-                                        : 'packages/stoyco_shared/lib/assets/icons/reaction_arrow_up_filled.svg',
-                                    width: StoycoScreenSize.width(context, 20),
-                                  ),
-                                ),
-                                Gap(StoycoScreenSize.width(context, 8.05)),
-                                Text(
-                                  '${widget.videoInfo.video.videoMetadata?.likes ?? 0}',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: StoycoScreenSize.fontSize(
-                                      context,
-                                      14,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Gap(StoycoScreenSize.width(context, 10)),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                InkWell(
-                                  onTap: widget.onDislike,
-                                  child: Transform(
-                                    alignment: Alignment.center,
-                                    transform: Matrix4.rotationZ(3.14159),
-                                    child: SvgPicture.asset(
-                                      !widget.videoInfo.hasDisliked
-                                          ? 'packages/stoyco_shared/lib/assets/icons/reaction_arrow_up.svg'
-                                          : 'packages/stoyco_shared/lib/assets/icons/reaction_arrow_up_filled.svg',
-                                      width: StoycoScreenSize.width(
-                                        context,
-                                        20,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Gap(StoycoScreenSize.width(context, 8.05)),
-                                Text(
-                                  '${widget.videoInfo.video.videoMetadata?.dislikes ?? 0}',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: StoycoScreenSize.fontSize(
-                                      context,
-                                      14,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Gap(StoycoScreenSize.width(context, 10)),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                GestureDetector(
-                                  onTapDown: (details) {
-                                    _lastSharePosition = details.globalPosition;
-                                  },
-                                  child: InkWell(
-                                    onTap: _isSharing.value
-                                        ? null
-                                        : _handleShare,
-                                    child: ValueListenableBuilder<bool>(
-                                      valueListenable: _isSharing,
-                                      builder: (context, isSharing, child) =>
-                                      isSharing
-                                          ? SizedBox(
-                                        width: StoycoScreenSize.width(
-                                          context,
-                                          20,
-                                        ),
-                                        height: StoycoScreenSize.width(
-                                          context,
-                                          20,
-                                        ),
-                                        child:
-                                        const CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          color: Colors.white,
-                                        ),
-                                      )
-                                          : SvgPicture.asset(
-                                        'packages/stoyco_shared/lib/assets/icons/share_outlined_icon.svg',
-                                        width: StoycoScreenSize.width(
-                                          context,
-                                          20,
-                                        ),
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Gap(StoycoScreenSize.width(context, 8.05)),
-                                Text(
-                                  '${widget.videoInfo.video.videoMetadata?.shared ?? 0}',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: StoycoScreenSize.fontSize(
-                                      context,
-                                      14,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                    Positioned(
+                      top: 20,
+                      right: 20,
+                      bottom: 20,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          ValueListenableBuilder<bool>(
+                            valueListenable: isMuted,
+                            builder: (context, value, child) => GestureDetector(
+                              onTap: toggleMute,
+                              child: Icon(
+                                value ? Icons.volume_off : Icons.volume_up,
+                                color: Colors.white,
+                                size: 24,
+                              ),
+                            ),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              if (widget.showInteractions) ...[
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    InkWell(
+                                      onTap: widget.onLike,
+                                      child: SvgPicture.asset(
+                                        !widget.videoInfo.hasLiked
+                                            ? 'packages/stoyco_shared/lib/assets/icons/reaction_arrow_up.svg'
+                                            : 'packages/stoyco_shared/lib/assets/icons/reaction_arrow_up_filled.svg',
+                                        width:
+                                            StoycoScreenSize.width(context, 20),
+                                      ),
+                                    ),
+                                    Gap(StoycoScreenSize.width(context, 8.05)),
+                                    Text(
+                                      '${widget.videoInfo.video.videoMetadata?.likes ?? 0}',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: StoycoScreenSize.fontSize(
+                                          context,
+                                          14,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Gap(StoycoScreenSize.width(context, 10)),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    InkWell(
+                                      onTap: widget.onDislike,
+                                      child: Transform(
+                                        alignment: Alignment.center,
+                                        transform: Matrix4.rotationZ(3.14159),
+                                        child: SvgPicture.asset(
+                                          !widget.videoInfo.hasDisliked
+                                              ? 'packages/stoyco_shared/lib/assets/icons/reaction_arrow_up.svg'
+                                              : 'packages/stoyco_shared/lib/assets/icons/reaction_arrow_up_filled.svg',
+                                          width: StoycoScreenSize.width(
+                                            context,
+                                            20,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Gap(StoycoScreenSize.width(context, 8.05)),
+                                    Text(
+                                      '${widget.videoInfo.video.videoMetadata?.dislikes ?? 0}',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: StoycoScreenSize.fontSize(
+                                          context,
+                                          14,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Gap(StoycoScreenSize.width(context, 10)),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    GestureDetector(
+                                      onTapDown: (details) {
+                                        _lastSharePosition =
+                                            details.globalPosition;
+                                      },
+                                      child: InkWell(
+                                        onTap: _isSharing.value
+                                            ? null
+                                            : _handleShare,
+                                        child: ValueListenableBuilder<bool>(
+                                          valueListenable: _isSharing,
+                                          builder: (context, isSharing,
+                                                  child) =>
+                                              isSharing
+                                                  ? SizedBox(
+                                                      width: StoycoScreenSize
+                                                          .width(
+                                                        context,
+                                                        20,
+                                                      ),
+                                                      height: StoycoScreenSize
+                                                          .width(
+                                                        context,
+                                                        20,
+                                                      ),
+                                                      child:
+                                                          const CircularProgressIndicator(
+                                                        strokeWidth: 2,
+                                                        color: Colors.white,
+                                                      ),
+                                                    )
+                                                  : SvgPicture.asset(
+                                                      'packages/stoyco_shared/lib/assets/icons/share_outlined_icon.svg',
+                                                      width: StoycoScreenSize
+                                                          .width(
+                                                        context,
+                                                        20,
+                                                      ),
+                                                      color: Colors.white,
+                                                    ),
+                                        ),
+                                      ),
+                                    ),
+                                    Gap(StoycoScreenSize.width(context, 8.05)),
+                                    Text(
+                                      '${widget.videoInfo.video.videoMetadata?.shared ?? 0}',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: StoycoScreenSize.fontSize(
+                                          context,
+                                          14,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       );
-    },
-  );
 }
