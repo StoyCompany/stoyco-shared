@@ -51,12 +51,40 @@ class VideoPlayerRepositoryV2 {
     }
   }
 
+  /// Handles API calls with error handling for endpoints that return items in a nested structure
+  Future<Either<Failure, T>> _handleApiCallWithItems<T>(
+    Future<Response> Function() apiCall,
+    T Function(dynamic data) fromJson,
+    String errorMessage,
+  ) async {
+    try {
+      final response = await apiCall();
+      if (response.statusCode != 200) {
+        return Left(
+          ExceptionFailure.decode(
+            Exception(errorMessage),
+          ),
+        );
+      }
+
+      // Access items from data.items instead of just data
+      return Right(fromJson(response.data['items']));
+    } on DioException catch (e) {
+      return Left(DioFailure.decode(e));
+    } on Error catch (e) {
+      return Left(ErrorFailure.decode(e));
+    } on Exception catch (e) {
+      return Left(ExceptionFailure.decode(e));
+    }
+  }
+
   /// Dislikes a video with the given [videoId].
   Future<Either<Failure, UserVideoReaction>> dislikeVideo(
     String videoId,
+    String userId,
   ) async =>
       _handleApiCall(
-        () => _dataSource.dislikeVideo(videoId),
+        () => _dataSource.dislikeVideo(videoId, userId),
         (data) => UserVideoReaction.fromJson(data),
         'Error disliking video',
       );
@@ -82,9 +110,9 @@ class VideoPlayerRepositoryV2 {
       );
 
   /// Likes a video with the given [videoId].
-  Future<Either<Failure, UserVideoReaction>> likeVideo(String videoId) async =>
+  Future<Either<Failure, UserVideoReaction>> likeVideo(String videoId, String userId) async =>
       _handleApiCall(
-        () => _dataSource.likeVideo(videoId),
+        () => _dataSource.likeVideo(videoId, userId),
         (data) => UserVideoReaction.fromJson(data),
         'Error liking video',
       );
@@ -110,6 +138,16 @@ class VideoPlayerRepositoryV2 {
         'Error sharing video',
       );
 
+  /// Views a video with the given [videoId].
+  Future<Either<Failure, bool>> viewVideo(
+    String videoId,
+  ) async =>
+      _handleApiCall(
+        () => _dataSource.viewVideo(videoId),
+        (_) => true,
+        'Error viewing video',
+      );
+
   /// Fetches a list of videos with metadata.
   Future<Either<Failure, List<VideoWithMetadata>>>
       getVideosWithMetadata() async => _handleApiCall(
@@ -119,4 +157,24 @@ class VideoPlayerRepositoryV2 {
                 .toList(),
             'Error getting videos with metadata',
           );
+
+  /// Fetches videos with filter mode, pagination, and optional userId
+  Future<Either<Failure, List<VideoWithMetadata>>> getVideosWithFilter({
+    required String filterMode,
+    int page = 1,
+    int pageSize = 20,
+    String? userId,
+  }) async =>
+      _handleApiCallWithItems(
+        () => _dataSource.getVideosWithFilter(
+          filterMode: filterMode,
+          page: page,
+          pageSize: pageSize,
+          userId: userId,
+        ),
+        (data) => (data as List)
+            .map((item) => VideoWithMetadata.fromJson(item))
+            .toList(),
+        'Error getting videos with filter',
+      );
 }

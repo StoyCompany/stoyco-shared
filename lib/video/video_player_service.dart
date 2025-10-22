@@ -178,11 +178,13 @@ class VideoPlayerService {
   /// Returns an [Either] containing a [Failure] or a [VideoInteraction].
   Future<Either<Failure, VideoInteraction>> likeVideo({
     required String videoId,
+    required String userId,
   }) async {
     try {
       await verifyToken();
       final result = await _repository!.likeVideo(
         videoId,
+        userId,
       );
       final reaction = await _handleReaction(result);
       return reaction;
@@ -199,11 +201,13 @@ class VideoPlayerService {
   /// Returns an [Either] containing a [Failure] or a [VideoInteraction].
   Future<Either<Failure, VideoInteraction>> dislikeVideo({
     required String videoId,
+    required String userId,
   }) async {
     try {
       await verifyToken();
       final result = await _repository!.dislikeVideo(
         videoId,
+        userId,
       );
       final reaction = await _handleReaction(result);
       return reaction;
@@ -250,6 +254,24 @@ class VideoPlayerService {
     }
   }
 
+  /// Views a video.
+  ///
+  /// [videoId] The ID of the video to view.
+  ///
+  /// Returns an [Either] containing a [Failure] or a boolean indicating success.
+  Future<Either<Failure, bool>> viewVideo({
+    required String videoId,
+  }) async {
+    try {
+      return await _repository!.viewVideo(
+        videoId,
+      );
+    } catch (e) {
+      StoyCoLogger.error('Error: $e');
+      return Left(ExceptionFailure.decode(Exception(e)));
+    }
+  }
+
   /// Retrieves user video interaction data.
   ///
   /// [videoId] The ID of the video.
@@ -261,7 +283,7 @@ class VideoPlayerService {
     try {
       await verifyToken();
       return await _repository!.getUserVideoInteractionData(
-        videoId,
+        videoId
       );
     } catch (e) {
       StoyCoLogger.error('Error: $e');
@@ -269,7 +291,6 @@ class VideoPlayerService {
     }
   }
 
-  //getVideosWithMetadata
   /// Retrieves a list of videos with metadata.
   ///
   /// Returns an [Either] containing a [Failure] or a list of [VideoWithMetadata].
@@ -277,6 +298,33 @@ class VideoPlayerService {
       getVideosWithMetadata() async {
     try {
       return await _repository!.getVideosWithMetadata();
+    } catch (e) {
+      StoyCoLogger.error('Error: $e');
+      return Left(ExceptionFailure.decode(Exception(e)));
+    }
+  }
+
+  /// Retrieves videos with filter mode, pagination, and optional userId
+  ///
+  /// [filterMode] The filter mode (e.g., 'Featured', 'ForYou')
+  /// [page] The page number (default: 1)
+  /// [pageSize] The number of items per page (default: 20)
+  /// [userId] Optional user ID for personalized content
+  ///
+  /// Returns an [Either] containing a [Failure] or a list of [VideoWithMetadata].
+  Future<Either<Failure, List<VideoWithMetadata>>> getVideosWithFilter({
+    required String filterMode,
+    int page = 1,
+    int pageSize = 20,
+    String? userId,
+  }) async {
+    try {
+      return await _repository!.getVideosWithFilter(
+        filterMode: filterMode,
+        page: page,
+        pageSize: pageSize,
+        userId: userId,
+      );
     } catch (e) {
       StoyCoLogger.error('Error: $e');
       return Left(ExceptionFailure.decode(Exception(e)));
@@ -300,10 +348,12 @@ class VideoPlayerService {
   /// This method:
   /// - Clears the user token
   /// - Removes the function to update token
+  /// - Updates the datasource to clear the token
   void reset() {
     userToken = '';
     functionToUpdateToken = null;
     _repository?.token = '';
+    _dataSource?.updateUserToken(''); // IMPORTANT: Clear token in datasource too!
   }
 }
 
