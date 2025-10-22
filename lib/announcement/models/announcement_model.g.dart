@@ -29,6 +29,7 @@ AnnouncementModel _$AnnouncementModelFromJson(Map<String, dynamic> json) =>
       cronJobId: json['cronJobId'],
       createdBy: json['createdBy'] as String?,
       createdAt: json['createdAt'] as String?,
+      communityOwnerId: json['communityOwnerId'] as String?,
     );
 
 Map<String, dynamic> _$AnnouncementModelToJson(AnnouncementModel instance) =>
@@ -51,4 +52,5 @@ Map<String, dynamic> _$AnnouncementModelToJson(AnnouncementModel instance) =>
       'cronJobId': instance.cronJobId,
       'createdBy': instance.createdBy,
       'createdAt': instance.createdAt,
+      'communityOwnerId': instance.communityOwnerId,
     };

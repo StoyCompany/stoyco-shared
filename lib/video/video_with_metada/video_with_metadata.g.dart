@@ -17,22 +17,29 @@ VideoWithMetadata _$VideoWithMetadataFromJson(Map<String, dynamic> json) =>
       appUrl: json['appUrl'] as String?,
       name: json['name'] as String?,
       description: json['description'] as String?,
+      partnerId: json['partnerId'] as String?,
       order: (json['order'] as num?)?.toInt(),
       active: json['active'] as bool?,
       createAt: json['createAt'] == null
           ? null
           : DateTime.parse(json['createAt'] as String),
+      streamingData: json['streamingData'] == null
+          ? null
+          : StreamingData.fromJson(
+              json['streamingData'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$VideoWithMetadataToJson(VideoWithMetadata instance) =>
     <String, dynamic>{
-      'videoMetadata': instance.videoMetadata,
+      'videoMetadata': instance.videoMetadata?.toJson(),
       'id': instance.id,
       'videoUrl': instance.videoUrl,
       'appUrl': instance.appUrl,
       'name': instance.name,
       'description': instance.description,
+      'partnerId': instance.partnerId,
       'order': instance.order,
       'active': instance.active,
       'createAt': instance.createAt?.toIso8601String(),
+      'streamingData': instance.streamingData?.toJson(),
     };
