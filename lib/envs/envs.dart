@@ -24,6 +24,17 @@ extension StoycoEnvironmentExtension on StoycoEnvironment {
     }
   }
 
+  String videoPlayerUrl({String version = 'v1'}) {
+    switch (this) {
+      case StoycoEnvironment.development:
+        return 'https://yebse2h4e4obpsy25hn5naclaq0qkbos.lambda-url.us-east-1.on.aws';
+      case StoycoEnvironment.production:
+        return 'https://yebse2h4e4obpsy25hn5naclaq0qkbos.lambda-url.us-east-1.on.aws';
+      case StoycoEnvironment.testing:
+        return 'https://yebse2h4e4obpsy25hn5naclaq0qkbos.lambda-url.us-east-1.on.aws';
+    }
+  }
+
   String get dataS3Url {
     switch (this) {
       case StoycoEnvironment.development:
