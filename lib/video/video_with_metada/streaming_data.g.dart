@@ -8,50 +8,50 @@ part of 'streaming_data.dart';
 
 StreamingData _$StreamingDataFromJson(Map<String, dynamic> json) =>
     StreamingData(
-      videoId: json['VideoId'] as String?,
-      source: json['Source'] == null
+      videoId: json['videoId'] as String?,
+      source: json['source'] == null
           ? null
-          : StreamSource.fromJson(json['Source'] as Map<String, dynamic>),
-      status: json['Status'] as String?,
-      ready: json['Ready'] as bool?,
-      contentType: json['ContentType'] as String?,
-      sizeBytes: (json['SizeBytes'] as num?)?.toInt(),
-      stream: json['Stream'] == null
+          : StreamSource.fromJson(json['source'] as Map<String, dynamic>),
+      status: json['status'] as String?,
+      ready: json['ready'] as bool?,
+      contentType: json['contentType'] as String?,
+      sizeBytes: (json['sizeBytes'] as num?)?.toInt(),
+      stream: json['stream'] == null
           ? null
-          : StreamInfo.fromJson(json['Stream'] as Map<String, dynamic>),
+          : StreamInfo.fromJson(json['stream'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$StreamingDataToJson(StreamingData instance) =>
     <String, dynamic>{
-      'VideoId': instance.videoId,
-      'Source': instance.source?.toJson(),
-      'Status': instance.status,
-      'Ready': instance.ready,
-      'ContentType': instance.contentType,
-      'SizeBytes': instance.sizeBytes,
-      'Stream': instance.stream?.toJson(),
+      'videoId': instance.videoId,
+      'source': instance.source?.toJson(),
+      'status': instance.status,
+      'ready': instance.ready,
+      'contentType': instance.contentType,
+      'sizeBytes': instance.sizeBytes,
+      'stream': instance.stream?.toJson(),
     };
 
 StreamSource _$StreamSourceFromJson(Map<String, dynamic> json) => StreamSource(
-      bucket: json['Bucket'] as String?,
-      key: json['Key'] as String?,
+      bucket: json['bucket'] as String?,
+      key: json['key'] as String?,
     );
 
 Map<String, dynamic> _$StreamSourceToJson(StreamSource instance) =>
     <String, dynamic>{
-      'Bucket': instance.bucket,
-      'Key': instance.key,
+      'bucket': instance.bucket,
+      'key': instance.key,
     };
 
 StreamInfo _$StreamInfoFromJson(Map<String, dynamic> json) => StreamInfo(
-      path: json['Path'] as String?,
-      version: json['Version'] as String?,
-      url: json['Url'] as String?,
+      path: json['path'] as String?,
+      version: json['version'] as String?,
+      url: json['url'] as String?,
     );
 
 Map<String, dynamic> _$StreamInfoToJson(StreamInfo instance) =>
     <String, dynamic>{
-      'Path': instance.path,
-      'Version': instance.version,
-      'Url': instance.url,
+      'path': instance.path,
+      'version': instance.version,
+      'url': instance.url,
     };

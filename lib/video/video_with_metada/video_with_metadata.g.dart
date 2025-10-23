@@ -27,6 +27,12 @@ VideoWithMetadata _$VideoWithMetadataFromJson(Map<String, dynamic> json) =>
           ? null
           : StreamingData.fromJson(
               json['streamingData'] as Map<String, dynamic>),
+      isSubscriberOnly: json['isSubscriberOnly'] as bool?,
+      isFeaturedContent: json['isFeaturedContent'] as bool?,
+      partnerName: json['partnerName'] as String?,
+      shared: (json['shared'] as num?)?.toInt(),
+      followingCO: json['followingCO'] as bool?,
+      likeThisVideo: json['likeThisVideo'] as bool?,
     );
 
 Map<String, dynamic> _$VideoWithMetadataToJson(VideoWithMetadata instance) =>
@@ -42,4 +48,10 @@ Map<String, dynamic> _$VideoWithMetadataToJson(VideoWithMetadata instance) =>
       'active': instance.active,
       'createAt': instance.createAt?.toIso8601String(),
       'streamingData': instance.streamingData?.toJson(),
+      'isSubscriberOnly': instance.isSubscriberOnly,
+      'isFeaturedContent': instance.isFeaturedContent,
+      'partnerName': instance.partnerName,
+      'shared': instance.shared,
+      'followingCO': instance.followingCO,
+      'likeThisVideo': instance.likeThisVideo,
     };

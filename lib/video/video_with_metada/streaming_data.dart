@@ -17,28 +17,41 @@ class StreamingData {
     this.stream,
   });
 
-  @JsonKey(name: 'VideoId')
+  @JsonKey(name: 'videoId')
   final String? videoId;
 
-  @JsonKey(name: 'Source')
+  @JsonKey(name: 'source')
   final StreamSource? source;
 
-  @JsonKey(name: 'Status')
+  @JsonKey(name: 'status')
   final String? status;
 
-  @JsonKey(name: 'Ready')
+  @JsonKey(name: 'ready')
   final bool? ready;
 
-  @JsonKey(name: 'ContentType')
+  @JsonKey(name: 'contentType')
   final String? contentType;
 
-  @JsonKey(name: 'SizeBytes')
+  @JsonKey(name: 'sizeBytes')
   final int? sizeBytes;
 
-  @JsonKey(name: 'Stream')
+  @JsonKey(name: 'stream')
   final StreamInfo? stream;
 
   Map<String, dynamic> toJson() => _$StreamingDataToJson(this);
+
+  @override
+  String toString() {
+    return 'StreamingData{'
+        'videoId: $videoId, '
+        'source: $source, '
+        'status: $status, '
+        'ready: $ready, '
+        'contentType: $contentType, '
+        'sizeBytes: $sizeBytes, '
+        'stream: $stream'
+        '}';
+  }
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -51,13 +64,21 @@ class StreamSource {
     this.key,
   });
 
-  @JsonKey(name: 'Bucket')
+  @JsonKey(name: 'bucket')
   final String? bucket;
 
-  @JsonKey(name: 'Key')
+  @JsonKey(name: 'key')
   final String? key;
 
   Map<String, dynamic> toJson() => _$StreamSourceToJson(this);
+
+  @override
+  String toString() {
+    return 'StreamSource{'
+        'bucket: $bucket, '
+        'key: $key'
+        '}';
+  }
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -71,14 +92,23 @@ class StreamInfo {
     this.url,
   });
 
-  @JsonKey(name: 'Path')
+  @JsonKey(name: 'path')
   final String? path;
 
-  @JsonKey(name: 'Version')
+  @JsonKey(name: 'version')
   final String? version;
 
-  @JsonKey(name: 'Url')
+  @JsonKey(name: 'url')
   final String? url;
 
   Map<String, dynamic> toJson() => _$StreamInfoToJson(this);
+
+  @override
+  String toString() {
+    return 'StreamInfo{'
+        'path: $path, '
+        'version: $version, '
+        'url: $url'
+        '}';
+  }
 }
