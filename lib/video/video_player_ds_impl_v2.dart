@@ -148,23 +148,66 @@ class VideoPlayerDataSourceV2 {
     int page = 1,
     int pageSize = 20,
     String? userId,
+    String? partnerProfile,
   }) async {
+    // The feed endpoint expects userId and limit (pageSize). Keep filterMode if provided.
     final queryParams = <String, dynamic>{
-      'filterMode': filterMode,
-      'page': page.toString(),
-      'pageSize': pageSize.toString(),
+      'limit': pageSize.toString(),
     };
 
     if (userId != null && userId.isNotEmpty) {
       queryParams['userId'] = userId;
     }
 
-    // Use v3 endpoint
-    final v3BaseUrl = environment.baseUrl(version: 'v3');
-    final uri = '${v3BaseUrl}short-video/videos';
-    
-    final queryString = queryParams.entries.map((e) => '${e.key}=${e.value}').join('&');
-    final fullUri = '$uri?$queryString';
+    if (filterMode.isNotEmpty) {
+      queryParams['filterMode'] = filterMode;
+    }
+
+    if (partnerProfile != null && partnerProfile.isNotEmpty) {
+      queryParams['partnerProfile'] = partnerProfile;
+    }
+
+    // Use feed endpoint (example: /api/stoyco/feed/user/videos)
+    final base = environment.baseUrl();
+    final uri = '${base}feed/user/videos';
+
+    final queryString =
+        queryParams.entries.map((e) => '${e.key}=${e.value}').join('&');
+    final fullUri = queryString.isNotEmpty ? '$uri?$queryString' : uri;
+
+    return _dio.get(
+      fullUri,
+      cancelToken: cancelToken,
+      options: Options(headers: _getHeaders()),
+    );
+  }
+
+  /// Fetch featured/explore videos (optional userId, pageSize)
+  Future<Response> getFeaturedVideos({
+    String? userId,
+    int pageSize = 10,
+    int page = 1,
+    String? partnerProfile,
+  }) async {
+    final queryParams = <String, dynamic>{
+      'pageSize': pageSize.toString(),
+      'page': page.toString(),
+    };
+
+    if (userId != null && userId.isNotEmpty) {
+      queryParams['userId'] = userId;
+    }
+
+    if (partnerProfile != null && partnerProfile.isNotEmpty) {
+      queryParams['partnerProfile'] = partnerProfile;
+    }
+
+    final base = environment.baseUrl();
+    final uri = '${base}feed/explore/videos';
+
+    final queryString =
+        queryParams.entries.map((e) => '${e.key}=${e.value}').join('&');
+    final fullUri = queryString.isNotEmpty ? '$uri?$queryString' : uri;
 
     return _dio.get(
       fullUri,

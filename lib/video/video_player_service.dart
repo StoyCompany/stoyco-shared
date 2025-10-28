@@ -282,9 +282,7 @@ class VideoPlayerService {
   }) async {
     try {
       await verifyToken();
-      return await _repository!.getUserVideoInteractionData(
-        videoId
-      );
+      return await _repository!.getUserVideoInteractionData(videoId);
     } catch (e) {
       StoyCoLogger.error('Error: $e');
       return Left(ExceptionFailure.decode(Exception(e)));
@@ -310,6 +308,7 @@ class VideoPlayerService {
   /// [page] The page number (default: 1)
   /// [pageSize] The number of items per page (default: 20)
   /// [userId] Optional user ID for personalized content
+  /// [partnerProfile] Optional partner profile filter (Music, Sport, Brand)
   ///
   /// Returns an [Either] containing a [Failure] or a list of [VideoWithMetadata].
   Future<Either<Failure, List<VideoWithMetadata>>> getVideosWithFilter({
@@ -317,6 +316,7 @@ class VideoPlayerService {
     int page = 1,
     int pageSize = 20,
     String? userId,
+    String? partnerProfile,
   }) async {
     try {
       return await _repository!.getVideosWithFilter(
@@ -324,6 +324,32 @@ class VideoPlayerService {
         page: page,
         pageSize: pageSize,
         userId: userId,
+        partnerProfile: partnerProfile,
+      );
+    } catch (e) {
+      StoyCoLogger.error('Error: $e');
+      return Left(ExceptionFailure.decode(Exception(e)));
+    }
+  }
+
+  /// Retrieves featured / explore videos.
+  ///
+  /// [userId] Optional user id to personalize results.
+  /// [pageSize] Number of items to fetch (default: 10).
+  /// [page] Page number for pagination (default: 1).
+  /// [partnerProfile] Optional partner profile filter (Music, Sport, Brand).
+  Future<Either<Failure, List<VideoWithMetadata>>> getFeaturedVideos({
+    String? userId,
+    int pageSize = 10,
+    int page = 1,
+    String? partnerProfile,
+  }) async {
+    try {
+      return await _repository!.getFeaturedVideos(
+        userId: userId,
+        pageSize: pageSize,
+        page: page,
+        partnerProfile: partnerProfile,
       );
     } catch (e) {
       StoyCoLogger.error('Error: $e');
@@ -353,7 +379,8 @@ class VideoPlayerService {
     userToken = '';
     functionToUpdateToken = null;
     _repository?.token = '';
-    _dataSource?.updateUserToken(''); // IMPORTANT: Clear token in datasource too!
+    _dataSource
+        ?.updateUserToken(''); // IMPORTANT: Clear token in datasource too!
   }
 }
 

@@ -1,3 +1,7 @@
+## 21.2.0
+
+feat(video): enhance video fetching with userId and pagination support
+
 ## 21.1.0
 
 - **feat(video):** Add StreamingData model for comprehensive video metadata handling
@@ -7,6 +11,7 @@
 - **feat(video):** Update VideoWithMetadata model to include StreamingData
 
 ## 21.0.0
+
 **feat(notification):** Adding push notificacion with moengage sdk
 
 ## 20.0.2

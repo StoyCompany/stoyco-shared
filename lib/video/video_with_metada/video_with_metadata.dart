@@ -28,6 +28,8 @@ class VideoWithMetadata {
     this.shared,
     this.followingCO,
     this.likeThisVideo,
+    this.views,
+    this.likes,
   });
 
   final VideoMetadata? videoMetadata;
@@ -47,10 +49,12 @@ class VideoWithMetadata {
   final int? shared;
   final bool? followingCO;
   final bool? likeThisVideo;
+  final int? views;
+  final int? likes;
 
   @override
   String toString() =>
-      'VideoWithMetadata(videoMetadata: $videoMetadata, id: $id, videoUrl: $videoUrl, appUrl: $appUrl, name: $name, description: $description, partnerId: $partnerId, order: $order, active: $active, createAt: $createAt, streamingData: $streamingData, isSubscriberOnly: $isSubscriberOnly, isFeaturedContent: $isFeaturedContent, partnerName: $partnerName, shared: $shared, followingCO: $followingCO, likeThisVideo: $likeThisVideo)';
+      'VideoWithMetadata(videoMetadata: $videoMetadata, id: $id, videoUrl: $videoUrl, appUrl: $appUrl, name: $name, description: $description, partnerId: $partnerId, order: $order, active: $active, createAt: $createAt, streamingData: $streamingData, isSubscriberOnly: $isSubscriberOnly, isFeaturedContent: $isFeaturedContent, partnerName: $partnerName, shared: $shared, followingCO: $followingCO, likeThisVideo: $likeThisVideo, views: $views, likes: $likes)';
 
   Map<String, dynamic> toJson() => _$VideoWithMetadataToJson(this);
 
@@ -72,6 +76,8 @@ class VideoWithMetadata {
     int? shared,
     bool? followingCO,
     bool? likeThisVideo,
+    int? views,
+    int? likes,
   }) =>
       VideoWithMetadata(
         videoMetadata: videoMetadata ?? this.videoMetadata,
@@ -91,6 +97,8 @@ class VideoWithMetadata {
         shared: shared ?? this.shared,
         followingCO: followingCO ?? this.followingCO,
         likeThisVideo: likeThisVideo ?? this.likeThisVideo,
+        views: views ?? this.views,
+        likes: likes ?? this.likes,
       );
 
   @override
@@ -118,11 +126,12 @@ class VideoWithMetadata {
       isFeaturedContent.hashCode ^
       partnerName.hashCode ^
       followingCO.hashCode ^
-      likeThisVideo.hashCode;
+      likeThisVideo.hashCode ^
+      views.hashCode ^
+      likes.hashCode;
 
   /// Gets the best available video URL, preferring streaming URL if available
   String? get bestVideoUrl {
-        print('la url best video: $streamingData');
 
     // Prefer streaming URL if available and ready
     if (streamingData?.ready == true &&
