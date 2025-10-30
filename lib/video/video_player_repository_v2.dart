@@ -210,6 +210,7 @@ class VideoPlayerRepositoryV2 {
                 : (m['views'] ?? m['viewCount']) != null
                     ? int.tryParse('${m['views'] ?? m['viewCount']}')
                     : null,
+            description: m['description'] as String?,
             streamingData: streamUrl != null
                 ? StreamingData(
                     stream: StreamInfo(url: streamUrl),

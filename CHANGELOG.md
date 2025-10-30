@@ -1,3 +1,7 @@
+## 21.2.2
+
+feat(video): add description field to video metadata
+
 ## 21.2.1
 
 feat(filter): add communityOwnerId to query parameters in FilterRequestHelper
