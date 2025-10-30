@@ -1,3 +1,7 @@
+## 21.2.1
+
+feat(filter): add communityOwnerId to query parameters in FilterRequestHelper
+
 ## 21.2.0
 
 feat(video): enhance video fetching with userId and pagination support

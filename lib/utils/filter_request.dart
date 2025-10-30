@@ -101,6 +101,10 @@ class FilterRequestHelper {
       params['page_size'] = filter.pageSize;
     }
 
+    if (filter.communityOwnerId != null) {
+      params['community_owner_id'] = filter.communityOwnerId!;
+    }
+
     return params;
   }
 }
