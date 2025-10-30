@@ -1,3 +1,7 @@
+## 21.2.3
+
+feat(video): add description field to video metadata in VideoPlayerRepositoryV2
+
 ## 21.2.2
 
 feat(video): add description field to video metadata

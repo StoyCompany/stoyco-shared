@@ -269,6 +269,7 @@ class VideoPlayerRepositoryV2 {
                     : null,
             followingCO: m['isFollowed'] as bool?,
             likeThisVideo: m['liked'] as bool?,
+            description: m['description'] as String?,
             streamingData: streamUrl != null
                 ? StreamingData(
                     stream: StreamInfo(url: streamUrl),
