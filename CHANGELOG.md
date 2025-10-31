@@ -1,3 +1,9 @@
+## 21.2.4 (2025-10-21)
+### Added
+- **feat (VideoExclusiveBlur widget):** Introduced a new molecule widget for exclusive video content overlays, including blur, lock/tag indicator, and customizable UI for premium/locked content.
+- **fix (NewModel fields):** Added `communityOwnerId`, `isSubscriberOnly`, and `hasAccess` fields to `NewModel`, with updated JSON serialization.
+- **fix (AnnouncementModel fields):** Added `communityOwnerId`, `isSubscriberOnly`, and `hasAccess` fields to `AnnouncementModel`.
+
 ## 21.2.3
 
 feat(video): add description field to video metadata in VideoPlayerRepositoryV2
