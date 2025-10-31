@@ -8,6 +8,7 @@ import 'package:stoyco_shared/video/models/video_reaction/user_video_reaction.da
 import 'package:stoyco_shared/video/models/video_player_model.dart';
 import 'package:stoyco_shared/video/video_player_ds_impl_v2.dart';
 import 'package:stoyco_shared/video/video_with_metada/video_with_metadata.dart';
+import 'package:stoyco_shared/video/video_with_metada/streaming_data.dart';
 
 /// Repository for managing video player interactions.
 class VideoPlayerRepositoryV2 {
@@ -51,12 +52,40 @@ class VideoPlayerRepositoryV2 {
     }
   }
 
+  /// Handles API calls with error handling for endpoints that return items in a nested structure
+  Future<Either<Failure, T>> _handleApiCallWithItems<T>(
+    Future<Response> Function() apiCall,
+    T Function(dynamic data) fromJson,
+    String errorMessage,
+  ) async {
+    try {
+      final response = await apiCall();
+      if (response.statusCode != 200) {
+        return Left(
+          ExceptionFailure.decode(
+            Exception(errorMessage),
+          ),
+        );
+      }
+
+      // Access items from data.items instead of just data
+      return Right(fromJson(response.data['data']['items']));
+    } on DioException catch (e) {
+      return Left(DioFailure.decode(e));
+    } on Error catch (e) {
+      return Left(ErrorFailure.decode(e));
+    } on Exception catch (e) {
+      return Left(ExceptionFailure.decode(e));
+    }
+  }
+
   /// Dislikes a video with the given [videoId].
   Future<Either<Failure, UserVideoReaction>> dislikeVideo(
     String videoId,
+    String userId,
   ) async =>
       _handleApiCall(
-        () => _dataSource.dislikeVideo(videoId),
+        () => _dataSource.dislikeVideo(videoId, userId),
         (data) => UserVideoReaction.fromJson(data),
         'Error disliking video',
       );
@@ -82,9 +111,10 @@ class VideoPlayerRepositoryV2 {
       );
 
   /// Likes a video with the given [videoId].
-  Future<Either<Failure, UserVideoReaction>> likeVideo(String videoId) async =>
+  Future<Either<Failure, UserVideoReaction>> likeVideo(
+          String videoId, String userId) async =>
       _handleApiCall(
-        () => _dataSource.likeVideo(videoId),
+        () => _dataSource.likeVideo(videoId, userId),
         (data) => UserVideoReaction.fromJson(data),
         'Error liking video',
       );
@@ -110,6 +140,16 @@ class VideoPlayerRepositoryV2 {
         'Error sharing video',
       );
 
+  /// Views a video with the given [videoId].
+  Future<Either<Failure, bool>> viewVideo(
+    String videoId,
+  ) async =>
+      _handleApiCall(
+        () => _dataSource.viewVideo(videoId),
+        (_) => true,
+        'Error viewing video',
+      );
+
   /// Fetches a list of videos with metadata.
   Future<Either<Failure, List<VideoWithMetadata>>>
       getVideosWithMetadata() async => _handleApiCall(
@@ -119,4 +159,125 @@ class VideoPlayerRepositoryV2 {
                 .toList(),
             'Error getting videos with metadata',
           );
+
+  /// Fetches videos with filter mode, pagination, and optional userId
+  Future<Either<Failure, List<VideoWithMetadata>>> getVideosWithFilter({
+    required String filterMode,
+    int page = 1,
+    int pageSize = 20,
+    String? userId,
+    String? partnerProfile,
+  }) async =>
+      _handleApiCallWithItems(
+        () => _dataSource.getVideosWithFilter(
+          filterMode: filterMode,
+          page: page,
+          pageSize: pageSize,
+          userId: userId,
+          partnerProfile: partnerProfile,
+        ),
+        (data) => (data as List).map((item) {
+          final Map<String, dynamic> m = Map<String, dynamic>.from(item as Map);
+
+          // Map fields from feed API to our VideoWithMetadata model
+          final streamUrl = m['hlsUrl'] as String? ?? m['mp4Url'] as String?;
+
+          return VideoWithMetadata(
+            id: m['contentId'] as String?,
+            name: m['title'] as String?,
+            videoUrl: m['mp4Url'] as String? ?? m['hlsUrl'] as String?,
+            createAt: m['contentCreatedAt'] != null
+                ? DateTime.tryParse(m['contentCreatedAt'] as String)
+                : null,
+            partnerId: m['partnerId'] as String?,
+            partnerName: m['partnerName'] as String?,
+            isSubscriberOnly: m['isSubscriberOnly'] as bool?,
+            isFeaturedContent: m['isFeaturedContent'] as bool?,
+            shared: (m['shares'] ?? m['sharedCount']) is int
+                ? (m['shares'] ?? m['sharedCount']) as int
+                : (m['shares'] ?? m['sharedCount']) != null
+                    ? int.tryParse('${m['shares'] ?? m['sharedCount']}')
+                    : null,
+            followingCO: m['isFollowed'] as bool?,
+            likeThisVideo: m['liked'] as bool?,
+            likes: (m['likes'] ?? m['likeCount']) is int
+                ? (m['likes'] ?? m['likeCount']) as int
+                : (m['likes'] ?? m['likeCount']) != null
+                    ? int.tryParse('${m['likes'] ?? m['likeCount']}')
+                    : null,
+            views: (m['views'] ?? m['viewCount']) is int
+                ? (m['views'] ?? m['viewCount']) as int
+                : (m['views'] ?? m['viewCount']) != null
+                    ? int.tryParse('${m['views'] ?? m['viewCount']}')
+                    : null,
+            description: m['description'] as String?,
+            streamingData: streamUrl != null
+                ? StreamingData(
+                    stream: StreamInfo(url: streamUrl),
+                    ready: true,
+                  )
+                : null,
+          );
+        }).toList(),
+        'Error getting videos with filter',
+      );
+
+  /// Fetch featured / explore videos (optional userId, pageSize)
+  Future<Either<Failure, List<VideoWithMetadata>>> getFeaturedVideos({
+    String? userId,
+    int pageSize = 10,
+    int page = 1,
+    String? partnerProfile,
+  }) async =>
+      _handleApiCallWithItems(
+        () => _dataSource.getFeaturedVideos(
+          userId: userId,
+          pageSize: pageSize,
+          page: page,
+          partnerProfile: partnerProfile,
+        ),
+        (data) => (data as List).map((item) {
+          final Map<String, dynamic> m = Map<String, dynamic>.from(item as Map);
+
+          final streamUrl = m['hlsUrl'] as String? ?? m['mp4Url'] as String?;
+
+          return VideoWithMetadata(
+            id: m['contentId'] as String?,
+            name: m['title'] as String?,
+            videoUrl: m['mp4Url'] as String? ?? m['hlsUrl'] as String?,
+            createAt: m['contentCreatedAt'] != null
+                ? DateTime.tryParse(m['contentCreatedAt'] as String)
+                : null,
+            partnerId: m['partnerId'] as String?,
+            partnerName: m['partnerName'] as String?,
+            isSubscriberOnly: m['isSubscriberOnly'] as bool?,
+            isFeaturedContent: m['isFeaturedContent'] as bool?,
+            shared: (m['shares'] ?? m['sharedCount']) is int
+                ? (m['shares'] ?? m['sharedCount']) as int
+                : (m['shares'] ?? m['sharedCount']) != null
+                    ? int.tryParse('${m['shares'] ?? m['sharedCount']}')
+                    : null,
+            likes: (m['likes'] ?? m['likeCount']) is int
+                ? (m['likes'] ?? m['likeCount']) as int
+                : (m['likes'] ?? m['likeCount']) != null
+                    ? int.tryParse('${m['likes'] ?? m['likeCount']}')
+                    : null,
+            views: (m['views'] ?? m['viewCount']) is int
+                ? (m['views'] ?? m['viewCount']) as int
+                : (m['views'] ?? m['viewCount']) != null
+                    ? int.tryParse('${m['views'] ?? m['viewCount']}')
+                    : null,
+            followingCO: m['isFollowed'] as bool?,
+            likeThisVideo: m['liked'] as bool?,
+            description: m['description'] as String?,
+            streamingData: streamUrl != null
+                ? StreamingData(
+                    stream: StreamInfo(url: streamUrl),
+                    ready: true,
+                  )
+                : null,
+          );
+        }).toList(),
+        'Error getting featured videos',
+      );
 }

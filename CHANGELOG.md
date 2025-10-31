@@ -1,4 +1,29 @@
+## 21.2.3
+
+feat(video): add description field to video metadata in VideoPlayerRepositoryV2
+
+## 21.2.2
+
+feat(video): add description field to video metadata
+
+## 21.2.1
+
+feat(filter): add communityOwnerId to query parameters in FilterRequestHelper
+
+## 21.2.0
+
+feat(video): enhance video fetching with userId and pagination support
+
+## 21.1.0
+
+- **feat(video):** Add StreamingData model for comprehensive video metadata handling
+- **feat(video):** Enhance video player service with viewVideo and getVideosWithFilter methods
+- **feat(video):** Add userId parameter to likeVideo and dislikeVideo methods for better user tracking
+- **feat(video):** Improve VideoPlayerService reset method to clear datasource token
+- **feat(video):** Update VideoWithMetadata model to include StreamingData
+
 ## 21.0.0
+
 **feat(notification):** Adding push notificacion with moengage sdk
 
 ## 20.0.2
