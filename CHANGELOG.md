@@ -1,18 +1,22 @@
+## 21.2.4
+
+- **fix(video):** rename 'page' to 'pageNumber' in getVideosWithFilter query parameters
+
 ## 21.2.3
 
-feat(video): add description field to video metadata in VideoPlayerRepositoryV2
+- **feat(video):** add description field to video metadata in VideoPlayerRepositoryV2
 
 ## 21.2.2
 
-feat(video): add description field to video metadata
+- **feat(video):** add description field to video metadata
 
 ## 21.2.1
 
-feat(filter): add communityOwnerId to query parameters in FilterRequestHelper
+- **feat(filter):** add communityOwnerId to query parameters in FilterRequestHelper
 
 ## 21.2.0
 
-feat(video): enhance video fetching with userId and pagination support
+- **feat(video):** enhance video fetching with userId and pagination support
 
 ## 21.1.0
 

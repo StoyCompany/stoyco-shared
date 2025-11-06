@@ -191,7 +191,7 @@ class VideoPlayerDataSourceV2 {
   }) async {
     final queryParams = <String, dynamic>{
       'pageSize': pageSize.toString(),
-      'page': page.toString(),
+      'pageNumber': page.toString(),
     };
 
     if (userId != null && userId.isNotEmpty) {
