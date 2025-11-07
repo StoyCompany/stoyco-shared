@@ -11,7 +11,8 @@ import 'package:stoyco_shared/utils/logger.dart';
 class MoEngageService {
   MoEngageService._internal([MoEngagePlatform? platform]) {
     _platform = platform ?? getMoEngagePlatform();
-    StoyCoLogger.info('MoEngageService: Plataforma seleccionada por el compilador es ${_platform.runtimeType}');
+    StoyCoLogger.info(
+        'MoEngageService: Plataforma seleccionada por el compilador es ${_platform.runtimeType}');
   }
 
   static MoEngageService? _instance;
@@ -37,7 +38,8 @@ class MoEngageService {
 
       StoyCoLogger.info('MoEngageService: Initialization successful.');
     } catch (e, st) {
-      StoyCoLogger.error('MoEngageService: Error initializing platform/geofence: $e');
+      StoyCoLogger.error(
+          'MoEngageService: Error initializing platform/geofence: $e');
       StoyCoLogger.info('MoEngageService: StackTrace: $st');
     }
     _instance = service;
@@ -56,7 +58,7 @@ class MoEngageService {
 
   void showNudge() => _platform.showNudge();
 
-  void logout()  {
+  void logout() {
     if (_platform is MoEngageMobilePlatform && _moEngageGeofence != null) {
       _moEngageGeofence!.stopGeofenceMonitoring();
     }
@@ -92,7 +94,6 @@ class MoEngageService {
     }
   }
 
-
   void startGeofenceMonitoring() {
     if (_platform is MoEngageMobilePlatform) {
       if (_moEngageGeofence == null) {
@@ -102,7 +103,8 @@ class MoEngageService {
       _moEngageGeofence!.startGeofenceMonitoring();
       StoyCoLogger.info('MoEngageService: Geofence iniciado.');
     } else {
-      StoyCoLogger.info('MoEngageService: Geofence solo está disponible en plataformas móviles.');
+      StoyCoLogger.info(
+          'MoEngageService: Geofence solo está disponible en plataformas móviles.');
     }
   }
 
@@ -111,5 +113,11 @@ class MoEngageService {
       final mobilePlatform = _platform as MoEngageMobilePlatform;
       mobilePlatform.setPushClickCallbackHandler(handler);
     }
+  }
+
+  /// Resets the singleton instance for testing purposes
+  @visibleForTesting
+  static void resetInstance() {
+    _instance = null;
   }
 }
