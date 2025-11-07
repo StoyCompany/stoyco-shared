@@ -1,24 +1,33 @@
-## 21.2.4 (2025-10-21)
+## 21.2.6 (2025-10-21)
 ### Added
 - **feat (VideoExclusiveBlur widget):** Introduced a new molecule widget for exclusive video content overlays, including blur, lock/tag indicator, and customizable UI for premium/locked content.
 - **fix (NewModel fields):** Added `communityOwnerId`, `isSubscriberOnly`, and `hasAccess` fields to `NewModel`, with updated JSON serialization.
 - **fix (AnnouncementModel fields):** Added `communityOwnerId`, `isSubscriberOnly`, and `hasAccess` fields to `AnnouncementModel`.
 
+## 21.2.5
+
+- **fix(video):** update query parameters to use 'pageSize' and 'pageNumber' in getVideosWithFilter
+
+## 21.2.4
+
+- **fix(video):** rename 'page' to 'pageNumber' in getVideosWithFilter query parameters
+
+
 ## 21.2.3
 
-feat(video): add description field to video metadata in VideoPlayerRepositoryV2
+- **feat(video):** add description field to video metadata in VideoPlayerRepositoryV2
 
 ## 21.2.2
 
-feat(video): add description field to video metadata
+- **feat(video):** add description field to video metadata
 
 ## 21.2.1
 
-feat(filter): add communityOwnerId to query parameters in FilterRequestHelper
+- **feat(filter):** add communityOwnerId to query parameters in FilterRequestHelper
 
 ## 21.2.0
 
-feat(video): enhance video fetching with userId and pagination support
+- **feat(video):** enhance video fetching with userId and pagination support
 
 ## 21.1.0
 

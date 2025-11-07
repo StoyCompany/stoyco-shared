@@ -155,7 +155,8 @@ class VideoPlayerDataSourceV2 {
   }) async {
     // The feed endpoint expects userId and limit (pageSize). Keep filterMode if provided.
     final queryParams = <String, dynamic>{
-      'limit': pageSize.toString(),
+      'pageSize': pageSize.toString(),
+      'pageNumber': page.toString(),
     };
 
     if (userId != null && userId.isNotEmpty) {
@@ -194,7 +195,7 @@ class VideoPlayerDataSourceV2 {
   }) async {
     final queryParams = <String, dynamic>{
       'pageSize': pageSize.toString(),
-      'page': page.toString(),
+      'pageNumber': page.toString(),
     };
 
     if (userId != null && userId.isNotEmpty) {
