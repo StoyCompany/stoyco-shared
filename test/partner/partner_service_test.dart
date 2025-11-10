@@ -109,6 +109,71 @@ void main() {
     });
   });
 
+  group('PartnerService checkPartnerFollow', () {
+    test('should return follow check response successfully when following',
+        () async {
+      final service = PartnerService(environment: StoycoEnvironment.testing);
+
+      final result = await service.checkPartnerFollow(
+        userId: 'user123',
+        partnerId: 'partner456',
+      );
+
+      expect(result.isRight, true);
+      result.fold(
+        (failure) => fail('Expected Right but got Left: $failure'),
+        (response) {
+          expect(response, isNotNull);
+          expect(response.error, -1);
+          expect(response.messageError, '');
+          expect(response.tecMessageError, '');
+          expect(response.count, -1);
+          expect(response.data, isA<bool>());
+          expect(response.isFollowing, isA<bool>());
+        },
+      );
+    });
+
+    test('should handle different user and partner combinations', () async {
+      final service = PartnerService(environment: StoycoEnvironment.testing);
+
+      final result1 = await service.checkPartnerFollow(
+        userId: 'user789',
+        partnerId: 'partner123',
+      );
+
+      final result2 = await service.checkPartnerFollow(
+        userId: 'differentUser',
+        partnerId: 'differentPartner',
+      );
+
+      expect(result1.isRight, true);
+      expect(result2.isRight, true);
+    });
+
+    test('should validate response structure for follow check', () async {
+      final service = PartnerService(environment: StoycoEnvironment.testing);
+
+      final result = await service.checkPartnerFollow(
+        userId: 'validUser',
+        partnerId: 'validPartner',
+      );
+
+      result.fold(
+        (failure) => fail('Expected Right but got Left: $failure'),
+        (response) {
+          // Validate all required fields are present
+          expect(response.error, isNotNull);
+          expect(response.messageError, isNotNull);
+          expect(response.tecMessageError, isNotNull);
+          expect(response.count, isNotNull);
+          expect(response.data, isNotNull);
+          expect(response.isFollowing, isNotNull);
+        },
+      );
+    });
+  });
+
   group('PartnerService error handling', () {
     test('should handle service initialization with different environments',
         () {

@@ -4,6 +4,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:stoyco_shared/partner/models/market_segment_model.dart';
 import 'package:stoyco_shared/partner/models/partner_community_response.dart';
+import 'package:stoyco_shared/partner/models/partner_follow_check_response.dart';
 import 'package:stoyco_shared/partner/partner_data_source.dart';
 import 'package:stoyco_shared/partner/partner_repository.dart';
 
@@ -181,6 +182,109 @@ void main() {
           .thenThrow(Exception('Test exception'));
 
       final result = await repository.getMarketSegments();
+
+      expect(result.isLeft, true);
+    });
+  });
+
+  group('checkPartnerFollow', () {
+    test('should return PartnerFollowCheckResponse on success', () async {
+      final mockData = {
+        'error': -1,
+        'messageError': '',
+        'tecMessageError': '',
+        'count': -1,
+        'data': true,
+      };
+
+      when(mockDataSource.checkPartnerFollow(
+        userId: 'user123',
+        partnerId: 'partner456',
+      )).thenAnswer((_) async => _createResponse(mockData));
+
+      final result = await repository.checkPartnerFollow(
+        userId: 'user123',
+        partnerId: 'partner456',
+      );
+
+      expect(result.isRight, true);
+      final followCheck = result.right;
+      expect(followCheck.isFollowing, true);
+      expect(followCheck.data, true);
+      expect(followCheck.error, -1);
+      expect(followCheck.messageError, '');
+      expect(followCheck.tecMessageError, '');
+      expect(followCheck.count, -1);
+    });
+
+    test('should return PartnerFollowCheckResponse when not following',
+        () async {
+      final mockData = {
+        'error': -1,
+        'messageError': '',
+        'tecMessageError': '',
+        'count': -1,
+        'data': false,
+      };
+
+      when(mockDataSource.checkPartnerFollow(
+        userId: 'user123',
+        partnerId: 'partner456',
+      )).thenAnswer((_) async => _createResponse(mockData));
+
+      final result = await repository.checkPartnerFollow(
+        userId: 'user123',
+        partnerId: 'partner456',
+      );
+
+      expect(result.isRight, true);
+      final followCheck = result.right;
+      expect(followCheck.isFollowing, false);
+      expect(followCheck.data, false);
+      expect(followCheck.error, -1);
+      expect(followCheck.messageError, '');
+      expect(followCheck.tecMessageError, '');
+      expect(followCheck.count, -1);
+    });
+
+    test('should return DioFailure on DioException', () async {
+      when(mockDataSource.checkPartnerFollow(
+        userId: 'user123',
+        partnerId: 'partner456',
+      )).thenThrow(DioException(requestOptions: RequestOptions(path: '/')));
+
+      final result = await repository.checkPartnerFollow(
+        userId: 'user123',
+        partnerId: 'partner456',
+      );
+
+      expect(result.isLeft, true);
+    });
+
+    test('should return ErrorFailure on Error thrown', () async {
+      when(mockDataSource.checkPartnerFollow(
+        userId: 'user123',
+        partnerId: 'partner456',
+      )).thenThrow(StateError('Test error'));
+
+      final result = await repository.checkPartnerFollow(
+        userId: 'user123',
+        partnerId: 'partner456',
+      );
+
+      expect(result.isLeft, true);
+    });
+
+    test('should return ExceptionFailure on Exception thrown', () async {
+      when(mockDataSource.checkPartnerFollow(
+        userId: 'user123',
+        partnerId: 'partner456',
+      )).thenThrow(Exception('Test exception'));
+
+      final result = await repository.checkPartnerFollow(
+        userId: 'user123',
+        partnerId: 'partner456',
+      );
 
       expect(result.isLeft, true);
     });

@@ -3,6 +3,7 @@ import 'package:stoyco_shared/envs/envs.dart';
 import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
 import 'package:stoyco_shared/partner/models/market_segment_model.dart';
 import 'package:stoyco_shared/partner/models/partner_community_response.dart';
+import 'package:stoyco_shared/partner/models/partner_follow_check_response.dart';
 import 'package:stoyco_shared/partner/partner_data_source.dart';
 import 'package:stoyco_shared/partner/partner_repository.dart';
 
@@ -86,4 +87,37 @@ class PartnerService {
   /// ```
   Future<Either<Failure, List<MarketSegmentModel>>> getMarketSegments() =>
       _partnerRepository!.getMarketSegments();
+
+  /// Checks if a user follows a partner.
+  ///
+  /// This method verifies whether the specified user is currently following
+  /// the given partner by calling the `/v1/partner/follow/check` endpoint.
+  ///
+  /// Parameters:
+  /// * [userId] is the unique identifier of the user to check.
+  /// * [partnerId] is the unique identifier of the partner to check.
+  ///
+  /// Returns an [Either] with:
+  /// - [Left] containing a [Failure] if the request fails
+  /// - [Right] containing a [PartnerFollowCheckResponse] with follow status if successful
+  ///
+  /// Example:
+  /// ```dart
+  /// final result = await PartnerService(environment: env).checkPartnerFollow(
+  ///   userId: "user123",
+  ///   partnerId: "partner456",
+  /// );
+  /// result.fold(
+  ///   (failure) => print('Error: $failure'),
+  ///   (response) => print('Is following: ${response.isFollowing}'),
+  /// );
+  /// ```
+  Future<Either<Failure, PartnerFollowCheckResponse>> checkPartnerFollow({
+    required String userId,
+    required String partnerId,
+  }) =>
+      _partnerRepository!.checkPartnerFollow(
+        userId: userId,
+        partnerId: partnerId,
+      );
 }

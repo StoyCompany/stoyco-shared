@@ -82,4 +82,32 @@ class MockPartnerDataSource extends _i1.Mock implements _i3.PartnerDataSource {
           ),
         )),
       ) as _i5.Future<_i2.Response<dynamic>>);
+
+  @override
+  _i5.Future<_i2.Response<dynamic>> checkPartnerFollow({
+    required String? userId,
+    required String? partnerId,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #checkPartnerFollow,
+          [],
+          {
+            #userId: userId,
+            #partnerId: partnerId,
+          },
+        ),
+        returnValue:
+            _i5.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
+          this,
+          Invocation.method(
+            #checkPartnerFollow,
+            [],
+            {
+              #userId: userId,
+              #partnerId: partnerId,
+            },
+          ),
+        )),
+      ) as _i5.Future<_i2.Response<dynamic>>);
 }

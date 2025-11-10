@@ -109,17 +109,14 @@ extension StoycoEnvironmentExtension on StoycoEnvironment {
   /// Base URL for the Market Segments service per environment.
   ///
   /// Returns the full URL for accessing market segments API.
-  /// QA (testing) uses: https://zc1kknd34g.execute-api.us-east-1.amazonaws.com/QA/api/stoyco/v2/
-  String get urlMarketSegments {
+  String urlV3({String version = 'v2'}) {
     switch (this) {
       case StoycoEnvironment.development:
-        // Using QA URL for development until dev environment is available
-        return 'https://zc1kknd34g.execute-api.us-east-1.amazonaws.com/QA/api/stoyco/v2/';
+        return 'https://zc1kknd34g.execute-api.us-east-1.amazonaws.com/dev/api/stoyco/$version/';
       case StoycoEnvironment.production:
-        // Using production path format (update when production URL is confirmed)
-        return 'https://zc1kknd34g.execute-api.us-east-1.amazonaws.com/prod/api/stoyco/v2/';
+        return 'https://zc1kknd34g.execute-api.us-east-1.amazonaws.com/prod/api/stoyco/$version/';
       case StoycoEnvironment.testing:
-        return 'https://zc1kknd34g.execute-api.us-east-1.amazonaws.com/QA/api/stoyco/v2/';
+        return 'https://zc1kknd34g.execute-api.us-east-1.amazonaws.com/QA/api/stoyco/$version/';
     }
   }
 }
