@@ -106,10 +106,8 @@ extension StoycoEnvironmentExtension on StoycoEnvironment {
     }
   }
 
-  /// Base URL for the Market Segments service per environment.
-  ///
-  /// Returns the full URL for accessing market segments API.
-  String urlV3({String version = 'v2'}) {
+  /// Base URL for the Partner service (market segments, partner community).
+  String partnerServiceBaseUrl({String version = 'v2'}) {
     switch (this) {
       case StoycoEnvironment.development:
         return 'https://zc1kknd34g.execute-api.us-east-1.amazonaws.com/dev/api/stoyco/$version/';

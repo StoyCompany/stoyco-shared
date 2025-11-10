@@ -16,7 +16,7 @@ class PartnerDataSource {
   Future<Response> getPartnerCommunityById(String partnerId) async {
     final cancelToken = CancelToken();
     final response = await _dio.get(
-      '${environment.urlV3(version: 'v3')}partner-community/$partnerId',
+      '${environment.partnerServiceBaseUrl(version: 'v3')}partner-community/$partnerId',
       cancelToken: cancelToken,
     );
     return response;
@@ -41,7 +41,7 @@ class PartnerDataSource {
   Future<Response> getMarketSegments() async {
     final cancelToken = CancelToken();
     final response = await _dio.get(
-      '${environment.urlV3(version: 'v2')}market-segments',
+      '${environment.partnerServiceBaseUrl(version: 'v2')}market-segments',
       cancelToken: cancelToken,
     );
     return response;
