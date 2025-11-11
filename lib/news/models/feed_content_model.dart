@@ -56,7 +56,7 @@ class FeedContentItem {
     required this.partnerId,
     required this.partnerName,
     required this.partnerProfile,
-    required this.partnerFrontImage,
+    this.partnerFrontImage,
     required this.title,
     required this.description,
     required this.thumbnail,
@@ -64,9 +64,12 @@ class FeedContentItem {
     this.mp4Url,
     required this.contentCreatedAt,
     required this.isSubscriberOnly,
+    this.updatedAt,
+    this.publishedDate,
+    this.endDate,
     required this.mainImage,
-    required this.images,
-    required this.slider,
+    this.images,
+    this.slider,
     required this.contentHtml,
     required this.detailPath,
     this.isSubscribed,
@@ -79,7 +82,7 @@ class FeedContentItem {
     this.liked,
     this.disliked,
     this.sharedCount,
-    required this.communityScore,
+    this.communityScore,
     required this.sortTiebreakerId,
     required this.isFeaturedContent,
   });
@@ -91,7 +94,7 @@ class FeedContentItem {
   final String partnerId;
   final String partnerName;
   final String partnerProfile;
-  final String partnerFrontImage;
+  final String? partnerFrontImage;
   final String title;
   final String description;
   final String thumbnail;
@@ -99,9 +102,12 @@ class FeedContentItem {
   final String? mp4Url;
   final String contentCreatedAt;
   final bool isSubscriberOnly;
+  final String? updatedAt;
+  final String? publishedDate;
+  final String? endDate;
   final String mainImage;
-  final List<String> images;
-  final List<dynamic> slider;
+  final List<String>? images;
+  final List<dynamic>? slider;
   final String contentHtml;
   final String detailPath;
   final bool? isSubscribed;
@@ -114,12 +120,9 @@ class FeedContentItem {
   final bool? liked;
   final bool? disliked;
   final int? sharedCount;
-  final int communityScore;
+  final int? communityScore;
   final String sortTiebreakerId;
   final bool isFeaturedContent;
 
   Map<String, dynamic> toJson() => _$FeedContentItemToJson(this);
 }
-
-
-

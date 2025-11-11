@@ -83,8 +83,8 @@ void main() {
       expect(item.description, 'funciona?d');
       expect(item.isSubscriberOnly, false);
       expect(item.mainImage, contains('NewJeans_HAERIN_Dior_3.webp'));
-      expect(item.images.length, 1);
-      expect(item.slider.length, 0);
+      expect(item.images?.length, 1);
+      expect(item.slider?.length, 0);
       expect(item.contentHtml, '<p>eefef</p>');
       expect(item.detailPath, '/news/6903e179265e7a42927041b4');
       expect(item.likes, 0);

@@ -1,7 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:stoyco_shared/announcement/widgets/cover_image_with_fade.dart';
 import 'package:stoyco_shared/design/colors.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/design/skeleton_card.dart';
@@ -16,6 +16,7 @@ abstract class InteractiveContent {
   int get likeCount;
   int get shareCount;
   bool get isLiked;
+  DateTime? get endDate;
 }
 
 
@@ -45,6 +46,15 @@ class FeedContentAdapter implements InteractiveContent {
   }
 
   @override
+  DateTime? get endDate {
+    try {
+    return item.endDate != null ? DateTime.parse(item.endDate!) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @override
   int get likeCount => item.likes;
 
   @override
@@ -56,19 +66,6 @@ class FeedContentAdapter implements InteractiveContent {
 
 /// Configuration class for InteractiveContentCard appearance
 class InteractiveCardConfig {
-  final double height;
-  final double borderRadius;
-  final double spacing;
-  final double iconSize;
-  final double titleFontSize;
-  final double dateFontSize;
-  final double counterFontSize;
-  final double skeletonHeight;
-  final int titleMaxLines;
-  final Color? likedIconColor;
-  final Color? unlikedIconColor;
-  final Color? shareIconColor;
-  final Color? textColor;
 
   const InteractiveCardConfig({
     this.height = 144.0,
@@ -85,6 +82,19 @@ class InteractiveCardConfig {
     this.shareIconColor,
     this.textColor,
   });
+  final double height;
+  final double borderRadius;
+  final double spacing;
+  final double iconSize;
+  final double titleFontSize;
+  final double dateFontSize;
+  final double counterFontSize;
+  final double skeletonHeight;
+  final int titleMaxLines;
+  final Color? likedIconColor;
+  final Color? unlikedIconColor;
+  final Color? shareIconColor;
+  final Color? textColor;
 
   /// Default configuration for news cards
   static const news = InteractiveCardConfig(
@@ -346,38 +356,60 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
 
   Widget _buildImage(BuildContext context, double size) => Hero(
       tag: 'content_image_${widget.data.id}',
-      child: Container(
+      child: SizedBox(
         width: size,
         height: size,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(
-            StoycoScreenSize.radius(context, widget.config.borderRadius),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: StoycoColors.shadowColor.withValues(alpha: 0.15),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(
-            StoycoScreenSize.radius(context, widget.config.borderRadius),
-          ),
-          child: CachedNetworkImage(
-            imageUrl: widget.data.mainImage,
-            fit: BoxFit.cover,
-            placeholder: (_, __) => const SkeletonCard(),
-            errorWidget: (_, __, ___) => Container(
-              color: StoycoColors.grayText.withValues(alpha: 0.2),
-              child: Icon(
-                Icons.image_not_supported,
-                color: StoycoColors.white2.withValues(alpha: 0.5),
-                size: StoycoScreenSize.width(context, 40),
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(
+                StoycoScreenSize.radius(context, widget.config.borderRadius),
+              ),
+              child: CoverImageWithFade(
+                imageUrl: widget.data.mainImage,
+                width: size,
+                height: size,
               ),
             ),
-          ),
+            // Overlay icon for announcements only, without affecting image size
+            if (widget.data.endDate != null)
+              Positioned(
+                top: StoycoScreenSize.height(context, 6),
+                left: StoycoScreenSize.width(context, 6),
+                child: Container(
+                  padding: StoycoScreenSize.symmetric(
+                    context,
+                    horizontal: 32, // long horizontal padding for a pill shape
+                    vertical: 8,    // small vertical padding for a slim badge
+                    horizontalPhone: 24,
+                    horizontalTablet: 28,
+                  ),
+                  decoration: BoxDecoration(
+                    color: true
+                        ? StoycoColors.royalIndigo.withValues(alpha: 0.7)
+                        : StoycoColors.hint.withValues(alpha: 0.7),
+                    borderRadius: BorderRadius.circular(32), // large for rounded ends
+                    boxShadow: [
+                      BoxShadow(
+                        color: StoycoColors.shadowColor.withValues(alpha: 0.2),
+                        blurRadius: 6,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  alignment: Alignment.center,
+                  child: SvgPicture.asset(
+                    'packages/stoyco_shared/lib/assets/icons/megaphone_icon.svg',
+                    width: StoycoScreenSize.width(context, 18), // icon size 18
+                    height: StoycoScreenSize.width(context, 18),
+                    colorFilter: const ColorFilter.mode(
+                      Colors.white,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );
@@ -464,15 +496,6 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
 
 // Private widget for social buttons
 class _SocialButton extends StatelessWidget {
-  final IconData? icon;
-  final String? svgAsset;
-  final int count;
-  final Color color;
-  final VoidCallback onPressed;
-  final bool isProcessing;
-  final Animation<double>? animation;
-  final InteractiveCardConfig config;
-
   const _SocialButton({
     this.icon,
     this.svgAsset,
@@ -483,6 +506,14 @@ class _SocialButton extends StatelessWidget {
     required this.config,
     this.animation,
   }) : assert(icon != null || svgAsset != null, 'Either icon or svgAsset must be provided');
+  final IconData? icon;
+  final String? svgAsset;
+  final int count;
+  final Color color;
+  final VoidCallback onPressed;
+  final bool isProcessing;
+  final Animation<double>? animation;
+  final InteractiveCardConfig config;
 
   @override
   Widget build(BuildContext context) {
@@ -555,11 +586,11 @@ class _SocialButton extends StatelessWidget {
 
 // Loading state widget
 class _InteractiveContentCardLoading extends StatelessWidget {
-  final InteractiveCardConfig config;
 
   const _InteractiveContentCardLoading({
     required this.config,
   });
+  final InteractiveCardConfig config;
 
   @override
   Widget build(BuildContext context) => SizedBox(

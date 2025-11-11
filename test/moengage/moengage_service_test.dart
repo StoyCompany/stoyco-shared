@@ -15,9 +15,9 @@ void main() {
   });
 
   test('init calls initialize on platform', ()  {
-    when(mockPlatform.initialize(appId: 'testAppId')).thenAnswer((_)  async {});
+    when(mockPlatform.initialize(appId: 'testAppId', pushToken: '')).thenAnswer((_)  async {});
      MoEngageService.init(appId: 'testAppId', platform: mockPlatform, pushToken: '');
-    verify(mockPlatform.initialize(appId: 'testAppId')).called(1);
+    verify(mockPlatform.initialize(appId: 'testAppId', pushToken: '')).called(1);
   });
 
 

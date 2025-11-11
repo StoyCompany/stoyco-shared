@@ -47,7 +47,7 @@ class NewsDataSource {
   }) async {
     final cancelToken = CancelToken();
     final response = await _dio.get(
-      '${environment.baseUrl()}feed/explore/$feedType',
+      '${environment.baseUrl()}feed/explore/content?contentType=$feedType&partnerId=$partnerId',
       queryParameters: {
         'pageNumber': pageNumber,
         'pageSize': pageSize,
