@@ -1,3 +1,7 @@
+## 21.2.4
+
+- **refactor(partner):** rename the environment helper to `partnerServiceBaseUrl` and update partner data source to use the new name
+
 ## 21.2.3
 
 feat(video): add description field to video metadata in VideoPlayerRepositoryV2
