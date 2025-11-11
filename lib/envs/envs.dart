@@ -105,4 +105,16 @@ extension StoycoEnvironmentExtension on StoycoEnvironment {
         return 'https://17lqazupjd.execute-api.us-east-1.amazonaws.com/qa';
     }
   }
+
+  /// Base URL for the Partner service (market segments, partner community).
+  String partnerServiceBaseUrl({String version = 'v2'}) {
+    switch (this) {
+      case StoycoEnvironment.development:
+        return 'https://zc1kknd34g.execute-api.us-east-1.amazonaws.com/dev/api/stoyco/$version/';
+      case StoycoEnvironment.production:
+        return 'https://zc1kknd34g.execute-api.us-east-1.amazonaws.com/prod/api/stoyco/$version/';
+      case StoycoEnvironment.testing:
+        return 'https://zc1kknd34g.execute-api.us-east-1.amazonaws.com/QA/api/stoyco/$version/';
+    }
+  }
 }
