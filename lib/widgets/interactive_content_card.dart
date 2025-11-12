@@ -105,6 +105,7 @@ typedef OnLikeCallback = Future<void> Function(String contentId, bool isLiked);
 typedef OnShareCallback = Future<void> Function(String contentId);
 typedef OnTapCallback = void Function(String contentId);
 typedef OnLoadInteractionCountsCallback = Future<InteractionCounts> Function(String contentId);
+typedef OnCheckIsLikedCallback = Future<bool> Function(String contentId);
 
 /// A reusable interactive content card widget with social features.
 /// 
@@ -144,6 +145,7 @@ class InteractiveContentCard extends StatefulWidget {
     this.onLike,
     this.onShare,
     this.onLoadInteractionCounts,
+    this.onCheckIsLiked,
     this.isLoading = false,
     this.enableLike = true,
     this.enableShare = true,
@@ -172,6 +174,10 @@ class InteractiveContentCard extends StatefulWidget {
   /// Callback to load interaction counts from Firestore
   /// The widget will call this internally on mount and update counts automatically
   final OnLoadInteractionCountsCallback? onLoadInteractionCounts;
+
+  /// Callback to check if user has liked the content
+  /// The widget will call this internally on mount to set the initial liked state
+  final OnCheckIsLikedCallback? onCheckIsLiked;
 
   /// Feature toggles
   final bool enableLike;
@@ -218,13 +224,24 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
     setState(() => _isLoadingCounts = true);
 
     try {
-      final counts = await widget.onLoadInteractionCounts!(widget.data.id);
+      // Load counts and isLiked status in parallel
+      final results = await Future.wait([
+        widget.onLoadInteractionCounts!(widget.data.id),
+        if (widget.onCheckIsLiked != null)
+          widget.onCheckIsLiked!(widget.data.id)
+        else
+          Future.value(false),
+      ]);
+
+      final counts = results[0] as InteractionCounts;
+      final isLiked = results[1] as bool;
+
       if (mounted) {
         setState(() {
           _likeCount = counts.likes;
           _shareCount = counts.shares;
           _viewCount = counts.views;
-          _isLiked = true ?? false;
+          _isLiked = isLiked;
         });
       }
     } catch (e) {
