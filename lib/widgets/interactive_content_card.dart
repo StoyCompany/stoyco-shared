@@ -102,7 +102,11 @@ class InteractiveCardConfig {
 
 /// Callback definitions for interactions
 typedef OnLikeCallback = Future<void> Function(String contentId, bool isLiked);
-typedef OnShareCallback = Future<void> Function(String contentId);
+typedef OnShareCallback = Future<void> Function({
+  required String contentId,
+  required String title,
+  required String imageUrl,
+});
 typedef OnTapCallback = void Function(String contentId);
 typedef OnLoadInteractionCountsCallback = Future<InteractionCounts> Function(String contentId);
 typedef OnCheckIsLikedCallback = Future<bool> Function(String contentId);
@@ -349,8 +353,12 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
       // Optimistically increment share count
       setState(() => _shareCount++);
 
-      // Call API through callback
-      await widget.onShare?.call(widget.data.id);
+      // Call API through callback with content details
+      await widget.onShare?.call(
+        contentId: widget.data.id,
+        title: widget.data.title,
+        imageUrl: widget.data.mainImage,
+      );
     } catch (e) {
       // Revert on error
       setState(() => _shareCount--);
