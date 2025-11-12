@@ -467,7 +467,7 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
     final textColor = widget.config.textColor ?? StoycoColors.white2;
 
     return Padding(
-      padding: StoycoScreenSize.symmetric(context, vertical: 8),
+      padding: StoycoScreenSize.symmetric(context, vertical: 9),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -487,13 +487,13 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
             overflow: TextOverflow.ellipsis,
           ),
 
-          Gap(StoycoScreenSize.height(context, 4)),
+          Gap(StoycoScreenSize.height(context, 5)),
 
           if (widget.data.publishDate != null)
             Text(
               _formatRelativeTime(widget.data.publishDate!),
               style: TextStyle(
-                color: textColor.withValues(alpha: 0.7),
+                color: textColor,
                 fontSize: StoycoScreenSize.fontSize(
                   context,
                   widget.config.dateFontSize,
@@ -606,7 +606,7 @@ class _SocialButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               iconWidget,
-              Gap(StoycoScreenSize.width(context, 4)),
+              Gap(StoycoScreenSize.width(context, 8)),
               Text(
                 _formatCount(count),
                 style: TextStyle(
