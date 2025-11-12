@@ -316,28 +316,25 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
 
     setState(() => _isProcessingLike = true);
 
-    // Optimistic UI update
     final newLikedState = !_isLiked;
-    setState(() {
-      _isLiked = newLikedState;
-      _likeCount += newLikedState ? 1 : -1;
-    });
-
-    // Animate
-    if (newLikedState) {
-      await _likeAnimController.forward();
-      await _likeAnimController.reverse();
-    }
 
     try {
-      // Call API through callback
+      // Call API through callback first (controller handles auth check + optimistic update)
       await widget.onLike?.call(widget.data.id, newLikedState);
-    } catch (e) {
-      // Revert on error
+
+      // Only update UI if callback succeeded (user is authenticated)
       setState(() {
-        _isLiked = !newLikedState;
-        _likeCount += newLikedState ? -1 : 1;
+        _isLiked = newLikedState;
+        _likeCount += newLikedState ? 1 : -1;
       });
+
+      // Animate after successful update
+      if (newLikedState) {
+        await _likeAnimController.forward();
+        await _likeAnimController.reverse();
+      }
+    } catch (e) {
+      // Don't update UI on error
       StoyCoLogger.error('Error handling like: $e');
     } finally {
       setState(() => _isProcessingLike = false);
@@ -350,18 +347,17 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
     setState(() => _isProcessingShare = true);
 
     try {
-      // Optimistically increment share count
-      setState(() => _shareCount++);
-
-      // Call API through callback with content details
+      // Call API through callback first (controller handles auth check + optimistic update)
       await widget.onShare?.call(
         contentId: widget.data.id,
         title: widget.data.title,
         imageUrl: widget.data.mainImage,
       );
+
+      // Only update UI if callback succeeded (user is authenticated)
+      setState(() => _shareCount++);
     } catch (e) {
-      // Revert on error
-      setState(() => _shareCount--);
+      // Don't update UI on error
       StoyCoLogger.error('Error sharing: $e');
     } finally {
       setState(() => _isProcessingShare = false);
