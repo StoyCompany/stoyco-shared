@@ -70,18 +70,11 @@ class FeedContentItem {
     required this.mainImage,
     this.images,
     this.slider,
-    required this.contentHtml,
+    this.contentHtml,
     required this.detailPath,
     this.isSubscribed,
     this.isFollowed,
     this.sortWeight,
-    required this.likes,
-    required this.dislikes,
-    required this.shares,
-    required this.views,
-    this.liked,
-    this.disliked,
-    this.sharedCount,
     this.communityScore,
     required this.sortTiebreakerId,
     required this.isFeaturedContent,
@@ -108,18 +101,11 @@ class FeedContentItem {
   final String mainImage;
   final List<String>? images;
   final List<dynamic>? slider;
-  final String contentHtml;
+  final String? contentHtml;
   final String detailPath;
   final bool? isSubscribed;
   final bool? isFollowed;
   final int? sortWeight;
-  final int likes;
-  final int dislikes;
-  final int shares;
-  final int views;
-  final bool? liked;
-  final bool? disliked;
-  final int? sharedCount;
   final int? communityScore;
   final String sortTiebreakerId;
   final bool isFeaturedContent;

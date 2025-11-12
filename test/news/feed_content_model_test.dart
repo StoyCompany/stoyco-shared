@@ -87,10 +87,6 @@ void main() {
       expect(item.slider?.length, 0);
       expect(item.contentHtml, '<p>eefef</p>');
       expect(item.detailPath, '/news/6903e179265e7a42927041b4');
-      expect(item.likes, 0);
-      expect(item.dislikes, 0);
-      expect(item.shares, 0);
-      expect(item.views, 0);
       expect(item.communityScore, 0);
       expect(item.isFeaturedContent, false);
       expect(item.hlsUrl, isNull);
@@ -98,9 +94,7 @@ void main() {
       expect(item.isSubscribed, isNull);
       expect(item.isFollowed, isNull);
       expect(item.sortWeight, isNull);
-      expect(item.liked, isNull);
-      expect(item.disliked, isNull);
-      expect(item.sharedCount, isNull);
+
     });
 
     test('should serialize FeedResponse back to JSON', () {
@@ -120,10 +114,6 @@ void main() {
         slider: [],
         contentHtml: '<p>Test HTML</p>',
         detailPath: '/news/test123',
-        likes: 10,
-        dislikes: 2,
-        shares: 5,
-        views: 100,
         communityScore: 50,
         sortTiebreakerId: 'test123',
         isFeaturedContent: true,

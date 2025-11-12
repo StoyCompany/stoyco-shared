@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:stoyco_interaction_content/stoyco_interaction_content.dart';
 import 'package:stoyco_shared/announcement/widgets/cover_image_with_fade.dart';
 import 'package:stoyco_shared/design/colors.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
@@ -13,9 +14,6 @@ abstract class InteractiveContent {
   String get title;
   String get mainImage;
   DateTime? get publishDate;
-  int get likeCount;
-  int get shareCount;
-  bool get isLiked;
   DateTime? get endDate;
 }
 
@@ -53,15 +51,6 @@ class FeedContentAdapter implements InteractiveContent {
       return null;
     }
   }
-
-  @override
-  int get likeCount => item.likes;
-
-  @override
-  int get shareCount => item.shares;
-
-  @override
-  bool get isLiked => item.liked ?? false;
 }
 
 /// Configuration class for InteractiveContentCard appearance
@@ -110,10 +99,12 @@ class InteractiveCardConfig {
   );
 }
 
+
 /// Callback definitions for interactions
 typedef OnLikeCallback = Future<void> Function(String contentId, bool isLiked);
 typedef OnShareCallback = Future<void> Function(String contentId);
 typedef OnTapCallback = void Function(String contentId);
+typedef OnLoadInteractionCountsCallback = Future<InteractionCounts> Function(String contentId);
 
 /// A reusable interactive content card widget with social features.
 /// 
@@ -123,19 +114,25 @@ typedef OnTapCallback = void Function(String contentId);
 /// - Feed content (generic)
 /// - Any content requiring social interaction
 ///
-/// Example with NewModel:
-/// ```dart
-/// InteractiveContentCard(
-///   data: NewModelAdapter(newsItem),
-///   onTap: () => navigate(newsItem),
-/// )
-/// ```
+/// The widget automatically loads interaction counts from Firestore via the
+/// `onLoadInteractionCounts` callback. Initial values show as 0 while loading.
 ///
-/// Example with FeedContentItem:
+/// Example usage:
 /// ```dart
 /// InteractiveContentCard(
 ///   data: FeedContentAdapter(feedItem),
-///   onTap: () => navigate(feedItem),
+///   onLoadInteractionCounts: (contentId) async {
+///     return await interactionService.getInteractionCounts(
+///       contentId: contentId,
+///     );
+///   },
+///   onLike: (contentId, isLiked) async {
+///     await interactionService.likeContent(contentId, isLiked);
+///   },
+///   onShare: (contentId) async {
+///     await interactionService.shareContent(contentId);
+///   },
+///   onTap: () => navigateToDetail(feedItem),
 /// )
 /// ```
 class InteractiveContentCard extends StatefulWidget {
@@ -146,9 +143,11 @@ class InteractiveContentCard extends StatefulWidget {
     this.onTap,
     this.onLike,
     this.onShare,
+    this.onLoadInteractionCounts,
     this.isLoading = false,
     this.enableLike = true,
     this.enableShare = true,
+    this.enableViews = false,
     this.customDateFormatter,
   });
 
@@ -170,12 +169,18 @@ class InteractiveContentCard extends StatefulWidget {
   /// Callback when share is pressed
   final OnShareCallback? onShare;
 
+  /// Callback to load interaction counts from Firestore
+  /// The widget will call this internally on mount and update counts automatically
+  final OnLoadInteractionCountsCallback? onLoadInteractionCounts;
+
   /// Feature toggles
   final bool enableLike;
   final bool enableShare;
+  final bool enableViews;
 
   /// Custom date formatter
   final String Function(DateTime)? customDateFormatter;
+
 
   /// Static loading card for shimmer effect
   static Widget loading({InteractiveCardConfig? config}) => _InteractiveContentCardLoading(
@@ -188,9 +193,11 @@ class InteractiveContentCard extends StatefulWidget {
 
 class _InteractiveContentCardState extends State<InteractiveContentCard>
     with TickerProviderStateMixin {
-  late bool _isLiked;
-  late int _likeCount;
-  late int _shareCount;
+  bool _isLiked = false;
+  int _likeCount = 0;
+  int _shareCount = 0;
+  int _viewCount = 0;
+  bool _isLoadingCounts = false;
 
   late AnimationController _likeAnimController;
   late Animation<double> _likeScaleAnim;
@@ -201,14 +208,32 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
   @override
   void initState() {
     super.initState();
-    _initializeState();
     _setupAnimations();
+    _loadInteractionCounts();
   }
 
-  void _initializeState() {
-    _isLiked = widget.data.isLiked;
-    _likeCount = widget.data.likeCount;
-    _shareCount = widget.data.shareCount;
+  Future<void> _loadInteractionCounts() async {
+    if (widget.onLoadInteractionCounts == null) return;
+
+    setState(() => _isLoadingCounts = true);
+
+    try {
+      final counts = await widget.onLoadInteractionCounts!(widget.data.id);
+      if (mounted) {
+        setState(() {
+          _likeCount = counts.likes;
+          _shareCount = counts.shares;
+          _viewCount = counts.views;
+          _isLiked = true ?? false;
+        });
+      }
+    } catch (e) {
+      StoyCoLogger.error('Error loading interaction counts: $e');
+    } finally {
+      if (mounted) {
+        setState(() => _isLoadingCounts = false);
+      }
+    }
   }
 
   void _setupAnimations() {
@@ -229,9 +254,11 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
   @override
   void didUpdateWidget(InteractiveContentCard oldWidget) {
     super.didUpdateWidget(oldWidget);
+    // Reload counts if content changed
     if (oldWidget.data.id != widget.data.id) {
-      _initializeState();
+      _loadInteractionCounts();
     }
+
   }
 
   @override
@@ -492,7 +519,7 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
           ),
       ],
     );
-}
+  }
 
 // Private widget for social buttons
 class _SocialButton extends StatelessWidget {
@@ -505,6 +532,7 @@ class _SocialButton extends StatelessWidget {
     required this.isProcessing,
     required this.config,
     this.animation,
+    this.isReadOnly = false,
   }) : assert(icon != null || svgAsset != null, 'Either icon or svgAsset must be provided');
   final IconData? icon;
   final String? svgAsset;
@@ -514,6 +542,7 @@ class _SocialButton extends StatelessWidget {
   final bool isProcessing;
   final Animation<double>? animation;
   final InteractiveCardConfig config;
+  final bool isReadOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -547,7 +576,7 @@ class _SocialButton extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: isProcessing ? null : onPressed,
+        onTap: isReadOnly ? null : (isProcessing ? null : onPressed),
         borderRadius: BorderRadius.circular(8),
         child: Padding(
           padding: const EdgeInsets.all(4),
