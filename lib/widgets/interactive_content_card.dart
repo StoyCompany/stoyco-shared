@@ -58,7 +58,7 @@ class InteractiveCardConfig {
 
   const InteractiveCardConfig({
     this.height = 144.0,
-    this.borderRadius = 20.0,
+    this.borderRadius = 5.0,
     this.spacing = 16.0,
     this.iconSize = 20.0,
     this.titleFontSize = 16.0,
@@ -417,6 +417,7 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
                 imageUrl: widget.data.mainImage,
                 width: size,
                 height: size,
+                borderRadius: widget.config.borderRadius,
               ),
             ),
             // Overlay icon for announcements only, without affecting image size
