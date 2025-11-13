@@ -38,6 +38,9 @@ class CoverImageWithFade extends StatelessWidget {
   ///
   /// The [enableFade] parameter controls whether the fade gradient effect is applied.
   /// By default, it is set to true.
+  ///
+  /// The [borderRadius] parameter controls the corner radius of the image.
+  /// If null, defaults to 20 with responsive scaling.
   const CoverImageWithFade({
     super.key,
     required this.imageUrl,
@@ -45,6 +48,7 @@ class CoverImageWithFade extends StatelessWidget {
     this.width,
     this.height,
     this.enableFade = false,
+    this.borderRadius,
   });
 
   /// The URL of the image to be displayed.
@@ -66,6 +70,9 @@ class CoverImageWithFade extends StatelessWidget {
   /// If false, no gradient overlay will be applied to the image.
   final bool enableFade;
 
+  /// Optional border radius for the image corners.
+  /// If null, defaults to 20 with responsive scaling (16 on phone, 18 on tablet, 24 on desktop).
+  final double? borderRadius;
   @override
   Widget build(BuildContext context) => LayoutBuilder(
         builder: (context, constraints) {
@@ -82,13 +89,15 @@ class CoverImageWithFade extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(
-                    StoycoScreenSize.radius(
-                      context,
-                      20,
-                      phone: 16,
-                      tablet: 18,
-                      desktopLarge: 24,
-                    ),
+                    borderRadius != null
+                        ? StoycoScreenSize.radius(context, borderRadius!)
+                        : StoycoScreenSize.radius(
+                            context,
+                            20,
+                            phone: 16,
+                            tablet: 18,
+                            desktopLarge: 24,
+                          ),
                   ),
                   child: SizedBox(
                     width: calculatedWidth,

@@ -10,3 +10,5 @@ export 'package:stoyco_shared/notification/model/model.dart';
 export 'package:stoyco_shared/external_packages/pin_code_fields/pin_code_fields.dart';
 export 'package:stoyco_shared/notification/notification.dart';
 export 'package:stoyco_shared/partner/partner.dart';
+export 'package:stoyco_shared/news/models/feed_content_model.dart';
+export 'package:stoyco_shared/widgets/interactive_content_card.dart';
