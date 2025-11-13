@@ -1,3 +1,7 @@
+## 21.2.6
+
+- **fix(env):** update URL endpoints for announcement service in StoycoEnvironmentExtension
+
 ## 21.2.5
 
 - **fix(video):** update query parameters to use 'pageSize' and 'pageNumber' in getVideosWithFilter
