@@ -1,3 +1,7 @@
+## 21.3.0
+
+- **feat(notification):** Add InteractiveContent Data for announcements,news,feedtype3
+
 ## 21.2.6
 
 - **fix(env):** update URL endpoints for announcement service in StoycoEnvironmentExtension
