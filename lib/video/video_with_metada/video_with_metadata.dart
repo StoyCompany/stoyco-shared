@@ -22,7 +22,6 @@ class VideoWithMetadata {
     this.active,
     this.createAt,
     this.streamingData,
-    this.isSubscriberOnly,
     this.isFeaturedContent,
     this.partnerName,
     this.shared,
@@ -30,7 +29,10 @@ class VideoWithMetadata {
     this.likeThisVideo,
     this.views,
     this.likes,
-  });
+    this.isSubscriberOnly,
+    bool? hasAccess,
+  }) : hasAccess = hasAccess ?? !(isSubscriberOnly ?? false);
+
 
   final VideoMetadata? videoMetadata;
   final String? id;
@@ -43,7 +45,6 @@ class VideoWithMetadata {
   final bool? active;
   final DateTime? createAt;
   final StreamingData? streamingData;
-  final bool? isSubscriberOnly;
   final bool? isFeaturedContent;
   final String? partnerName;
   final int? shared;
@@ -51,10 +52,12 @@ class VideoWithMetadata {
   final bool? likeThisVideo;
   final int? views;
   final int? likes;
+  final bool? isSubscriberOnly;
+  final bool hasAccess;
 
   @override
   String toString() =>
-      'VideoWithMetadata(videoMetadata: $videoMetadata, id: $id, videoUrl: $videoUrl, appUrl: $appUrl, name: $name, description: $description, partnerId: $partnerId, order: $order, active: $active, createAt: $createAt, streamingData: $streamingData, isSubscriberOnly: $isSubscriberOnly, isFeaturedContent: $isFeaturedContent, partnerName: $partnerName, shared: $shared, followingCO: $followingCO, likeThisVideo: $likeThisVideo, views: $views, likes: $likes)';
+      'VideoWithMetadata(videoMetadata: $videoMetadata, id: $id, videoUrl: $videoUrl, appUrl: $appUrl, name: $name, description: $description, partnerId: $partnerId, order: $order, active: $active, createAt: $createAt, partnerId: $partnerId, isSubscriberOnly: $isSubscriberOnly, hasAccess: $hasAccess, streamingData: $streamingData, isSubscriberOnly: $isSubscriberOnly, isFeaturedContent: $isFeaturedContent, partnerName: $partnerName, shared: $shared, followingCO: $followingCO, likeThisVideo: $likeThisVideo, views: $views, likes: $likes)';
 
   Map<String, dynamic> toJson() => _$VideoWithMetadataToJson(this);
 
@@ -70,7 +73,6 @@ class VideoWithMetadata {
     bool? active,
     DateTime? createAt,
     StreamingData? streamingData,
-    bool? isSubscriberOnly,
     bool? isFeaturedContent,
     String? partnerName,
     int? shared,
@@ -78,6 +80,8 @@ class VideoWithMetadata {
     bool? likeThisVideo,
     int? views,
     int? likes,
+    bool? isSubscriberOnly,
+    bool? hasAccess,
   }) =>
       VideoWithMetadata(
         videoMetadata: videoMetadata ?? this.videoMetadata,
@@ -91,7 +95,6 @@ class VideoWithMetadata {
         active: active ?? this.active,
         createAt: createAt ?? this.createAt,
         streamingData: streamingData ?? this.streamingData,
-        isSubscriberOnly: isSubscriberOnly ?? this.isSubscriberOnly,
         isFeaturedContent: isFeaturedContent ?? this.isFeaturedContent,
         partnerName: partnerName ?? this.partnerName,
         shared: shared ?? this.shared,
@@ -99,6 +102,8 @@ class VideoWithMetadata {
         likeThisVideo: likeThisVideo ?? this.likeThisVideo,
         views: views ?? this.views,
         likes: likes ?? this.likes,
+        isSubscriberOnly: isSubscriberOnly ?? this.isSubscriberOnly,
+        hasAccess: hasAccess ?? this.hasAccess,
       );
 
   @override
@@ -121,6 +126,9 @@ class VideoWithMetadata {
       order.hashCode ^
       active.hashCode ^
       createAt.hashCode ^
+      partnerId.hashCode ^
+      isSubscriberOnly.hashCode ^
+      hasAccess.hashCode ^
       streamingData.hashCode ^
       isSubscriberOnly.hashCode ^
       isFeaturedContent.hashCode ^

@@ -17,10 +17,14 @@ class VideoPlayerDataSourceV2 {
   final Dio _dio = Dio();
 
   /// Gets the headers for authenticated requests, including the Authorization header
-  Map<String, String> _getHeaders() => {
-        'Authorization': 'Bearer $userToken',
-        'Content-Type': 'application/json',
-      };
+  Map<String, String> _getHeaders() {
+    final headers = <String, String>{};
+    if (userToken.isNotEmpty) {
+      headers['Authorization'] = 'Bearer $userToken';
+    }
+    headers['Content-Type'] = 'application/json';
+    return headers;
+  }
 
   late String baseUrl;
 
@@ -136,7 +140,6 @@ class VideoPlayerDataSourceV2 {
     final String uri = _buildUri('short-video/list');
     return _dio.get(
       uri,
-      cancelToken: cancelToken,
       options: Options(headers: _getHeaders()),
     );
   }

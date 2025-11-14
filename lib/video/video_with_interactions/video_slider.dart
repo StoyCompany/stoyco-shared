@@ -104,6 +104,7 @@ class VideoSlider extends StatefulWidget {
     required this.getVideosWithMetadata,
     required this.getUserVideoInteractionData,
     required this.env,
+    required this.onTapElementExclusive,
   });
 
   /// Whether to show interaction buttons (like, dislike, share).
@@ -173,6 +174,9 @@ class VideoSlider extends StatefulWidget {
 
   /// The current environment.
   final StoycoEnvironment env;
+
+  /// Callback triggered when an exclusive element is tapped.
+  final ValueChanged<VideoWithMetadata> onTapElementExclusive;
 
   @override
   State<VideoSlider> createState() => _VideoSliderState();
@@ -441,8 +445,7 @@ class _VideoSliderState extends State<VideoSlider> {
   @override
   Widget build(BuildContext context) {
     final sliderWidth = widget.width ?? StoycoScreenSize.screenWidth(context);
-    final sliderHeight =
-        widget.height ?? sliderWidth ;
+    final sliderHeight = widget.height ?? sliderWidth ;
 
           return ValueListenableBuilder<bool>(
             valueListenable: isLoading,
@@ -504,18 +507,12 @@ class _VideoSliderState extends State<VideoSlider> {
                             builder: (context, isMutedValue, _) =>
                                 ParallaxVideoCard(
                               videoInfo: videosList[index],
-                              thumbnail: videosList[index].video.id != null
-                                  ? thumbnails[videosList[index].video.id]
-                                  : null,
+                              thumbnail: videosList[index].video.id != null ? thumbnails[videosList[index].video.id] : null,
                               play: currentIndexValue == index,
                               showInteractions: widget.showInteractions,
-                              onLike: () =>
-                                  _handleLike(videosList[index].video),
-                              onDislike: () =>
-                                  _handleDislike(videosList[index].video),
-                              onShare: widget.onShare != null
-                                  ? () => _handleShare(videosList[index].video)
-                                  : null,
+                              onLike: () => _handleLike(videosList[index].video),
+                              onDislike: () => _handleDislike(videosList[index].video),
+                              onShare: widget.onShare != null ? () => _handleShare(videosList[index].video) : null,
                               nextVideo: () {
                                 widget.nextVideo?.call(
                                     isMuted.value, videosList[index].video);
@@ -543,6 +540,7 @@ class _VideoSliderState extends State<VideoSlider> {
                               isMuted: isMutedValue,
                               isLooping: videosList.length == 1,
                               env: widget.env,
+                              onTapElementExclusive: widget.onTapElementExclusive,
                             ),
                           ),
                         ),
