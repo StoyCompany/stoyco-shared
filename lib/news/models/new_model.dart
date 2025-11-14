@@ -24,6 +24,8 @@ class NewModel {
     this.createdBy,
     this.createdAt,
     this.communityOwnerId,
+    this.hasAccess,
+    this.accessContent,
   });
 
   factory NewModel.fromJson(Map<String, dynamic> json) =>
@@ -47,10 +49,12 @@ class NewModel {
   final String? createdBy;
   final String? createdAt;
   final String? communityOwnerId;
+  final bool? hasAccess;
+  final Map<String, dynamic>? accessContent;
 
   @override
   String toString() =>
-      'NewModel(id: $id, title: $title, mainImage: $mainImage, images: $images, content: $content, shortDescription: $shortDescription, isDraft: $isDraft, isPublished: $isPublished, isDeleted: $isDeleted, viewCount: $viewCount, scheduledPublishDate: $scheduledPublishDate, draftCreationDate: $draftCreationDate, lastUpdatedDate: $lastUpdatedDate, deletionDate: $deletionDate, cronJobId: $cronJobId, createdBy: $createdBy, createdAt: $createdAt, communityOwnerId: $communityOwnerId)';
+      'NewModel(id: $id, title: $title, mainImage: $mainImage, images: $images, content: $content, shortDescription: $shortDescription, isDraft: $isDraft, isPublished: $isPublished, isDeleted: $isDeleted, viewCount: $viewCount, scheduledPublishDate: $scheduledPublishDate, draftCreationDate: $draftCreationDate, lastUpdatedDate: $lastUpdatedDate, deletionDate: $deletionDate, cronJobId: $cronJobId, createdBy: $createdBy, createdAt: $createdAt, communityOwnerId: $communityOwnerId, hasAccess: $hasAccess, accessContent: $accessContent)';
 
   Map<String, dynamic> toJson() => _$NewModelToJson(this);
 
@@ -72,6 +76,8 @@ class NewModel {
     dynamic cronJobId,
     String? createdBy,
     String? createdAt,
+    bool? hasAccess,
+    Map<String, dynamic>? accessContent,
   }) =>
       NewModel(
         id: id ?? this.id,
@@ -91,6 +97,8 @@ class NewModel {
         cronJobId: cronJobId ?? this.cronJobId,
         createdBy: createdBy ?? this.createdBy,
         createdAt: createdAt ?? this.createdAt,
+        hasAccess: hasAccess ?? this.hasAccess,
+        accessContent: accessContent ?? this.accessContent,
       );
 
   @override
@@ -119,5 +127,7 @@ class NewModel {
       deletionDate.hashCode ^
       cronJobId.hashCode ^
       createdBy.hashCode ^
-      createdAt.hashCode;
+      createdAt.hashCode ^
+      hasAccess.hashCode ^
+      accessContent.hashCode;
 }

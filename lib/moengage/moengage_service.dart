@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:moengage_geofence/moengage_geofence.dart';
 import 'package:stoyco_shared/moengage/moengage_mobile_platform.dart';
@@ -23,9 +22,31 @@ class MoEngageService {
     return _instance!;
   }
 
+  /// Initializes the MoEngage service with the provided configuration.
+  ///
+  /// The [appId] is required to identify the MoEngage application.
+  /// The [pushToken] is optional and only needed for push notifications.
+  /// For web applications without push notifications, you can omit this parameter.
+  /// An optional [platform] implementation can be injected for testing purposes.
+  ///
+  /// Returns the initialized [MoEngageService] instance.
+  ///
+  /// Example:
+  /// ```dart
+  /// // With push token (mobile or web with FCM)
+  /// final service = MoEngageService.init(
+  ///   appId: 'your-app-id',
+  ///   pushToken: 'your-push-token',
+  /// );
+  /// 
+  /// // Without push token (web without notifications)
+  /// final service = MoEngageService.init(
+  ///   appId: 'your-app-id',
+  /// );
+  /// ```
   static MoEngageService init({
     required String appId,
-    required String pushToken,
+    String? pushToken,
     MoEngagePlatform? platform,
   }) {
     final service = _instance ?? MoEngageService._internal(platform);

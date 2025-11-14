@@ -1,3 +1,8 @@
+## 21.2.6
+
+- Updated news item models and services param requirements
+- Updated moengage service param requirements, making the pushToken optional in order to use it in web 
+
 ## 21.2.5
 
 - **fix(video):** update query parameters to use 'pageSize' and 'pageNumber' in getVideosWithFilter

@@ -33,6 +33,8 @@ VideoWithMetadata _$VideoWithMetadataFromJson(Map<String, dynamic> json) =>
       shared: (json['shared'] as num?)?.toInt(),
       followingCO: json['followingCO'] as bool?,
       likeThisVideo: json['likeThisVideo'] as bool?,
+      views: (json['views'] as num?)?.toInt(),
+      likes: (json['likes'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$VideoWithMetadataToJson(VideoWithMetadata instance) =>
@@ -54,4 +56,6 @@ Map<String, dynamic> _$VideoWithMetadataToJson(VideoWithMetadata instance) =>
       'shared': instance.shared,
       'followingCO': instance.followingCO,
       'likeThisVideo': instance.likeThisVideo,
+      'views': instance.views,
+      'likes': instance.likes,
     };
