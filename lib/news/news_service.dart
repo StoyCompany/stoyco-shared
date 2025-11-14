@@ -51,15 +51,20 @@ class NewsService {
   ///
   /// * [pageNumber] is the page index to fetch.
   /// * [pageSize] is the number of news items to return in each page.
+  /// * [communityOwnerId] is an optional filter to get news by community owner.
   ///
   /// Returns:
   /// - [Either] containing either a [Failure] or a [PageResult] of [NewModel].
   Future<Either<Failure, PageResult<NewModel>>> getNewsPaginated(
     int pageNumber,
-    int pageSize,
+    int pageSize, {
     String? communityOwnerId,
-  ) =>
-      _newsRepository!.getNewsPaginated(pageNumber, pageSize, communityOwnerId);
+  }) =>
+      _newsRepository!.getNewsPaginated(
+        pageNumber,
+        pageSize,
+        communityOwnerId: communityOwnerId,
+      );
 
   /// Retrieves a paginated list of news articles based on a search term.
   ///

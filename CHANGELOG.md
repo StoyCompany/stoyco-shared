@@ -1,3 +1,8 @@
+## 21.3.1
+
+- **feat(news):** Updated news item models and services param requirements
+- **fix(moEngage)** Updated moengage service param requirements, making the pushToken optional in order to use it in web 
+
 ## 21.3.0
 
 - **feat(notification):** Add InteractiveContent Data for announcements,news,feedtype3
