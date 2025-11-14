@@ -1,3 +1,25 @@
+## 21.3.6
+### Added
+- **feat (VideoExclusiveBlur widget):** Introduced a new molecule widget for exclusive video content overlays, including blur, lock/tag indicator, and customizable UI for premium/locked content.
+- **fix (NewModel fields):** Added `communityOwnerId`, `isSubscriberOnly`, and `hasAccess` fields to `NewModel`, with updated JSON serialization.
+- **fix (AnnouncementModel fields):** Added `communityOwnerId`, `isSubscriberOnly`, and `hasAccess` fields to `AnnouncementModel`.
+
+## 21.3.5
+
+**-feat(announcements):** update design Fo rAnnouncements
+## 21.3.4
+
+**-fix(moengage):** update import statement and clean up comments in MoEngageService
+
+## 21.3.3
+
+- **feat(video):** add partnerId parameter to getVideosWithFilter and getFeaturedVideos methods for filtering videos by specific partner
+
+## 21.3.1
+
+- **feat(news):** Updated news item models and services param requirements
+- **fix(moEngage)** Updated moengage service param requirements, making the pushToken optional in order to use it in web
+
 ## 21.3.0
 
 - **feat(notification):** Add InteractiveContent Data for announcements,news,feedtype3

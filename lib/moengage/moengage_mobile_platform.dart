@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:moengage_geofence/moengage_geofence.dart';
 import 'package:stoyco_shared/moengage/moengage_platform.dart';
@@ -13,7 +12,7 @@ class MoEngageMobilePlatform implements MoEngagePlatform {
           AnalyticsConfig(shouldTrackUserAttributeBooleanAsNumber: true),);
 
   @override
-  void initialize({required String appId,required String pushToken}) {
+  void initialize({required String appId, String? pushToken}) {
     if (appId.isEmpty) {
       StoyCoLogger.info('MoEngage Mobile: App ID es crucial para la inicialización y no fue proporcionado.');
     }
@@ -21,7 +20,13 @@ class MoEngageMobilePlatform implements MoEngagePlatform {
     _moengagePlugin = MoEngageFlutter(appId, moEInitConfig: _initConfig);
     _moEngageGeofence = MoEngageGeofence(appId);
     _moengagePlugin.initialise();
-    _moengagePlugin.passFCMPushToken(pushToken);
+    
+    // Only pass the push token if provided
+    if (pushToken != null && pushToken.isNotEmpty) {
+      _moengagePlugin.passFCMPushToken(pushToken);
+      StoyCoLogger.info('MoEngage Mobile: Push token registered for AppID: $appId');
+    }
+    
     _moengagePlugin.registerForPushNotification();
     _setupInAppCallbacks();
   }

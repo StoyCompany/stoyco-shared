@@ -167,6 +167,7 @@ class VideoPlayerRepositoryV2 {
     int pageSize = 20,
     String? userId,
     String? partnerProfile,
+    String? partnerId,
   }) async =>
       _handleApiCallWithItems(
         () => _dataSource.getVideosWithFilter(
@@ -175,6 +176,7 @@ class VideoPlayerRepositoryV2 {
           pageSize: pageSize,
           userId: userId,
           partnerProfile: partnerProfile,
+          partnerId: partnerId,
         ),
         (data) => (data as List).map((item) {
           final Map<String, dynamic> m = Map<String, dynamic>.from(item as Map);
@@ -228,6 +230,7 @@ class VideoPlayerRepositoryV2 {
     int pageSize = 10,
     int page = 1,
     String? partnerProfile,
+    String? partnerId,
   }) async =>
       _handleApiCallWithItems(
         () => _dataSource.getFeaturedVideos(
@@ -235,6 +238,7 @@ class VideoPlayerRepositoryV2 {
           pageSize: pageSize,
           page: page,
           partnerProfile: partnerProfile,
+          partnerId: partnerId,
         ),
         (data) => (data as List).map((item) {
           final Map<String, dynamic> m = Map<String, dynamic>.from(item as Map);

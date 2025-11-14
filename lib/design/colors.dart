@@ -32,4 +32,7 @@ class StoycoColors {
   static Color shadowColor = ColorUtils.fromHex('494949');
 
   static Color whiteLavander = ColorUtils.fromHex('F7F6FA');
+  static Color lightViolet = ColorUtils.fromHex('6C61FF');
+
+  static Color darkBackground = ColorUtils.fromHex('0F151A');
 }

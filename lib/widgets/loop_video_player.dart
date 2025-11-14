@@ -19,9 +19,9 @@ class _LoopVideoPlayerState extends State<LoopVideoPlayer> {
     _controller = VideoPlayerController.networkUrl(Uri.parse(widget.url));
 
     _controller.initialize().then((_) {
-      _controller.setLooping(true); // 🔁 Repetir siempre
-      _controller.setVolume(0); // 🔇 Opcional: sin sonido
-      _controller.play(); // ▶ Reproducir automáticamente
+      _controller.setLooping(true);
+      _controller.setVolume(0);
+      _controller.play();
       setState(() {});
     });
   }

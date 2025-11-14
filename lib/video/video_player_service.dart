@@ -309,6 +309,7 @@ class VideoPlayerService {
   /// [pageSize] The number of items per page (default: 20)
   /// [userId] Optional user ID for personalized content
   /// [partnerProfile] Optional partner profile filter (Music, Sport, Brand)
+  /// [partnerId] Optional partner ID to filter videos by specific partner
   ///
   /// Returns an [Either] containing a [Failure] or a list of [VideoWithMetadata].
   Future<Either<Failure, List<VideoWithMetadata>>> getVideosWithFilter({
@@ -317,6 +318,7 @@ class VideoPlayerService {
     int pageSize = 20,
     String? userId,
     String? partnerProfile,
+    String? partnerId,
   }) async {
     try {
       return await _repository!.getVideosWithFilter(
@@ -325,6 +327,7 @@ class VideoPlayerService {
         pageSize: pageSize,
         userId: userId,
         partnerProfile: partnerProfile,
+        partnerId: partnerId,
       );
     } catch (e) {
       StoyCoLogger.error('Error: $e');
@@ -338,11 +341,13 @@ class VideoPlayerService {
   /// [pageSize] Number of items to fetch (default: 10).
   /// [page] Page number for pagination (default: 1).
   /// [partnerProfile] Optional partner profile filter (Music, Sport, Brand).
+  /// [partnerId] Optional partner ID to filter videos by specific partner.
   Future<Either<Failure, List<VideoWithMetadata>>> getFeaturedVideos({
     String? userId,
     int pageSize = 10,
     int page = 1,
     String? partnerProfile,
+    String? partnerId,
   }) async {
     try {
       return await _repository!.getFeaturedVideos(
@@ -350,6 +355,7 @@ class VideoPlayerService {
         pageSize: pageSize,
         page: page,
         partnerProfile: partnerProfile,
+        partnerId: partnerId,
       );
     } catch (e) {
       StoyCoLogger.error('Error: $e');

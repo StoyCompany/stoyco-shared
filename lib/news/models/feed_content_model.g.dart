@@ -70,10 +70,14 @@ FeedContentItem _$FeedContentItemFromJson(Map<String, dynamic> json) =>
       communityScore: (json['communityScore'] as num?)?.toInt(),
       sortTiebreakerId: json['sortTiebreakerId'] as String,
       isFeaturedContent: json['isFeaturedContent'] as bool,
+      customData: json['customData'] as Map<String, dynamic>?,
+      state: json['state'] as String?,
     );
 
 Map<String, dynamic> _$FeedContentItemToJson(FeedContentItem instance) =>
     <String, dynamic>{
+      'customData': instance.customData,
+      'state': instance.state,
       'contentId': instance.contentId,
       'partnerId': instance.partnerId,
       'partnerName': instance.partnerName,

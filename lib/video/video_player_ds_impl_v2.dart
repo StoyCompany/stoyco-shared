@@ -17,10 +17,14 @@ class VideoPlayerDataSourceV2 {
   final Dio _dio = Dio();
 
   /// Gets the headers for authenticated requests, including the Authorization header
-  Map<String, String> _getHeaders() => {
-        'Authorization': 'Bearer $userToken',
-        'Content-Type': 'application/json',
-      };
+  Map<String, String> _getHeaders() {
+    final headers = <String, String>{};
+    if (userToken.isNotEmpty) {
+      headers['Authorization'] = 'Bearer $userToken';
+    }
+    headers['Content-Type'] = 'application/json';
+    return headers;
+  }
 
   late String baseUrl;
 
@@ -136,7 +140,6 @@ class VideoPlayerDataSourceV2 {
     final String uri = _buildUri('short-video/list');
     return _dio.get(
       uri,
-      cancelToken: cancelToken,
       options: Options(headers: _getHeaders()),
     );
   }
@@ -149,6 +152,7 @@ class VideoPlayerDataSourceV2 {
     int pageSize = 20,
     String? userId,
     String? partnerProfile,
+    String? partnerId,
   }) async {
     // The feed endpoint expects userId and limit (pageSize). Keep filterMode if provided.
     final queryParams = <String, dynamic>{
@@ -166,6 +170,10 @@ class VideoPlayerDataSourceV2 {
 
     if (partnerProfile != null && partnerProfile.isNotEmpty) {
       queryParams['partnerProfile'] = partnerProfile;
+    }
+
+    if (partnerId != null && partnerId.isNotEmpty) {
+      queryParams['partnerId'] = partnerId;
     }
 
     // Use feed endpoint (example: /api/stoyco/feed/user/videos)
@@ -189,6 +197,7 @@ class VideoPlayerDataSourceV2 {
     int pageSize = 10,
     int page = 1,
     String? partnerProfile,
+    String? partnerId,
   }) async {
     final queryParams = <String, dynamic>{
       'pageSize': pageSize.toString(),
@@ -201,6 +210,10 @@ class VideoPlayerDataSourceV2 {
 
     if (partnerProfile != null && partnerProfile.isNotEmpty) {
       queryParams['partnerProfile'] = partnerProfile;
+    }
+
+    if (partnerId != null && partnerId.isNotEmpty) {
+      queryParams['partnerId'] = partnerId;
     }
 
     final base = environment.baseUrl();
