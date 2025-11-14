@@ -76,8 +76,6 @@ FeedContentItem _$FeedContentItemFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$FeedContentItemToJson(FeedContentItem instance) =>
     <String, dynamic>{
-      'customData': instance.customData,
-      'state': instance.state,
       'contentId': instance.contentId,
       'partnerId': instance.partnerId,
       'partnerName': instance.partnerName,
@@ -104,4 +102,6 @@ Map<String, dynamic> _$FeedContentItemToJson(FeedContentItem instance) =>
       'communityScore': instance.communityScore,
       'sortTiebreakerId': instance.sortTiebreakerId,
       'isFeaturedContent': instance.isFeaturedContent,
+      'customData': instance.customData,
+      'state': instance.state,
     };

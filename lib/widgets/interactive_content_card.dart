@@ -8,6 +8,32 @@ import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/design/skeleton_card.dart';
 import 'package:stoyco_shared/stoyco_shared.dart';
 
+/// Enum representing different types of feed content
+enum FeedType {
+  /// News content
+  news('news'),
+
+  /// Announcement/convocatoria content
+  announcement('announcement'),
+
+  /// Unknown or unspecified content type
+  unknown('unknown');
+
+  const FeedType(this.value);
+
+  final String value;
+
+  /// Creates a FeedType from a string value
+  static FeedType fromString(String? value) {
+    if (value == null) return FeedType.unknown;
+
+    return FeedType.values.firstWhere(
+      (type) => type.value == value,
+      orElse: () => FeedType.unknown,
+    );
+  }
+}
+
 /// Abstract interface for content that can be displayed in InteractiveContentCard
 abstract class InteractiveContent {
   String get id;
@@ -59,6 +85,9 @@ class FeedContentAdapter implements InteractiveContent {
 
   @override
   String? get state => item.state;
+
+  /// Gets the feed type as an enum (e.g., FeedType.news, FeedType.announcement)
+  FeedType get feedType => FeedType.fromString(item.feedType);
 }
 
 /// Configuration class for InteractiveContentCard appearance
@@ -435,8 +464,8 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
                 borderRadius: widget.config.borderRadius,
               ),
             ),
-            // Overlay icon for announcements only, without affecting image size
-            if (widget.data.endDate != null)
+            if (widget.data is FeedContentAdapter &&
+                (widget.data as FeedContentAdapter).feedType == FeedType.announcement)
               Positioned(
                 top: StoycoScreenSize.height(context, 5),
                 left: StoycoScreenSize.width(context, 5),
