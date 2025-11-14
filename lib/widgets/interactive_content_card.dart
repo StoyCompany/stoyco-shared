@@ -15,6 +15,8 @@ abstract class InteractiveContent {
   String get mainImage;
   DateTime? get publishDate;
   DateTime? get endDate;
+  Map<String, dynamic>? get customData;
+  String? get state;
 }
 
 
@@ -51,6 +53,12 @@ class FeedContentAdapter implements InteractiveContent {
       return null;
     }
   }
+
+  @override
+  Map<String, dynamic>? get customData => item.customData;
+
+  @override
+  String? get state => item.state;
 }
 
 /// Configuration class for InteractiveContentCard appearance
@@ -289,27 +297,34 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
   }
 
   String _formatRelativeTime(DateTime date) {
-    if (widget.customDateFormatter != null) {
-      return widget.customDateFormatter!(date);
-    }
-
     final now = DateTime.now();
     final diff = now.difference(date);
 
-    if (diff.inMinutes < 1) return 'ahora';
-    if (diff.inMinutes < 60) return '${diff.inMinutes}m';
-    if (diff.inHours < 24) return '${diff.inHours}h';
-    if (diff.inDays < 7) return '${diff.inDays}d';
-    if (diff.inDays < 30) {
+    String timeString;
+    if (diff.inMinutes < 1) {
+      timeString = 'ahora';
+    } else if (diff.inMinutes < 60) {
+      timeString = '${diff.inMinutes}m';
+    } else if (diff.inHours < 24) {
+      timeString = '${diff.inHours}h';
+    } else if (diff.inDays < 7) {
+      timeString = '${diff.inDays}d';
+    } else if (diff.inDays < 30) {
       final weeks = (diff.inDays / 7).floor();
-      return weeks == 1 ? '1 semana' : '$weeks semanas';
+      timeString = weeks == 1 ? '1 semana' : '$weeks semanas';
+    } else {
+      timeString = '${date.day.toString().padLeft(2, '0')}/'
+          '${date.month.toString().padLeft(2, '0')}/'
+          '${date.year}';
     }
-    
-    // After 30 days, show DD/MM/YYYY format
-    return '${date.day.toString().padLeft(2, '0')}/'
-           '${date.month.toString().padLeft(2, '0')}/'
-           '${date.year}';
+
+    // Only for announcements/convocatorias with state 'closed'
+    if (widget.data.state == 'closed') {
+      return 'Terminado hace $timeString';
+    }
+    return timeString;
   }
+
 
   Future<void> _handleLike() async {
     if (!widget.enableLike || _isProcessingLike) return;
@@ -423,21 +438,21 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
             // Overlay icon for announcements only, without affecting image size
             if (widget.data.endDate != null)
               Positioned(
-                top: StoycoScreenSize.height(context, 6),
-                left: StoycoScreenSize.width(context, 6),
+                top: StoycoScreenSize.height(context, 5),
+                left: StoycoScreenSize.width(context, 5),
                 child: Container(
                   padding: StoycoScreenSize.symmetric(
                     context,
-                    horizontal: 32, // long horizontal padding for a pill shape
-                    vertical: 8,    // small vertical padding for a slim badge
-                    horizontalPhone: 24,
-                    horizontalTablet: 28,
+                    horizontal: 14,
+                    vertical: 3,
+                    horizontalPhone: 12,
+                    horizontalTablet: 12,
                   ),
                   decoration: BoxDecoration(
-                    color: true
-                        ? StoycoColors.royalIndigo.withValues(alpha: 0.7)
+                    color: (widget.data.customData?['isPublished'] as bool? ?? false)
+                        ? StoycoColors.lightViolet
                         : StoycoColors.hint.withValues(alpha: 0.7),
-                    borderRadius: BorderRadius.circular(32), // large for rounded ends
+                    borderRadius: BorderRadius.circular(30),
                     boxShadow: [
                       BoxShadow(
                         color: StoycoColors.shadowColor.withValues(alpha: 0.2),
@@ -449,8 +464,8 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
                   alignment: Alignment.center,
                   child: SvgPicture.asset(
                     'packages/stoyco_shared/lib/assets/icons/megaphone_icon.svg',
-                    width: StoycoScreenSize.width(context, 18), // icon size 18
-                    height: StoycoScreenSize.width(context, 18),
+                    width: StoycoScreenSize.width(context, 12), // icon size 18
+                    height: StoycoScreenSize.width(context, 12),
                     colorFilter: const ColorFilter.mode(
                       Colors.white,
                       BlendMode.srcIn,

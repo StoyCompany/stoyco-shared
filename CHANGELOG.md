@@ -1,3 +1,6 @@
+## 21.3.5
+
+**-feat(announcements):** update design Fo rAnnouncements
 ## 21.3.4
 
 **-fix(moengage):** update import statement and clean up comments in MoEngageService
