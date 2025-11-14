@@ -26,8 +26,8 @@ NewModel _$NewModelFromJson(Map<String, dynamic> json) => NewModel(
       createdBy: json['createdBy'] as String?,
       createdAt: json['createdAt'] as String?,
       communityOwnerId: json['communityOwnerId'] as String?,
-      isSubscriberOnly: json['isSubscriberOnly'] as bool?,
       hasAccess: json['hasAccess'] as bool?,
+      accessContent: json['accessContent'] as Map<String, dynamic>?,
     );
 
 Map<String, dynamic> _$NewModelToJson(NewModel instance) => <String, dynamic>{
@@ -49,6 +49,6 @@ Map<String, dynamic> _$NewModelToJson(NewModel instance) => <String, dynamic>{
       'createdBy': instance.createdBy,
       'createdAt': instance.createdAt,
       'communityOwnerId': instance.communityOwnerId,
-      'isSubscriberOnly': instance.isSubscriberOnly,
       'hasAccess': instance.hasAccess,
+      'accessContent': instance.accessContent,
     };

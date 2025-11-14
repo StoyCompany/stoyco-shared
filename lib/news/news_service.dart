@@ -5,6 +5,7 @@ import 'package:stoyco_shared/models/page_result/page_result.dart';
 import 'package:stoyco_shared/news/models/new_model.dart';
 import 'package:stoyco_shared/news/news_data_source.dart';
 import 'package:stoyco_shared/news/news_repository.dart';
+import 'package:stoyco_shared/widgets/interactive_content_card.dart';
 
 /// A service that handles all operations related to news, including
 /// fetching paginated news, searching for news, retrieving a specific
@@ -50,15 +51,20 @@ class NewsService {
   ///
   /// * [pageNumber] is the page index to fetch.
   /// * [pageSize] is the number of news items to return in each page.
+  /// * [communityOwnerId] is an optional filter to get news by community owner.
   ///
   /// Returns:
   /// - [Either] containing either a [Failure] or a [PageResult] of [NewModel].
   Future<Either<Failure, PageResult<NewModel>>> getNewsPaginated(
     int pageNumber,
-    int pageSize,
+    int pageSize, {
     String? communityOwnerId,
-  ) =>
-      _newsRepository!.getNewsPaginated(pageNumber, pageSize, communityOwnerId);
+  }) =>
+      _newsRepository!.getNewsPaginated(
+        pageNumber,
+        pageSize,
+        communityOwnerId: communityOwnerId,
+      );
 
   /// Retrieves a paginated list of news articles based on a search term.
   ///
@@ -100,4 +106,56 @@ class NewsService {
   /// - [Either] containing either a [Failure] or [void] if the operation is successful.
   Future<Either<Failure, void>> markAsViewed(String id) =>
       _newsRepository!.markAsViewed(id);
+
+  /// Retrieves a paginated list of feed content items.
+  ///
+  /// This method returns a [PageResult] containing [FeedContentAdapter] objects,
+  /// wrapped in an [Either] to handle possible [Failure] errors.
+  ///
+  /// * [pageNumber] is the page index to fetch.
+  /// * [pageSize] is the number of feed items to return in each page.
+  /// * [partnerId] optional filter by partner ID.
+  /// * [userId] optional filter by user ID.
+  /// * [partnerProfile] optional filter by partner profile.
+  /// * [onlyNew] optional flag to fetch only new items.
+  /// * [newDays] optional number of days to consider for new items (default 30).
+  /// * [hideSubscriberOnlyIfNotSubscribed] optional flag to hide subscriber-only content.
+  /// * [ct] optional continuation token.
+  ///
+  /// Returns:
+  /// - [Either] containing either a [Failure] or a [PageResult] of [FeedContentAdapter].
+  ///
+  /// Example:
+  /// ```dart
+  /// final result = await NewsService(environment: env).getFeedPaginated(
+  ///   1,
+  ///   20,
+  ///   partnerId: 'partner123',
+  ///   onlyNew: true,
+  /// );
+  /// ```
+  Future<Either<Failure, PageResult<FeedContentAdapter>>> getFeedPaginated(
+    int pageNumber,
+    int pageSize, {
+    String? partnerId,
+    String? userId,
+    String? partnerProfile,
+    bool? onlyNew,
+    int? newDays,
+    bool? hideSubscriberOnlyIfNotSubscribed,
+    String? ct,
+    required String feedType,
+  }) =>
+      _newsRepository!.getFeedPaginated(
+        pageNumber,
+        pageSize,
+        partnerId: partnerId,
+        userId: userId,
+        partnerProfile: partnerProfile,
+        onlyNew: onlyNew,
+        newDays: newDays,
+        hideSubscriberOnlyIfNotSubscribed: hideSubscriberOnlyIfNotSubscribed,
+        ct: ct,
+        feedType: feedType,
+      );
 }

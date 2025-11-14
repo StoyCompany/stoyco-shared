@@ -11,7 +11,8 @@ import 'package:stoyco_shared/utils/logger.dart';
 class MoEngageService {
   MoEngageService._internal([MoEngagePlatform? platform]) {
     _platform = platform ?? getMoEngagePlatform();
-    StoyCoLogger.info('MoEngageService: Plataforma seleccionada por el compilador es ${_platform.runtimeType}');
+    StoyCoLogger.info(
+        'MoEngageService: Plataforma seleccionada por el compilador es ${_platform.runtimeType}');
   }
 
   static MoEngageService? _instance;
@@ -23,9 +24,31 @@ class MoEngageService {
     return _instance!;
   }
 
+  /// Initializes the MoEngage service with the provided configuration.
+  ///
+  /// The [appId] is required to identify the MoEngage application.
+  /// The [pushToken] is optional and only needed for push notifications.
+  /// For web applications without push notifications, you can omit this parameter.
+  /// An optional [platform] implementation can be injected for testing purposes.
+  ///
+  /// Returns the initialized [MoEngageService] instance.
+  ///
+  /// Example:
+  /// ```dart
+  /// // With push token (mobile or web with FCM)
+  /// final service = MoEngageService.init(
+  ///   appId: 'your-app-id',
+  ///   pushToken: 'your-push-token',
+  /// );
+  ///
+  /// // Without push token (web without notifications)
+  /// final service = MoEngageService.init(
+  ///   appId: 'your-app-id',
+  /// );
+  /// ```
   static MoEngageService init({
     required String appId,
-    required String pushToken,
+    String? pushToken,
     MoEngagePlatform? platform,
   }) {
     final service = _instance ?? MoEngageService._internal(platform);
@@ -37,7 +60,8 @@ class MoEngageService {
 
       StoyCoLogger.info('MoEngageService: Initialization successful.');
     } catch (e, st) {
-      StoyCoLogger.error('MoEngageService: Error initializing platform/geofence: $e');
+      StoyCoLogger.error(
+          'MoEngageService: Error initializing platform/geofence: $e');
       StoyCoLogger.info('MoEngageService: StackTrace: $st');
     }
     _instance = service;
@@ -56,7 +80,7 @@ class MoEngageService {
 
   void showNudge() => _platform.showNudge();
 
-  void logout()  {
+  void logout() {
     if (_platform is MoEngageMobilePlatform && _moEngageGeofence != null) {
       _moEngageGeofence!.stopGeofenceMonitoring();
     }
@@ -92,7 +116,6 @@ class MoEngageService {
     }
   }
 
-
   void startGeofenceMonitoring() {
     if (_platform is MoEngageMobilePlatform) {
       if (_moEngageGeofence == null) {
@@ -102,7 +125,8 @@ class MoEngageService {
       _moEngageGeofence!.startGeofenceMonitoring();
       StoyCoLogger.info('MoEngageService: Geofence iniciado.');
     } else {
-      StoyCoLogger.info('MoEngageService: Geofence solo está disponible en plataformas móviles.');
+      StoyCoLogger.info(
+          'MoEngageService: Geofence solo está disponible en plataformas móviles.');
     }
   }
 
@@ -111,5 +135,11 @@ class MoEngageService {
       final mobilePlatform = _platform as MoEngageMobilePlatform;
       mobilePlatform.setPushClickCallbackHandler(handler);
     }
+  }
+
+  /// Resets the singleton instance for testing purposes
+  @visibleForTesting
+  static void resetInstance() {
+    _instance = null;
   }
 }

@@ -4,21 +4,50 @@
 - **fix (NewModel fields):** Added `communityOwnerId`, `isSubscriberOnly`, and `hasAccess` fields to `NewModel`, with updated JSON serialization.
 - **fix (AnnouncementModel fields):** Added `communityOwnerId`, `isSubscriberOnly`, and `hasAccess` fields to `AnnouncementModel`.
 
+## 21.3.4
+
+**-fix(moengage):** update import statement and clean up comments in MoEngageService
+
+## 21.3.3
+
+- **feat(video):** add partnerId parameter to getVideosWithFilter and getFeaturedVideos methods for filtering videos by specific partner
+
+## 21.3.1
+
+- **feat(news):** Updated news item models and services param requirements
+- **fix(moEngage)** Updated moengage service param requirements, making the pushToken optional in order to use it in web
+
+## 21.3.0
+
+- **feat(notification):** Add InteractiveContent Data for announcements,news,feedtype3
+
+## 21.2.6
+
+- **fix(env):** update URL endpoints for announcement service in StoycoEnvironmentExtension
+
+## 21.2.5
+
+- **fix(video):** update query parameters to use 'pageSize' and 'pageNumber' in getVideosWithFilter
+
+## 21.2.4
+
+- **fix(video):** rename 'page' to 'pageNumber' in getVideosWithFilter query parameters
+
 ## 21.2.3
 
-feat(video): add description field to video metadata in VideoPlayerRepositoryV2
+- **feat(video):** add description field to video metadata in VideoPlayerRepositoryV2
 
 ## 21.2.2
 
-feat(video): add description field to video metadata
+- **feat(video):** add description field to video metadata
 
 ## 21.2.1
 
-feat(filter): add communityOwnerId to query parameters in FilterRequestHelper
+- **feat(filter):** add communityOwnerId to query parameters in FilterRequestHelper
 
 ## 21.2.0
 
-feat(video): enhance video fetching with userId and pagination support
+- **feat(video):** enhance video fetching with userId and pagination support
 
 ## 21.1.0
 
