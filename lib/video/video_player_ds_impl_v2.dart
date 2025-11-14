@@ -149,6 +149,7 @@ class VideoPlayerDataSourceV2 {
     int pageSize = 20,
     String? userId,
     String? partnerProfile,
+    String? partnerId,
   }) async {
     // The feed endpoint expects userId and limit (pageSize). Keep filterMode if provided.
     final queryParams = <String, dynamic>{
@@ -166,6 +167,10 @@ class VideoPlayerDataSourceV2 {
 
     if (partnerProfile != null && partnerProfile.isNotEmpty) {
       queryParams['partnerProfile'] = partnerProfile;
+    }
+
+    if (partnerId != null && partnerId.isNotEmpty) {
+      queryParams['partnerId'] = partnerId;
     }
 
     // Use feed endpoint (example: /api/stoyco/feed/user/videos)
@@ -189,6 +194,7 @@ class VideoPlayerDataSourceV2 {
     int pageSize = 10,
     int page = 1,
     String? partnerProfile,
+    String? partnerId,
   }) async {
     final queryParams = <String, dynamic>{
       'pageSize': pageSize.toString(),
@@ -201,6 +207,10 @@ class VideoPlayerDataSourceV2 {
 
     if (partnerProfile != null && partnerProfile.isNotEmpty) {
       queryParams['partnerProfile'] = partnerProfile;
+    }
+
+    if (partnerId != null && partnerId.isNotEmpty) {
+      queryParams['partnerId'] = partnerId;
     }
 
     final base = environment.baseUrl();

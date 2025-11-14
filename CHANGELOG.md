@@ -1,7 +1,11 @@
+## 21.3.3
+
+- **feat(video):** add partnerId parameter to getVideosWithFilter and getFeaturedVideos methods for filtering videos by specific partner
+
 ## 21.3.1
 
 - **feat(news):** Updated news item models and services param requirements
-- **fix(moEngage)** Updated moengage service param requirements, making the pushToken optional in order to use it in web 
+- **fix(moEngage)** Updated moengage service param requirements, making the pushToken optional in order to use it in web
 
 ## 21.3.0
 
@@ -14,7 +18,6 @@
 ## 21.2.5
 
 - **fix(video):** update query parameters to use 'pageSize' and 'pageNumber' in getVideosWithFilter
-
 ## 21.2.4
 
 - **fix(video):** rename 'page' to 'pageNumber' in getVideosWithFilter query parameters
