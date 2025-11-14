@@ -43,6 +43,10 @@ class MockMoEngagePlatform extends _i1.Mock implements _i2.MoEngagePlatform {
             #appId: appId,
             #pushToken: pushToken,
           },
+          {
+            #appId: appId,
+            #pushToken: pushToken,
+          },
         ),
         returnValueForMissingStub: null,
       );

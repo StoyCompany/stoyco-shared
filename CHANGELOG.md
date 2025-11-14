@@ -1,7 +1,15 @@
+## 21.3.1
+
+- **feat(news):** Updated news item models and services param requirements
+- **fix(moEngage)** Updated moengage service param requirements, making the pushToken optional in order to use it in web 
+
+## 21.3.0
+
+- **feat(notification):** Add InteractiveContent Data for announcements,news,feedtype3
+
 ## 21.2.6
 
-- Updated news item models and services param requirements
-- Updated moengage service param requirements, making the pushToken optional in order to use it in web 
+- **fix(env):** update URL endpoints for announcement service in StoycoEnvironmentExtension
 
 ## 21.2.5
 
