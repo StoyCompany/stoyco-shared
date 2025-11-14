@@ -18,7 +18,6 @@
 ## 21.2.5
 
 - **fix(video):** update query parameters to use 'pageSize' and 'pageNumber' in getVideosWithFilter
-
 ## 21.2.4
 
 - **fix(video):** rename 'page' to 'pageNumber' in getVideosWithFilter query parameters
