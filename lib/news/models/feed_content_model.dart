@@ -78,6 +78,8 @@ class FeedContentItem {
     this.communityScore,
     required this.sortTiebreakerId,
     required this.isFeaturedContent,
+    this.customData,
+    this.state,
   });
 
   factory FeedContentItem.fromJson(Map<String, dynamic> json) =>
@@ -109,6 +111,9 @@ class FeedContentItem {
   final int? communityScore;
   final String sortTiebreakerId;
   final bool isFeaturedContent;
-
+  /// Custom data map (e.g., publication flags). announcements
+  final Map<String, dynamic>? customData;
+  /// Publication state (e.g., 'published').
+  final String? state;
   Map<String, dynamic> toJson() => _$FeedContentItemToJson(this);
 }
