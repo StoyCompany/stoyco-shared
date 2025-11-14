@@ -1,4 +1,4 @@
-## 21.3.2
+## 21.3.3
 
 - **feat(video):** add partnerId parameter to getVideosWithFilter and getFeaturedVideos methods for filtering videos by specific partner
 
