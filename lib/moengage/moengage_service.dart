@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:moengage_flutter/moengage_flutter.dart';
 import 'package:moengage_geofence/moengage_geofence.dart';
 import 'package:stoyco_shared/moengage/moengage_mobile_platform.dart';
@@ -39,7 +40,7 @@ class MoEngageService {
   ///   appId: 'your-app-id',
   ///   pushToken: 'your-push-token',
   /// );
-  /// 
+  ///
   /// // Without push token (web without notifications)
   /// final service = MoEngageService.init(
   ///   appId: 'your-app-id',

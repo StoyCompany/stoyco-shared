@@ -1,3 +1,7 @@
+## 21.3.4
+
+**-fix(moengage):** update import statement and clean up comments in MoEngageService
+
 ## 21.3.3
 
 - **feat(video):** add partnerId parameter to getVideosWithFilter and getFeaturedVideos methods for filtering videos by specific partner
@@ -18,6 +22,7 @@
 ## 21.2.5
 
 - **fix(video):** update query parameters to use 'pageSize' and 'pageNumber' in getVideosWithFilter
+
 ## 21.2.4
 
 - **fix(video):** rename 'page' to 'pageNumber' in getVideosWithFilter query parameters
