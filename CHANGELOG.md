@@ -1,3 +1,7 @@
+## 21.3.7
+
+**-feat(announcements):** update Models Announcements
+
 ## 21.3.6
 ### Added
 - **feat (VideoExclusiveBlur widget):** Introduced a new molecule widget for exclusive video content overlays, including blur, lock/tag indicator, and customizable UI for premium/locked content.
