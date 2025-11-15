@@ -1,16 +1,24 @@
+## 21.3.8
+
+**-fix(dependencies):** update share_plus to version 12.0.1
+
 ## 21.3.7
 
 **-feat(announcements):** update Models Announcements
 
 ## 21.3.6
+
 ### Added
+
 - **feat (LoopVideoPlayer widget):** A component has been added to view videos in an infinite loop.
 
 - **feat (SharedLike widget):** A component has been added to display sharing and liking.
 - **feat (SocialButton widget):** A component is added to render the icon and text for like and share.
 
 ## 21.3.6
+
 ### Added
+
 - **feat (VideoExclusiveBlur widget):** Introduced a new molecule widget for exclusive video content overlays, including blur, lock/tag indicator, and customizable UI for premium/locked content.
 - **fix (NewModel fields):** Added `communityOwnerId`, `isSubscriberOnly`, and `hasAccess` fields to `NewModel`, with updated JSON serialization.
 - **fix (AnnouncementModel fields):** Added `communityOwnerId`, `isSubscriberOnly`, and `hasAccess` fields to `AnnouncementModel`.
@@ -18,6 +26,7 @@
 ## 21.3.5
 
 **-feat(announcements):** update design Fo rAnnouncements
+
 ## 21.3.4
 
 **-fix(moengage):** update import statement and clean up comments in MoEngageService
