@@ -1,3 +1,14 @@
+## 21.3.7
+
+**-feat(announcements):** update Models Announcements
+
+## 21.3.6
+### Added
+- **feat (LoopVideoPlayer widget):** A component has been added to view videos in an infinite loop.
+
+- **feat (SharedLike widget):** A component has been added to display sharing and liking.
+- **feat (SocialButton widget):** A component is added to render the icon and text for like and share.
+
 ## 21.3.6
 ### Added
 - **feat (VideoExclusiveBlur widget):** Introduced a new molecule widget for exclusive video content overlays, including blur, lock/tag indicator, and customizable UI for premium/locked content.

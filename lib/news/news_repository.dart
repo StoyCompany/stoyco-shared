@@ -80,7 +80,7 @@ class NewsRepository {
       final feedData = feedResponse.data;
       final pageResult = PageResult<FeedContentAdapter>(
         items: feedData.items
-            .map((item) => FeedContentAdapter(item))
+            .map((item) => FeedContentAdapter(item.copyWith(feedType: feedType)))
             .toList(),
         pageNumber: feedData.pageNumber,
         pageSize: feedData.pageSize,
