@@ -1,3 +1,7 @@
+## 21.3.11
+
+**feat(cache):** enhance video cache management with partner following updates and tests
+
 ## 21.3.9
 
 **feat(video):** add examples for persistent caching and prefetching

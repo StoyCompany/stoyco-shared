@@ -60,7 +60,7 @@ class VideoCacheManager {
   /// Returns the initialized singleton instance.
   static Future<VideoCacheManager> initialize({
     int ttl = 300,
-    int maxCacheSize = 100,
+    int maxCacheSize = 1500,
     String? cachePath,
   }) async {
     if (_instance != null) return _instance!;
@@ -82,6 +82,19 @@ class VideoCacheManager {
 
   /// Returns the current instance if initialized, null otherwise.
   static VideoCacheManager? get instance => _instance;
+
+  /// Resets the singleton instance (for testing).
+  ///
+  /// This method closes all Hive boxes and clears the singleton instance.
+  /// Use this in test tearDown to ensure clean state between tests.
+  static Future<void> resetInstance() async {
+    if (_instance != null) {
+      await _instance!.clear();
+      await _instance!._cacheBox?.close();
+      await _instance!._metadataBox?.close();
+      _instance = null;
+    }
+  }
 
   /// Opens Hive boxes for cache storage.
   Future<void> _openBoxes() async {
@@ -129,10 +142,13 @@ class VideoCacheManager {
   Future<List<VideoWithMetadata>?> get(String key) async {
     // Check memory cache first
     if (_memoryCache.containsKey(key)) {
-      if (await _isValid(key)) {
+      final isValid = await _isValid(key);
+      print('[VIDEO_CACHE_DEBUG] 📦 Found in memory: $key, valid: $isValid');
+      if (isValid) {
         await _updateAccessTime(key);
         return _memoryCache[key];
       } else {
+        print('[VIDEO_CACHE_DEBUG] ⏰ Entry expired, removing: $key');
         // Expired, remove from memory
         _memoryCache.remove(key);
       }
@@ -173,47 +189,49 @@ class VideoCacheManager {
     }
   }
 
-  /// Stores a video list in cache with deduplication.
+  /// Stores a video list in cache.
   ///
   /// [key] The cache key.
   /// [videos] The list of videos to cache.
   ///
-  /// Videos already in the cache (by ID) are filtered out to prevent duplicates.
+  /// Each cache key stores its complete video list independently.
+  /// No global deduplication is performed to ensure each page caches correctly.
   Future<void> put(String key, List<VideoWithMetadata> videos) async {
-    // Deduplicate: filter out videos already cached
-    final deduplicatedVideos = videos.where((video) {
-      final videoId = video.id ?? '';
-      return videoId.isNotEmpty && !_cachedVideoIds.contains(videoId);
-    }).toList();
+    print(
+        '[VIDEO_CACHE_DEBUG] 💾 Storing in cache: $key (${videos.length} videos, total entries: ${_memoryCache.length + 1})');
+    // Store in memory first (always succeeds)
+    _memoryCache[key] = videos;
 
-    // Add new video IDs to the set
-    for (final video in deduplicatedVideos) {
+    // Track video IDs for removeVideoFromCache functionality
+    for (final video in videos) {
       final videoId = video.id ?? '';
       if (videoId.isNotEmpty) {
         _cachedVideoIds.add(videoId);
       }
     }
 
-    // Store in memory
-    _memoryCache[key] = deduplicatedVideos;
-
-    // Store in disk
-    if (_cacheBox != null) {
+    // Store in disk with metadata
+    if (_cacheBox != null && _metadataBox != null) {
       try {
-        final jsonList = deduplicatedVideos.map((v) => v.toJson()).toList();
+        final jsonList = videos.map((v) => v.toJson()).toList();
         final jsonString = jsonEncode(jsonList);
-        await _cacheBox!.put(key, jsonString);
 
-        // Update metadata
-        await _setMetadata(key, {
-          'timestamp': DateTime.now().millisecondsSinceEpoch,
-          'accessTime': DateTime.now().millisecondsSinceEpoch,
+        final now = DateTime.now().millisecondsSinceEpoch;
+
+        // Write metadata FIRST to ensure it exists before cache entry
+        await _metadataBox!.put(key, {
+          'timestamp': now,
+          'accessTime': now,
         });
+
+        // Then write cache entry
+        await _cacheBox!.put(key, jsonString);
 
         // Enforce size limit
         await _evictIfNeeded();
-      } catch (_) {
-        // Continue with memory-only cache
+      } catch (e) {
+        // If disk write fails, at least we have memory cache
+        print('[VIDEO_CACHE] ⚠️ Failed to write to disk cache: $e');
       }
     }
   }
@@ -222,6 +240,7 @@ class VideoCacheManager {
   ///
   /// [key] The cache key to remove.
   Future<void> remove(String key) async {
+    print('[VIDEO_CACHE_DEBUG] 🗑️ Removing cache entry: $key');
     // Remove from memory
     final videos = _memoryCache.remove(key);
 
@@ -244,6 +263,10 @@ class VideoCacheManager {
 
   /// Clears all cache entries.
   Future<void> clear() async {
+    print(
+        '[VIDEO_CACHE_DEBUG] 🧹 Clearing ALL cache (${_memoryCache.length} entries)');
+    print('[VIDEO_CACHE_DEBUG] 📍 Stack trace:');
+    print(StackTrace.current);
     _memoryCache.clear();
     _cachedVideoIds.clear();
 
@@ -283,10 +306,15 @@ class VideoCacheManager {
 
   /// Checks if a cache entry is still valid (not expired).
   Future<bool> _isValid(String key) async {
-    if (_metadataBox == null) return false;
+    // If no metadata box, assume memory cache is valid (no TTL check for memory-only)
+    if (_metadataBox == null) return true;
 
     final metadata = _metadataBox!.get(key);
-    if (metadata == null) return false;
+    if (metadata == null) {
+      // No metadata but item exists - could be memory-only cache
+      // Check if item is in memory cache, if so it's valid
+      return _memoryCache.containsKey(key);
+    }
 
     final timestamp = metadata['timestamp'] as int?;
     if (timestamp == null) return false;
@@ -304,12 +332,6 @@ class VideoCacheManager {
       metadata['accessTime'] = DateTime.now().millisecondsSinceEpoch;
       await _metadataBox!.put(key, metadata);
     }
-  }
-
-  /// Sets metadata for a cache entry.
-  Future<void> _setMetadata(String key, Map<String, dynamic> metadata) async {
-    if (_metadataBox == null) return;
-    await _metadataBox!.put(key, metadata);
   }
 
   /// Evicts least recently used entries if cache size exceeds limit.
@@ -411,6 +433,96 @@ class VideoCacheManager {
             if (video.id == videoId) {
               updated = true;
               return updater(video);
+            }
+            return video;
+          }).toList();
+
+          if (updated) {
+            final updatedJsonString = jsonEncode(
+              updatedVideos.map((v) => v.toJson()).toList(),
+            );
+            await _cacheBox!.put(key, updatedJsonString);
+          }
+        } catch (e) {
+          // If update fails, remove the entry
+          await remove(keyString);
+        }
+      }
+    }
+  }
+
+  /// Updates the followingCO status for all videos from a specific partner.
+  ///
+  /// This should be called when a user follows/unfollows a partner,
+  /// updating the follow state in all cached videos from that partner.
+  ///
+  /// [partnerId] The ID of the partner whose videos should be updated.
+  /// [isFollowing] The new following state (true = following, false = not following).
+  ///
+  /// Example:
+  /// ```dart
+  /// // After user follows a partner
+  /// await cacheManager.updatePartnerFollowingStatus('partner123', true);
+  ///
+  /// // After user unfollows a partner
+  /// await cacheManager.updatePartnerFollowingStatus('partner123', false);
+  /// ```
+  Future<void> updatePartnerFollowingStatus(
+    String partnerId,
+    bool isFollowing,
+  ) async {
+    // Update in memory cache
+    for (final key in _memoryCache.keys.toList()) {
+      final videos = _memoryCache[key];
+      if (videos == null) continue;
+
+      bool updated = false;
+      final updatedVideos = videos.map((video) {
+        if (video.partnerId == partnerId) {
+          updated = true;
+          return video.copyWith(followingCO: isFollowing);
+        }
+        return video;
+      }).toList();
+
+      if (updated) {
+        _memoryCache[key] = updatedVideos;
+
+        // Update in disk cache
+        if (_cacheBox != null) {
+          try {
+            final jsonString = jsonEncode(
+              updatedVideos.map((v) => v.toJson()).toList(),
+            );
+            await _cacheBox!.put(key, jsonString);
+          } catch (e) {
+            // If update fails, remove the entry
+            await remove(key);
+          }
+        }
+      }
+    }
+
+    // Update in disk cache (for entries not in memory)
+    if (_cacheBox != null) {
+      for (final key in _cacheBox!.keys.toList()) {
+        final keyString = key.toString();
+        // Skip if already in memory cache
+        if (_memoryCache.containsKey(keyString)) continue;
+
+        try {
+          final jsonString = _cacheBox!.get(key);
+          if (jsonString == null) continue;
+
+          final List<dynamic> jsonList =
+              jsonDecode(jsonString) as List<dynamic>;
+          bool updated = false;
+          final updatedVideos = jsonList.map((item) {
+            final video =
+                VideoWithMetadata.fromJson(item as Map<String, dynamic>);
+            if (video.partnerId == partnerId) {
+              updated = true;
+              return video.copyWith(followingCO: isFollowing);
             }
             return video;
           }).toList();

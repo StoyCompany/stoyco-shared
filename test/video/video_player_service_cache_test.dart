@@ -1,22 +1,45 @@
+import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hive/hive.dart';
 import 'package:stoyco_shared/envs/envs.dart';
 import 'package:stoyco_shared/video/video_player_service.dart';
+import 'package:stoyco_shared/video/cache/video_cache_manager.dart';
 
 void main() {
   group('VideoPlayerService Cache Tests', () {
     late VideoPlayerService service;
+    late Directory tempDir;
+
+    setUpAll(() async {
+      // Create a temporary directory for Hive
+      tempDir = await Directory.systemTemp.createTemp('video_cache_test_');
+      Hive.init(tempDir.path);
+    });
 
     setUp(() {
-      // Create service with short TTL for testing (5 seconds)
+      // Create service with long TTL for testing (5 minutes)
+      // This prevents cache entries from expiring during test execution
       service = VideoPlayerService(
         environment: StoycoEnvironment.development,
         userToken: 'test_token',
-        videoCacheTTL: 5,
+        videoCacheTTL: 300,
       );
     });
 
-    tearDown(() {
-      service.reset();
+    tearDown(() async {
+      await service.reset();
+      // Note: We don't reset the cache manager singleton here because
+      // it shares the same Hive boxes across all tests.
+      // The boxes will be closed only in tearDownAll.
+    });
+
+    tearDownAll(() async {
+      // Clean up Hive boxes and singleton
+      await VideoCacheManager.resetInstance();
+      await Hive.close();
+      if (tempDir.existsSync()) {
+        tempDir.deleteSync(recursive: true);
+      }
     });
 
     test('should cache video results on first call', () async {
