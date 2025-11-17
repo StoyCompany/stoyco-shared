@@ -132,9 +132,8 @@ class InteractiveCardConfig {
 
   /// Default configuration for announcement cards
   static const announcement = InteractiveCardConfig(
-    height: 160.0,
-    titleMaxLines: 3,
-    iconSize: 22.0,
+    height: 144.0,
+    titleMaxLines: 2,
   );
 }
 
@@ -421,21 +420,40 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
       return InteractiveContentCard.loading(config: widget.config);
     }
 
+    // Check if participate button should be shown
+    final showParticipateButton = widget.data is FeedContentAdapter &&
+        ((widget.data as FeedContentAdapter).feedType == FeedType.events ||
+            ((widget.data as FeedContentAdapter).feedType == FeedType.announcement &&
+                widget.data.state == 'PUBLISHED'));
+
     return SizedBox(
       height: StoycoScreenSize.height(context, widget.config.height),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: widget.onTap != null 
-              ? () => widget.onTap!()
-              : null,
-          borderRadius: BorderRadius.circular(
-            StoycoScreenSize.radius(context, widget.config.borderRadius),
+      child: Stack(
+        children: [
+          // Main card content
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: widget.onTap != null
+                  ? () => widget.onTap!()
+                  : null,
+              borderRadius: BorderRadius.circular(
+                StoycoScreenSize.radius(context, widget.config.borderRadius),
+              ),
+              splashColor: StoycoColors.blue.withValues(alpha: 0.1),
+              highlightColor: Colors.transparent,
+              child: _buildContent(context),
+            ),
           ),
-          splashColor: StoycoColors.blue.withValues(alpha: 0.1),
-          highlightColor: Colors.transparent,
-          child: _buildContent(context),
-        ),
+
+          // Participate button positioned absolutely (doesn't affect layout)
+          if (showParticipateButton)
+            Positioned(
+              left: StoycoScreenSize.width(context, widget.config.height + widget.config.spacing + 8),
+              bottom: StoycoScreenSize.height(context, 38),
+              child: _buildParticipateButton(context),
+            ),
+        ],
       ),
     );
   }
@@ -552,14 +570,6 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
               ),
             ),
 
-          // Participate button (only for events)
-          if (widget.data is FeedContentAdapter &&
-              ((widget.data as FeedContentAdapter).feedType == FeedType.events ||
-                  (widget.data as FeedContentAdapter).feedType == FeedType.announcement &&
-                      widget.data.state == 'PUBLISHED'))...[
-            Gap(StoycoScreenSize.height(context, 9)),
-            _buildParticipateButton(context),
-          ],
 
           const Spacer(),
 
@@ -573,6 +583,7 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
       ),
     );
   }
+
 
   Widget _buildParticipateButton(BuildContext context) => Material(
       color: Colors.transparent,
