@@ -12,16 +12,39 @@ import 'package:stoyco_shared/video/models/video_reaction/user_video_reaction.da
 import 'package:stoyco_shared/video/models/video_player_model.dart';
 import 'dart:collection';
 
+import 'package:stoyco_shared/video/cache/video_cache_manager.dart';
 import 'package:stoyco_shared/video/video_player_ds_impl_v2.dart';
 import 'package:stoyco_shared/video/video_player_repository_v2.dart';
 import 'package:stoyco_shared/video/video_with_metada/video_with_metadata.dart';
 
 /// Service responsible for managing video playback and reactions.
 ///
+/// This service includes intelligent caching with persistent storage to prevent
+/// redundant backend calls when users switch between tabs or filter modes.
+/// Videos are automatically deduplicated to prevent duplicates when content shifts between pages.
+/// Cache persists across app sessions using Hive.
+///
 /// Example:
 /// ```dart
-/// var videoService = VideoPlayerService(environment: StoycoEnvironment.development);
-/// var videos = await videoService.getVideos();
+/// // Initialize cache manager first (one time, at app startup)
+/// await VideoCacheManager.initialize(ttl: 300);
+///
+/// // Create service with caching enabled
+/// var videoService = VideoPlayerService(
+///   environment: StoycoEnvironment.development,
+///   userToken: 'user_token',
+///   videoCacheTTL: 300, // 5 minutes
+/// );
+///
+/// // Fetch videos - automatically cached to disk
+/// var videos = await videoService.getVideosWithFilter(
+///   filterMode: 'Featured',
+///   page: 1,
+///   pageSize: 20,
+/// );
+///
+/// // Clear cache on user refresh
+/// await videoService.clearVideoCache();
 /// ```
 class VideoPlayerService {
   /// Private constructor for [VideoPlayerService].
@@ -29,15 +52,18 @@ class VideoPlayerService {
   /// [environment] The environment configuration.
   /// [userToken] The user token.
   /// [functionToUpdateToken] Function to update the user token.
+  /// [videoCacheTTL] Time to live for video cache in seconds (default: 300 = 5 minutes).
   VideoPlayerService._({
     this.environment = StoycoEnvironment.development,
     this.userToken = '',
     this.functionToUpdateToken,
+    this.videoCacheTTL = 300,
   }) {
     _dataSource = VideoPlayerDataSourceV2(environment);
     _repository = VideoPlayerRepositoryV2(_dataSource!, userToken);
     _repository!.token = userToken;
     _dataSource!.updateUserToken(userToken);
+    _cacheManager = VideoCacheManager.instance;
   }
 
   /// Factory constructor for [VideoPlayerService].
@@ -45,20 +71,23 @@ class VideoPlayerService {
   /// [environment] The environment configuration.
   /// [userToken] The user token.
   /// [functionToUpdateToken] Function to update the user token.
+  /// [videoCacheTTL] Time to live for video cache in seconds (default: 300 = 5 minutes).
   ///
   /// Example:
   /// ```dart
-  /// var videoService = VideoPlayerService(userToken: 'abc123');
+  /// var videoService = VideoPlayerService(userToken: 'abc123', videoCacheTTL: 600);
   /// ```
   factory VideoPlayerService({
     StoycoEnvironment environment = StoycoEnvironment.development,
     String userToken = '',
     Future<String?>? functionToUpdateToken,
+    int videoCacheTTL = 300,
   }) {
     _instance = VideoPlayerService._(
       environment: environment,
       userToken: userToken,
       functionToUpdateToken: functionToUpdateToken,
+      videoCacheTTL: videoCacheTTL,
     );
 
     return _instance!;
@@ -92,8 +121,45 @@ class VideoPlayerService {
   /// Cache for storing [UserVideoReaction] with timestamps.
   final Map<String, _CachedVideoInteraction> _reactionCache = HashMap();
 
+  /// Time to live for video cache in seconds.
+  final int videoCacheTTL;
+
+  /// Persistent cache manager instance (optional, provides disk-based caching).
+  VideoCacheManager? _cacheManager;
+
+  /// Tracks active prefetch operations to avoid duplicate prefetching.
+  final Set<String> _activePrefetches = {};
+
+  /// Enable/disable automatic prefetching of next page (default: true).
+  bool enablePrefetching = true;
+
   /// The token of the user.
   String userToken = '';
+
+  /// Initializes the persistent cache manager.
+  ///
+  /// Call this method once at app startup before using video services.
+  /// If not called, the service will work without persistent caching.
+  ///
+  /// [ttl] Cache time to live in seconds (default: 300 = 5 minutes).
+  /// [maxCacheSize] Maximum number of cache entries (default: 100).
+  /// [cachePath] Optional custom path for Hive storage.
+  ///
+  /// Example:
+  /// ```dart
+  /// await VideoPlayerService.initializeCache(ttl: 600);
+  /// ```
+  static Future<void> initializeCache({
+    int ttl = 300,
+    int maxCacheSize = 100,
+    String? cachePath,
+  }) async {
+    await VideoCacheManager.initialize(
+      ttl: ttl,
+      maxCacheSize: maxCacheSize,
+      cachePath: cachePath,
+    );
+  }
 
   /// Sets the user token and updates the repository and data source.
   ///
@@ -187,6 +253,15 @@ class VideoPlayerService {
         userId,
       );
       final reaction = await _handleReaction(result);
+
+      // Invalidate video cache (don't await - fire and forget)
+      // Next fetch will get fresh data from backend
+      // ignore: unawaited_futures
+      reaction.fold(
+        (failure) => null,
+        (videoInteraction) => invalidateVideoCacheForVideo(videoId),
+      );
+
       return reaction;
     } catch (e) {
       StoyCoLogger.error('Error: $e');
@@ -210,6 +285,15 @@ class VideoPlayerService {
         userId,
       );
       final reaction = await _handleReaction(result);
+
+      // Invalidate video cache (don't await - fire and forget)
+      // Next fetch will get fresh data from backend
+      // ignore: unawaited_futures
+      reaction.fold(
+        (failure) => null,
+        (videoInteraction) => invalidateVideoCacheForVideo(videoId),
+      );
+
       return reaction;
     } catch (e) {
       StoyCoLogger.error('Error: $e');
@@ -244,10 +328,23 @@ class VideoPlayerService {
   }) async {
     try {
       await verifyToken();
-      return await _repository!.shareVideo(
+      final result = await _repository!.shareVideo(
         videoId,
         !isWeb ? getPlatform() : 'web',
       );
+
+      // Invalidate video cache (don't await - fire and forget)
+      // Next fetch will get fresh data from backend
+      result.fold(
+        (failure) => null,
+        (success) {
+          if (success) {
+            invalidateVideoCacheForVideo(videoId);
+          }
+        },
+      );
+
+      return result;
     } catch (e) {
       StoyCoLogger.error('Error: $e');
       return Left(ExceptionFailure.decode(Exception(e)));
@@ -310,8 +407,11 @@ class VideoPlayerService {
   /// [userId] Optional user ID for personalized content
   /// [partnerProfile] Optional partner profile filter (Music, Sport, Brand)
   /// [partnerId] Optional partner ID to filter videos by specific partner
+  /// [forceRefresh] Force refresh cache (default: false)
   ///
   /// Returns an [Either] containing a [Failure] or a list of [VideoWithMetadata].
+  /// Results are cached to disk and memory to avoid repeated calls when switching between tabs.
+  /// Videos are deduplicated by ID to prevent duplicates if content shifts between pages.
   Future<Either<Failure, List<VideoWithMetadata>>> getVideosWithFilter({
     required String filterMode,
     int page = 1,
@@ -319,9 +419,10 @@ class VideoPlayerService {
     String? userId,
     String? partnerProfile,
     String? partnerId,
+    bool forceRefresh = false,
   }) async {
     try {
-      return await _repository!.getVideosWithFilter(
+      final cacheKey = _buildVideoCacheKey(
         filterMode: filterMode,
         page: page,
         pageSize: pageSize,
@@ -329,6 +430,59 @@ class VideoPlayerService {
         partnerProfile: partnerProfile,
         partnerId: partnerId,
       );
+
+      // Check cache first (if cache manager is initialized)
+      if (!forceRefresh && _cacheManager != null) {
+        final cached = await _cacheManager!.get(cacheKey);
+        if (cached != null && cached.isNotEmpty) {
+          // Prefetch next page in background if enabled
+          if (enablePrefetching) {
+            _prefetchNextPage(
+              filterMode: filterMode,
+              currentPage: page,
+              pageSize: pageSize,
+              userId: userId,
+              partnerProfile: partnerProfile,
+              partnerId: partnerId,
+            );
+          }
+          return Right(cached);
+        }
+      }
+
+      // Fetch from repository
+      final result = await _repository!.getVideosWithFilter(
+        filterMode: filterMode,
+        page: page,
+        pageSize: pageSize,
+        userId: userId,
+        partnerProfile: partnerProfile,
+        partnerId: partnerId,
+      );
+
+      // Cache successful results with deduplication (if cache manager is initialized)
+      await result.fold(
+        (_) async {},
+        (videos) async {
+          if (_cacheManager != null) {
+            await _cacheManager!.put(cacheKey, videos);
+
+            // Prefetch next page after successful fetch if enabled and has results
+            if (enablePrefetching && videos.isNotEmpty) {
+              _prefetchNextPage(
+                filterMode: filterMode,
+                currentPage: page,
+                pageSize: pageSize,
+                userId: userId,
+                partnerProfile: partnerProfile,
+                partnerId: partnerId,
+              );
+            }
+          }
+        },
+      );
+
+      return result;
     } catch (e) {
       StoyCoLogger.error('Error: $e');
       return Left(ExceptionFailure.decode(Exception(e)));
@@ -342,21 +496,79 @@ class VideoPlayerService {
   /// [page] Page number for pagination (default: 1).
   /// [partnerProfile] Optional partner profile filter (Music, Sport, Brand).
   /// [partnerId] Optional partner ID to filter videos by specific partner.
+  /// [forceRefresh] Force refresh cache (default: false).
+  ///
+  /// Results are cached to disk and memory to avoid repeated calls when switching between tabs.
+  /// Videos are deduplicated by ID to prevent duplicates if content shifts between pages.
   Future<Either<Failure, List<VideoWithMetadata>>> getFeaturedVideos({
     String? userId,
     int pageSize = 10,
     int page = 1,
     String? partnerProfile,
     String? partnerId,
+    bool forceRefresh = false,
   }) async {
     try {
-      return await _repository!.getFeaturedVideos(
+      final cacheKey = _buildVideoCacheKey(
+        filterMode: 'Featured',
+        page: page,
+        pageSize: pageSize,
+        userId: userId,
+        partnerProfile: partnerProfile,
+        partnerId: partnerId,
+      );
+
+      // Check cache first (if cache manager is initialized)
+      if (!forceRefresh && _cacheManager != null) {
+        final cached = await _cacheManager!.get(cacheKey);
+        if (cached != null && cached.isNotEmpty) {
+          // Prefetch next page in background if enabled
+          if (enablePrefetching) {
+            _prefetchNextPage(
+              filterMode: 'Featured',
+              currentPage: page,
+              pageSize: pageSize,
+              userId: userId,
+              partnerProfile: partnerProfile,
+              partnerId: partnerId,
+            );
+          }
+          return Right(cached);
+        }
+      }
+
+      // Fetch from repository
+      final result = await _repository!.getFeaturedVideos(
         userId: userId,
         pageSize: pageSize,
         page: page,
         partnerProfile: partnerProfile,
         partnerId: partnerId,
       );
+
+      // Cache successful results with deduplication (if cache manager is initialized)
+      await result.fold(
+        (_) async {},
+        (videos) async {
+          if (_cacheManager != null) {
+            await _cacheManager!.put(cacheKey, videos);
+
+            // Prefetch next page after successful fetch if enabled and has results
+            if (enablePrefetching && videos.isNotEmpty) {
+              _prefetchNextPage(
+                filterMode: 'Featured',
+                currentPage: page,
+                pageSize: pageSize,
+                userId: userId,
+                partnerProfile: partnerProfile,
+                partnerId: partnerId,
+              );
+            }
+          }
+        },
+      );
+
+      return result;
     } catch (e) {
       StoyCoLogger.error('Error: $e');
       return Left(ExceptionFailure.decode(Exception(e)));
@@ -381,12 +593,160 @@ class VideoPlayerService {
   /// - Clears the user token
   /// - Removes the function to update token
   /// - Updates the datasource to clear the token
-  void reset() {
+  /// - Clears all video caches
+  Future<void> reset() async {
     userToken = '';
     functionToUpdateToken = null;
     _repository?.token = '';
     _dataSource
         ?.updateUserToken(''); // IMPORTANT: Clear token in datasource too!
+    await clearVideoCache();
+  }
+
+  /// Prefetches the next page in the background.
+  ///
+  /// This method runs asynchronously without blocking the current request.
+  /// It checks if the next page is already cached or being fetched before making a request.
+  void _prefetchNextPage({
+    required String filterMode,
+    required int currentPage,
+    required int pageSize,
+    String? userId,
+    String? partnerProfile,
+    String? partnerId,
+  }) {
+    final nextPage = currentPage + 1;
+    final nextPageKey = _buildVideoCacheKey(
+      filterMode: filterMode,
+      page: nextPage,
+      pageSize: pageSize,
+      userId: userId,
+      partnerProfile: partnerProfile,
+      partnerId: partnerId,
+    );
+
+    // Avoid duplicate prefetch operations
+    if (_activePrefetches.contains(nextPageKey)) {
+      return;
+    }
+
+    // Mark as active
+    _activePrefetches.add(nextPageKey);
+
+    // Run prefetch in background
+    Future.microtask(() async {
+      try {
+        // Check if next page is already cached
+        if (_cacheManager != null) {
+          final cached = await _cacheManager!.get(nextPageKey);
+          if (cached != null && cached.isNotEmpty) {
+            _activePrefetches.remove(nextPageKey);
+            return; // Already cached, no need to prefetch
+          }
+        }
+
+        // Fetch next page from repository
+        final result = filterMode == 'Featured'
+            ? await _repository!.getFeaturedVideos(
+                userId: userId,
+                pageSize: pageSize,
+                page: nextPage,
+                partnerProfile: partnerProfile,
+                partnerId: partnerId,
+              )
+            : await _repository!.getVideosWithFilter(
+                filterMode: filterMode,
+                page: nextPage,
+                pageSize: pageSize,
+                userId: userId,
+                partnerProfile: partnerProfile,
+                partnerId: partnerId,
+              );
+
+        // Cache the prefetched results
+        await result.fold(
+          (_) async {}, // Ignore errors in background prefetch
+          (videos) async {
+            if (_cacheManager != null && videos.isNotEmpty) {
+              await _cacheManager!.put(nextPageKey, videos);
+            }
+          },
+        );
+      } catch (e) {
+        // Silently fail prefetch - don't affect user experience
+        StoyCoLogger.error('Prefetch failed for page $nextPage: $e');
+      } finally {
+        _activePrefetches.remove(nextPageKey);
+      }
+    });
+  }
+
+  /// Builds a cache key for video list requests.
+  ///
+  /// [filterMode] The filter mode.
+  /// [page] The page number.
+  /// [pageSize] The page size.
+  /// [userId] Optional user ID.
+  /// [partnerProfile] Optional partner profile.
+  /// [partnerId] Optional partner ID.
+  ///
+  /// Returns a unique cache key string.
+  String _buildVideoCacheKey({
+    required String filterMode,
+    required int page,
+    required int pageSize,
+    String? userId,
+    String? partnerProfile,
+    String? partnerId,
+  }) =>
+      '$filterMode:${partnerProfile ?? 'null'}:${partnerId ?? 'null'}:${userId ?? 'null'}:$page:$pageSize';
+
+  /// Clears all video list caches.
+  ///
+  /// Call this when you need to force a complete refresh of video content,
+  /// for example after the user performs a pull-to-refresh action.
+  Future<void> clearVideoCache() async {
+    _cacheManager ??= VideoCacheManager.instance;
+    if (_cacheManager != null) {
+      await _cacheManager!.clear();
+    }
+  }
+
+  /// Removes a specific video from all cache entries.
+  ///
+  /// Useful when you need to force a refresh for a specific video
+  /// without clearing the entire cache.
+  ///
+  /// [videoId] The ID of the video to remove from cache.
+  Future<void> invalidateVideoCacheForVideo(String videoId) async {
+    _cacheManager ??= VideoCacheManager.instance;
+    if (_cacheManager == null) return;
+
+    await _cacheManager!.removeVideoFromCache(videoId);
+  }
+
+  /// Clears video cache for a specific filter configuration.
+  ///
+  /// [filterMode] The filter mode.
+  /// [userId] Optional user ID.
+  /// [partnerProfile] Optional partner profile.
+  /// [partnerId] Optional partner ID.
+  ///
+  /// This clears all pages for the given filter combination.
+  Future<void> clearVideoCacheForFilter({
+    required String filterMode,
+    String? userId,
+    String? partnerProfile,
+    String? partnerId,
+  }) async {
+    _cacheManager ??= VideoCacheManager.instance;
+    if (_cacheManager == null) return;
+
+    // Build partial key pattern
+    final keyPrefix =
+        '$filterMode:${partnerProfile ?? 'null'}:${partnerId ?? 'null'}:${userId ?? 'null'}:';
+
+    await _cacheManager!.clearByPrefix(keyPrefix);
   }
 }
 
