@@ -9,12 +9,18 @@ import 'package:stoyco_shared/news/models/feed_content_model.dart';
 import 'package:stoyco_shared/news/models/new_model.dart';
 import 'package:stoyco_shared/news/news_data_source.dart';
 import 'package:stoyco_shared/widgets/interactive_content_card.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/active_subscription_service.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/mixins/content_access_validator_mixin.dart';
 
-class NewsRepository with RepositoryCacheMixin {
-  NewsRepository({required NewsDataSource newsDataSource})
-      : _newsDataSource = newsDataSource;
+class NewsRepository with RepositoryCacheMixin, MultiContentAccessValidatorMixin {
+  NewsRepository({
+    required NewsDataSource newsDataSource,
+    required ActiveSubscriptionService activeSubscriptionService,
+  }): _newsDataSource = newsDataSource,
+      _activeSubscriptionService = activeSubscriptionService;
 
   final NewsDataSource _newsDataSource;
+  final ActiveSubscriptionService _activeSubscriptionService;
 
   /// Cached for 3 minutes (dynamic news list).
   Future<Either<Failure, PageResult<NewModel>>> getNewsPaginated(
@@ -72,8 +78,7 @@ class NewsRepository with RepositoryCacheMixin {
     required String feedType,
   }) async =>
       cachedCall<PageResult<FeedContentAdapter>>(
-        key:
-            'feed_paginated_${pageNumber}_${pageSize}_${partnerId}_${userId}_${feedType}_${onlyNew}_$ct',
+        key: 'feed_paginated_${pageNumber}_${pageSize}_${partnerId}_${userId}_${feedType}_${onlyNew}_$ct',
         ttl: const Duration(minutes: 2),
         fetcher: () async {
           try {
@@ -85,24 +90,29 @@ class NewsRepository with RepositoryCacheMixin {
                 partnerProfile: partnerProfile,
                 onlyNew: onlyNew,
                 newDays: newDays,
-                hideSubscriberOnlyIfNotSubscribed:
-                    hideSubscriberOnlyIfNotSubscribed,
+                hideSubscriberOnlyIfNotSubscribed: hideSubscriberOnlyIfNotSubscribed,
                 ct: ct,
-                feedType: feedType);
+                feedType: feedType,
+              );
 
-            final feedResponse =
-                FeedResponse.fromJson(response.data as Map<String, dynamic>);
+            final feedResponse = FeedResponse.fromJson(response.data as Map<String, dynamic>);
             final feedData = feedResponse.data;
-            final pageResult = PageResult<FeedContentAdapter>(
-              items: feedData.items
-                  .map((item) =>
-                      FeedContentAdapter(item.copyWith(feedType: feedType)))
-                  .toList(),
-              pageNumber: feedData.pageNumber,
-              pageSize: feedData.pageSize,
-              totalItems: feedData.totalItems,
-              totalPages: feedData.totalPages,
-            );
+              final validatedItems = await validateMultipleAccess<FeedContentItem>(
+                service: _activeSubscriptionService,
+                partnerId: partnerId,
+                forceRefresh: true,
+                contents: feedData.items,
+                getAccessContent: (item) => item.accessContent,
+                hasAccessToContent: (item, hasAccess) => item.copyWith(hasAccessWithSubscription: hasAccess),
+                getIsSubscriptionOnly: (item) => item.isSubscriberOnly,
+              );
+              final pageResult = PageResult<FeedContentAdapter>(
+                items: validatedItems.map((item) => FeedContentAdapter(item.copyWith(feedType: feedType))).toList(),
+                pageNumber: feedData.pageNumber,
+                pageSize: feedData.pageSize,
+                totalItems: feedData.totalItems,
+                totalPages: feedData.totalPages,
+              );
 
             return Right(pageResult);
           } on DioException catch (error) {
@@ -115,8 +125,7 @@ class NewsRepository with RepositoryCacheMixin {
         },
       );
 
-  Future<Either<Failure, PageResult<FeedContentAdapter>>>
-      getFeedEventsPaginated(
+  Future<Either<Failure, PageResult<FeedContentAdapter>>> getFeedEventsPaginated(
     int pageNumber,
     int pageSize, {
     String? partnerId,
@@ -142,14 +151,19 @@ class NewsRepository with RepositoryCacheMixin {
         feedType: feedType,
       );
 
-      final feedResponse =
-          FeedResponse.fromJson(response.data as Map<String, dynamic>);
+      final feedResponse = FeedResponse.fromJson(response.data as Map<String, dynamic>);
       final feedData = feedResponse.data;
+      final validatedItems = await validateMultipleAccess<FeedContentItem>(
+        service: _activeSubscriptionService,
+        partnerId: partnerId,
+        forceRefresh: true,
+        contents: feedData.items,
+        getAccessContent: (item) => item.accessContent,
+        hasAccessToContent: (item, hasAccess) => item.copyWith(hasAccessWithSubscription: hasAccess),
+        getIsSubscriptionOnly: (item) => item.isSubscriberOnly,
+      );
       final pageResult = PageResult<FeedContentAdapter>(
-        items: feedData.items
-            .map(
-                (item) => FeedContentAdapter(item.copyWith(feedType: feedType)))
-            .toList(),
+        items: validatedItems.map((item) => FeedContentAdapter(item.copyWith(feedType: feedType))).toList(),
         pageNumber: feedData.pageNumber,
         pageSize: feedData.pageSize,
         totalItems: feedData.totalItems,
@@ -198,24 +212,23 @@ class NewsRepository with RepositoryCacheMixin {
       );
 
   /// Cached for 10 minutes (individual news item).
-  Future<Either<Failure, NewModel>> getNewsById(String id) async =>
-      cachedCall<NewModel>(
-        key: 'news_by_id_$id',
-        ttl: const Duration(minutes: 10),
-        fetcher: () async {
-          try {
-            final response = await _newsDataSource.getById(id);
-            final NewModel news = NewModel.fromJson(response.data);
-            return Right(news);
-          } on DioException catch (error) {
-            return Left(DioFailure.decode(error));
-          } on Error catch (error) {
-            return Left(ErrorFailure.decode(error));
-          } on Exception catch (error) {
-            return Left(ExceptionFailure.decode(error));
-          }
-        },
-      );
+  Future<Either<Failure, NewModel>> getNewsById(String id) async => cachedCall<NewModel>(
+    key: 'news_by_id_$id',
+    ttl: const Duration(minutes: 10),
+    fetcher: () async {
+      try {
+        final response = await _newsDataSource.getById(id);
+        final NewModel news = NewModel.fromJson(response.data);
+        return Right(news);
+      } on DioException catch (error) {
+        return Left(DioFailure.decode(error));
+      } on Error catch (error) {
+        return Left(ErrorFailure.decode(error));
+      } on Exception catch (error) {
+        return Left(ExceptionFailure.decode(error));
+      }
+    },
+  );
 
   Future<Either<Failure, bool>> markAsViewed(String id) async {
     try {

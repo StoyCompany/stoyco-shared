@@ -3,12 +3,24 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i5;
+import 'dart:async' as _i6;
 
 import 'package:dio/dio.dart' as _i2;
+import 'package:either_dart/either.dart' as _i9;
+import 'package:firebase_auth/firebase_auth.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:stoyco_shared/envs/envs.dart' as _i4;
-import 'package:stoyco_shared/news/news_data_source.dart' as _i3;
+import 'package:mockito/src/dummies.dart' as _i12;
+import 'package:stoyco_shared/envs/envs.dart' as _i5;
+import 'package:stoyco_shared/news/news_data_source.dart' as _i4;
+import 'package:stoyco_subscription/envs/envs.dart' as _i8;
+import 'package:stoyco_subscription/pages/subscription_plans/data/active_subscription_service.dart'
+    as _i7;
+import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart'
+    as _i10;
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/access_content.dart'
+    as _i13;
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/responses/active_user_plan_response.dart'
+    as _i11;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -23,7 +35,6 @@ import 'package:stoyco_shared/news/news_data_source.dart' as _i3;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
-// ignore_for_file: invalid_use_of_internal_member
 
 class _FakeResponse_0<T> extends _i1.SmartFake implements _i2.Response<T> {
   _FakeResponse_0(
@@ -35,22 +46,42 @@ class _FakeResponse_0<T> extends _i1.SmartFake implements _i2.Response<T> {
         );
 }
 
+class _FakeFirebaseAuth_1 extends _i1.SmartFake implements _i3.FirebaseAuth {
+  _FakeFirebaseAuth_1(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeDuration_2 extends _i1.SmartFake implements Duration {
+  _FakeDuration_2(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [NewsDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockNewsDataSource extends _i1.Mock implements _i3.NewsDataSource {
+class MockNewsDataSource extends _i1.Mock implements _i4.NewsDataSource {
   MockNewsDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.StoycoEnvironment get environment => (super.noSuchMethod(
+  _i5.StoycoEnvironment get environment => (super.noSuchMethod(
         Invocation.getter(#environment),
-        returnValue: _i4.StoycoEnvironment.development,
-      ) as _i4.StoycoEnvironment);
+        returnValue: _i5.StoycoEnvironment.development,
+      ) as _i5.StoycoEnvironment);
 
   @override
-  _i5.Future<_i2.Response<dynamic>> getPaged({
+  _i6.Future<_i2.Response<dynamic>> getPaged({
     int? pageNumber = 1,
     int? pageSize = 10,
     String? searchTerm,
@@ -68,7 +99,7 @@ class MockNewsDataSource extends _i1.Mock implements _i3.NewsDataSource {
           },
         ),
         returnValue:
-            _i5.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
+            _i6.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
           this,
           Invocation.method(
             #getPaged,
@@ -81,10 +112,10 @@ class MockNewsDataSource extends _i1.Mock implements _i3.NewsDataSource {
             },
           ),
         )),
-      ) as _i5.Future<_i2.Response<dynamic>>);
+      ) as _i6.Future<_i2.Response<dynamic>>);
 
   @override
-  _i5.Future<_i2.Response<dynamic>> getPagedFeed({
+  _i6.Future<_i2.Response<dynamic>> getPagedFeed({
     int? pageNumber = 1,
     int? pageSize = 20,
     String? partnerId,
@@ -115,7 +146,7 @@ class MockNewsDataSource extends _i1.Mock implements _i3.NewsDataSource {
           },
         ),
         returnValue:
-            _i5.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
+            _i6.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
           this,
           Invocation.method(
             #getPagedFeed,
@@ -192,35 +223,277 @@ class MockNewsDataSource extends _i1.Mock implements _i3.NewsDataSource {
       ) as _i5.Future<_i2.Response<dynamic>>);
 
   @override
-  _i5.Future<_i2.Response<dynamic>> markAsViewed(String? id) =>
+  _i6.Future<_i2.Response<dynamic>> markAsViewed(String? id) =>
       (super.noSuchMethod(
         Invocation.method(
           #markAsViewed,
           [id],
         ),
         returnValue:
-            _i5.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
+            _i6.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
           this,
           Invocation.method(
             #markAsViewed,
             [id],
           ),
         )),
-      ) as _i5.Future<_i2.Response<dynamic>>);
+      ) as _i6.Future<_i2.Response<dynamic>>);
 
   @override
-  _i5.Future<_i2.Response<dynamic>> getById(String? id) => (super.noSuchMethod(
+  _i6.Future<_i2.Response<dynamic>> getById(String? id) => (super.noSuchMethod(
         Invocation.method(
           #getById,
           [id],
         ),
         returnValue:
-            _i5.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
+            _i6.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
           this,
           Invocation.method(
             #getById,
             [id],
           ),
         )),
-      ) as _i5.Future<_i2.Response<dynamic>>);
+      ) as _i6.Future<_i2.Response<dynamic>>);
+}
+
+/// A class which mocks [ActiveSubscriptionService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockActiveSubscriptionService extends _i1.Mock
+    implements _i7.ActiveSubscriptionService {
+  MockActiveSubscriptionService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i8.StoycoEnvironment get environment => (super.noSuchMethod(
+        Invocation.getter(#environment),
+        returnValue: _i8.StoycoEnvironment.development,
+      ) as _i8.StoycoEnvironment);
+
+  @override
+  _i3.FirebaseAuth get firebaseAuth => (super.noSuchMethod(
+        Invocation.getter(#firebaseAuth),
+        returnValue: _FakeFirebaseAuth_1(
+          this,
+          Invocation.getter(#firebaseAuth),
+        ),
+      ) as _i3.FirebaseAuth);
+
+  @override
+  Duration get cacheDuration => (super.noSuchMethod(
+        Invocation.getter(#cacheDuration),
+        returnValue: _FakeDuration_2(
+          this,
+          Invocation.getter(#cacheDuration),
+        ),
+      ) as Duration);
+
+  @override
+  void clearCache() => super.noSuchMethod(
+        Invocation.method(
+          #clearCache,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void dispose() => super.noSuchMethod(
+        Invocation.method(
+          #dispose,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i6.Future<void> refreshCacheFromPush() => (super.noSuchMethod(
+        Invocation.method(
+          #refreshCacheFromPush,
+          [],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i6.Future<_i9.Either<_i10.Failure, _i11.ActiveUserPlanResponse>>
+      getActiveUserSubscriptions({bool? forceRefresh = false}) =>
+          (super.noSuchMethod(
+            Invocation.method(
+              #getActiveUserSubscriptions,
+              [],
+              {#forceRefresh: forceRefresh},
+            ),
+            returnValue: _i6.Future<
+                    _i9
+                    .Either<_i10.Failure, _i11.ActiveUserPlanResponse>>.value(
+                _i12.dummyValue<
+                    _i9.Either<_i10.Failure, _i11.ActiveUserPlanResponse>>(
+              this,
+              Invocation.method(
+                #getActiveUserSubscriptions,
+                [],
+                {#forceRefresh: forceRefresh},
+              ),
+            )),
+          ) as _i6
+              .Future<_i9.Either<_i10.Failure, _i11.ActiveUserPlanResponse>>);
+
+  @override
+  _i6.Future<_i9.Either<_i10.Failure, bool>> hasActiveSubscription(
+          {bool? forceRefresh = false}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #hasActiveSubscription,
+          [],
+          {#forceRefresh: forceRefresh},
+        ),
+        returnValue: _i6.Future<_i9.Either<_i10.Failure, bool>>.value(
+            _i12.dummyValue<_i9.Either<_i10.Failure, bool>>(
+          this,
+          Invocation.method(
+            #hasActiveSubscription,
+            [],
+            {#forceRefresh: forceRefresh},
+          ),
+        )),
+      ) as _i6.Future<_i9.Either<_i10.Failure, bool>>);
+
+  @override
+  _i6.Future<_i9.Either<_i10.Failure, bool>> hasActiveSubscriptionForPartner({
+    required String? partnerId,
+    bool? forceRefresh = false,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #hasActiveSubscriptionForPartner,
+          [],
+          {
+            #partnerId: partnerId,
+            #forceRefresh: forceRefresh,
+          },
+        ),
+        returnValue: _i6.Future<_i9.Either<_i10.Failure, bool>>.value(
+            _i12.dummyValue<_i9.Either<_i10.Failure, bool>>(
+          this,
+          Invocation.method(
+            #hasActiveSubscriptionForPartner,
+            [],
+            {
+              #partnerId: partnerId,
+              #forceRefresh: forceRefresh,
+            },
+          ),
+        )),
+      ) as _i6.Future<_i9.Either<_i10.Failure, bool>>);
+
+  @override
+  _i6.Future<_i9.Either<_i10.Failure, List<_i11.ActiveUserPlan>>>
+      getActiveSubscriptionsForPartner({
+    required String? partnerId,
+    bool? forceRefresh = false,
+  }) =>
+          (super.noSuchMethod(
+            Invocation.method(
+              #getActiveSubscriptionsForPartner,
+              [],
+              {
+                #partnerId: partnerId,
+                #forceRefresh: forceRefresh,
+              },
+            ),
+            returnValue: _i6.Future<
+                    _i9.Either<_i10.Failure, List<_i11.ActiveUserPlan>>>.value(
+                _i12.dummyValue<
+                    _i9.Either<_i10.Failure, List<_i11.ActiveUserPlan>>>(
+              this,
+              Invocation.method(
+                #getActiveSubscriptionsForPartner,
+                [],
+                {
+                  #partnerId: partnerId,
+                  #forceRefresh: forceRefresh,
+                },
+              ),
+            )),
+          ) as _i6.Future<_i9.Either<_i10.Failure, List<_i11.ActiveUserPlan>>>);
+
+  @override
+  _i6.Future<bool> hasAccessToContent({
+    required _i13.AccessContent? accessContent,
+    required bool? isSubscriptionOnly,
+    String? partnerId,
+    bool? forceRefresh = false,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #hasAccessToContent,
+          [],
+          {
+            #accessContent: accessContent,
+            #isSubscriptionOnly: isSubscriptionOnly,
+            #partnerId: partnerId,
+            #forceRefresh: forceRefresh,
+          },
+        ),
+        returnValue: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
+
+  @override
+  _i6.Future<List<T>> hasAccessToMultiplesContent<T>({
+    required List<T>? contents,
+    required _i13.AccessContent? Function(T)? getAccessContent,
+    required T Function(
+      T,
+      bool,
+    )? hasAccessToContent,
+    required bool Function(T)? getIsSubscriptionOnly,
+    String? partnerId,
+    bool? forceRefresh = false,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #hasAccessToMultiplesContent,
+          [],
+          {
+            #contents: contents,
+            #getAccessContent: getAccessContent,
+            #hasAccessToContent: hasAccessToContent,
+            #getIsSubscriptionOnly: getIsSubscriptionOnly,
+            #partnerId: partnerId,
+            #forceRefresh: forceRefresh,
+          },
+        ),
+        returnValue: _i6.Future<List<T>>.value(<T>[]),
+      ) as _i6.Future<List<T>>);
+
+  @override
+  _i6.Future<_i9.Either<_i10.Failure, Set<String>>> getAllUserAccesses({
+    String? partnerId,
+    bool? forceRefresh = false,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAllUserAccesses,
+          [],
+          {
+            #partnerId: partnerId,
+            #forceRefresh: forceRefresh,
+          },
+        ),
+        returnValue: _i6.Future<_i9.Either<_i10.Failure, Set<String>>>.value(
+            _i12.dummyValue<_i9.Either<_i10.Failure, Set<String>>>(
+          this,
+          Invocation.method(
+            #getAllUserAccesses,
+            [],
+            {
+              #partnerId: partnerId,
+              #forceRefresh: forceRefresh,
+            },
+          ),
+        )),
+      ) as _i6.Future<_i9.Either<_i10.Failure, Set<String>>>);
 }

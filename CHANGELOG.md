@@ -1,3 +1,21 @@
+## 21.5.0
+
+**feat(feed):** Refactor FeedContentItem and NewsRepository for improved access validation
+- Refactored FeedContentItem model to enhance access control logic and support for subscription-based access.
+- Updated NewsRepository to validate access for feed items before mapping to FeedContentAdapter, ensuring correct access flags and types.
+- Improved consistency in access validation across paginated feed and event endpoints.
+
+**refactor:** FeedContentItem and VideoWithMetadata models for improved access control
+- Refactored FeedContentItem and VideoWithMetadata models to centralize and clarify access control logic.
+- Enhanced model structure for better maintainability and future feature expansion.
+
+**feat(feed):** Add AccessContent class and refactor FeedContentItem model
+- Introduced AccessContent class to encapsulate access-related properties for feed items.
+- Refactored FeedContentItem to use AccessContent, improving code clarity and separation of concerns.
+
+**merge:** Synced with latest changes from 'test' branch
+- Merged updates from 'test' branch to keep QA branch up to date.
+
 ## 21.4.3
 
 **-fix(dependencies):** update package route

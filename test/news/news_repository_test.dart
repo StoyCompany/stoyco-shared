@@ -6,10 +6,11 @@ import 'package:stoyco_shared/cache/in_memory_cache_manager.dart';
 import 'package:stoyco_shared/news/models/new_model.dart';
 import 'package:stoyco_shared/news/news_data_source.dart';
 import 'package:stoyco_shared/news/news_repository.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/active_subscription_service.dart';
 
 import 'news_repository_test.mocks.dart';
 
-@GenerateMocks([NewsDataSource])
+@GenerateMocks([NewsDataSource, ActiveSubscriptionService])
 void main() {
   late MockNewsDataSource mockDataSource;
   late NewsRepository repository;
@@ -18,7 +19,8 @@ void main() {
     // Reset cache before each test
     InMemoryCacheManager.resetInstance();
     mockDataSource = MockNewsDataSource();
-    repository = NewsRepository(newsDataSource: mockDataSource);
+    final mockActiveSubscriptionService = MockActiveSubscriptionService();
+    repository = NewsRepository(newsDataSource: mockDataSource, activeSubscriptionService: mockActiveSubscriptionService);
   });
 
   Response _createResponse(dynamic data) => Response(

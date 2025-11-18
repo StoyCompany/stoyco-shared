@@ -6,6 +6,7 @@ import 'package:stoyco_shared/news/models/new_model.dart';
 import 'package:stoyco_shared/news/news_data_source.dart';
 import 'package:stoyco_shared/news/news_repository.dart';
 import 'package:stoyco_shared/widgets/interactive_content_card.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/active_subscription_service.dart';
 
 /// A service that handles all operations related to news, including
 /// fetching paginated news, searching for news, retrieving a specific
@@ -15,16 +16,15 @@ class NewsService {
   ///
   /// The [environment] is required to initialize the service with
   /// the necessary configurations.
-  factory NewsService({required StoycoEnvironment environment}) =>
-      _instance ??= NewsService._(environment: environment);
+  factory NewsService({required StoycoEnvironment environment, required ActiveSubscriptionService activeSubscriptionService}) => _instance ??= NewsService._(environment: environment , activeSubscriptionService: activeSubscriptionService);
 
   /// Private constructor for internal initialization of the [NewsService].
   ///
   /// This initializes the [_newsDataSource] and [_newsRepository] with
   /// the provided [environment].
-  NewsService._({required this.environment}) {
+  NewsService._({required this.environment, required this.activeSubscriptionService}) {
     _newsDataSource = NewsDataSource(environment: environment);
-    _newsRepository = NewsRepository(newsDataSource: _newsDataSource!);
+    _newsRepository = NewsRepository(newsDataSource: _newsDataSource!, activeSubscriptionService: activeSubscriptionService);
 
     _instance = this;
   }
@@ -37,6 +37,8 @@ class NewsService {
 
   /// Environment configuration used for initializing data sources and repositories.
   StoycoEnvironment environment;
+
+  ActiveSubscriptionService activeSubscriptionService;
 
   /// Repository responsible for handling news operations.
   NewsRepository? _newsRepository;
