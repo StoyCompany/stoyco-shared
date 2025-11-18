@@ -189,14 +189,18 @@ class VideoPlayerRepositoryV2 {
             id: m['contentId'] as String?,
             name: m['title'] as String?,
             videoUrl: m['mp4Url'] as String? ?? m['hlsUrl'] as String?,
-            createAt: m['contentCreatedAt'] != null ? DateTime.tryParse(m['contentCreatedAt'] as String) : null,
+            createAt: m['contentCreatedAt'] != null
+                ? DateTime.tryParse(m['contentCreatedAt'] as String)
+                : null,
             partnerId: m['partnerId'] as String?,
             partnerName: m['partnerName'] as String?,
             isSubscriberOnly: m['isSubscriberOnly'] as bool,
             isFeaturedContent: m['isFeaturedContent'] as bool?,
             shared: (m['shares'] ?? m['sharedCount']) is int
                 ? (m['shares'] ?? m['sharedCount']) as int
-                : (m['shares'] ?? m['sharedCount']) != null ? int.tryParse('${m['shares'] ?? m['sharedCount']}') : null,
+                : (m['shares'] ?? m['sharedCount']) != null
+                    ? int.tryParse('${m['shares'] ?? m['sharedCount']}')
+                    : null,
             followingCO: m['isFollowed'] as bool?,
             likeThisVideo: m['liked'] as bool?,
             likes: (m['likes'] ?? m['likeCount']) is int
@@ -216,7 +220,10 @@ class VideoPlayerRepositoryV2 {
                     ready: true,
                   )
                 : null,
-            accessContent: AccessContent.fromJson(m['accessContent'] as Map<String, dynamic>? ?? {}),
+            accessContent: m['accessContent'] != null
+                ? AccessContent.fromJson(
+                    m['accessContent'] as Map<String, dynamic>)
+                : null,
           );
         }).toList(),
         'Error getting videos with filter',
@@ -278,7 +285,10 @@ class VideoPlayerRepositoryV2 {
                     ready: true,
                   )
                 : null,
-            accessContent: AccessContent.fromJson(m['accessContent'] as Map<String, dynamic>? ?? {}),
+            accessContent: m['accessContent'] != null
+                ? AccessContent.fromJson(
+                    m['accessContent'] as Map<String, dynamic>)
+                : null,
           );
         }).toList(),
         'Error getting featured videos',

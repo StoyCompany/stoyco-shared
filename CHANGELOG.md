@@ -1,3 +1,7 @@
+## 21.4.3
+
+**-fix(dependencies):** update package route
+
 ## 21.4.0
 
 feat: Add PartnerContentAvailabilityResponse model and related serialization logic
@@ -37,6 +41,7 @@ feat: Add PartnerContentAvailabilityResponse model and related serialization log
 - Added tests for video cache interactions in `video_cache_interaction_test.dart` to ensure proper updates and removals of cached videos.
 - Developed `video_cache_manager_test.dart` to validate cache manager functionalities including storage, retrieval, and expiration of cached videos.
 - Introduced `video_player_service_cache_test.dart` to verify caching behavior in the video player service, ensuring efficient data retrieval and cache management.
+- A component update Interactive Content
 
 ## 21.3.8
 

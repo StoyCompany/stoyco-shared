@@ -166,10 +166,10 @@ class MockNewsDataSource extends _i1.Mock implements _i4.NewsDataSource {
             },
           ),
         )),
-      ) as _i6.Future<_i2.Response<dynamic>>);
+      ) as _i5.Future<_i2.Response<dynamic>>);
 
   @override
-  _i6.Future<_i2.Response<dynamic>> getPagedFeedEvents({
+  _i5.Future<_i2.Response<dynamic>> getPagedFeedEvents({
     int? pageNumber = 1,
     int? pageSize = 20,
     String? partnerId,
@@ -200,7 +200,7 @@ class MockNewsDataSource extends _i1.Mock implements _i4.NewsDataSource {
           },
         ),
         returnValue:
-            _i6.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
+            _i5.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
           this,
           Invocation.method(
             #getPagedFeedEvents,
@@ -220,7 +220,7 @@ class MockNewsDataSource extends _i1.Mock implements _i4.NewsDataSource {
             },
           ),
         )),
-      ) as _i6.Future<_i2.Response<dynamic>>);
+      ) as _i5.Future<_i2.Response<dynamic>>);
 
   @override
   _i6.Future<_i2.Response<dynamic>> markAsViewed(String? id) =>

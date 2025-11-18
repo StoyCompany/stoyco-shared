@@ -5,13 +5,13 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i8;
 
-import 'package:dio/src/adapter.dart' as _i3;
+import 'package:dio/src/adapter.dart' as _i4;
 import 'package:dio/src/cancel_token.dart' as _i9;
 import 'package:dio/src/dio.dart' as _i7;
-import 'package:dio/src/dio_mixin.dart' as _i5;
+import 'package:dio/src/dio_mixin.dart' as _i3;
 import 'package:dio/src/options.dart' as _i2;
 import 'package:dio/src/response.dart' as _i6;
-import 'package:dio/src/transformer.dart' as _i4;
+import 'package:dio/src/transformer.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -27,6 +27,7 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
+// ignore_for_file: invalid_use_of_internal_member
 
 class _FakeBaseOptions_0 extends _i1.SmartFake implements _i2.BaseOptions {
   _FakeBaseOptions_0(
@@ -38,9 +39,8 @@ class _FakeBaseOptions_0 extends _i1.SmartFake implements _i2.BaseOptions {
         );
 }
 
-class _FakeHttpClientAdapter_1 extends _i1.SmartFake
-    implements _i3.HttpClientAdapter {
-  _FakeHttpClientAdapter_1(
+class _FakeInterceptors_1 extends _i1.SmartFake implements _i3.Interceptors {
+  _FakeInterceptors_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -49,8 +49,9 @@ class _FakeHttpClientAdapter_1 extends _i1.SmartFake
         );
 }
 
-class _FakeTransformer_2 extends _i1.SmartFake implements _i4.Transformer {
-  _FakeTransformer_2(
+class _FakeHttpClientAdapter_2 extends _i1.SmartFake
+    implements _i4.HttpClientAdapter {
+  _FakeHttpClientAdapter_2(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -59,8 +60,8 @@ class _FakeTransformer_2 extends _i1.SmartFake implements _i4.Transformer {
         );
 }
 
-class _FakeInterceptors_3 extends _i1.SmartFake implements _i5.Interceptors {
-  _FakeInterceptors_3(
+class _FakeTransformer_3 extends _i1.SmartFake implements _i5.Transformer {
+  _FakeTransformer_3(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -107,56 +108,55 @@ class MockDio extends _i1.Mock implements _i7.Dio {
       ) as _i2.BaseOptions);
 
   @override
-  _i3.HttpClientAdapter get httpClientAdapter => (super.noSuchMethod(
-        Invocation.getter(#httpClientAdapter),
-        returnValue: _FakeHttpClientAdapter_1(
-          this,
-          Invocation.getter(#httpClientAdapter),
-        ),
-      ) as _i3.HttpClientAdapter);
-
-  @override
-  _i4.Transformer get transformer => (super.noSuchMethod(
-        Invocation.getter(#transformer),
-        returnValue: _FakeTransformer_2(
-          this,
-          Invocation.getter(#transformer),
-        ),
-      ) as _i4.Transformer);
-
-  @override
-  _i5.Interceptors get interceptors => (super.noSuchMethod(
+  _i3.Interceptors get interceptors => (super.noSuchMethod(
         Invocation.getter(#interceptors),
-        returnValue: _FakeInterceptors_3(
+        returnValue: _FakeInterceptors_1(
           this,
           Invocation.getter(#interceptors),
         ),
-      ) as _i5.Interceptors);
+      ) as _i3.Interceptors);
 
   @override
-  set options(_i2.BaseOptions? _options) => super.noSuchMethod(
+  _i4.HttpClientAdapter get httpClientAdapter => (super.noSuchMethod(
+        Invocation.getter(#httpClientAdapter),
+        returnValue: _FakeHttpClientAdapter_2(
+          this,
+          Invocation.getter(#httpClientAdapter),
+        ),
+      ) as _i4.HttpClientAdapter);
+
+  @override
+  _i5.Transformer get transformer => (super.noSuchMethod(
+        Invocation.getter(#transformer),
+        returnValue: _FakeTransformer_3(
+          this,
+          Invocation.getter(#transformer),
+        ),
+      ) as _i5.Transformer);
+
+  @override
+  set options(_i2.BaseOptions? value) => super.noSuchMethod(
         Invocation.setter(
           #options,
-          _options,
+          value,
         ),
         returnValueForMissingStub: null,
       );
 
   @override
-  set httpClientAdapter(_i3.HttpClientAdapter? _httpClientAdapter) =>
-      super.noSuchMethod(
+  set httpClientAdapter(_i4.HttpClientAdapter? value) => super.noSuchMethod(
         Invocation.setter(
           #httpClientAdapter,
-          _httpClientAdapter,
+          value,
         ),
         returnValueForMissingStub: null,
       );
 
   @override
-  set transformer(_i4.Transformer? _transformer) => super.noSuchMethod(
+  set transformer(_i5.Transformer? value) => super.noSuchMethod(
         Invocation.setter(
           #transformer,
-          _transformer,
+          value,
         ),
         returnValueForMissingStub: null,
       );
@@ -804,9 +804,9 @@ class MockDio extends _i1.Mock implements _i7.Dio {
   @override
   _i7.Dio clone({
     _i2.BaseOptions? options,
-    _i5.Interceptors? interceptors,
-    _i3.HttpClientAdapter? httpClientAdapter,
-    _i4.Transformer? transformer,
+    _i3.Interceptors? interceptors,
+    _i4.HttpClientAdapter? httpClientAdapter,
+    _i5.Transformer? transformer,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
