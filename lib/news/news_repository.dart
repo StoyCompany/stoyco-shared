@@ -99,6 +99,56 @@ class NewsRepository {
   }
 
 
+
+  Future<Either<Failure, PageResult<FeedContentAdapter>>> getFeedEventsPaginated(
+      int pageNumber,
+      int pageSize, {
+        String? partnerId,
+        String? userId,
+        String? partnerProfile,
+        bool? onlyNew,
+        int? newDays,
+        bool? hideSubscriberOnlyIfNotSubscribed,
+        String? ct,
+        required String feedType,
+      }) async {
+      try {
+        final response = await _newsDataSource.getPagedFeedEvents(
+            pageNumber: pageNumber,
+            pageSize: pageSize,
+            partnerId: partnerId,
+            userId: userId,
+            partnerProfile: partnerProfile,
+            onlyNew: onlyNew,
+            newDays: newDays,
+            hideSubscriberOnlyIfNotSubscribed: hideSubscriberOnlyIfNotSubscribed,
+            ct: ct,
+            feedType: feedType,
+        );
+
+        final feedResponse = FeedResponse.fromJson(response.data as Map<String, dynamic>);
+        final feedData = feedResponse.data;
+        final pageResult = PageResult<FeedContentAdapter>(
+          items: feedData.items
+              .map((item) => FeedContentAdapter(item.copyWith(feedType: feedType)))
+              .toList(),
+          pageNumber: feedData.pageNumber,
+          pageSize: feedData.pageSize,
+          totalItems: feedData.totalItems,
+          totalPages: feedData.totalPages,
+        );
+
+        return Right(pageResult);
+      } on DioException catch (error) {
+        return Left(DioFailure.decode(error));
+      } on Error catch (error) {
+        return Left(ErrorFailure.decode(error));
+      } on Exception catch (error) {
+        return Left(ExceptionFailure.decode(error));
+      }
+    }
+
+
   Future<Either<Failure, PageResult<NewModel>>> getNewsPaginatedWithSearchTerm(
     int pageNumber,
     int pageSize,

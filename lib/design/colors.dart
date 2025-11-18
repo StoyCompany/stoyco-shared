@@ -35,4 +35,7 @@ class StoycoColors {
   static Color lightViolet = ColorUtils.fromHex('6C61FF');
 
   static Color darkBackground = ColorUtils.fromHex('0F151A');
+
+  static Color whiteLavender = ColorUtils.fromHex('F7F6FA');
+
 }
