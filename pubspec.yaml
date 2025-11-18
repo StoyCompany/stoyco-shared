@@ -53,7 +53,7 @@ dependencies:
     # path: ../stoyco_subscription
     git:
       url: https://github.com/StoyCompany/stoyco_subscription.git
-      ref: main
+      ref: origin/feat/active_subscription
 
 dev_dependencies:
   flutter_test:
