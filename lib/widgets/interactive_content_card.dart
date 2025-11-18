@@ -446,11 +446,11 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
             ),
           ),
 
-          // Participate button positioned absolutely (doesn't affect layout)
+
           if (showParticipateButton)
             Positioned(
-              left: StoycoScreenSize.width(context, widget.config.height + widget.config.spacing + 8),
-              bottom: StoycoScreenSize.height(context, 38),
+              left: StoycoScreenSize.width(context, widget.config.height + widget.config.spacing ),
+              bottom: StoycoScreenSize.height(context, 45),
               child: _buildParticipateButton(context),
             ),
         ],
