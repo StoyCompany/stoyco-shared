@@ -32,6 +32,7 @@ AnnouncementModel _$AnnouncementModelFromJson(Map<String, dynamic> json) =>
       communityOwnerId: json['communityOwnerId'] as String?,
       isSubscriberOnly: json['isSubscriberOnly'] as bool?,
       hasAccess: json['hasAccess'] as bool?,
+      accessContent: json['accessContent'] as Map<String, dynamic>?,
     );
 
 Map<String, dynamic> _$AnnouncementModelToJson(AnnouncementModel instance) =>
@@ -57,4 +58,5 @@ Map<String, dynamic> _$AnnouncementModelToJson(AnnouncementModel instance) =>
       'communityOwnerId': instance.communityOwnerId,
       'isSubscriberOnly': instance.isSubscriberOnly,
       'hasAccess': instance.hasAccess,
+      'accessContent': instance.accessContent,
     };

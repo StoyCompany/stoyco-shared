@@ -28,6 +28,7 @@ class AnnouncementModel {
     this.communityOwnerId,
     this.isSubscriberOnly,
     bool? hasAccess,
+    this.accessContent,
   }) : hasAccess = hasAccess ?? !(isSubscriberOnly ?? false);
 
   factory AnnouncementModel.fromJson(Map<String, dynamic> json) =>
@@ -54,12 +55,13 @@ class AnnouncementModel {
   final String? communityOwnerId;
   final bool? isSubscriberOnly;
   final bool hasAccess;
+  final Map<String, dynamic>? accessContent;
 
   bool get isActive => isPublished ?? false;
 
   @override
   String toString() =>
-      'AnnouncementModel(id: $id, title: $title, mainImage: $mainImage, images: $images, content: $content, shortDescription: $shortDescription, isDraft: $isDraft, isPublished: $isPublished, isDeleted: $isDeleted, viewCount: $viewCount, startDate: $startDate, endDate: $endDate, draftCreationDate: $draftCreationDate, lastUpdatedDate: $lastUpdatedDate, deletionDate: $deletionDate, cronJobId: $cronJobId, createdBy: $createdBy, createdAt: $createdAt, communityOwnerId: $communityOwnerId, isSubscriberOnly: $isSubscriberOnly, hasAccess: $hasAccess)';
+      'AnnouncementModel(id: $id, title: $title, mainImage: $mainImage, images: $images, content: $content, shortDescription: $shortDescription, isDraft: $isDraft, isPublished: $isPublished, isDeleted: $isDeleted, viewCount: $viewCount, startDate: $startDate, endDate: $endDate, draftCreationDate: $draftCreationDate, lastUpdatedDate: $lastUpdatedDate, deletionDate: $deletionDate, cronJobId: $cronJobId, createdBy: $createdBy, createdAt: $createdAt, communityOwnerId: $communityOwnerId, isSubscriberOnly: $isSubscriberOnly, hasAccess: $hasAccess, accessContent: $accessContent)';
 
   Map<String, dynamic> toJson() => _$AnnouncementModelToJson(this);
 
@@ -85,6 +87,7 @@ class AnnouncementModel {
     String? communityOwnerId,
     bool? isSubscriberOnly,
     bool? hasAccess,
+    Map<String, dynamic>? accessContent,
   }) =>
       AnnouncementModel(
         id: id ?? this.id,
@@ -108,6 +111,7 @@ class AnnouncementModel {
         communityOwnerId: communityOwnerId ?? this.communityOwnerId,
         isSubscriberOnly: isSubscriberOnly ?? this.isSubscriberOnly,
         hasAccess: hasAccess ?? this.hasAccess,
+        accessContent: accessContent ?? this.accessContent,
       );
 
   @override
@@ -140,5 +144,6 @@ class AnnouncementModel {
       createdAt.hashCode ^
       communityOwnerId.hashCode ^
       isSubscriberOnly.hashCode ^
-      hasAccess.hashCode;
+      hasAccess.hashCode ^
+      accessContent.hashCode;
 }
