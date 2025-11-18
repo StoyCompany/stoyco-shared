@@ -82,11 +82,10 @@ class FeedContentItem with ContentAccessValidatorMixin {
     this.customData,
     this.state,
     this.feedType,
-    this.accessContent,
     this.isSubscriberOnly = false,
-    bool? hasAccess,
     this.accessContent,
-  }) : hasAccess = hasAccess ?? !isSubscriberOnly;
+    bool? hasAccessWithSubscription,
+  }) : hasAccessWithSubscription = hasAccessWithSubscription ?? !isSubscriberOnly;
 
   factory FeedContentItem.fromJson(Map<String, dynamic> json) => _$FeedContentItemFromJson(json);
 
@@ -121,17 +120,13 @@ class FeedContentItem with ContentAccessValidatorMixin {
 
   /// Publication state (e.g., 'published').
   final String? state;
-  final bool isSubscriberOnly;
-  /// This value is constructed in the frontend and is not mapped from backend JSON.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  final bool hasAccess;
-  final AccessContent? accessContent;
-
-
   /// Feed type (e.g., 'news', 'announcements'). Not returned by API, injected by repository.
   @JsonKey(includeFromJson: false, includeToJson: false)
   final String? feedType;
-
+  final bool isSubscriberOnly;
+  /// This value is constructed in the frontend and is not mapped from backend JSON.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final bool hasAccessWithSubscription;
   final AccessContent? accessContent;
 
   Map<String, dynamic> toJson() => _$FeedContentItemToJson(this);
@@ -168,6 +163,7 @@ class FeedContentItem with ContentAccessValidatorMixin {
     String? state,
     String? feedType,
     AccessContent? accessContent,
+    bool? hasAccessWithSubscription,
   }) =>
       FeedContentItem(
         contentId: contentId ?? this.contentId,
@@ -200,30 +196,12 @@ class FeedContentItem with ContentAccessValidatorMixin {
         state: state ?? this.state,
         feedType: feedType ?? this.feedType,
         accessContent: accessContent ?? this.accessContent,
+        hasAccessWithSubscription: hasAccessWithSubscription ?? this.hasAccessWithSubscription,
       );
-
-  @override
-  AccessContent get contentAccess => accessContent ?? AccessContent.empty();
-}
-
-@JsonSerializable()
-class AccessContent {
-  const AccessContent({
-    required this.contentId,
-    required this.partnerId,
-    required this.planIds,
-    this.visibleFrom,
-    this.visibleUntil,
-  });
-
-  factory AccessContent.fromJson(Map<String, dynamic> json) => _$AccessContentFromJson(json);
-
-  final String contentId;
-  final String partnerId;
-  final List<String> planIds;
-  final DateTime? visibleFrom;
-  final DateTime? visibleUntil;
-
-  Map<String, dynamic> toJson() => _$AccessContentToJson(this);
-
+      
+      @override
+      AccessContent get contentAccess => accessContent!;
+    
+      @override
+      bool get isSubscriptionOnly => isSubscriberOnly;
 }
