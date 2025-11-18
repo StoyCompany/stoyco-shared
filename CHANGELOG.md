@@ -1,10 +1,43 @@
 ## 21.4.0
 
-- **feat (Interactive Content):** A component update Interactive Content
+feat: Add PartnerContentAvailabilityResponse model and related serialization logic
+
+- Implemented PartnerContentAvailabilityResponse and PartnerContentAvailabilityData classes for handling content availability responses from the API.
+- Added JSON serialization and deserialization methods using json_annotation.
+- Included unit tests for cache management in InMemoryCacheManager and PersistentCacheManager.
+- Developed tests for the NewsRepository to ensure correct caching behavior and error handling.
+- Created mock classes for testing with Mockito to simulate data source interactions.
+
+## 21.3.11
+
+**feat(cache):** enhance video cache management with partner following updates and tests
+
+## 21.3.10
+
+**feat(cache):** add generic caching system for repositories
+
+- Implemented generic `CacheEntry<T>` model with TTL and expiration tracking
+- Created abstract `CacheManager` interface for flexible cache implementations
+- Added `InMemoryCacheManager` singleton for in-memory caching
+- Introduced `RepositoryCacheMixin` to easily add caching to any repository
+- Features include:
+  - Automatic cache expiration based on TTL
+  - Force refresh capability
+  - Pattern-based cache invalidation
+  - Support for `Either<Failure, T>` return types
+  - Full test coverage with unit tests
+- Comprehensive documentation and usage examples included
 
 ## 21.3.9
 
-- **feat (Events Desing):** A component update new desing
+**feat(video):** add examples for persistent caching and prefetching
+
+- Implemented `persistent_cache_example.dart` demonstrating initialization, usage, and cache management in a video feed application.
+- Created `prefetching_example.dart` to showcase automatic prefetching of video pages for seamless pagination.
+- Added tests for video cache interactions in `video_cache_interaction_test.dart` to ensure proper updates and removals of cached videos.
+- Developed `video_cache_manager_test.dart` to validate cache manager functionalities including storage, retrieval, and expiration of cached videos.
+- Introduced `video_player_service_cache_test.dart` to verify caching behavior in the video player service, ensuring efficient data retrieval and cache management.
+- A component update Interactive Content
 
 ## 21.3.8
 

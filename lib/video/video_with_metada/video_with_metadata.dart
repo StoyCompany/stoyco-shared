@@ -2,13 +2,15 @@ import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:stoyco_shared/video/video_with_metada/video_metadata.dart';
 import 'package:stoyco_shared/video/video_with_metada/streaming_data.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/active_subscription_service.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/mixins/content_access_validator_mixin.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/access_content.dart';
 
 part 'video_with_metadata.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class VideoWithMetadata {
-  factory VideoWithMetadata.fromJson(Map<String, dynamic> json) =>
-      _$VideoWithMetadataFromJson(json);
+class VideoWithMetadata with ContentAccessValidatorMixin {
+  factory VideoWithMetadata.fromJson(Map<String, dynamic> json) => _$VideoWithMetadataFromJson(json);
 
   const VideoWithMetadata({
     this.videoMetadata,
@@ -29,10 +31,10 @@ class VideoWithMetadata {
     this.likeThisVideo,
     this.views,
     this.likes,
-    this.isSubscriberOnly,
-    bool? hasAccess,
-  }) : hasAccess = hasAccess ?? !(isSubscriberOnly ?? false);
-
+    this.isSubscriberOnly = false,
+    this.accessContent,
+    bool? hasAccessWithSubscription,
+  }) : hasAccessWithSubscription = hasAccessWithSubscription ?? !isSubscriberOnly;
 
   final VideoMetadata? videoMetadata;
   final String? id;
@@ -52,12 +54,13 @@ class VideoWithMetadata {
   final bool? likeThisVideo;
   final int? views;
   final int? likes;
-  final bool? isSubscriberOnly;
-  final bool hasAccess;
+  final bool isSubscriberOnly;
+  final AccessContent? accessContent;
+  final bool hasAccessWithSubscription;
 
   @override
   String toString() =>
-      'VideoWithMetadata(videoMetadata: $videoMetadata, id: $id, videoUrl: $videoUrl, appUrl: $appUrl, name: $name, description: $description, partnerId: $partnerId, order: $order, active: $active, createAt: $createAt, partnerId: $partnerId, isSubscriberOnly: $isSubscriberOnly, hasAccess: $hasAccess, streamingData: $streamingData, isSubscriberOnly: $isSubscriberOnly, isFeaturedContent: $isFeaturedContent, partnerName: $partnerName, shared: $shared, followingCO: $followingCO, likeThisVideo: $likeThisVideo, views: $views, likes: $likes)';
+      'VideoWithMetadata(videoMetadata: $videoMetadata, id: $id, videoUrl: $videoUrl, appUrl: $appUrl, name: $name, description: $description, partnerId: $partnerId, order: $order, active: $active, createAt: $createAt, partnerId: $partnerId, isSubscriberOnly: $isSubscriberOnly, streamingData: $streamingData, isSubscriberOnly: $isSubscriberOnly, isFeaturedContent: $isFeaturedContent, partnerName: $partnerName, shared: $shared, followingCO: $followingCO, likeThisVideo: $likeThisVideo, views: $views, likes: $likes)';
 
   Map<String, dynamic> toJson() => _$VideoWithMetadataToJson(this);
 
@@ -81,7 +84,7 @@ class VideoWithMetadata {
     int? views,
     int? likes,
     bool? isSubscriberOnly,
-    bool? hasAccess,
+    bool? hasAccessWithSubscription,
   }) =>
       VideoWithMetadata(
         videoMetadata: videoMetadata ?? this.videoMetadata,
@@ -103,7 +106,8 @@ class VideoWithMetadata {
         views: views ?? this.views,
         likes: likes ?? this.likes,
         isSubscriberOnly: isSubscriberOnly ?? this.isSubscriberOnly,
-        hasAccess: hasAccess ?? this.hasAccess,
+        hasAccessWithSubscription:
+            hasAccessWithSubscription ?? this.hasAccessWithSubscription,
       );
 
   @override
@@ -128,7 +132,6 @@ class VideoWithMetadata {
       createAt.hashCode ^
       partnerId.hashCode ^
       isSubscriberOnly.hashCode ^
-      hasAccess.hashCode ^
       streamingData.hashCode ^
       isSubscriberOnly.hashCode ^
       isFeaturedContent.hashCode ^
@@ -136,11 +139,11 @@ class VideoWithMetadata {
       followingCO.hashCode ^
       likeThisVideo.hashCode ^
       views.hashCode ^
-      likes.hashCode;
+      likes.hashCode ^
+      hasAccessWithSubscription.hashCode;
 
   /// Gets the best available video URL, preferring streaming URL if available
   String? get bestVideoUrl {
-
     // Prefer streaming URL if available and ready
     if (streamingData?.ready == true &&
         streamingData?.stream?.url != null &&
@@ -151,4 +154,17 @@ class VideoWithMetadata {
     // Fall back to videoUrl
     return videoUrl;
   }
+
+  @override
+  AccessContent? get contentAccess => accessContent;
+
+  @override
+  bool get isSubscriptionOnly => isSubscriberOnly;
+
+  /// Checks if the user can access this video.
+  ///
+  /// Uses the mixin's hasAccess() method to validate access based on active subscriptions.
+  Future<bool> canUserAccess() async => validateAccess(
+    service: ActiveSubscriptionService.instance,
+  );
 }

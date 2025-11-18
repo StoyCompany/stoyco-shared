@@ -54,7 +54,6 @@ FeedContentItem _$FeedContentItemFromJson(Map<String, dynamic> json) =>
       hlsUrl: json['hlsUrl'] as String?,
       mp4Url: json['mp4Url'] as String?,
       contentCreatedAt: json['contentCreatedAt'] as String,
-      isSubscriberOnly: json['isSubscriberOnly'] as bool,
       updatedAt: json['updatedAt'] as String?,
       publishedDate: json['publishedDate'] as String?,
       endDate: json['endDate'] as String?,
@@ -72,6 +71,14 @@ FeedContentItem _$FeedContentItemFromJson(Map<String, dynamic> json) =>
       isFeaturedContent: json['isFeaturedContent'] as bool,
       customData: json['customData'] as Map<String, dynamic>?,
       state: json['state'] as String?,
+<<<<<<< HEAD
+      isSubscriberOnly: json['isSubscriberOnly'] as bool? ?? false,
+=======
+>>>>>>> 45e7e93b161f1efea4e1c3a410e7db6a0b29dacd
+      accessContent: json['accessContent'] == null
+          ? null
+          : AccessContent.fromJson(
+              json['accessContent'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$FeedContentItemToJson(FeedContentItem instance) =>
@@ -87,7 +94,6 @@ Map<String, dynamic> _$FeedContentItemToJson(FeedContentItem instance) =>
       'hlsUrl': instance.hlsUrl,
       'mp4Url': instance.mp4Url,
       'contentCreatedAt': instance.contentCreatedAt,
-      'isSubscriberOnly': instance.isSubscriberOnly,
       'updatedAt': instance.updatedAt,
       'publishedDate': instance.publishedDate,
       'endDate': instance.endDate,
@@ -104,4 +110,33 @@ Map<String, dynamic> _$FeedContentItemToJson(FeedContentItem instance) =>
       'isFeaturedContent': instance.isFeaturedContent,
       'customData': instance.customData,
       'state': instance.state,
+<<<<<<< HEAD
+      'isSubscriberOnly': instance.isSubscriberOnly,
+      'accessContent': instance.accessContent,
+    };
+
+AccessContent _$AccessContentFromJson(Map<String, dynamic> json) =>
+    AccessContent(
+      contentId: json['contentId'] as String,
+      partnerId: json['partnerId'] as String,
+      planIds:
+          (json['planIds'] as List<dynamic>).map((e) => e as String).toList(),
+      visibleFrom: json['visibleFrom'] == null
+          ? null
+          : DateTime.parse(json['visibleFrom'] as String),
+      visibleUntil: json['visibleUntil'] == null
+          ? null
+          : DateTime.parse(json['visibleUntil'] as String),
+    );
+
+Map<String, dynamic> _$AccessContentToJson(AccessContent instance) =>
+    <String, dynamic>{
+      'contentId': instance.contentId,
+      'partnerId': instance.partnerId,
+      'planIds': instance.planIds,
+      'visibleFrom': instance.visibleFrom?.toIso8601String(),
+      'visibleUntil': instance.visibleUntil?.toIso8601String(),
+=======
+      'accessContent': instance.accessContent,
+>>>>>>> 45e7e93b161f1efea4e1c3a410e7db6a0b29dacd
     };
