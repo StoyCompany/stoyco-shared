@@ -52,7 +52,7 @@ class FeedData {
 
 /// Individual feed content item (flattened structure)
 @JsonSerializable()
-class FeedContentItem with ContentAccessValidatorMixin {
+class FeedContentItem {
   const FeedContentItem({
     required this.contentId,
     required this.partnerId,
@@ -198,10 +198,4 @@ class FeedContentItem with ContentAccessValidatorMixin {
         accessContent: accessContent ?? this.accessContent,
         hasAccessWithSubscription: hasAccessWithSubscription ?? this.hasAccessWithSubscription,
       );
-      
-      @override
-      AccessContent get contentAccess => accessContent!;
-    
-      @override
-      bool get isSubscriptionOnly => isSubscriberOnly;
 }
