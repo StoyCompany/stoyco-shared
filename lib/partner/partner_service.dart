@@ -4,6 +4,7 @@ import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
 import 'package:stoyco_shared/partner/models/market_segment_model.dart';
 import 'package:stoyco_shared/partner/models/partner_community_response.dart';
 import 'package:stoyco_shared/partner/models/partner_follow_check_response.dart';
+import 'package:stoyco_shared/partner/models/partner_content_availability_response.dart';
 import 'package:stoyco_shared/partner/partner_data_source.dart';
 import 'package:stoyco_shared/partner/partner_repository.dart';
 
@@ -14,9 +15,7 @@ class PartnerService {
   /// The [environment] is required to initialize the service with
   /// the necessary configurations.
   factory PartnerService({required StoycoEnvironment environment}) {
-    if (_instance == null) {
-      _instance = PartnerService._(environment: environment);
-    }
+    _instance ??= PartnerService._(environment: environment);
     return _instance!;
   }
 
@@ -120,4 +119,35 @@ class PartnerService {
         userId: userId,
         partnerId: partnerId,
       );
+
+  /// Retrieves content availability for a partner.
+  ///
+  /// This method calls the `/v1/feed/partner/{partnerId}/content-availability`
+  /// endpoint and returns a set of boolean flags indicating whether different
+  /// types of content (news, announcements, events, videos, NFTs, products)
+  /// exist for the specified partner.
+  ///
+  /// Parameters:
+  /// * [partnerId] - Unique identifier of the partner.
+  ///
+  /// Returns an [Either] with:
+  /// - [Left] containing a [Failure] if the request fails
+  /// - [Right] containing a [PartnerContentAvailabilityResponse] if successful
+  ///
+  /// Example:
+  /// ```dart
+  /// final result = await PartnerService(environment: env)
+  ///   .getPartnerContentAvailability('66f5bd918d77fca522545f01');
+  /// result.fold(
+  ///   (failure) => print('Error: $failure'),
+  ///   (availability) {
+  ///     if (availability.data.videos) {
+  ///       // show videos section
+  ///     }
+  ///   },
+  /// );
+  /// ```
+  Future<Either<Failure, PartnerContentAvailabilityResponse>>
+      getPartnerContentAvailability(String partnerId) =>
+          _partnerRepository!.getPartnerContentAvailability(partnerId);
 }

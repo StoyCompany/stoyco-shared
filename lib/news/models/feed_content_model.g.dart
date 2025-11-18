@@ -71,7 +71,10 @@ FeedContentItem _$FeedContentItemFromJson(Map<String, dynamic> json) =>
       isFeaturedContent: json['isFeaturedContent'] as bool,
       customData: json['customData'] as Map<String, dynamic>?,
       state: json['state'] as String?,
+<<<<<<< HEAD
       isSubscriberOnly: json['isSubscriberOnly'] as bool? ?? false,
+=======
+>>>>>>> 45e7e93b161f1efea4e1c3a410e7db6a0b29dacd
       accessContent: json['accessContent'] == null
           ? null
           : AccessContent.fromJson(
@@ -107,6 +110,7 @@ Map<String, dynamic> _$FeedContentItemToJson(FeedContentItem instance) =>
       'isFeaturedContent': instance.isFeaturedContent,
       'customData': instance.customData,
       'state': instance.state,
+<<<<<<< HEAD
       'isSubscriberOnly': instance.isSubscriberOnly,
       'accessContent': instance.accessContent,
     };
@@ -132,4 +136,7 @@ Map<String, dynamic> _$AccessContentToJson(AccessContent instance) =>
       'planIds': instance.planIds,
       'visibleFrom': instance.visibleFrom?.toIso8601String(),
       'visibleUntil': instance.visibleUntil?.toIso8601String(),
+=======
+      'accessContent': instance.accessContent,
+>>>>>>> 45e7e93b161f1efea4e1c3a410e7db6a0b29dacd
     };

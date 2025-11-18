@@ -1,5 +1,64 @@
+## 21.4.0
+
+feat: Add PartnerContentAvailabilityResponse model and related serialization logic
+
+- Implemented PartnerContentAvailabilityResponse and PartnerContentAvailabilityData classes for handling content availability responses from the API.
+- Added JSON serialization and deserialization methods using json_annotation.
+- Included unit tests for cache management in InMemoryCacheManager and PersistentCacheManager.
+- Developed tests for the NewsRepository to ensure correct caching behavior and error handling.
+- Created mock classes for testing with Mockito to simulate data source interactions.
+
+## 21.3.11
+
+**feat(cache):** enhance video cache management with partner following updates and tests
+
+## 21.3.10
+
+**feat(cache):** add generic caching system for repositories
+
+- Implemented generic `CacheEntry<T>` model with TTL and expiration tracking
+- Created abstract `CacheManager` interface for flexible cache implementations
+- Added `InMemoryCacheManager` singleton for in-memory caching
+- Introduced `RepositoryCacheMixin` to easily add caching to any repository
+- Features include:
+  - Automatic cache expiration based on TTL
+  - Force refresh capability
+  - Pattern-based cache invalidation
+  - Support for `Either<Failure, T>` return types
+  - Full test coverage with unit tests
+- Comprehensive documentation and usage examples included
+
+## 21.3.9
+
+**feat(video):** add examples for persistent caching and prefetching
+
+- Implemented `persistent_cache_example.dart` demonstrating initialization, usage, and cache management in a video feed application.
+- Created `prefetching_example.dart` to showcase automatic prefetching of video pages for seamless pagination.
+- Added tests for video cache interactions in `video_cache_interaction_test.dart` to ensure proper updates and removals of cached videos.
+- Developed `video_cache_manager_test.dart` to validate cache manager functionalities including storage, retrieval, and expiration of cached videos.
+- Introduced `video_player_service_cache_test.dart` to verify caching behavior in the video player service, ensuring efficient data retrieval and cache management.
+
+## 21.3.8
+
+**-fix(dependencies):** update share_plus to version 12.0.1
+
+## 21.3.7
+
+**-feat(announcements):** update Models Announcements
+
 ## 21.3.6
+
 ### Added
+
+- **feat (LoopVideoPlayer widget):** A component has been added to view videos in an infinite loop.
+
+- **feat (SharedLike widget):** A component has been added to display sharing and liking.
+- **feat (SocialButton widget):** A component is added to render the icon and text for like and share.
+
+## 21.3.6
+
+### Added
+
 - **feat (VideoExclusiveBlur widget):** Introduced a new molecule widget for exclusive video content overlays, including blur, lock/tag indicator, and customizable UI for premium/locked content.
 - **fix (NewModel fields):** Added `communityOwnerId`, `isSubscriberOnly`, and `hasAccess` fields to `NewModel`, with updated JSON serialization.
 - **fix (AnnouncementModel fields):** Added `communityOwnerId`, `isSubscriberOnly`, and `hasAccess` fields to `AnnouncementModel`.
@@ -7,6 +66,7 @@
 ## 21.3.5
 
 **-feat(announcements):** update design Fo rAnnouncements
+
 ## 21.3.4
 
 **-fix(moengage):** update import statement and clean up comments in MoEngageService
