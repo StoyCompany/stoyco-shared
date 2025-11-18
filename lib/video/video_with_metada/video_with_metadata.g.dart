@@ -34,7 +34,7 @@ VideoWithMetadata _$VideoWithMetadataFromJson(Map<String, dynamic> json) =>
       likeThisVideo: json['likeThisVideo'] as bool?,
       views: (json['views'] as num?)?.toInt(),
       likes: (json['likes'] as num?)?.toInt(),
-      isSubscriberOnly: json['isSubscriberOnly'] as bool?,
+      isSubscriberOnly: json['isSubscriberOnly'] as bool? ?? false,
       accessContent: json['accessContent'] == null
           ? null
           : AccessContent.fromJson(

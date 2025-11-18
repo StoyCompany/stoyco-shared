@@ -138,6 +138,60 @@ class MockNewsDataSource extends _i1.Mock implements _i3.NewsDataSource {
       ) as _i5.Future<_i2.Response<dynamic>>);
 
   @override
+  _i5.Future<_i2.Response<dynamic>> getPagedFeedEvents({
+    int? pageNumber = 1,
+    int? pageSize = 20,
+    String? partnerId,
+    String? userId,
+    String? partnerProfile,
+    bool? onlyNew,
+    int? newDays = 30,
+    bool? hideSubscriberOnlyIfNotSubscribed,
+    String? ct,
+    String? feedType = '3',
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getPagedFeedEvents,
+          [],
+          {
+            #pageNumber: pageNumber,
+            #pageSize: pageSize,
+            #partnerId: partnerId,
+            #userId: userId,
+            #partnerProfile: partnerProfile,
+            #onlyNew: onlyNew,
+            #newDays: newDays,
+            #hideSubscriberOnlyIfNotSubscribed:
+                hideSubscriberOnlyIfNotSubscribed,
+            #ct: ct,
+            #feedType: feedType,
+          },
+        ),
+        returnValue:
+            _i5.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
+          this,
+          Invocation.method(
+            #getPagedFeedEvents,
+            [],
+            {
+              #pageNumber: pageNumber,
+              #pageSize: pageSize,
+              #partnerId: partnerId,
+              #userId: userId,
+              #partnerProfile: partnerProfile,
+              #onlyNew: onlyNew,
+              #newDays: newDays,
+              #hideSubscriberOnlyIfNotSubscribed:
+                  hideSubscriberOnlyIfNotSubscribed,
+              #ct: ct,
+              #feedType: feedType,
+            },
+          ),
+        )),
+      ) as _i5.Future<_i2.Response<dynamic>>);
+
+  @override
   _i5.Future<_i2.Response<dynamic>> markAsViewed(String? id) =>
       (super.noSuchMethod(
         Invocation.method(
