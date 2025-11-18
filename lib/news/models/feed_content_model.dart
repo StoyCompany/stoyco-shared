@@ -65,7 +65,6 @@ class FeedContentItem with ContentAccessValidatorMixin {
     this.hlsUrl,
     this.mp4Url,
     required this.contentCreatedAt,
-    required this.isSubscriberOnly,
     this.updatedAt,
     this.publishedDate,
     this.endDate,
@@ -83,11 +82,12 @@ class FeedContentItem with ContentAccessValidatorMixin {
     this.customData,
     this.state,
     this.feedType,
+    this.isSubscriberOnly = false,
     this.accessContent,
-  });
+    bool? hasAccessWithSubscription,
+  }) : hasAccessWithSubscription = hasAccessWithSubscription ?? !isSubscriberOnly;
 
-  factory FeedContentItem.fromJson(Map<String, dynamic> json) =>
-      _$FeedContentItemFromJson(json);
+  factory FeedContentItem.fromJson(Map<String, dynamic> json) => _$FeedContentItemFromJson(json);
 
   final String contentId;
   final String partnerId;
@@ -100,7 +100,6 @@ class FeedContentItem with ContentAccessValidatorMixin {
   final String? hlsUrl;
   final String? mp4Url;
   final String contentCreatedAt;
-  final bool isSubscriberOnly;
   final String? updatedAt;
   final String? publishedDate;
   final String? endDate;
@@ -121,11 +120,13 @@ class FeedContentItem with ContentAccessValidatorMixin {
 
   /// Publication state (e.g., 'published').
   final String? state;
-
   /// Feed type (e.g., 'news', 'announcements'). Not returned by API, injected by repository.
   @JsonKey(includeFromJson: false, includeToJson: false)
   final String? feedType;
-
+  final bool isSubscriberOnly;
+  /// This value is constructed in the frontend and is not mapped from backend JSON.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final bool hasAccessWithSubscription;
   final AccessContent? accessContent;
 
   Map<String, dynamic> toJson() => _$FeedContentItemToJson(this);
@@ -162,6 +163,7 @@ class FeedContentItem with ContentAccessValidatorMixin {
     String? state,
     String? feedType,
     AccessContent? accessContent,
+    bool? hasAccessWithSubscription,
   }) =>
       FeedContentItem(
         contentId: contentId ?? this.contentId,
@@ -194,8 +196,12 @@ class FeedContentItem with ContentAccessValidatorMixin {
         state: state ?? this.state,
         feedType: feedType ?? this.feedType,
         accessContent: accessContent ?? this.accessContent,
+        hasAccessWithSubscription: hasAccessWithSubscription ?? this.hasAccessWithSubscription,
       );
-
-  @override
-  AccessContent get contentAccess => accessContent ?? AccessContent.empty();
+      
+      @override
+      AccessContent get contentAccess => accessContent!;
+    
+      @override
+      bool get isSubscriptionOnly => isSubscriberOnly;
 }

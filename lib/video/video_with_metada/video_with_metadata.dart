@@ -10,8 +10,7 @@ part 'video_with_metadata.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class VideoWithMetadata with ContentAccessValidatorMixin {
-  factory VideoWithMetadata.fromJson(Map<String, dynamic> json) =>
-      _$VideoWithMetadataFromJson(json);
+  factory VideoWithMetadata.fromJson(Map<String, dynamic> json) => _$VideoWithMetadataFromJson(json);
 
   const VideoWithMetadata({
     this.videoMetadata,
@@ -32,10 +31,10 @@ class VideoWithMetadata with ContentAccessValidatorMixin {
     this.likeThisVideo,
     this.views,
     this.likes,
-    this.isSubscriberOnly,
+    this.isSubscriberOnly = false,
     this.accessContent,
-    this.hasAccessWithSubscription,
-  });
+    bool? hasAccessWithSubscription,
+  }) : hasAccessWithSubscription = hasAccessWithSubscription ?? !isSubscriberOnly;
 
   final VideoMetadata? videoMetadata;
   final String? id;
@@ -55,9 +54,9 @@ class VideoWithMetadata with ContentAccessValidatorMixin {
   final bool? likeThisVideo;
   final int? views;
   final int? likes;
-  final bool? isSubscriberOnly;
+  final bool isSubscriberOnly;
   final AccessContent? accessContent;
-  final bool? hasAccessWithSubscription;
+  final bool hasAccessWithSubscription;
 
   @override
   String toString() =>
@@ -157,12 +156,15 @@ class VideoWithMetadata with ContentAccessValidatorMixin {
   }
 
   @override
-  AccessContent get contentAccess => accessContent ?? AccessContent.empty();
+  AccessContent? get contentAccess => accessContent;
+
+  @override
+  bool get isSubscriptionOnly => isSubscriberOnly;
 
   /// Checks if the user can access this video.
   ///
   /// Uses the mixin's hasAccess() method to validate access based on active subscriptions.
-  Future<bool> canUserAccess() async => hasAccess(
-        service: ActiveSubscriptionService.instance,
-      );
+  Future<bool> canUserAccess() async => validateAccess(
+    service: ActiveSubscriptionService.instance,
+  );
 }

@@ -24,7 +24,6 @@ import 'package:stoyco_shared/envs/envs.dart' as _i4;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
-// ignore_for_file: invalid_use_of_internal_member
 
 class _FakeResponse_0<T> extends _i1.SmartFake implements _i2.Response<T> {
   _FakeResponse_0(
@@ -61,10 +60,10 @@ class MockActivityDataSource extends _i1.Mock
       ) as String);
 
   @override
-  set userToken(String? value) => super.noSuchMethod(
+  set userToken(String? _userToken) => super.noSuchMethod(
         Invocation.setter(
           #userToken,
-          value,
+          _userToken,
         ),
         returnValueForMissingStub: null,
       );
