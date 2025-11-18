@@ -123,8 +123,7 @@ class InteractiveCardConfig {
   static const news = InteractiveCardConfig(height: 144.0, titleMaxLines: 2);
 
   /// Default configuration for announcement cards.
-  static const announcement =
-      InteractiveCardConfig(height: 144.0, titleMaxLines: 2);
+  static const announcement = InteractiveCardConfig(height: 144.0, titleMaxLines: 2);
 }
 
 /// Callback definitions for interactions.
@@ -135,8 +134,7 @@ typedef OnShareCallback = Future<void> Function({
   required String imageUrl,
 });
 typedef OnTapCallback = void Function(String contentId);
-typedef OnLoadInteractionCountsCallback = Future<InteractionCounts> Function(
-    String contentId);
+typedef OnLoadInteractionCountsCallback = Future<InteractionCounts> Function(String contentId);
 typedef OnCheckIsLikedCallback = Future<bool> Function(String contentId);
 
 /// Immutable view state for interaction-related values.
@@ -171,8 +169,7 @@ class InteractionViewState {
     bool? isLoadingCounts,
     bool? processingLike,
     bool? processingShare,
-  }) =>
-      InteractionViewState(
+  }) => InteractionViewState(
         isLiked: isLiked ?? this.isLiked,
         likeCount: likeCount ?? this.likeCount,
         shareCount: shareCount ?? this.shareCount,
@@ -188,8 +185,7 @@ class InteractionViewState {
 /// Supply this to the widget to manually refresh interaction values (e.g. after an API call
 /// higher in the tree). If omitted, the widget creates its own internal controller.
 class InteractiveContentCardController {
-  InteractiveContentCardController(
-      [InteractionViewState initial = const InteractionViewState()])
+  InteractiveContentCardController([InteractionViewState initial = const InteractionViewState()])
       : state = ValueNotifier<InteractionViewState>(initial);
 
   /// Internal notifier holding the current [InteractionViewState].
@@ -312,8 +308,7 @@ class InteractiveContentCard extends StatefulWidget {
   final InteractiveContentCardController? controller;
 
   /// Static loading card for shimmer effect.
-  static Widget loading({InteractiveCardConfig? config}) =>
-      _InteractiveContentCardLoading(
+  static Widget loading({InteractiveCardConfig? config}) => _InteractiveContentCardLoading(
         config: config ?? const InteractiveCardConfig(),
       );
 
@@ -443,8 +438,7 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
       await widget.onLike?.call(widget.data.id, newLikedState);
       if (!mounted) return; // Salir si se desmontó durante la operación.
 
-      final updatedLikeCount =
-          _state.value.likeCount + (newLikedState ? 1 : -1);
+      final updatedLikeCount = _state.value.likeCount + (newLikedState ? 1 : -1);
       _state.value = _state.value.copyWith(
         isLiked: newLikedState,
         likeCount: updatedLikeCount < 0 ? 0 : updatedLikeCount,
@@ -477,8 +471,7 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
         imageUrl: widget.data.mainImage,
       );
       if (!mounted) return;
-      _state.value =
-          _state.value.copyWith(shareCount: _state.value.shareCount + 1);
+      _state.value = _state.value.copyWith(shareCount: _state.value.shareCount + 1);
     } catch (e) {
       if (mounted) {
         StoyCoLogger.error('Error sharing: $e');
@@ -497,8 +490,7 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
     }
     final showParticipateButton = widget.data is FeedContentAdapter &&
         ((widget.data as FeedContentAdapter).feedType == FeedType.events ||
-            ((widget.data as FeedContentAdapter).feedType ==
-                    FeedType.announcement &&
+            ((widget.data as FeedContentAdapter).feedType == FeedType.announcement &&
                 widget.data.state == 'PUBLISHED'));
     return SizedBox(
       height: StoycoScreenSize.height(context, widget.config.height),
@@ -518,8 +510,7 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
           ),
           if (showParticipateButton)
             Positioned(
-              left: StoycoScreenSize.width(
-                  context, widget.config.height + widget.config.spacing),
+              left: StoycoScreenSize.width(context, widget.config.height + widget.config.spacing),
               bottom: StoycoScreenSize.height(context, 45),
               child: _buildParticipateButton(context),
             ),
@@ -560,8 +551,7 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
                 ),
               ),
               if (widget.data is FeedContentAdapter &&
-                  (widget.data as FeedContentAdapter).feedType ==
-                      FeedType.announcement)
+                  (widget.data as FeedContentAdapter).feedType == FeedType.announcement)
                 Positioned(
                   top: StoycoScreenSize.height(context, 5),
                   left: StoycoScreenSize.width(context, 5),
@@ -574,15 +564,13 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
                       horizontalTablet: 12,
                     ),
                     decoration: BoxDecoration(
-                      color: (widget.data.customData?['isPublished'] as bool? ??
-                              false)
+                      color: (widget.data.customData?['isPublished'] as bool? ?? false)
                           ? StoycoColors.lightViolet
                           : StoycoColors.hint.withValues(alpha: 0.7),
                       borderRadius: BorderRadius.circular(30),
                       boxShadow: [
                         BoxShadow(
-                          color:
-                              StoycoColors.shadowColor.withValues(alpha: 0.2),
+                          color: StoycoColors.shadowColor.withValues(alpha: 0.2),
                           blurRadius: 6,
                           offset: const Offset(0, 4),
                         ),
@@ -616,8 +604,7 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
             widget.data.title,
             style: TextStyle(
               color: textColor,
-              fontSize: StoycoScreenSize.fontSize(
-                  context, widget.config.titleFontSize),
+              fontSize: StoycoScreenSize.fontSize(context, widget.config.titleFontSize),
               fontWeight: FontWeight.w700,
               height: 1.2,
             ),
@@ -630,8 +617,7 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
               _formatRelativeTime(widget.data.publishDate!),
               style: TextStyle(
                 color: textColor,
-                fontSize: StoycoScreenSize.fontSize(
-                    context, widget.config.dateFontSize),
+                fontSize: StoycoScreenSize.fontSize(context, widget.config.dateFontSize),
               ),
             ),
           const Spacer(),
@@ -711,8 +697,7 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
     BuildContext context,
     Color baseColor,
     InteractionViewState vState,
-  ) =>
-      Row(
+  ) => Row(
         children: [
           if (widget.enableLike)
             _SocialButton(
@@ -730,8 +715,7 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
             Gap(StoycoScreenSize.width(context, 15)),
           if (widget.enableShare)
             _SocialButton(
-              svgAsset:
-                  'packages/stoyco_shared/lib/assets/icons/share_outlined_icon.svg',
+              svgAsset: 'packages/stoyco_shared/lib/assets/icons/share_outlined_icon.svg',
               count: vState.shareCount,
               color: widget.config.shareIconColor ?? baseColor,
               onPressed: _handleShare,
@@ -753,8 +737,7 @@ class _SocialButton extends StatelessWidget {
     required this.isProcessing,
     required this.config,
     this.animation,
-  }) : assert(icon != null || svgAsset != null,
-            'Either icon or svgAsset must be provided');
+  }) : assert(icon != null || svgAsset != null, 'Either icon or svgAsset must be provided');
   final IconData? icon;
   final String? svgAsset;
   final int count;
@@ -806,8 +789,7 @@ class _SocialButton extends StatelessWidget {
                 _formatCount(count),
                 style: TextStyle(
                   color: color,
-                  fontSize: StoycoScreenSize.fontSize(
-                      context, config.counterFontSize),
+                  fontSize: StoycoScreenSize.fontSize(context, config.counterFontSize),
                   fontWeight: FontWeight.w600,
                 ),
               ),

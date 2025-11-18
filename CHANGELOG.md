@@ -1,7 +1,3 @@
-## 21.5.1
-
-- **feat:** add base interactive list widget and update pubspec.yaml dependencies
-
 ## 21.5.0
 
 **feat(feed):** Refactor FeedContentItem and NewsRepository for improved access validation
