@@ -638,6 +638,12 @@ class _AnnouncementLeaderShipDialogState
         ),
       ),
       child: InteractiveGradientPanel(
+        gradient: LinearGradient(
+          colors: [
+            Color(0xFF253341),
+            Color(0xFF253341),
+          ],
+        ),
         padding: widget.dateButtonPadding ??
             StoycoScreenSize.symmetric(
               context,

@@ -264,7 +264,7 @@ class AnnouncementDetailsUtils {
   }
 
   static const List<Color> primaryGradientColors = [
-    Color(0xFF1f1c86),
-    Color(0xFF4236df),
+    Color(0xFF6C61FF),
+    Color(0xFF6C61FF),
   ];
 }

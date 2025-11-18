@@ -23,7 +23,6 @@ import 'package:stoyco_shared/partner/partner_data_source.dart' as _i3;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
-// ignore_for_file: invalid_use_of_internal_member
 
 class _FakeResponse_0<T> extends _i1.SmartFake implements _i2.Response<T> {
   _FakeResponse_0(
@@ -107,6 +106,24 @@ class MockPartnerDataSource extends _i1.Mock implements _i3.PartnerDataSource {
               #userId: userId,
               #partnerId: partnerId,
             },
+          ),
+        )),
+      ) as _i5.Future<_i2.Response<dynamic>>);
+
+  @override
+  _i5.Future<_i2.Response<dynamic>> getPartnerContentAvailability(
+          String? partnerId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getPartnerContentAvailability,
+          [partnerId],
+        ),
+        returnValue:
+            _i5.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
+          this,
+          Invocation.method(
+            #getPartnerContentAvailability,
+            [partnerId],
           ),
         )),
       ) as _i5.Future<_i2.Response<dynamic>>);

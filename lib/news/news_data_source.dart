@@ -65,6 +65,38 @@ class NewsDataSource {
   }
 
 
+  Future<Response> getPagedFeedEvents({
+    int pageNumber = 1,
+    int pageSize = 20,
+    String? partnerId,
+    String? userId,
+    String? partnerProfile,
+    bool? onlyNew,
+    int? newDays = 30,
+    bool? hideSubscriberOnlyIfNotSubscribed,
+    String? ct,
+    String feedType = '3',
+  }) async {
+    final cancelToken = CancelToken();
+    final response = await _dio.get(
+      '${environment.baseUrl()}feed/events?partnerId=$partnerId&eventType=$feedType',
+      queryParameters: {
+        'pageNumber': pageNumber,
+        'pageSize': pageSize,
+        'partnerId': partnerId,
+        'userId': userId,
+        'partnerProfile': partnerProfile,
+        'onlyNew': onlyNew,
+        'newDays': newDays,
+        'hideSubscriberOnlyIfNotSubscribed': hideSubscriberOnlyIfNotSubscribed,
+        'ct': ct,
+      },
+      cancelToken: cancelToken,
+    );
+    return response;
+  }
+
+
 
   //MarkAsViewed
   Future<Response> markAsViewed(String id) async {

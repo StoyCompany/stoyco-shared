@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/mixins/content_access_validator_mixin.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/access_content.dart';
 
 part 'feed_content_model.g.dart';
 
@@ -50,7 +52,7 @@ class FeedData {
 
 /// Individual feed content item (flattened structure)
 @JsonSerializable()
-class FeedContentItem {
+class FeedContentItem with ContentAccessValidatorMixin {
   const FeedContentItem({
     required this.contentId,
     required this.partnerId,
@@ -63,7 +65,6 @@ class FeedContentItem {
     this.hlsUrl,
     this.mp4Url,
     required this.contentCreatedAt,
-    required this.isSubscriberOnly,
     this.updatedAt,
     this.publishedDate,
     this.endDate,
@@ -81,10 +82,12 @@ class FeedContentItem {
     this.customData,
     this.state,
     this.feedType,
-  });
+    this.isSubscriberOnly = false,
+    this.accessContent,
+    bool? hasAccessWithSubscription,
+  }) : hasAccessWithSubscription = hasAccessWithSubscription ?? !isSubscriberOnly;
 
-  factory FeedContentItem.fromJson(Map<String, dynamic> json) =>
-      _$FeedContentItemFromJson(json);
+  factory FeedContentItem.fromJson(Map<String, dynamic> json) => _$FeedContentItemFromJson(json);
 
   final String contentId;
   final String partnerId;
@@ -97,7 +100,6 @@ class FeedContentItem {
   final String? hlsUrl;
   final String? mp4Url;
   final String contentCreatedAt;
-  final bool isSubscriberOnly;
   final String? updatedAt;
   final String? publishedDate;
   final String? endDate;
@@ -112,13 +114,20 @@ class FeedContentItem {
   final int? communityScore;
   final String sortTiebreakerId;
   final bool isFeaturedContent;
+
   /// Custom data map (e.g., publication flags). announcements
   final Map<String, dynamic>? customData;
+
   /// Publication state (e.g., 'published').
   final String? state;
   /// Feed type (e.g., 'news', 'announcements'). Not returned by API, injected by repository.
   @JsonKey(includeFromJson: false, includeToJson: false)
   final String? feedType;
+  final bool isSubscriberOnly;
+  /// This value is constructed in the frontend and is not mapped from backend JSON.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final bool hasAccessWithSubscription;
+  final AccessContent? accessContent;
 
   Map<String, dynamic> toJson() => _$FeedContentItemToJson(this);
 
@@ -153,35 +162,46 @@ class FeedContentItem {
     Map<String, dynamic>? customData,
     String? state,
     String? feedType,
-  }) => FeedContentItem(
-      contentId: contentId ?? this.contentId,
-      partnerId: partnerId ?? this.partnerId,
-      partnerName: partnerName ?? this.partnerName,
-      partnerProfile: partnerProfile ?? this.partnerProfile,
-      partnerFrontImage: partnerFrontImage ?? this.partnerFrontImage,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      thumbnail: thumbnail ?? this.thumbnail,
-      hlsUrl: hlsUrl ?? this.hlsUrl,
-      mp4Url: mp4Url ?? this.mp4Url,
-      contentCreatedAt: contentCreatedAt ?? this.contentCreatedAt,
-      isSubscriberOnly: isSubscriberOnly ?? this.isSubscriberOnly,
-      updatedAt: updatedAt ?? this.updatedAt,
-      publishedDate: publishedDate ?? this.publishedDate,
-      endDate: endDate ?? this.endDate,
-      mainImage: mainImage ?? this.mainImage,
-      images: images ?? this.images,
-      slider: slider ?? this.slider,
-      contentHtml: contentHtml ?? this.contentHtml,
-      detailPath: detailPath ?? this.detailPath,
-      isSubscribed: isSubscribed ?? this.isSubscribed,
-      isFollowed: isFollowed ?? this.isFollowed,
-      sortWeight: sortWeight ?? this.sortWeight,
-      communityScore: communityScore ?? this.communityScore,
-      sortTiebreakerId: sortTiebreakerId ?? this.sortTiebreakerId,
-      isFeaturedContent: isFeaturedContent ?? this.isFeaturedContent,
-      customData: customData ?? this.customData,
-      state: state ?? this.state,
-      feedType: feedType ?? this.feedType,
-    );
+    AccessContent? accessContent,
+    bool? hasAccessWithSubscription,
+  }) =>
+      FeedContentItem(
+        contentId: contentId ?? this.contentId,
+        partnerId: partnerId ?? this.partnerId,
+        partnerName: partnerName ?? this.partnerName,
+        partnerProfile: partnerProfile ?? this.partnerProfile,
+        partnerFrontImage: partnerFrontImage ?? this.partnerFrontImage,
+        title: title ?? this.title,
+        description: description ?? this.description,
+        thumbnail: thumbnail ?? this.thumbnail,
+        hlsUrl: hlsUrl ?? this.hlsUrl,
+        mp4Url: mp4Url ?? this.mp4Url,
+        contentCreatedAt: contentCreatedAt ?? this.contentCreatedAt,
+        isSubscriberOnly: isSubscriberOnly ?? this.isSubscriberOnly,
+        updatedAt: updatedAt ?? this.updatedAt,
+        publishedDate: publishedDate ?? this.publishedDate,
+        endDate: endDate ?? this.endDate,
+        mainImage: mainImage ?? this.mainImage,
+        images: images ?? this.images,
+        slider: slider ?? this.slider,
+        contentHtml: contentHtml ?? this.contentHtml,
+        detailPath: detailPath ?? this.detailPath,
+        isSubscribed: isSubscribed ?? this.isSubscribed,
+        isFollowed: isFollowed ?? this.isFollowed,
+        sortWeight: sortWeight ?? this.sortWeight,
+        communityScore: communityScore ?? this.communityScore,
+        sortTiebreakerId: sortTiebreakerId ?? this.sortTiebreakerId,
+        isFeaturedContent: isFeaturedContent ?? this.isFeaturedContent,
+        customData: customData ?? this.customData,
+        state: state ?? this.state,
+        feedType: feedType ?? this.feedType,
+        accessContent: accessContent ?? this.accessContent,
+        hasAccessWithSubscription: hasAccessWithSubscription ?? this.hasAccessWithSubscription,
+      );
+      
+      @override
+      AccessContent get contentAccess => accessContent!;
+    
+      @override
+      bool get isSubscriptionOnly => isSubscriberOnly;
 }
