@@ -1,6 +1,32 @@
+## 21.4.0
+
+feat: Add PartnerContentAvailabilityResponse model and related serialization logic
+
+- Implemented PartnerContentAvailabilityResponse and PartnerContentAvailabilityData classes for handling content availability responses from the API.
+- Added JSON serialization and deserialization methods using json_annotation.
+- Included unit tests for cache management in InMemoryCacheManager and PersistentCacheManager.
+- Developed tests for the NewsRepository to ensure correct caching behavior and error handling.
+- Created mock classes for testing with Mockito to simulate data source interactions.
+
 ## 21.3.11
 
 **feat(cache):** enhance video cache management with partner following updates and tests
+
+## 21.3.10
+
+**feat(cache):** add generic caching system for repositories
+
+- Implemented generic `CacheEntry<T>` model with TTL and expiration tracking
+- Created abstract `CacheManager` interface for flexible cache implementations
+- Added `InMemoryCacheManager` singleton for in-memory caching
+- Introduced `RepositoryCacheMixin` to easily add caching to any repository
+- Features include:
+  - Automatic cache expiration based on TTL
+  - Force refresh capability
+  - Pattern-based cache invalidation
+  - Support for `Either<Failure, T>` return types
+  - Full test coverage with unit tests
+- Comprehensive documentation and usage examples included
 
 ## 21.3.9
 

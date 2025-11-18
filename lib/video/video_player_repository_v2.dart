@@ -9,6 +9,7 @@ import 'package:stoyco_shared/video/models/video_player_model.dart';
 import 'package:stoyco_shared/video/video_player_ds_impl_v2.dart';
 import 'package:stoyco_shared/video/video_with_metada/video_with_metadata.dart';
 import 'package:stoyco_shared/video/video_with_metada/streaming_data.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/access_content.dart';
 
 /// Repository for managing video player interactions.
 class VideoPlayerRepositoryV2 {
@@ -219,6 +220,8 @@ class VideoPlayerRepositoryV2 {
                     ready: true,
                   )
                 : null,
+            accessContent: AccessContent.fromJson(
+                m['accessContent'] as Map<String, dynamic>? ?? {}),
           );
         }).toList(),
         'Error getting videos with filter',
@@ -280,6 +283,8 @@ class VideoPlayerRepositoryV2 {
                     ready: true,
                   )
                 : null,
+            accessContent: AccessContent.fromJson(
+                m['accessContent'] as Map<String, dynamic>? ?? {}),
           );
         }).toList(),
         'Error getting featured videos',

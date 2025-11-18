@@ -80,4 +80,33 @@ class PartnerDataSource {
     );
     return response;
   }
+
+  /// Gets content availability flags for a given partner.
+  ///
+  /// This endpoint returns a set of booleans indicating whether different
+  /// types of content exist for the specified partner (news, announcements,
+  /// events, videos, nfts, products, etc.).
+  ///
+  /// **Endpoint**: `GET /api/stoyco/v1/feed/partner/{partnerId}/content-availability`
+  ///
+  /// * [partnerId] The unique identifier of the partner whose content
+  ///   availability is being queried.
+  ///
+  /// Returns a [Response] whose `data` field contains the standard wrapper
+  /// (error, messageError, tecMessageError, count) and a nested `data` object
+  /// with the availability flags.
+  ///
+  /// Example:
+  /// ```dart
+  /// final response = await dataSource.getPartnerContentAvailability('abc123');
+  /// final json = response.data as Map<String, dynamic>;
+  /// ```
+  Future<Response> getPartnerContentAvailability(String partnerId) async {
+    final cancelToken = CancelToken();
+    final response = await _dio.get(
+      '${environment.baseUrl(version: 'v1')}feed/partner/$partnerId/content-availability',
+      cancelToken: cancelToken,
+    );
+    return response;
+  }
 }

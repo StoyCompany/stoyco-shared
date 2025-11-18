@@ -72,6 +72,10 @@ FeedContentItem _$FeedContentItemFromJson(Map<String, dynamic> json) =>
       isFeaturedContent: json['isFeaturedContent'] as bool,
       customData: json['customData'] as Map<String, dynamic>?,
       state: json['state'] as String?,
+      accessContent: json['accessContent'] == null
+          ? null
+          : AccessContent.fromJson(
+              json['accessContent'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$FeedContentItemToJson(FeedContentItem instance) =>
@@ -104,4 +108,5 @@ Map<String, dynamic> _$FeedContentItemToJson(FeedContentItem instance) =>
       'isFeaturedContent': instance.isFeaturedContent,
       'customData': instance.customData,
       'state': instance.state,
+      'accessContent': instance.accessContent,
     };
