@@ -16,6 +16,8 @@ enum FeedType {
   /// Announcement/convocatoria content
   announcement('announcement'),
 
+  events('1'),
+
   /// Unknown or unspecified content type
   unknown('unknown');
 
@@ -130,9 +132,8 @@ class InteractiveCardConfig {
 
   /// Default configuration for announcement cards
   static const announcement = InteractiveCardConfig(
-    height: 160.0,
-    titleMaxLines: 3,
-    iconSize: 22.0,
+    height: 144.0,
+    titleMaxLines: 2,
   );
 }
 
@@ -174,6 +175,7 @@ typedef OnCheckIsLikedCallback = Future<bool> Function(String contentId);
 ///   onShare: (contentId) async {
 ///     await interactionService.shareContent(contentId);
 ///   },
+///   onParticipate: () => navigateToAnnouncementForm(feedItem)
 ///   onTap: () => navigateToDetail(feedItem),
 /// )
 /// ```
@@ -185,6 +187,7 @@ class InteractiveContentCard extends StatefulWidget {
     this.onTap,
     this.onLike,
     this.onShare,
+    this.onParticipate,
     this.onLoadInteractionCounts,
     this.onCheckIsLiked,
     this.isLoading = false,
@@ -211,6 +214,9 @@ class InteractiveContentCard extends StatefulWidget {
 
   /// Callback when share is pressed
   final OnShareCallback? onShare;
+
+  /// Callback when participate button is pressed (only for announcements)
+  final VoidCallback? onParticipate;
 
   /// Callback to load interaction counts from Firestore
   /// The widget will call this internally on mount and update counts automatically
@@ -414,21 +420,40 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
       return InteractiveContentCard.loading(config: widget.config);
     }
 
+    // Check if participate button should be shown
+    final showParticipateButton = widget.data is FeedContentAdapter &&
+        ((widget.data as FeedContentAdapter).feedType == FeedType.events ||
+            ((widget.data as FeedContentAdapter).feedType == FeedType.announcement &&
+                widget.data.state == 'PUBLISHED'));
+
     return SizedBox(
       height: StoycoScreenSize.height(context, widget.config.height),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: widget.onTap != null 
-              ? () => widget.onTap!()
-              : null,
-          borderRadius: BorderRadius.circular(
-            StoycoScreenSize.radius(context, widget.config.borderRadius),
+      child: Stack(
+        children: [
+          // Main card content
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: widget.onTap != null
+                  ? () => widget.onTap!()
+                  : null,
+              borderRadius: BorderRadius.circular(
+                StoycoScreenSize.radius(context, widget.config.borderRadius),
+              ),
+              splashColor: StoycoColors.blue.withValues(alpha: 0.1),
+              highlightColor: Colors.transparent,
+              child: _buildContent(context),
+            ),
           ),
-          splashColor: StoycoColors.blue.withValues(alpha: 0.1),
-          highlightColor: Colors.transparent,
-          child: _buildContent(context),
-        ),
+
+
+          if (showParticipateButton)
+            Positioned(
+              left: StoycoScreenSize.width(context, widget.config.height + widget.config.spacing ),
+              bottom: StoycoScreenSize.height(context, 45),
+              child: _buildParticipateButton(context),
+            ),
+        ],
       ),
     );
   }
@@ -545,6 +570,7 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
               ),
             ),
 
+
           const Spacer(),
 
           Row(
@@ -557,6 +583,49 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
       ),
     );
   }
+
+
+  Widget _buildParticipateButton(BuildContext context) => Material(
+      color: Colors.transparent,
+      child: Ink(
+        decoration: BoxDecoration(
+          color: const Color(0xff253341),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: InkWell(
+          onTap: widget.onParticipate,
+          borderRadius: BorderRadius.circular(20),
+          splashColor: StoycoColors.whiteLavender.withValues(alpha: 0.1),
+          highlightColor: StoycoColors.whiteLavender.withValues(alpha: 0.05),
+          child: Container(
+            padding: StoycoScreenSize.symmetric(
+              context,
+              horizontal: 10,
+              vertical: 3,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Participar',
+                  style: TextStyle(
+                    color: StoycoColors.whiteLavender,
+                    fontSize: StoycoScreenSize.fontSize(context, 12),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Gap(StoycoScreenSize.width(context, 6)),
+                Icon(
+                  Icons.confirmation_number_outlined,
+                  size: StoycoScreenSize.width(context, 16),
+                  color: StoycoColors.whiteLavender,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
 
   Widget _buildSocialActions(BuildContext context, Color baseColor) => Row(
       children: [

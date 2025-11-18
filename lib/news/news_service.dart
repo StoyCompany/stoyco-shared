@@ -158,4 +158,31 @@ class NewsService {
         ct: ct,
         feedType: feedType,
       );
+
+  Future<Either<Failure, PageResult<FeedContentAdapter>>> getFeedEventsPaginated(
+      int pageNumber,
+      int pageSize, {
+        String? partnerId,
+        String? userId,
+        String? partnerProfile,
+        bool? onlyNew,
+        int? newDays,
+        bool? hideSubscriberOnlyIfNotSubscribed,
+        String? ct,
+        required String feedType,
+      }) =>
+      _newsRepository!.getFeedEventsPaginated(
+        pageNumber,
+        pageSize,
+        partnerId: partnerId,
+        userId: userId,
+        partnerProfile: partnerProfile,
+        onlyNew: onlyNew,
+        newDays: newDays,
+        hideSubscriberOnlyIfNotSubscribed: hideSubscriberOnlyIfNotSubscribed,
+        ct: ct,
+        feedType: feedType,
+      );
+
+
 }

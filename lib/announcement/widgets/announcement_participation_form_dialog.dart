@@ -417,7 +417,7 @@ class _ParticipationFormDialogState<T>
                     isLoading: _isLoading,
                     onTap: form.valid ? _handleSubmit : () {},
                     backgroundColor: form.valid && !_isLoading
-                        ? null
+                        ? const Color(0xFF6C61FF)
                         : const Color(0xFF92929D),
                     loadingIndicatorSize: widget.loadingIndicatorSize ??
                         StoycoScreenSize.width(

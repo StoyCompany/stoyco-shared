@@ -100,26 +100,23 @@ class DialogContainer extends StatelessWidget {
                     minHeight: minHeight,
                   ),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
+                    borderRadius: BorderRadius.circular(0),
                     color: backgroundColor ??
                         (gradient == null
-                            ? const Color.fromARGB(7, 238, 232, 232)
+                            ? const  Color.fromRGBO(32, 37, 50, 0.8)
                             : null),
                     gradient: gradient,
                   ),
                   child: CustomPaint(
                     painter: GradientPainter(
-                      strokeWidth: 2.5,
-                      radius: 25,
+                      strokeWidth: 0,
+                      radius: 8,
                       gradient: const LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          Color.fromARGB(42, 99, 97, 153),
-                          Color.fromARGB(106, 99, 97, 153),
-                          Color(0xFF636199),
-                          Color.fromARGB(196, 88, 80, 200),
-                          Color(0xFF483ce4),
+                          Color.fromRGBO(32, 37, 50, 0.8),
+                          Color.fromRGBO(32, 37, 50, 0.8)
                         ],
                       ),
                     ),

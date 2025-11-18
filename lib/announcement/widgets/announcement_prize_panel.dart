@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:stoyco_shared/announcement/utils/announcement_details_utils.dart';
-import 'package:stoyco_shared/announcement/widgets/gradient_container.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
@@ -72,7 +71,7 @@ class _AnnouncementPrizePanelState extends State<AnnouncementPrizePanel> {
   @override
   Widget build(BuildContext context) => SizedBox(
         width: double.infinity,
-        child: InteractiveGradientPanel(
+        child: Container(
           padding: StoycoScreenSize.all(
             context,
             20,
@@ -80,12 +79,16 @@ class _AnnouncementPrizePanelState extends State<AnnouncementPrizePanel> {
             tablet: 18,
             desktopLarge: 24,
           ),
-          showBorder: true,
-          borderRadiusValue: _responsiveRadius(
-            AnnouncementPrizePanel._defaultBorderRadius,
-            phone: 16,
-            tablet: 18,
-            desktopLarge: 24,
+          decoration: BoxDecoration(
+            color: const Color(0xFF202532),
+            borderRadius: BorderRadius.circular(
+              _responsiveRadius(
+                AnnouncementPrizePanel._defaultBorderRadius,
+                phone: 15,
+                tablet: 18,
+                desktopLarge: 24,
+              ),
+            ),
           ),
           child: widget.maxHeight != null
               ? ConstrainedBox(
