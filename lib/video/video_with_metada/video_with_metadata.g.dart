@@ -34,6 +34,8 @@ VideoWithMetadata _$VideoWithMetadataFromJson(Map<String, dynamic> json) =>
       likeThisVideo: json['likeThisVideo'] as bool?,
       views: (json['views'] as num?)?.toInt(),
       likes: (json['likes'] as num?)?.toInt(),
+      isSubscriberOnly: json['isSubscriberOnly'] as bool?,
+      hasAccess: json['hasAccess'] as bool?,
     );
 
 Map<String, dynamic> _$VideoWithMetadataToJson(VideoWithMetadata instance) =>
@@ -56,4 +58,6 @@ Map<String, dynamic> _$VideoWithMetadataToJson(VideoWithMetadata instance) =>
       'likeThisVideo': instance.likeThisVideo,
       'views': instance.views,
       'likes': instance.likes,
+      'isSubscriberOnly': instance.isSubscriberOnly,
+      'hasAccess': instance.hasAccess,
     };

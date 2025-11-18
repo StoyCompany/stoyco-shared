@@ -63,7 +63,6 @@ class FeedContentItem {
     this.hlsUrl,
     this.mp4Url,
     required this.contentCreatedAt,
-    required this.isSubscriberOnly,
     this.updatedAt,
     this.publishedDate,
     this.endDate,
@@ -80,10 +79,12 @@ class FeedContentItem {
     required this.isFeaturedContent,
     this.customData,
     this.state,
-  });
+    this.isSubscriberOnly = false,
+    bool? hasAccess,
+    this.accessContent,
+  }) : hasAccess = hasAccess ?? !isSubscriberOnly;
 
-  factory FeedContentItem.fromJson(Map<String, dynamic> json) =>
-      _$FeedContentItemFromJson(json);
+  factory FeedContentItem.fromJson(Map<String, dynamic> json) => _$FeedContentItemFromJson(json);
 
   final String contentId;
   final String partnerId;
@@ -96,7 +97,6 @@ class FeedContentItem {
   final String? hlsUrl;
   final String? mp4Url;
   final String contentCreatedAt;
-  final bool isSubscriberOnly;
   final String? updatedAt;
   final String? publishedDate;
   final String? endDate;
@@ -115,5 +115,33 @@ class FeedContentItem {
   final Map<String, dynamic>? customData;
   /// Publication state (e.g., 'published').
   final String? state;
+  final bool isSubscriberOnly;
+  /// This value is constructed in the frontend and is not mapped from backend JSON.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final bool hasAccess;
+  final AccessContent? accessContent;
+
   Map<String, dynamic> toJson() => _$FeedContentItemToJson(this);
+}
+
+@JsonSerializable()
+class AccessContent {
+  const AccessContent({
+    required this.contentId,
+    required this.partnerId,
+    required this.planIds,
+    this.visibleFrom,
+    this.visibleUntil,
+  });
+
+  factory AccessContent.fromJson(Map<String, dynamic> json) => _$AccessContentFromJson(json);
+
+  final String contentId;
+  final String partnerId;
+  final List<String> planIds;
+  final DateTime? visibleFrom;
+  final DateTime? visibleUntil;
+
+  Map<String, dynamic> toJson() => _$AccessContentToJson(this);
+
 }
