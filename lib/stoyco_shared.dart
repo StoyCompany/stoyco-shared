@@ -12,6 +12,8 @@ export 'package:stoyco_shared/notification/notification.dart';
 export 'package:stoyco_shared/partner/partner.dart';
 export 'package:stoyco_shared/news/models/feed_content_model.dart';
 export 'package:stoyco_shared/widgets/interactive_content_card.dart';
+export 'package:stoyco_shared/widgets/reactive_social_buttons.dart';
 export 'package:stoyco_shared/widgets/social_button.dart';
 export 'package:stoyco_shared/widgets/shared_like.dart';
 export 'package:stoyco_shared/widgets/loop_video_player.dart';
+export 'package:stoyco_shared/services/social_interaction_service.dart';

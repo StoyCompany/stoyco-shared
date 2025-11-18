@@ -624,13 +624,25 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              ValueListenableBuilder<InteractionViewState>(
-                valueListenable: _state,
-                builder: (context, vState, _) => _buildSocialActions(
-                  context,
-                  textColor,
-                  vState,
+              ReactiveSocialButtons(
+                contentId: widget.data.id,
+                contentTitle: widget.data.title,
+                contentImageUrl: widget.data.mainImage,
+                config: SocialButtonsConfig(
+                  iconSize: widget.config.iconSize,
+                  counterFontSize: widget.config.counterFontSize,
+                  spacing: 15.0,
+                  likedIconColor: widget.config.likedIconColor,
+                  unlikedIconColor: widget.config.unlikedIconColor,
+                  shareIconColor: widget.config.shareIconColor,
                 ),
+                onLoadCounts: widget.onLoadInteractionCounts,
+                onCheckIsLiked: widget.onCheckIsLiked,
+                onLike: widget.onLike,
+                onShare: widget.onShare,
+                enableLike: widget.enableLike,
+                enableShare: widget.enableShare,
+                textColor: textColor,
               ),
             ],
           ),
