@@ -1,3 +1,7 @@
+## 21.4.3
+
+**-fix(dependencies):** update package route
+
 ## 21.4.0
 
 feat: Add PartnerContentAvailabilityResponse model and related serialization logic
