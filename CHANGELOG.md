@@ -1,3 +1,7 @@
+## 21.4.0
+
+- **feat (Interactive Content):** A component update Interactive Content
+
 ## 21.3.9
 
 - **feat (Events Desing):** A component update new desing

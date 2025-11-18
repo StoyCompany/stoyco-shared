@@ -8,27 +8,29 @@ import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/design/skeleton_card.dart';
 import 'package:stoyco_shared/stoyco_shared.dart';
 
-/// Enum representing different types of feed content
+/// Enum representing different types of feed content.
+///
+/// Use [FeedType.fromString] to safely convert raw backend values to this enum.
 enum FeedType {
-  /// News content
+  /// News content.
   news('news'),
 
-  /// Announcement/convocatoria content
+  /// Announcement / convocatoria content.
   announcement('announcement'),
 
+  /// Event content (mapped from backend value '1').
   events('1'),
 
-  /// Unknown or unspecified content type
+  /// Unknown or unspecified content type.
   unknown('unknown');
 
   const FeedType(this.value);
 
   final String value;
 
-  /// Creates a FeedType from a string value
+  /// Creates a [FeedType] from a string value or returns [FeedType.unknown] if no match.
   static FeedType fromString(String? value) {
     if (value == null) return FeedType.unknown;
-
     return FeedType.values.firstWhere(
       (type) => type.value == value,
       orElse: () => FeedType.unknown,
@@ -36,7 +38,7 @@ enum FeedType {
   }
 }
 
-/// Abstract interface for content that can be displayed in InteractiveContentCard
+/// Abstract interface for content that can be displayed in [InteractiveContentCard].
 abstract class InteractiveContent {
   String get id;
   String get title;
@@ -47,20 +49,15 @@ abstract class InteractiveContent {
   String? get state;
 }
 
-
-
-/// Adapter for FeedContentItem to InteractiveContent
+/// Adapter for [FeedContentItem] to [InteractiveContent].
 class FeedContentAdapter implements InteractiveContent {
   const FeedContentAdapter(this.item);
-
   final FeedContentItem item;
 
   @override
   String get id => item.contentId;
-
   @override
   String get title => item.title;
-
   @override
   String get mainImage => item.mainImage;
 
@@ -68,7 +65,7 @@ class FeedContentAdapter implements InteractiveContent {
   DateTime? get publishDate {
     try {
       return DateTime.parse(item.contentCreatedAt);
-    } catch (e) {
+    } catch (_) {
       return null;
     }
   }
@@ -76,25 +73,23 @@ class FeedContentAdapter implements InteractiveContent {
   @override
   DateTime? get endDate {
     try {
-    return item.endDate != null ? DateTime.parse(item.endDate!) : null;
-    } catch (e) {
+      return item.endDate != null ? DateTime.parse(item.endDate!) : null;
+    } catch (_) {
       return null;
     }
   }
 
   @override
   Map<String, dynamic>? get customData => item.customData;
-
   @override
   String? get state => item.state;
 
-  /// Gets the feed type as an enum (e.g., FeedType.news, FeedType.announcement)
+  /// Gets the feed type as an enum (e.g. [FeedType.news], [FeedType.announcement]).
   FeedType get feedType => FeedType.fromString(item.feedType);
 }
 
-/// Configuration class for InteractiveContentCard appearance
+/// Configuration values for the visual properties of [InteractiveContentCard].
 class InteractiveCardConfig {
-
   const InteractiveCardConfig({
     this.height = 144.0,
     this.borderRadius = 5.0,
@@ -124,21 +119,14 @@ class InteractiveCardConfig {
   final Color? shareIconColor;
   final Color? textColor;
 
-  /// Default configuration for news cards
-  static const news = InteractiveCardConfig(
-    height: 144.0,
-    titleMaxLines: 2,
-  );
+  /// Default configuration for news cards.
+  static const news = InteractiveCardConfig(height: 144.0, titleMaxLines: 2);
 
-  /// Default configuration for announcement cards
-  static const announcement = InteractiveCardConfig(
-    height: 144.0,
-    titleMaxLines: 2,
-  );
+  /// Default configuration for announcement cards.
+  static const announcement = InteractiveCardConfig(height: 144.0, titleMaxLines: 2);
 }
 
-
-/// Callback definitions for interactions
+/// Callback definitions for interactions.
 typedef OnLikeCallback = Future<void> Function(String contentId, bool isLiked);
 typedef OnShareCallback = Future<void> Function({
   required String contentId,
@@ -149,35 +137,118 @@ typedef OnTapCallback = void Function(String contentId);
 typedef OnLoadInteractionCountsCallback = Future<InteractionCounts> Function(String contentId);
 typedef OnCheckIsLikedCallback = Future<bool> Function(String contentId);
 
+/// Immutable view state for interaction-related values.
+///
+/// Using an immutable state object with [ValueNotifier] enables granular rebuilds via
+/// [ValueListenableBuilder] instead of calling setState for every small change. This keeps
+/// the widget lightweight and avoids introducing extra dependencies for simple local state.
+class InteractionViewState {
+  const InteractionViewState({
+    this.isLiked = false,
+    this.likeCount = 0,
+    this.shareCount = 0,
+    this.viewCount = 0,
+    this.isLoadingCounts = false,
+    this.processingLike = false,
+    this.processingShare = false,
+  });
+
+  final bool isLiked;
+  final int likeCount;
+  final int shareCount;
+  final int viewCount;
+  final bool isLoadingCounts;
+  final bool processingLike;
+  final bool processingShare;
+
+  InteractionViewState copyWith({
+    bool? isLiked,
+    int? likeCount,
+    int? shareCount,
+    int? viewCount,
+    bool? isLoadingCounts,
+    bool? processingLike,
+    bool? processingShare,
+  }) => InteractionViewState(
+        isLiked: isLiked ?? this.isLiked,
+        likeCount: likeCount ?? this.likeCount,
+        shareCount: shareCount ?? this.shareCount,
+        viewCount: viewCount ?? this.viewCount,
+        isLoadingCounts: isLoadingCounts ?? this.isLoadingCounts,
+        processingLike: processingLike ?? this.processingLike,
+        processingShare: processingShare ?? this.processingShare,
+      );
+}
+
+/// Controller to drive an [InteractiveContentCard] from outside.
+///
+/// Supply this to the widget to manually refresh interaction values (e.g. after an API call
+/// higher in the tree). If omitted, the widget creates its own internal controller.
+class InteractiveContentCardController {
+  InteractiveContentCardController([InteractionViewState initial = const InteractionViewState()])
+      : state = ValueNotifier<InteractionViewState>(initial);
+
+  /// Internal notifier holding the current [InteractionViewState].
+  final ValueNotifier<InteractionViewState> state;
+
+  /// Internal callback assigned by the widget to trigger a data refresh.
+  /// Do not set manually; use [reloadCounts].
+  VoidCallback? _reloadCounts;
+
+  /// Replaces the entire state.
+  void update(InteractionViewState newState) => state.value = newState;
+
+  /// Patches selected fields of the current state.
+  void patch({
+    bool? isLiked,
+    int? likeCount,
+    int? shareCount,
+    int? viewCount,
+    bool? isLoadingCounts,
+    bool? processingLike,
+    bool? processingShare,
+  }) {
+    state.value = state.value.copyWith(
+      isLiked: isLiked,
+      likeCount: likeCount,
+      shareCount: shareCount,
+      viewCount: viewCount,
+      isLoadingCounts: isLoadingCounts,
+      processingLike: processingLike,
+      processingShare: processingShare,
+    );
+  }
+
+  /// Requests the widget to reload interaction counts from its data source.
+  /// Does nothing if the widget did not provide a loader callback.
+  void reloadCounts() => _reloadCounts?.call();
+
+  /// Disposes the underlying notifier. Only call if you own the controller.
+  void dispose() {
+    _reloadCounts = null;
+    state.dispose();
+  }
+}
+
 /// A reusable interactive content card widget with social features.
-/// 
-/// This component follows best practices and can be used for:
-/// - News articles
-/// - Announcements (convocatorias)
-/// - Feed content (generic)
-/// - Any content requiring social interaction
 ///
-/// The widget automatically loads interaction counts from Firestore via the
-/// `onLoadInteractionCounts` callback. Initial values show as 0 while loading.
+/// Features:
+/// - Like & share actions with animated feedback.
+/// - Optional participate button for events / announcements.
+/// - External refresh via [InteractiveContentCardController].
+/// - Lightweight state management using [ValueNotifier] instead of setState.
 ///
-/// Example usage:
+/// Example:
 /// ```dart
+/// final controller = InteractiveContentCardController();
 /// InteractiveContentCard(
-///   data: FeedContentAdapter(feedItem),
-///   onLoadInteractionCounts: (contentId) async {
-///     return await interactionService.getInteractionCounts(
-///       contentId: contentId,
-///     );
-///   },
-///   onLike: (contentId, isLiked) async {
-///     await interactionService.likeContent(contentId, isLiked);
-///   },
-///   onShare: (contentId) async {
-///     await interactionService.shareContent(contentId);
-///   },
-///   onParticipate: () => navigateToAnnouncementForm(feedItem)
-///   onTap: () => navigateToDetail(feedItem),
-/// )
+///   controller: controller,
+///   data: FeedContentAdapter(item),
+///   onLike: (id, liked) async { /* ... */ },
+///   onLoadInteractionCounts: fetchCounts,
+/// );
+/// // Later refresh counts
+/// controller.patch(likeCount: 42);
 /// ```
 class InteractiveContentCard extends StatefulWidget {
   const InteractiveContentCard({
@@ -195,50 +266,51 @@ class InteractiveContentCard extends StatefulWidget {
     this.enableShare = true,
     this.enableViews = false,
     this.customDateFormatter,
+    this.controller,
   });
 
-  /// Content data to display (use NewModelAdapter or FeedContentAdapter)
+  /// Content data to display (use a concrete adapter implementation like [FeedContentAdapter]).
   final InteractiveContent data;
 
-  /// Visual configuration
+  /// Visual configuration.
   final InteractiveCardConfig config;
 
-  /// Loading state
+  /// Loading skeleton state.
   final bool isLoading;
 
-  /// Callback when card is tapped
+  /// Tap callback for entire card.
   final VoidCallback? onTap;
 
-  /// Callback when like is pressed
+  /// Callback when like is toggled.
   final OnLikeCallback? onLike;
 
-  /// Callback when share is pressed
+  /// Callback when share is triggered.
   final OnShareCallback? onShare;
 
-  /// Callback when participate button is pressed (only for announcements)
+  /// Callback when participate button is pressed (for eligible content types).
   final VoidCallback? onParticipate;
 
-  /// Callback to load interaction counts from Firestore
-  /// The widget will call this internally on mount and update counts automatically
+  /// Loads initial interaction counts.
   final OnLoadInteractionCountsCallback? onLoadInteractionCounts;
 
-  /// Callback to check if user has liked the content
-  /// The widget will call this internally on mount to set the initial liked state
+  /// Checks initial liked status.
   final OnCheckIsLikedCallback? onCheckIsLiked;
 
-  /// Feature toggles
+  /// Feature toggles.
   final bool enableLike;
   final bool enableShare;
   final bool enableViews;
 
-  /// Custom date formatter
+  /// Optional custom date formatter.
   final String Function(DateTime)? customDateFormatter;
 
+  /// Optional external controller for manual refresh.
+  final InteractiveContentCardController? controller;
 
-  /// Static loading card for shimmer effect
+  /// Static loading card for shimmer effect.
   static Widget loading({InteractiveCardConfig? config}) => _InteractiveContentCardLoading(
-      config: config ?? const InteractiveCardConfig(),
-    );
+        config: config ?? const InteractiveCardConfig(),
+      );
 
   @override
   State<InteractiveContentCard> createState() => _InteractiveContentCardState();
@@ -246,32 +318,30 @@ class InteractiveContentCard extends StatefulWidget {
 
 class _InteractiveContentCardState extends State<InteractiveContentCard>
     with TickerProviderStateMixin {
-  bool _isLiked = false;
-  int _likeCount = 0;
-  int _shareCount = 0;
-  int _viewCount = 0;
-  bool _isLoadingCounts = false;
-
+  late final InteractiveContentCardController _controller;
+  late final bool _ownsController;
   late AnimationController _likeAnimController;
   late Animation<double> _likeScaleAnim;
-  
-  bool _isProcessingLike = false;
-  bool _isProcessingShare = false;
+
+  ValueNotifier<InteractionViewState> get _state => _controller.state;
 
   @override
   void initState() {
     super.initState();
+    _ownsController = widget.controller == null;
+    _controller = widget.controller ?? InteractiveContentCardController();
+    // Expose internal reload to external controller.
+    _controller._reloadCounts = _loadInteractionCounts;
     _setupAnimations();
     _loadInteractionCounts();
   }
 
   Future<void> _loadInteractionCounts() async {
-    if (widget.onLoadInteractionCounts == null) return;
+    if (widget.onLoadInteractionCounts == null || !mounted) return;
 
-    setState(() => _isLoadingCounts = true);
+    _state.value = _state.value.copyWith(isLoadingCounts: true);
 
     try {
-      // Load counts and isLiked status in parallel
       final results = await Future.wait([
         widget.onLoadInteractionCounts!(widget.data.id),
         if (widget.onCheckIsLiked != null)
@@ -280,22 +350,24 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
           Future.value(false),
       ]);
 
+      if (!mounted) return; // Widget pudo ser desmontado mientras se esperaba.
+
       final counts = results[0] as InteractionCounts;
       final isLiked = results[1] as bool;
 
-      if (mounted) {
-        setState(() {
-          _likeCount = counts.likes;
-          _shareCount = counts.shares;
-          _viewCount = counts.views;
-          _isLiked = isLiked;
-        });
-      }
+      _state.value = _state.value.copyWith(
+        likeCount: counts.likes,
+        shareCount: counts.shares,
+        viewCount: counts.views,
+        isLiked: isLiked,
+      );
     } catch (e) {
-      StoyCoLogger.error('Error loading interaction counts: $e');
+      if (mounted) {
+        StoyCoLogger.error('Error loading interaction counts: $e');
+      }
     } finally {
       if (mounted) {
-        setState(() => _isLoadingCounts = false);
+        _state.value = _state.value.copyWith(isLoadingCounts: false);
       }
     }
   }
@@ -305,36 +377,34 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    
-    _likeScaleAnim = Tween<double>(
-      begin: 1.0,
-      end: 1.3,
-    ).animate(CurvedAnimation(
-      parent: _likeAnimController,
-      curve: Curves.elasticOut,
-    ));
+    _likeScaleAnim = Tween<double>(begin: 1.0, end: 1.3).animate(
+      CurvedAnimation(parent: _likeAnimController, curve: Curves.elasticOut),
+    );
   }
 
   @override
   void didUpdateWidget(InteractiveContentCard oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Reload counts if content changed
     if (oldWidget.data.id != widget.data.id) {
       _loadInteractionCounts();
     }
-
   }
 
   @override
   void dispose() {
     _likeAnimController.dispose();
+    if (_ownsController) {
+      _controller.dispose();
+    } else {
+      // Ensure we clear the internal callback when not owning controller to avoid leaks.
+      _controller._reloadCounts = null;
+    }
     super.dispose();
   }
 
   String _formatRelativeTime(DateTime date) {
     final now = DateTime.now();
     final diff = now.difference(date);
-
     String timeString;
     if (diff.inMinutes < 1) {
       timeString = 'ahora';
@@ -352,65 +422,64 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
           '${date.month.toString().padLeft(2, '0')}/'
           '${date.year}';
     }
-
-    // Only for announcements/convocatorias with state 'closed'
     if (widget.data.state == 'closed') {
       return 'Terminado hace $timeString';
     }
     return timeString;
   }
 
-
   Future<void> _handleLike() async {
-    if (!widget.enableLike || _isProcessingLike) return;
+    if (!mounted || !widget.enableLike || _state.value.processingLike) return;
 
-    setState(() => _isProcessingLike = true);
-
-    final newLikedState = !_isLiked;
+    _state.value = _state.value.copyWith(processingLike: true);
+    final newLikedState = !_state.value.isLiked;
 
     try {
-      // Call API through callback first (controller handles auth check + optimistic update)
       await widget.onLike?.call(widget.data.id, newLikedState);
+      if (!mounted) return; // Salir si se desmontó durante la operación.
 
-      // Only update UI if callback succeeded (user is authenticated)
-      setState(() {
-        _isLiked = newLikedState;
-        _likeCount += newLikedState ? 1 : -1;
-      });
+      final updatedLikeCount = _state.value.likeCount + (newLikedState ? 1 : -1);
+      _state.value = _state.value.copyWith(
+        isLiked: newLikedState,
+        likeCount: updatedLikeCount < 0 ? 0 : updatedLikeCount,
+      );
 
-      // Animate after successful update
-      if (newLikedState) {
+      if (newLikedState && mounted) {
         await _likeAnimController.forward();
+        if (!mounted) return;
         await _likeAnimController.reverse();
       }
     } catch (e) {
-      // Don't update UI on error
-      StoyCoLogger.error('Error handling like: $e');
+      if (mounted) {
+        StoyCoLogger.error('Error handling like: $e');
+      }
     } finally {
-      setState(() => _isProcessingLike = false);
+      if (mounted) {
+        _state.value = _state.value.copyWith(processingLike: false);
+      }
     }
   }
 
   Future<void> _handleShare() async {
-    if (!widget.enableShare || _isProcessingShare) return;
+    if (!mounted || !widget.enableShare || _state.value.processingShare) return;
 
-    setState(() => _isProcessingShare = true);
-
+    _state.value = _state.value.copyWith(processingShare: true);
     try {
-      // Call API through callback first (controller handles auth check + optimistic update)
       await widget.onShare?.call(
         contentId: widget.data.id,
         title: widget.data.title,
         imageUrl: widget.data.mainImage,
       );
-
-      // Only update UI if callback succeeded (user is authenticated)
-      setState(() => _shareCount++);
+      if (!mounted) return;
+      _state.value = _state.value.copyWith(shareCount: _state.value.shareCount + 1);
     } catch (e) {
-      // Don't update UI on error
-      StoyCoLogger.error('Error sharing: $e');
+      if (mounted) {
+        StoyCoLogger.error('Error sharing: $e');
+      }
     } finally {
-      setState(() => _isProcessingShare = false);
+      if (mounted) {
+        _state.value = _state.value.copyWith(processingShare: false);
+      }
     }
   }
 
@@ -419,24 +488,18 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
     if (widget.isLoading) {
       return InteractiveContentCard.loading(config: widget.config);
     }
-
-    // Check if participate button should be shown
     final showParticipateButton = widget.data is FeedContentAdapter &&
         ((widget.data as FeedContentAdapter).feedType == FeedType.events ||
             ((widget.data as FeedContentAdapter).feedType == FeedType.announcement &&
                 widget.data.state == 'PUBLISHED'));
-
     return SizedBox(
       height: StoycoScreenSize.height(context, widget.config.height),
       child: Stack(
         children: [
-          // Main card content
           Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: widget.onTap != null
-                  ? () => widget.onTap!()
-                  : null,
+              onTap: widget.onTap != null ? () => widget.onTap!() : null,
               borderRadius: BorderRadius.circular(
                 StoycoScreenSize.radius(context, widget.config.borderRadius),
               ),
@@ -445,11 +508,9 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
               child: _buildContent(context),
             ),
           ),
-
-
           if (showParticipateButton)
             Positioned(
-              left: StoycoScreenSize.width(context, widget.config.height + widget.config.spacing ),
+              left: StoycoScreenSize.width(context, widget.config.height + widget.config.spacing),
               bottom: StoycoScreenSize.height(context, 45),
               child: _buildParticipateButton(context),
             ),
@@ -459,124 +520,118 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
   }
 
   Widget _buildContent(BuildContext context) => LayoutBuilder(
-      builder: (context, constraints) {
-        final imageSize = constraints.maxHeight;
-        return Row(
-          children: [
-            _buildImage(context, imageSize),
-            Gap(StoycoScreenSize.width(context, widget.config.spacing)),
-            Expanded(child: _buildInfo(context)),
-          ],
-        );
-      },
-    );
+        builder: (context, constraints) {
+          final imageSize = constraints.maxHeight;
+          return Row(
+            children: [
+              _buildImage(context, imageSize),
+              Gap(StoycoScreenSize.width(context, widget.config.spacing)),
+              Expanded(child: _buildInfo(context)),
+            ],
+          );
+        },
+      );
 
   Widget _buildImage(BuildContext context, double size) => Hero(
-      tag: 'content_image_${widget.data.id}',
-      child: SizedBox(
-        width: size,
-        height: size,
-        child: Stack(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(
-                StoycoScreenSize.radius(context, widget.config.borderRadius),
+        tag: 'content_image_${widget.data.id}',
+        child: SizedBox(
+          width: size,
+          height: size,
+          child: Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(
+                  StoycoScreenSize.radius(context, widget.config.borderRadius),
+                ),
+                child: CoverImageWithFade(
+                  imageUrl: widget.data.mainImage,
+                  width: size,
+                  height: size,
+                  borderRadius: widget.config.borderRadius,
+                ),
               ),
-              child: CoverImageWithFade(
-                imageUrl: widget.data.mainImage,
-                width: size,
-                height: size,
-                borderRadius: widget.config.borderRadius,
-              ),
-            ),
-            if (widget.data is FeedContentAdapter &&
-                (widget.data as FeedContentAdapter).feedType == FeedType.announcement)
-              Positioned(
-                top: StoycoScreenSize.height(context, 5),
-                left: StoycoScreenSize.width(context, 5),
-                child: Container(
-                  padding: StoycoScreenSize.symmetric(
-                    context,
-                    horizontal: 14,
-                    vertical: 3,
-                    horizontalPhone: 12,
-                    horizontalTablet: 12,
-                  ),
-                  decoration: BoxDecoration(
-                    color: (widget.data.customData?['isPublished'] as bool? ?? false)
-                        ? StoycoColors.lightViolet
-                        : StoycoColors.hint.withValues(alpha: 0.7),
-                    borderRadius: BorderRadius.circular(30),
-                    boxShadow: [
-                      BoxShadow(
-                        color: StoycoColors.shadowColor.withValues(alpha: 0.2),
-                        blurRadius: 6,
-                        offset: const Offset(0, 4),
+              if (widget.data is FeedContentAdapter &&
+                  (widget.data as FeedContentAdapter).feedType == FeedType.announcement)
+                Positioned(
+                  top: StoycoScreenSize.height(context, 5),
+                  left: StoycoScreenSize.width(context, 5),
+                  child: Container(
+                    padding: StoycoScreenSize.symmetric(
+                      context,
+                      horizontal: 14,
+                      vertical: 3,
+                      horizontalPhone: 12,
+                      horizontalTablet: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color: (widget.data.customData?['isPublished'] as bool? ?? false)
+                          ? StoycoColors.lightViolet
+                          : StoycoColors.hint.withValues(alpha: 0.7),
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: StoycoColors.shadowColor.withValues(alpha: 0.2),
+                          blurRadius: 6,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    alignment: Alignment.center,
+                    child: SvgPicture.asset(
+                      'packages/stoyco_shared/lib/assets/icons/megaphone_icon.svg',
+                      width: StoycoScreenSize.width(context, 12),
+                      height: StoycoScreenSize.width(context, 12),
+                      colorFilter: const ColorFilter.mode(
+                        Colors.white,
+                        BlendMode.srcIn,
                       ),
-                    ],
-                  ),
-                  alignment: Alignment.center,
-                  child: SvgPicture.asset(
-                    'packages/stoyco_shared/lib/assets/icons/megaphone_icon.svg',
-                    width: StoycoScreenSize.width(context, 12), // icon size 18
-                    height: StoycoScreenSize.width(context, 12),
-                    colorFilter: const ColorFilter.mode(
-                      Colors.white,
-                      BlendMode.srcIn,
                     ),
                   ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
 
   Widget _buildInfo(BuildContext context) {
     final textColor = widget.config.textColor ?? StoycoColors.white2;
-
     return Padding(
       padding: StoycoScreenSize.symmetric(context, vertical: 9),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Title
           Text(
             widget.data.title,
             style: TextStyle(
               color: textColor,
-              fontSize: StoycoScreenSize.fontSize(
-                context,
-                widget.config.titleFontSize,
-              ),
+              fontSize: StoycoScreenSize.fontSize(context, widget.config.titleFontSize),
               fontWeight: FontWeight.w700,
               height: 1.2,
             ),
             maxLines: widget.config.titleMaxLines,
             overflow: TextOverflow.ellipsis,
           ),
-
           Gap(StoycoScreenSize.height(context, 5)),
-
           if (widget.data.publishDate != null)
             Text(
               _formatRelativeTime(widget.data.publishDate!),
               style: TextStyle(
                 color: textColor,
-                fontSize: StoycoScreenSize.fontSize(
-                  context,
-                  widget.config.dateFontSize,
-                ),
+                fontSize: StoycoScreenSize.fontSize(context, widget.config.dateFontSize),
               ),
             ),
-
-
           const Spacer(),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              _buildSocialActions(context, textColor),
+              ValueListenableBuilder<InteractionViewState>(
+                valueListenable: _state,
+                builder: (context, vState, _) => _buildSocialActions(
+                  context,
+                  textColor,
+                  vState,
+                ),
+              ),
             ],
           ),
         ],
@@ -584,79 +639,82 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
     );
   }
 
-
   Widget _buildParticipateButton(BuildContext context) => Material(
-      color: Colors.transparent,
-      child: Ink(
-        decoration: BoxDecoration(
-          color: const Color(0xff253341),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: InkWell(
-          onTap: widget.onParticipate,
-          borderRadius: BorderRadius.circular(20),
-          splashColor: StoycoColors.whiteLavender.withValues(alpha: 0.1),
-          highlightColor: StoycoColors.whiteLavender.withValues(alpha: 0.05),
-          child: Container(
-            padding: StoycoScreenSize.symmetric(
-              context,
-              horizontal: 10,
-              vertical: 3,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Participar',
-                  style: TextStyle(
-                    color: StoycoColors.whiteLavender,
-                    fontSize: StoycoScreenSize.fontSize(context, 12),
-                    fontWeight: FontWeight.w600,
+        color: Colors.transparent,
+        child: Ink(
+          decoration: BoxDecoration(
+            color: const Color(0xff253341),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: InkWell(
+            onTap: widget.onParticipate,
+            borderRadius: BorderRadius.circular(20),
+            splashColor: StoycoColors.whiteLavender.withValues(alpha: 0.1),
+            highlightColor: StoycoColors.whiteLavender.withValues(alpha: 0.05),
+            child: Container(
+              padding: StoycoScreenSize.symmetric(
+                context,
+                horizontal: 10,
+                vertical: 3,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Participar',
+                    style: TextStyle(
+                      color: StoycoColors.whiteLavender,
+                      fontSize: StoycoScreenSize.fontSize(context, 12),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                Gap(StoycoScreenSize.width(context, 6)),
-                Icon(
-                  Icons.confirmation_number_outlined,
-                  size: StoycoScreenSize.width(context, 16),
-                  color: StoycoColors.whiteLavender,
-                ),
-              ],
+                  Gap(StoycoScreenSize.width(context, 6)),
+                  Icon(
+                    Icons.confirmation_number_outlined,
+                    size: StoycoScreenSize.width(context, 16),
+                    color: StoycoColors.whiteLavender,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
 
-  Widget _buildSocialActions(BuildContext context, Color baseColor) => Row(
-      children: [
-        if (widget.enableLike)
-          _SocialButton(
-            icon: _isLiked ? Icons.favorite : Icons.favorite_border,
-            count: _likeCount,
-            color: _isLiked
-                ? (widget.config.likedIconColor ?? StoycoColors.white)
-                : (widget.config.unlikedIconColor ?? baseColor),
-            onPressed: _handleLike,
-            isProcessing: _isProcessingLike,
-            animation: _isLiked ? _likeScaleAnim : null,
-            config: widget.config,
-          ),
-        if (widget.enableLike && widget.enableShare)
-          Gap(StoycoScreenSize.width(context, 15)),
-        if (widget.enableShare)
-          _SocialButton(
-            svgAsset: 'packages/stoyco_shared/lib/assets/icons/share_outlined_icon.svg',
-            count: _shareCount,
-            color: widget.config.shareIconColor ?? baseColor,
-            onPressed: _handleShare,
-            isProcessing: _isProcessingShare,
-            config: widget.config,
-          ),
-      ],
-    );
-  }
+  Widget _buildSocialActions(
+    BuildContext context,
+    Color baseColor,
+    InteractionViewState vState,
+  ) => Row(
+        children: [
+          if (widget.enableLike)
+            _SocialButton(
+              icon: vState.isLiked ? Icons.favorite : Icons.favorite_border,
+              count: vState.likeCount,
+              color: vState.isLiked
+                  ? (widget.config.likedIconColor ?? StoycoColors.white)
+                  : (widget.config.unlikedIconColor ?? baseColor),
+              onPressed: _handleLike,
+              isProcessing: vState.processingLike,
+              animation: vState.isLiked ? _likeScaleAnim : null,
+              config: widget.config,
+            ),
+          if (widget.enableLike && widget.enableShare)
+            Gap(StoycoScreenSize.width(context, 15)),
+          if (widget.enableShare)
+            _SocialButton(
+              svgAsset: 'packages/stoyco_shared/lib/assets/icons/share_outlined_icon.svg',
+              count: vState.shareCount,
+              color: widget.config.shareIconColor ?? baseColor,
+              onPressed: _handleShare,
+              isProcessing: vState.processingShare,
+              config: widget.config,
+            ),
+        ],
+      );
+}
 
-// Private widget for social buttons
+// Private widget for social buttons.
 class _SocialButton extends StatelessWidget {
   const _SocialButton({
     this.icon,
@@ -667,7 +725,6 @@ class _SocialButton extends StatelessWidget {
     required this.isProcessing,
     required this.config,
     this.animation,
-    this.isReadOnly = false,
   }) : assert(icon != null || svgAsset != null, 'Either icon or svgAsset must be provided');
   final IconData? icon;
   final String? svgAsset;
@@ -677,12 +734,10 @@ class _SocialButton extends StatelessWidget {
   final bool isProcessing;
   final Animation<double>? animation;
   final InteractiveCardConfig config;
-  final bool isReadOnly;
 
   @override
   Widget build(BuildContext context) {
     Widget iconWidget;
-
     if (svgAsset != null) {
       iconWidget = SvgPicture.asset(
         svgAsset!,
@@ -696,7 +751,6 @@ class _SocialButton extends StatelessWidget {
         color: color,
       );
     }
-
     if (animation != null) {
       iconWidget = AnimatedBuilder(
         animation: animation!,
@@ -707,11 +761,10 @@ class _SocialButton extends StatelessWidget {
         child: iconWidget,
       );
     }
-
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: isReadOnly ? null : (isProcessing ? null : onPressed),
+        onTap: (isProcessing ? null : onPressed),
         borderRadius: BorderRadius.circular(8),
         child: Padding(
           padding: const EdgeInsets.all(4),
@@ -724,10 +777,7 @@ class _SocialButton extends StatelessWidget {
                 _formatCount(count),
                 style: TextStyle(
                   color: color,
-                  fontSize: StoycoScreenSize.fontSize(
-                    context,
-                    config.counterFontSize,
-                  ),
+                  fontSize: StoycoScreenSize.fontSize(context, config.counterFontSize),
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -739,77 +789,68 @@ class _SocialButton extends StatelessWidget {
   }
 
   String _formatCount(int count) {
-    if (count >= 1000000) {
-      return '${(count / 1000000).toStringAsFixed(1)}M';
-    } else if (count >= 1000) {
-      return '${(count / 1000).toStringAsFixed(1)}K';
-    }
+    if (count >= 1000000) return '${(count / 1000000).toStringAsFixed(1)}M';
+    if (count >= 1000) return '${(count / 1000).toStringAsFixed(1)}K';
     return count.toString();
   }
 }
 
-// Loading state widget
+// Loading state widget shown while data is fetched.
 class _InteractiveContentCardLoading extends StatelessWidget {
-
-  const _InteractiveContentCardLoading({
-    required this.config,
-  });
+  const _InteractiveContentCardLoading({required this.config});
   final InteractiveCardConfig config;
 
   @override
   Widget build(BuildContext context) => SizedBox(
-      height: StoycoScreenSize.height(context, config.height),
-      child: Row(
-        children: [
-          SkeletonCard(
-            width: StoycoScreenSize.height(context, config.height),
-            height: StoycoScreenSize.height(context, config.height),
-            borderRadius: BorderRadius.circular(
-              StoycoScreenSize.radius(context, config.borderRadius),
-            ),
-          ),
-          Gap(StoycoScreenSize.width(context, config.spacing)),
-          Expanded(
-            child: Padding(
-              padding: StoycoScreenSize.symmetric(context, vertical: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Title skeleton
-                  SkeletonCard(
-                    width: double.infinity,
-                    height: StoycoScreenSize.height(context, 24),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  Gap(StoycoScreenSize.height(context, 8)),
-                  // Social buttons skeleton
-                  Row(
-                    children: [
-                      SkeletonCard(
-                        width: StoycoScreenSize.width(context, 60),
-                        height: StoycoScreenSize.height(context, 20),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      Gap(StoycoScreenSize.width(context, 20)),
-                      SkeletonCard(
-                        width: StoycoScreenSize.width(context, 60),
-                        height: StoycoScreenSize.height(context, 20),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  // Date skeleton
-                  SkeletonCard(
-                    width: StoycoScreenSize.width(context, 80),
-                    height: StoycoScreenSize.height(context, 16),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ],
+        height: StoycoScreenSize.height(context, config.height),
+        child: Row(
+          children: [
+            SkeletonCard(
+              width: StoycoScreenSize.height(context, config.height),
+              height: StoycoScreenSize.height(context, config.height),
+              borderRadius: BorderRadius.circular(
+                StoycoScreenSize.radius(context, config.borderRadius),
               ),
             ),
-          ),
-        ],
-      ),
-    );
+            Gap(StoycoScreenSize.width(context, config.spacing)),
+            Expanded(
+              child: Padding(
+                padding: StoycoScreenSize.symmetric(context, vertical: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SkeletonCard(
+                      width: double.infinity,
+                      height: StoycoScreenSize.height(context, 24),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    Gap(StoycoScreenSize.height(context, 8)),
+                    Row(
+                      children: [
+                        SkeletonCard(
+                          width: StoycoScreenSize.width(context, 60),
+                          height: StoycoScreenSize.height(context, 20),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        Gap(StoycoScreenSize.width(context, 20)),
+                        SkeletonCard(
+                          width: StoycoScreenSize.width(context, 60),
+                          height: StoycoScreenSize.height(context, 20),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ],
+                    ),
+                    const Spacer(),
+                    SkeletonCard(
+                      width: StoycoScreenSize.width(context, 80),
+                      height: StoycoScreenSize.height(context, 16),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
 }
