@@ -50,10 +50,10 @@ dependencies:
       url: https://github.com/StoyCompany/StoycoInteractionContent_Package.git
       ref: main
   stoyco_subscription:
-    path: ../stoyco_subscription
-    # git:
-    #   url: https://github.com/StoyCompany/stoyco_subscription.git
-    #   ref: main
+    # path: ../stoyco_subscription
+    git:
+      url: https://github.com/StoyCompany/stoyco_subscription.git
+      ref: main
 
 dev_dependencies:
   flutter_test:
