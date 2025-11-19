@@ -1,4 +1,10 @@
-## 19.0.2
+## 21.0.1
+
+fix: Adjust leaderboard item index display for correct ranking
+
+## 21.0.0
+
+**feat(notification):** Adding push notificacion with moengage sdk
 
 - **refactor:** Simplify video playback and sharing logic in ParallaxVideoCard
 
