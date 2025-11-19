@@ -7,6 +7,7 @@ import 'package:stoyco_shared/design/colors.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/design/skeleton_card.dart';
 import 'package:stoyco_shared/stoyco_shared.dart';
+import 'package:stoyco_shared/widgets/reactive_social_buttons.dart';
 
 /// Enum representing different types of feed content.
 ///
@@ -136,6 +137,7 @@ typedef OnShareCallback = Future<void> Function({
 typedef OnTapCallback = void Function(String contentId);
 typedef OnLoadInteractionCountsCallback = Future<InteractionCounts> Function(String contentId);
 typedef OnCheckIsLikedCallback = Future<bool> Function(String contentId);
+typedef OnAuthenticationRequiredCallback = void Function();
 
 /// Immutable view state for interaction-related values.
 ///
@@ -258,6 +260,7 @@ class InteractiveContentCard extends StatefulWidget {
     this.onTap,
     this.onLike,
     this.onShare,
+    this.onAuthenticationRequired,
     this.onParticipate,
     this.onLoadInteractionCounts,
     this.onCheckIsLiked,
@@ -286,6 +289,10 @@ class InteractiveContentCard extends StatefulWidget {
 
   /// Callback when share is triggered.
   final OnShareCallback? onShare;
+
+  /// Callback when authentication is required (user not logged in).
+  /// Use this to redirect the user to login screen.
+  final OnAuthenticationRequiredCallback? onAuthenticationRequired;
 
   /// Callback when participate button is pressed (for eligible content types).
   final VoidCallback? onParticipate;
@@ -640,6 +647,7 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
                 onCheckIsLiked: widget.onCheckIsLiked,
                 onLike: widget.onLike,
                 onShare: widget.onShare,
+                onAuthenticationRequired: widget.onAuthenticationRequired,
                 enableLike: widget.enableLike,
                 enableShare: widget.enableShare,
                 textColor: textColor,

@@ -1,3 +1,7 @@
+## 21.5.6
+
+**feat(Logic):** implements auxiliar methods for Interactions
+
 ## 21.5.5
 
 **feat(cache):** implement global cache management and invalidation features

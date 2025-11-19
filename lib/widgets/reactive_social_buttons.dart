@@ -16,6 +16,7 @@ typedef OnSocialShareCallback = Future<void> Function({
 });
 typedef OnLoadSocialCountsCallback = Future<InteractionCounts> Function(String contentId);
 typedef OnCheckSocialIsLikedCallback = Future<bool> Function(String contentId);
+typedef OnAuthenticationRequiredCallback = void Function();
 
 /// Configuration for social buttons appearance.
 class SocialButtonsConfig {
@@ -155,6 +156,7 @@ class ReactiveSocialButtons extends StatefulWidget {
     this.onCheckIsLiked,
     this.onLike,
     this.onShare,
+    this.onAuthenticationRequired,
     this.controller,
     this.enableLike = true,
     this.enableShare = true,
@@ -185,6 +187,10 @@ class ReactiveSocialButtons extends StatefulWidget {
 
   /// Callback when share button is pressed.
   final OnSocialShareCallback? onShare;
+
+  /// Callback when authentication is required (user not logged in).
+  /// Use this to redirect the user to login screen.
+  final OnAuthenticationRequiredCallback? onAuthenticationRequired;
 
   /// Optional external controller for state management.
   final SocialButtonsController? controller;
@@ -293,6 +299,13 @@ class _ReactiveSocialButtonsState extends State<ReactiveSocialButtons>
       return;
     }
 
+    // Check authentication before processing
+    if (!SocialInteractionService.instance.isAuthenticated) {
+      StoyCoLogger.info('User not authenticated, triggering authentication required callback');
+      widget.onAuthenticationRequired?.call();
+      return;
+    }
+
     _controller.patch(processingLike: true);
     final newLikedState = !_controller.state.isLiked;
 
@@ -322,6 +335,13 @@ class _ReactiveSocialButtonsState extends State<ReactiveSocialButtons>
 
   Future<void> _handleShare() async {
     if (!mounted || !widget.enableShare || _controller.state.processingShare) {
+      return;
+    }
+
+    // Check authentication before processing
+    if (!SocialInteractionService.instance.isAuthenticated) {
+      StoyCoLogger.info('User not authenticated, triggering authentication required callback');
+      widget.onAuthenticationRequired?.call();
       return;
     }
 
