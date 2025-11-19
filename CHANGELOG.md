@@ -1,3 +1,7 @@
+## 21.5.9
+
+**fix(Events):** implements correct type for free events
+
 ## 21.5.6
 
 **feat(Logic):** implements auxiliar methods for Interactions
