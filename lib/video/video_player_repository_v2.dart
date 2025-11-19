@@ -9,15 +9,24 @@ import 'package:stoyco_shared/video/models/video_player_model.dart';
 import 'package:stoyco_shared/video/video_player_ds_impl_v2.dart';
 import 'package:stoyco_shared/video/video_with_metada/video_with_metadata.dart';
 import 'package:stoyco_shared/video/video_with_metada/streaming_data.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/active_subscription_service.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/mixins/content_access_validator_mixin.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/access_content.dart';
 
 /// Repository for managing video player interactions.
-class VideoPlayerRepositoryV2 {
+class VideoPlayerRepositoryV2 with MultiContentAccessValidatorMixin {
   /// Creates a [VideoPlayerRepositoryV2] with the given data source and user token.
-  VideoPlayerRepositoryV2(this._dataSource, this.userToken);
+  VideoPlayerRepositoryV2(
+    this._dataSource,
+    this.userToken,
+    this._activeSubscriptionService,
+  );
 
   /// The data source for video player operations.
   final VideoPlayerDataSourceV2 _dataSource;
+
+  /// The active subscription service for validating user access.
+  final ActiveSubscriptionService _activeSubscriptionService;
 
   /// The user's authentication token.
   late String userToken;
@@ -113,7 +122,9 @@ class VideoPlayerRepositoryV2 {
 
   /// Likes a video with the given [videoId].
   Future<Either<Failure, UserVideoReaction>> likeVideo(
-          String videoId, String userId) async =>
+    String videoId,
+    String userId,
+  ) async =>
       _handleApiCall(
         () => _dataSource.likeVideo(videoId, userId),
         (data) => UserVideoReaction.fromJson(data),
@@ -161,7 +172,9 @@ class VideoPlayerRepositoryV2 {
             'Error getting videos with metadata',
           );
 
-  /// Fetches videos with filter mode, pagination, and optional userId
+  /// Fetches videos with filter mode, pagination, and optional userId.
+  ///
+  /// Validates user access to each video based on subscription status.
   Future<Either<Failure, List<VideoWithMetadata>>> getVideosWithFilter({
     required String filterMode,
     int page = 1,
@@ -169,8 +182,9 @@ class VideoPlayerRepositoryV2 {
     String? userId,
     String? partnerProfile,
     String? partnerId,
-  }) async =>
-      _handleApiCallWithItems(
+  }) async {
+    try {
+      final result = await _handleApiCallWithItems(
         () => _dataSource.getVideosWithFilter(
           filterMode: filterMode,
           page: page,
@@ -222,22 +236,53 @@ class VideoPlayerRepositoryV2 {
                 : null,
             accessContent: m['accessContent'] != null
                 ? AccessContent.fromJson(
-                    m['accessContent'] as Map<String, dynamic>)
+                    m['accessContent'] as Map<String, dynamic>,
+                  )
                 : null,
           );
         }).toList(),
         'Error getting videos with filter',
       );
 
-  /// Fetch featured / explore videos (optional userId, pageSize)
+      // If the API call failed, return the error
+      if (result.isLeft) {
+        return result;
+      }
+
+      // Validate access for each video
+      final videos = result.right;
+      final validatedVideos = await validateMultipleAccess<VideoWithMetadata>(
+        service: _activeSubscriptionService,
+        partnerId: partnerId,
+        contents: videos,
+        getAccessContent: (video) => video.accessContent,
+        hasAccessToContent: (video, hasAccess) =>
+            video.copyWith(hasAccessWithSubscription: hasAccess),
+        getIsSubscriptionOnly: (video) => video.isSubscriberOnly,
+      );
+
+      return Right(validatedVideos);
+    } on DioException catch (error) {
+      return Left(DioFailure.decode(error));
+    } on Error catch (error) {
+      return Left(ErrorFailure.decode(error));
+    } on Exception catch (error) {
+      return Left(ExceptionFailure.decode(error));
+    }
+  }
+
+  /// Fetch featured / explore videos (optional userId, pageSize).
+  ///
+  /// Validates user access to each video based on subscription status.
   Future<Either<Failure, List<VideoWithMetadata>>> getFeaturedVideos({
     String? userId,
     int pageSize = 10,
     int page = 1,
     String? partnerProfile,
     String? partnerId,
-  }) async =>
-      _handleApiCallWithItems(
+  }) async {
+    try {
+      final result = await _handleApiCallWithItems(
         () => _dataSource.getFeaturedVideos(
           userId: userId,
           pageSize: pageSize,
@@ -287,10 +332,38 @@ class VideoPlayerRepositoryV2 {
                 : null,
             accessContent: m['accessContent'] != null
                 ? AccessContent.fromJson(
-                    m['accessContent'] as Map<String, dynamic>)
+                    m['accessContent'] as Map<String, dynamic>,
+                  )
                 : null,
           );
         }).toList(),
         'Error getting featured videos',
       );
+
+      // If the API call failed, return the error
+      if (result.isLeft) {
+        return result;
+      }
+
+      // Validate access for each video
+      final videos = result.right;
+      final validatedVideos = await validateMultipleAccess<VideoWithMetadata>(
+        service: _activeSubscriptionService,
+        partnerId: partnerId,
+        contents: videos,
+        getAccessContent: (video) => video.accessContent,
+        hasAccessToContent: (video, hasAccess) =>
+            video.copyWith(hasAccessWithSubscription: hasAccess),
+        getIsSubscriptionOnly: (video) => video.isSubscriberOnly,
+      );
+
+      return Right(validatedVideos);
+    } on DioException catch (error) {
+      return Left(DioFailure.decode(error));
+    } on Error catch (error) {
+      return Left(ErrorFailure.decode(error));
+    } on Exception catch (error) {
+      return Left(ExceptionFailure.decode(error));
+    }
+  }
 }

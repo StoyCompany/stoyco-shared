@@ -16,6 +16,7 @@ import 'package:stoyco_shared/video/cache/video_cache_manager.dart';
 import 'package:stoyco_shared/video/video_player_ds_impl_v2.dart';
 import 'package:stoyco_shared/video/video_player_repository_v2.dart';
 import 'package:stoyco_shared/video/video_with_metada/video_with_metadata.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/active_subscription_service.dart';
 
 /// Service responsible for managing video playback and reactions.
 ///
@@ -61,20 +62,29 @@ import 'package:stoyco_shared/video/video_with_metada/video_with_metadata.dart';
 /// await videoService.clearVideoCache();
 /// ```
 class VideoPlayerService {
+  /// Service for validating user access to subscription content.
+  final ActiveSubscriptionService activeSubscriptionService;
+
   /// Private constructor for [VideoPlayerService].
   ///
   /// [environment] The environment configuration.
   /// [userToken] The user token.
   /// [functionToUpdateToken] Function to update the user token.
   /// [videoCacheTTL] Time to live for video cache in seconds (default: 300 = 5 minutes).
+  /// [activeSubscriptionService] Service for validating user access to subscription content.
   VideoPlayerService._({
+    required this.activeSubscriptionService,
     this.environment = StoycoEnvironment.development,
     this.userToken = '',
     this.functionToUpdateToken,
     this.videoCacheTTL = 300,
   }) {
     _dataSource = VideoPlayerDataSourceV2(environment);
-    _repository = VideoPlayerRepositoryV2(_dataSource!, userToken);
+    _repository = VideoPlayerRepositoryV2(
+      _dataSource!,
+      userToken,
+      activeSubscriptionService,
+    );
     _repository!.token = userToken;
     _dataSource!.updateUserToken(userToken);
     _cacheManager = VideoCacheManager.instance;
@@ -86,18 +96,25 @@ class VideoPlayerService {
   /// [userToken] The user token.
   /// [functionToUpdateToken] Function to update the user token.
   /// [videoCacheTTL] Time to live for video cache in seconds (default: 300 = 5 minutes).
+  /// [activeSubscriptionService] Service for validating user access to subscription content.
   ///
   /// Example:
   /// ```dart
-  /// var videoService = VideoPlayerService(userToken: 'abc123', videoCacheTTL: 600);
+  /// var videoService = VideoPlayerService(
+  ///   userToken: 'abc123',
+  ///   videoCacheTTL: 600,
+  ///   activeSubscriptionService: activeSubscriptionService,
+  /// );
   /// ```
   factory VideoPlayerService({
+    required ActiveSubscriptionService activeSubscriptionService,
     StoycoEnvironment environment = StoycoEnvironment.development,
     String userToken = '',
     Future<String?>? functionToUpdateToken,
     int videoCacheTTL = 300,
   }) {
     _instance = VideoPlayerService._(
+      activeSubscriptionService: activeSubscriptionService,
       environment: environment,
       userToken: userToken,
       functionToUpdateToken: functionToUpdateToken,

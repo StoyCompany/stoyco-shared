@@ -1,3 +1,7 @@
+## 21.5.10
+
+**feat(video):** integrate active subscription validation in video player repository and service
+
 ## 21.5.9
 
 **fix(Events):** implements correct type for free events
