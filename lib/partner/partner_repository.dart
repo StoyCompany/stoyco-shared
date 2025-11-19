@@ -21,32 +21,25 @@ class PartnerRepository with RepositoryCacheMixin {
   /// Returns an [Either] with:
   /// - [Left] containing a [Failure] if the request fails
   /// - [Right] containing a [PartnerCommunityResponse] if successful
-  ///
-  /// Cached for 10 minutes.
   Future<Either<Failure, PartnerCommunityResponse>> getPartnerCommunityById(
     String partnerId,
-  ) async =>
-      cachedCall<PartnerCommunityResponse>(
-        key: 'partner_community_$partnerId',
-        ttl: const Duration(minutes: 10),
-        fetcher: () async {
-          try {
-            final response =
-                await _partnerDataSource.getPartnerCommunityById(partnerId);
+  ) async {
+    try {
+      final response =
+          await _partnerDataSource.getPartnerCommunityById(partnerId);
 
-            final partnerCommunityResponse =
-                PartnerCommunityResponse.fromJson(response.data);
+      final partnerCommunityResponse =
+          PartnerCommunityResponse.fromJson(response.data);
 
-            return Right(partnerCommunityResponse);
-          } on DioException catch (error) {
-            return Left(DioFailure.decode(error));
-          } on Error catch (error) {
-            return Left(ErrorFailure.decode(error));
-          } on Exception catch (error) {
-            return Left(ExceptionFailure.decode(error));
-          }
-        },
-      );
+      return Right(partnerCommunityResponse);
+    } on DioException catch (error) {
+      return Left(DioFailure.decode(error));
+    } on Error catch (error) {
+      return Left(ErrorFailure.decode(error));
+    } on Exception catch (error) {
+      return Left(ExceptionFailure.decode(error));
+    }
+  }
 
   /// Gets all available market segments.
   ///
@@ -86,35 +79,28 @@ class PartnerRepository with RepositoryCacheMixin {
   /// Returns an [Either] with:
   /// - [Left] containing a [Failure] if the request fails
   /// - [Right] containing a [PartnerFollowCheckResponse] if successful
-  ///
-  /// Cached for 2 minutes (user state can change).
   Future<Either<Failure, PartnerFollowCheckResponse>> checkPartnerFollow({
     required String userId,
     required String partnerId,
-  }) async =>
-      cachedCall<PartnerFollowCheckResponse>(
-        key: 'partner_follow_${userId}_$partnerId',
-        ttl: const Duration(minutes: 2),
-        fetcher: () async {
-          try {
-            final response = await _partnerDataSource.checkPartnerFollow(
-              userId: userId,
-              partnerId: partnerId,
-            );
-
-            final followCheckResponse =
-                PartnerFollowCheckResponse.fromJson(response.data);
-
-            return Right(followCheckResponse);
-          } on DioException catch (error) {
-            return Left(DioFailure.decode(error));
-          } on Error catch (error) {
-            return Left(ErrorFailure.decode(error));
-          } on Exception catch (error) {
-            return Left(ExceptionFailure.decode(error));
-          }
-        },
+  }) async {
+    try {
+      final response = await _partnerDataSource.checkPartnerFollow(
+        userId: userId,
+        partnerId: partnerId,
       );
+
+      final followCheckResponse =
+          PartnerFollowCheckResponse.fromJson(response.data);
+
+      return Right(followCheckResponse);
+    } on DioException catch (error) {
+      return Left(DioFailure.decode(error));
+    } on Error catch (error) {
+      return Left(ErrorFailure.decode(error));
+    } on Exception catch (error) {
+      return Left(ExceptionFailure.decode(error));
+    }
+  }
 
   /// Gets content availability flags for a partner.
   ///
