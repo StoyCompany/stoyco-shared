@@ -20,7 +20,7 @@ enum FeedType {
   announcement('announcement'),
 
   /// Event content (mapped from backend value '1').
-  events('1'),
+  events('3'),
 
   /// Unknown or unspecified content type.
   unknown('unknown');
@@ -497,7 +497,7 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
     }
     final showParticipateButton = widget.data is FeedContentAdapter &&
         ((widget.data as FeedContentAdapter).feedType == FeedType.events ||
-            ((widget.data as FeedContentAdapter).feedType == FeedType.announcement &&
+            ((widget.data as FeedContentAdapter).feedType == FeedType.events &&
                 widget.data.state == 'PUBLISHED'));
     return SizedBox(
       height: StoycoScreenSize.height(context, widget.config.height),
