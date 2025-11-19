@@ -1,3 +1,4 @@
+**feat:** add cache invalidation methods to PartnerService and update version in pubspec.yaml
 ## 21.5.0
 
 **feat(feed):** Refactor FeedContentItem and NewsRepository for improved access validation
