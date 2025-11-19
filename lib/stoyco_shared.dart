@@ -2,7 +2,10 @@ library stoyco_shared;
 
 // Cache system
 export 'package:stoyco_shared/cache/cache_manager.dart';
+export 'package:stoyco_shared/cache/cache_utils.dart';
+export 'package:stoyco_shared/cache/global_cache_manager.dart';
 export 'package:stoyco_shared/cache/in_memory_cache_manager.dart';
+export 'package:stoyco_shared/cache/persistent_cache_manager.dart';
 export 'package:stoyco_shared/cache/repository_cache_mixin.dart';
 export 'package:stoyco_shared/cache/models/cache_entry.dart';
 
