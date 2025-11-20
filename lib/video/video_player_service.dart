@@ -62,9 +62,6 @@ import 'package:stoyco_subscription/pages/subscription_plans/data/active_subscri
 /// await videoService.clearVideoCache();
 /// ```
 class VideoPlayerService {
-  /// Service for validating user access to subscription content.
-  final ActiveSubscriptionService activeSubscriptionService;
-
   /// Private constructor for [VideoPlayerService].
   ///
   /// [environment] The environment configuration.
@@ -123,6 +120,9 @@ class VideoPlayerService {
 
     return _instance!;
   }
+
+  /// Service for validating user access to subscription content.
+  final ActiveSubscriptionService activeSubscriptionService;
 
   /// Function to update the user token.
   Future<String?>? functionToUpdateToken;
@@ -216,7 +216,6 @@ class VideoPlayerService {
       try {
         await VideoCacheManager.initialize(
           ttl: videoCacheTTL,
-          maxCacheSize: 1500,
         );
         _cacheManager = VideoCacheManager.instance;
         if (_cacheManager != null) {
