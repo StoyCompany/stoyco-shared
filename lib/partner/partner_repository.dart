@@ -29,6 +29,7 @@ class PartnerRepository with RepositoryCacheMixin {
       cachedCall<PartnerCommunityResponse>(
         key: 'partner_community_$partnerId',
         ttl: const Duration(minutes: 10),
+        forceRefresh: true,
         fetcher: () async {
           try {
             final response =
@@ -61,6 +62,7 @@ class PartnerRepository with RepositoryCacheMixin {
       cachedCall<List<MarketSegmentModel>>(
         key: 'market_segments',
         ttl: const Duration(minutes: 30),
+        forceRefresh: true,
         fetcher: () async {
           try {
             final response = await _partnerDataSource.getMarketSegments();
@@ -95,6 +97,7 @@ class PartnerRepository with RepositoryCacheMixin {
       cachedCall<PartnerFollowCheckResponse>(
         key: 'partner_follow_${userId}_$partnerId',
         ttl: const Duration(minutes: 2),
+        forceRefresh: true,
         fetcher: () async {
           try {
             final response = await _partnerDataSource.checkPartnerFollow(
@@ -128,6 +131,7 @@ class PartnerRepository with RepositoryCacheMixin {
           cachedCall<PartnerContentAvailabilityResponse>(
             key: 'partner_content_availability_$partnerId',
             ttl: const Duration(minutes: 5),
+            forceRefresh: true,
             fetcher: () async {
               try {
                 final response = await _partnerDataSource

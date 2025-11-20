@@ -1,3 +1,7 @@
+## 21.5.12
+
+**feat(partner):** enable force refresh for cached partner data retrieval
+
 ## 21.5.10
 
 **feat(video):** integrate active subscription validation in video player repository and service
