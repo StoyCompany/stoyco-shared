@@ -13,6 +13,7 @@ Sistema genérico de caché para repositorios en `stoyco_shared`.
 - ✅ **Thread-safe**: Singleton compartido en toda la app
 - ✅ **Completamente testeado**: Cobertura de tests completa
 - ✅ **Persistente opcional**: Usa `PersistentCacheManager` para conservar datos tras reinicios (solo resultados exitosos y serializables)
+- ✅ **Invalidación global**: Limpia todos los caches de todos los repositorios de una sola vez
 
 ## Instalación
 
@@ -164,11 +165,110 @@ invalidateCachePattern('user_${userId}_');
 ### Limpiar todo el cache
 
 ```dart
-// En tu repositorio
+// En tu repositorio (solo limpia el cache de ese repositorio)
 void clearAllCache() {
   cacheManager.clear();
 }
 ```
+
+### Invalidación global (todos los repositorios)
+
+El sistema ahora incluye `GlobalCacheManager` que rastrea automáticamente TODOS los `CacheManager` creados en la aplicación (tanto `PersistentCacheManager` como `InMemoryCacheManager`). Todos los caches se registran automáticamente al ser creados o asignados a un repositorio. Puedes invalidar caches de TODOS los repositorios de una sola vez:
+
+```dart
+import 'package:stoyco_shared/cache/repository_cache_mixin.dart';
+
+// Limpiar TODOS los caches de TODOS los repositorios
+RepositoryCacheMixin.clearAllRepositoryCaches();
+
+// Invalidar una key específica en TODOS los repositorios
+RepositoryCacheMixin.invalidateKeyGlobally('user_123');
+
+// Invalidar por patrón en TODOS los repositorios
+RepositoryCacheMixin.invalidatePatternGlobally('news_');
+```
+
+**Casos de uso comunes:**
+
+- **Logout de usuario**: Limpia todos los caches al cerrar sesión
+- **Cambio de ambiente**: Invalida caches al cambiar de producción a staging
+- **Cambio de cuenta**: Limpia datos del usuario anterior
+- **Reset de datos**: Cuando se detecta un problema de sincronización
+
+**Ejemplo en un AuthService:**
+
+```dart
+class AuthService {
+  Future<void> logout() async {
+    // Limpiar todos los caches de todos los repositorios
+    RepositoryCacheMixin.clearAllRepositoryCaches();
+
+    // Continuar con logout...
+    await _clearTokens();
+    await _clearUserData();
+  }
+}
+```
+
+**Ejemplo para invalidar datos de un usuario específico:**
+
+```dart
+void onUserDataChanged(String userId) {
+  // Invalida todos los caches relacionados con este usuario
+  // en todos los repositorios de la app
+  RepositoryCacheMixin.invalidatePatternGlobally('user_${userId}_');
+}
+```
+
+### Invalidación desde el cliente (UI/Services)
+
+Para facilitar el uso desde cualquier capa de la aplicación (UI, services, etc.), usa la clase `CacheUtils`:
+
+```dart
+import 'package:stoyco_shared/cache/cache_utils.dart';
+
+// En un botón de logout
+ElevatedButton(
+  onPressed: () {
+    CacheUtils.clearAllCaches();
+    Navigator.pushReplacementNamed(context, '/login');
+  },
+  child: Text('Logout'),
+)
+
+// En un servicio de autenticación
+class AuthService {
+  Future<void> logout() async {
+    await _clearTokens();
+    CacheUtils.clearAllCaches(); // ✅ Fácil y directo
+    await _navigateToLogin();
+  }
+}
+
+// Invalidar datos específicos después de una actualización
+class ProfileScreen extends StatelessWidget {
+  Future<void> _updateProfile(String userId) async {
+    await _profileService.updateProfile(userId);
+    // Invalida todos los caches de este usuario
+    CacheUtils.invalidatePattern('user_${userId}_');
+    setState(() {});
+  }
+}
+
+// Refrescar datos de noticias
+class NewsScreen extends StatelessWidget {
+  Future<void> _refreshNews() async {
+    CacheUtils.invalidatePattern('news_');
+    await _loadNews(forceRefresh: true);
+  }
+}
+```
+
+**Diferencia entre los métodos:**
+
+- **`CacheUtils`**: Para usar desde UI, services, o cualquier capa de la app
+- **`RepositoryCacheMixin`**: Para usar dentro de repositorios o cuando ya tienes el mixin
+- **`GlobalCacheManager`**: Para uso avanzado o casos especiales (normalmente no necesario)
 
 ## API Reference
 
@@ -203,7 +303,44 @@ Invalida todos los caches cuya key contenga el patrón.
 
 #### `clearAllCache()`
 
-Elimina todos los caches.
+Elimina todos los caches del repositorio actual.
+
+#### `clearAllRepositoryCaches()` (static)
+
+Limpia TODOS los caches de TODOS los repositorios en la aplicación.
+Usa `GlobalCacheManager` internamente.
+
+#### `invalidateKeyGlobally(String key)` (static)
+
+Invalida una key específica en todos los repositorios.
+Retorna el número de caches donde se encontró la key.
+
+#### `invalidatePatternGlobally(String pattern)` (static)
+
+Invalida todas las keys que contengan el patrón en todos los repositorios.
+Retorna el número total de keys invalidadas.
+
+### CacheUtils
+
+Clase de utilidad para invalidar cache desde cualquier capa de la aplicación.
+
+#### `clearAllCaches()` (static)
+
+Limpia TODOS los caches de TODOS los repositorios.
+
+#### `invalidateKey(String key)` (static)
+
+Invalida una key específica en todos los repositorios.
+Retorna el número de caches donde se encontró la key.
+
+#### `invalidatePattern(String pattern)` (static)
+
+Invalida todas las keys que contengan el patrón en todos los repositorios.
+Retorna el número total de keys invalidadas.
+
+#### `registeredCacheCount` (static getter)
+
+Retorna el número de cache managers actualmente registrados.
 
 ### CacheManager
 

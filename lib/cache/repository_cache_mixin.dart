@@ -1,10 +1,11 @@
 import 'package:either_dart/either.dart';
-import '../errors/errors.dart';
-import 'cache_manager.dart';
-import 'in_memory_cache_manager.dart';
-import 'persistent_cache_manager.dart';
+import 'package:stoyco_shared/errors/errors.dart';
+import 'package:stoyco_shared/cache/cache_manager.dart';
+import 'package:stoyco_shared/cache/global_cache_manager.dart';
+import 'package:stoyco_shared/cache/in_memory_cache_manager.dart';
+import 'package:stoyco_shared/cache/persistent_cache_manager.dart';
 import 'dart:io';
-import 'models/cache_entry.dart';
+import 'package:stoyco_shared/cache/models/cache_entry.dart';
 
 /// Mixin that adds caching capabilities to repository classes.
 ///
@@ -54,8 +55,11 @@ mixin RepositoryCacheMixin {
   /// Sets a custom cache manager.
   ///
   /// Useful for testing or using different cache implementations.
+  /// The cache manager will be automatically registered in [GlobalCacheManager].
   set cacheManager(CacheManager manager) {
     _cacheManager = manager;
+    // Register the custom cache manager in the global registry
+    GlobalCacheManager.register(manager);
   }
 
   /// Executes a cached call with automatic caching and expiration.
@@ -124,9 +128,7 @@ mixin RepositoryCacheMixin {
   /// ```dart
   /// invalidateCache('event_123');
   /// ```
-  bool invalidateCache(String key) {
-    return cacheManager.invalidate(key);
-  }
+  bool invalidateCache(String key) => cacheManager.invalidate(key);
 
   /// Invalidates multiple cache keys at once.
   ///
@@ -164,4 +166,48 @@ mixin RepositoryCacheMixin {
   void clearAllCache() {
     cacheManager.clear();
   }
+
+  /// Clears all caches across all repositories in the application.
+  ///
+  /// This is a static method that clears ALL cache managers registered
+  /// with [GlobalCacheManager], affecting all repositories that use caching.
+  ///
+  /// Typical use cases:
+  /// - User logout
+  /// - App data reset
+  /// - Switching environments or accounts
+  ///
+  /// Example:
+  /// ```dart
+  /// // On user logout, clear all caches
+  /// RepositoryCacheMixin.clearAllRepositoryCaches();
+  /// ```
+  static void clearAllRepositoryCaches() {
+    GlobalCacheManager.clearAllCaches();
+  }
+
+  /// Invalidates a specific key across all repository caches.
+  ///
+  /// Returns the number of caches where the key was found and invalidated.
+  ///
+  /// Example:
+  /// ```dart
+  /// final count = RepositoryCacheMixin.invalidateKeyGlobally('user_123');
+  /// print('Cleared from $count caches');
+  /// ```
+  static int invalidateKeyGlobally(String key) =>
+      GlobalCacheManager.invalidateKeyGlobally(key);
+
+  /// Invalidates all keys matching a pattern across all repository caches.
+  ///
+  /// Uses [String.contains] to match patterns.
+  /// Returns the total number of keys invalidated.
+  ///
+  /// Example:
+  /// ```dart
+  /// // Clear all news-related caches
+  /// final count = RepositoryCacheMixin.invalidatePatternGlobally('news_');
+  /// ```
+  static int invalidatePatternGlobally(String pattern) =>
+      GlobalCacheManager.invalidatePatternGlobally(pattern);
 }

@@ -1,3 +1,27 @@
+## 21.5.10
+
+**feat(video):** integrate active subscription validation in video player repository and service
+
+## 21.5.9
+
+**fix(Events):** implements correct type for free events
+
+## 21.5.6
+
+**feat(Logic):** implements auxiliar methods for Interactions
+
+## 21.5.5
+
+**feat(cache):** implement global cache management and invalidation features
+
+- Added GlobalCacheManager to track all cache managers and provide global operations.
+- Introduced CacheUtils for easy access to cache operations from any application layer.
+- Enhanced RepositoryCacheMixin with static methods for global cache invalidation.
+- Updated InMemoryCacheManager and PersistentCacheManager to register with GlobalCacheManager upon creation.
+- Added tests for CacheUtils and GlobalCacheManager to ensure functionality and reliability.
+- Updated README.md to document new features and usage examples for global cache management.
+  **feat:** add cache invalidation methods to PartnerService and update version in pubspec.yaml
+
 ## 21.5.0
 
 **feat(feed):** Refactor FeedContentItem and NewsRepository for improved access validation

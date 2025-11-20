@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
-import '../utils/logger.dart';
-import 'cache_manager.dart';
-import 'models/cache_entry.dart';
+import 'package:stoyco_shared/utils/logger.dart';
+import 'package:stoyco_shared/cache/cache_manager.dart';
+import 'package:stoyco_shared/cache/global_cache_manager.dart';
+import 'package:stoyco_shared/cache/models/cache_entry.dart';
 import 'package:either_dart/either.dart';
-import '../errors/error_handling/failure/failure.dart';
+import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
 
 /// A file-backed persistent implementation of [CacheManager].
 ///
@@ -49,6 +50,8 @@ class PersistentCacheManager implements CacheManager {
   }) : _file = File(_resolveFilePath(directoryPath, fileName)) {
     _ensureReady();
     _loadFromDisk();
+    // Register this instance with the global cache manager
+    GlobalCacheManager.register(this);
   }
 
   static String _resolveFilePath(String dir, String fileName) {
@@ -203,6 +206,13 @@ class PersistentCacheManager implements CacheManager {
   void clear() {
     _entries.clear();
     _persist();
+  }
+
+  /// Disposes this cache manager and unregisters it from the global registry.
+  ///
+  /// Call this when the cache manager is no longer needed.
+  void dispose() {
+    GlobalCacheManager.unregister(this);
   }
 
   @override

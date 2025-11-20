@@ -150,4 +150,86 @@ class PartnerService {
   Future<Either<Failure, PartnerContentAvailabilityResponse>>
       getPartnerContentAvailability(String partnerId) =>
           _partnerRepository!.getPartnerContentAvailability(partnerId);
+
+  // Cache invalidation methods
+
+  /// Invalidates the cached partner community data for a specific partner.
+  ///
+  /// Call this when partner or community data changes (e.g., after an update).
+  ///
+  /// Example:
+  /// ```dart
+  /// PartnerService(environment: env).invalidatePartnerCommunity('partner123');
+  /// ```
+  void invalidatePartnerCommunity(String partnerId) {
+    _partnerRepository?.invalidateCache('partner_community_$partnerId');
+  }
+
+  /// Invalidates the cached market segments data.
+  ///
+  /// Call this when market segments are modified or new ones are added.
+  ///
+  /// Example:
+  /// ```dart
+  /// PartnerService(environment: env).invalidateMarketSegments();
+  /// ```
+  void invalidateMarketSegments() {
+    _partnerRepository?.invalidateCache('market_segments');
+  }
+
+  /// Invalidates the cached follow status for a specific user and partner.
+  ///
+  /// Call this after follow/unfollow actions to reflect the latest state.
+  ///
+  /// Example:
+  /// ```dart
+  /// PartnerService(environment: env).invalidatePartnerFollow(
+  ///   userId: 'user123',
+  ///   partnerId: 'partner456',
+  /// );
+  /// ```
+  void invalidatePartnerFollow({
+    required String userId,
+    required String partnerId,
+  }) {
+    _partnerRepository?.invalidateCache('partner_follow_${userId}_$partnerId');
+  }
+
+  /// Invalidates the cached content availability for a specific partner.
+  ///
+  /// Call this when partner content is added or removed.
+  ///
+  /// Example:
+  /// ```dart
+  /// PartnerService(environment: env).invalidateContentAvailability('partner123');
+  /// ```
+  void invalidateContentAvailability(String partnerId) {
+    _partnerRepository
+        ?.invalidateCache('partner_content_availability_$partnerId');
+  }
+
+  /// Invalidates all caches related to a specific partner.
+  ///
+  /// This includes: partner community data, follow status, and content availability.
+  /// Useful when performing bulk operations on a partner.
+  ///
+  /// Example:
+  /// ```dart
+  /// PartnerService(environment: env).invalidateAllPartnerCaches('partner123');
+  /// ```
+  void invalidateAllPartnerCaches(String partnerId) {
+    _partnerRepository?.invalidateCachePattern(partnerId);
+  }
+
+  /// Clears all cached data in the partner service.
+  ///
+  /// Use with caution - this will force all subsequent calls to fetch fresh data.
+  ///
+  /// Example:
+  /// ```dart
+  /// PartnerService(environment: env).clearAllCache();
+  /// ```
+  void clearAllCache() {
+    _partnerRepository?.clearAllCache();
+  }
 }

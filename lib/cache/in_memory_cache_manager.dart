@@ -1,4 +1,5 @@
 import 'package:stoyco_shared/cache/cache_manager.dart';
+import 'package:stoyco_shared/cache/global_cache_manager.dart';
 import 'package:stoyco_shared/cache/models/cache_entry.dart';
 
 /// In-memory implementation of [CacheManager].
@@ -29,10 +30,17 @@ import 'package:stoyco_shared/cache/models/cache_entry.dart';
 /// ```
 class InMemoryCacheManager implements CacheManager {
   /// Returns the singleton instance of [InMemoryCacheManager].
-  factory InMemoryCacheManager() => _instance;
+  factory InMemoryCacheManager() {
+    if (!_registered) {
+      GlobalCacheManager.register(_instance);
+      _registered = true;
+    }
+    return _instance;
+  }
   InMemoryCacheManager._();
 
   static final InMemoryCacheManager _instance = InMemoryCacheManager._();
+  static bool _registered = false;
 
   final Map<String, CacheEntry> _cache = {};
 
@@ -87,8 +95,20 @@ class InMemoryCacheManager implements CacheManager {
     }
   }
 
+  /// Disposes this cache manager and unregisters it from the global registry.
+  ///
+  /// Call this when the cache manager is no longer needed.
+  void dispose() {
+    GlobalCacheManager.unregister(this);
+    _registered = false;
+  }
+
   /// For testing purposes only: resets the singleton instance.
   static void resetInstance() {
     _instance._cache.clear();
+    if (_registered) {
+      GlobalCacheManager.unregister(_instance);
+      _registered = false;
+    }
   }
 }
