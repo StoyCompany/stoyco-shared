@@ -35,6 +35,7 @@ import 'package:stoyco_subscription/pages/subscription_plans/data/models/respons
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
+// ignore_for_file: invalid_use_of_internal_member
 
 class _FakeResponse_0<T> extends _i1.SmartFake implements _i2.Response<T> {
   _FakeResponse_0(
@@ -166,10 +167,10 @@ class MockNewsDataSource extends _i1.Mock implements _i4.NewsDataSource {
             },
           ),
         )),
-      ) as _i5.Future<_i2.Response<dynamic>>);
+      ) as _i6.Future<_i2.Response<dynamic>>);
 
   @override
-  _i5.Future<_i2.Response<dynamic>> getPagedFeedEvents({
+  _i6.Future<_i2.Response<dynamic>> getPagedFeedEvents({
     int? pageNumber = 1,
     int? pageSize = 20,
     String? partnerId,
@@ -200,7 +201,7 @@ class MockNewsDataSource extends _i1.Mock implements _i4.NewsDataSource {
           },
         ),
         returnValue:
-            _i5.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
+            _i6.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
           this,
           Invocation.method(
             #getPagedFeedEvents,
@@ -220,7 +221,7 @@ class MockNewsDataSource extends _i1.Mock implements _i4.NewsDataSource {
             },
           ),
         )),
-      ) as _i5.Future<_i2.Response<dynamic>>);
+      ) as _i6.Future<_i2.Response<dynamic>>);
 
   @override
   _i6.Future<_i2.Response<dynamic>> markAsViewed(String? id) =>
