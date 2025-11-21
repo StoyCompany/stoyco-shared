@@ -1,3 +1,7 @@
+## 21.5.15
+
+**fix(InteractiveContent):** update Desing events
+
 ## 21.5.14
 
 **fix(InteractiveContent):** update Desing events
