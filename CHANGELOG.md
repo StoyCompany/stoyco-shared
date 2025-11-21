@@ -1,4 +1,4 @@
-## 21.5.11
+## 21.5.14
 
 - Added ActiveSubscriptionService to VideoPlayerService for subscription validation.
 - Updated persistent_cache_example.dart to initialize VideoPlayerService with ActiveSubscriptionService.
@@ -7,6 +7,14 @@
 - Adjusted pubspec.yaml to switch from git to local path for stoyco_subscription dependency.
 - Updated video_player_service_cache_test.dart to include ActiveSubscriptionService in test setup.
 - Adjusted news model and others to receive accessContent.
+
+## 21.5.13
+
+**fix(InteractiveContent):** update Desing events
+
+## 21.5.12
+
+**feat(partner):** enable force refresh for cached partner data retrieval
 
 ## 21.5.10
 

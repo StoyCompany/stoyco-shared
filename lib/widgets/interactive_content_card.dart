@@ -490,6 +490,31 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
     }
   }
 
+  /// Calculates the number of lines the title will occupy at runtime.
+  int _getTitleLineCount(BuildContext context) {
+    final textSpan = TextSpan(
+      text: widget.data.title,
+      style: TextStyle(
+        fontSize: StoycoScreenSize.fontSize(context, widget.config.titleFontSize),
+        fontWeight: FontWeight.w700,
+        height: 1.2,
+      ),
+    );
+    final tp = TextPainter(
+      text: textSpan,
+      maxLines: widget.config.titleMaxLines,
+      textDirection: TextDirection.ltr,
+    );
+    // Use screen width minus card image height, spacing, and padding
+    final screenWidth = MediaQuery.of(context).size.width;
+    final imageWidth = StoycoScreenSize.width(context, widget.config.height);
+    final spacing = StoycoScreenSize.width(context, widget.config.spacing);
+    final padding = StoycoScreenSize.width(context, 32); // Approximate padding
+    final maxWidth = screenWidth - imageWidth - spacing - padding;
+    tp.layout(maxWidth: maxWidth);
+    return tp.computeLineMetrics().length;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.isLoading) {
@@ -518,7 +543,10 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
           if (showParticipateButton)
             Positioned(
               left: StoycoScreenSize.width(context, widget.config.height + widget.config.spacing),
-              bottom: StoycoScreenSize.height(context, 45),
+              bottom: StoycoScreenSize.height(
+                context,
+                _getTitleLineCount(context) == 2 ? 45 : 60,
+              ),
               child: _buildParticipateButton(context),
             ),
         ],
@@ -675,7 +703,7 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
               padding: StoycoScreenSize.symmetric(
                 context,
                 horizontal: 10,
-                vertical: 3,
+                vertical: 5,
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
