@@ -521,9 +521,9 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
       return InteractiveContentCard.loading(config: widget.config);
     }
     final showParticipateButton = widget.data is FeedContentAdapter &&
-        ((widget.data as FeedContentAdapter).feedType == FeedType.events ||
-            ((widget.data as FeedContentAdapter).feedType == FeedType.events &&
-                widget.data.state == 'PUBLISHED'));
+        (widget.data as FeedContentAdapter).feedType == FeedType.events &&
+        widget.data.state == 'PUBLISHED';
+
     return SizedBox(
       height: StoycoScreenSize.height(context, widget.config.height),
       child: Stack(
