@@ -1,3 +1,7 @@
+## 21.5.13
+
+**fix(InteractiveContent):** update Desing events
+
 ## 21.5.12
 
 **feat(partner):** enable force refresh for cached partner data retrieval
