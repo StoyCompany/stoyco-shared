@@ -1,3 +1,7 @@
+## 21.5.17
+
+**fix(InteractiveContent):** update Desing logic PARTICIPATE BUTTON
+
 ## 21.5.16
 
 - Added ActiveSubscriptionService to VideoPlayerService for subscription validation.
