@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:stoyco_shared/envs/envs.dart';
 import 'package:stoyco_shared/video/video_player_service.dart';
 import 'package:stoyco_shared/video/cache/video_cache_manager.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/active_subscription_service.dart';
 
 void main() {
   group('VideoPlayerService Cache Tests', () {
@@ -20,9 +20,8 @@ void main() {
       // Create service with long TTL for testing (5 minutes)
       // This prevents cache entries from expiring during test execution
       service = VideoPlayerService(
-        environment: StoycoEnvironment.development,
         userToken: 'test_token',
-        videoCacheTTL: 300,
+        activeSubscriptionService: ActiveSubscriptionService.instance,
       );
     });
 

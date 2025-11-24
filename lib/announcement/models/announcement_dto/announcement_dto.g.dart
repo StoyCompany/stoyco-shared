@@ -26,6 +26,14 @@ AnnouncementDto _$AnnouncementDtoFromJson(Map<String, dynamic> json) =>
           : Configuration.fromJson(
               json['configuration'] as Map<String, dynamic>),
       views: (json['views'] as num?)?.toInt(),
+      communityOwnerId: json['community_owner_id'] as String?,
+      communityOwnerName: json['community_owner_name'] as String?,
+      communityOwnerProfile: json['community_owner_profile'] as String?,
+      isSubscriberOnly: json['is_subscriber_only'] as bool?,
+      accessContent: json['access_content'] == null
+          ? null
+          : AccessContent.fromJson(
+              json['access_content'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$AnnouncementDtoToJson(AnnouncementDto instance) =>
@@ -43,4 +51,9 @@ Map<String, dynamic> _$AnnouncementDtoToJson(AnnouncementDto instance) =>
       'end_date': instance.endDate,
       'configuration': instance.configuration,
       'views': instance.views,
+      'community_owner_id': instance.communityOwnerId,
+      'community_owner_name': instance.communityOwnerName,
+      'community_owner_profile': instance.communityOwnerProfile,
+      'is_subscriber_only': instance.isSubscriberOnly,
+      'access_content': instance.accessContent,
     };

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:stoyco_shared/envs/envs.dart';
 import 'package:stoyco_shared/video/video_player_service.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/active_subscription_service.dart';
 
 /// Example of how to initialize and use the persistent video cache.
 ///
@@ -60,6 +61,7 @@ class _VideoFeedScreenState extends State<VideoFeedScreen>
     // 2. Create video service (cache is already initialized)
     _videoService = VideoPlayerService(
       environment: StoycoEnvironment.development,
+      activeSubscriptionService: ActiveSubscriptionService.instance,
       userToken: 'your_user_token_here',
     );
   }

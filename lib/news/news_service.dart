@@ -16,15 +16,24 @@ class NewsService {
   ///
   /// The [environment] is required to initialize the service with
   /// the necessary configurations.
-  factory NewsService({required StoycoEnvironment environment, required ActiveSubscriptionService activeSubscriptionService}) => _instance ??= NewsService._(environment: environment , activeSubscriptionService: activeSubscriptionService);
+  factory NewsService(
+          {required StoycoEnvironment environment,
+          required ActiveSubscriptionService activeSubscriptionService}) =>
+      _instance ??= NewsService._(
+          environment: environment,
+          activeSubscriptionService: activeSubscriptionService);
 
   /// Private constructor for internal initialization of the [NewsService].
   ///
   /// This initializes the [_newsDataSource] and [_newsRepository] with
   /// the provided [environment].
-  NewsService._({required this.environment, required this.activeSubscriptionService}) {
+  NewsService._(
+      {required this.environment, required this.activeSubscriptionService}) {
     _newsDataSource = NewsDataSource(environment: environment);
-    _newsRepository = NewsRepository(newsDataSource: _newsDataSource!, activeSubscriptionService: activeSubscriptionService);
+    _newsRepository = NewsRepository(
+      newsDataSource: _newsDataSource!,
+      activeSubscriptionService: activeSubscriptionService,
+    );
 
     _instance = this;
   }
@@ -161,30 +170,30 @@ class NewsService {
         feedType: feedType,
       );
 
-  Future<Either<Failure, PageResult<FeedContentAdapter>>> getFeedEventsPaginated(
-      int pageNumber,
-      int pageSize, {
-        String? partnerId,
-        String? userId,
-        String? partnerProfile,
-        bool? onlyNew,
-        int? newDays,
-        bool? hideSubscriberOnlyIfNotSubscribed,
-        String? ct,
-        required String feedType,
-      }) =>
-      _newsRepository!.getFeedEventsPaginated(
-        pageNumber,
-        pageSize,
-        partnerId: partnerId,
-        userId: userId,
-        partnerProfile: partnerProfile,
-        onlyNew: onlyNew,
-        newDays: newDays,
-        hideSubscriberOnlyIfNotSubscribed: hideSubscriberOnlyIfNotSubscribed,
-        ct: ct,
-        feedType: feedType,
-      );
-
-
+  Future<Either<Failure, PageResult<FeedContentAdapter>>>
+      getFeedEventsPaginated(
+    int pageNumber,
+    int pageSize, {
+    String? partnerId,
+    String? userId,
+    String? partnerProfile,
+    bool? onlyNew,
+    int? newDays,
+    bool? hideSubscriberOnlyIfNotSubscribed,
+    String? ct,
+    required String feedType,
+  }) =>
+          _newsRepository!.getFeedEventsPaginated(
+            pageNumber,
+            pageSize,
+            partnerId: partnerId,
+            userId: userId,
+            partnerProfile: partnerProfile,
+            onlyNew: onlyNew,
+            newDays: newDays,
+            hideSubscriberOnlyIfNotSubscribed:
+                hideSubscriberOnlyIfNotSubscribed,
+            ct: ct,
+            feedType: feedType,
+          );
 }

@@ -14,6 +14,7 @@ import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
 import 'package:stoyco_shared/models/page_result/page_result.dart';
 import 'package:stoyco_shared/utils/filter_request.dart';
 import 'package:stoyco_shared/utils/logger.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/active_subscription_service.dart';
 
 /// A service for managing announcements in the application.
 ///
@@ -22,19 +23,24 @@ import 'package:stoyco_shared/utils/logger.dart';
 /// - Fetching announcements by ID
 /// - Getting paginated announcement lists
 /// - Handling user participation in announcements
+/// - Validating subscription access for announcements
 ///
 /// Example usage:
 /// ```dart
 /// final announcementService = AnnouncementService(
 ///   remoteConfig: FirebaseRemoteConfig.instance,
 ///   environment: StoycoEnvironment.production,
+///   activeSubscriptionService: ActiveSubscriptionService(...),
 /// );
 ///
 /// // Check if there are active announcements
 /// bool hasActive = announcementService.hasActiveAnnouncement();
 ///
-/// // Get announcement by ID
-/// final announcement = await announcementService.getAnnouncementById('ann123');
+/// // Get announcement by ID with subscription validation
+/// final announcement = await announcementService.getAnnouncementById(
+///   'ann123',
+///   partnerId: 'partner123',
+/// );
 /// ```
 class AnnouncementService {
   /// Creates or returns the singleton instance of [AnnouncementService].
@@ -45,17 +51,20 @@ class AnnouncementService {
   /// Parameters:
   /// - [remoteConfig]: The Firebase Remote Config instance used for fetching configuration.
   /// - [environment]: The environment configuration for the service.
+  /// - [activeSubscriptionService]: Service for validating subscription access.
   ///
   /// Example:
   /// ```dart
   /// final service = AnnouncementService(
   ///   remoteConfig: FirebaseRemoteConfig.instance,
   ///   environment: StoycoEnvironment.production,
+  ///   activeSubscriptionService: ActiveSubscriptionService(...),
   /// );
   /// ```
   factory AnnouncementService({
     required FirebaseRemoteConfig remoteConfig,
     required StoycoEnvironment environment,
+    required ActiveSubscriptionService activeSubscriptionService,
   }) {
     // For testing, we'll return a new instance each time if instance is not null
     // This allows us to reset the singleton in tests
@@ -65,32 +74,37 @@ class AnnouncementService {
       return AnnouncementService._(
         remoteConfig: remoteConfig,
         environment: environment,
+        activeSubscriptionService: activeSubscriptionService,
       );
     }
 
     _instance ??= AnnouncementService._(
       remoteConfig: remoteConfig,
       environment: environment,
+      activeSubscriptionService: activeSubscriptionService,
     );
     return _instance!;
   }
 
   /// Private constructor for the singleton pattern.
   ///
-  /// Initializes the data source and repository for announcements.
+  /// Initializes the data source and repository for announcements with subscription validation.
   ///
   /// Parameters:
   /// - [remoteConfig]: The Firebase Remote Config instance.
   /// - [environment]: The environment configuration.
+  /// - [activeSubscriptionService]: Service for validating subscription access.
   AnnouncementService._({
     required this.remoteConfig,
     required this.environment,
+    required ActiveSubscriptionService activeSubscriptionService,
   }) {
     _announcementDataSource = AnnouncementDataSource(
       environment: environment,
     );
     _announcementRepository = AnnouncementRepository(
       announcementDataSource: _announcementDataSource!,
+      activeSubscriptionService: activeSubscriptionService,
     );
 
     _instance = this;
@@ -131,6 +145,7 @@ class AnnouncementService {
   /// Parameters:
   /// - [remoteConfig]: The Firebase Remote Config instance.
   /// - [environment]: The environment configuration.
+  /// - [activeSubscriptionService]: Service for validating subscription access.
   ///
   /// Returns an instance of [AnnouncementService].
   ///
@@ -139,15 +154,18 @@ class AnnouncementService {
   /// final service = AnnouncementService.getInstance(
   ///   remoteConfig: FirebaseRemoteConfig.instance,
   ///   environment: StoycoEnvironment.production,
+  ///   activeSubscriptionService: ActiveSubscriptionService(...),
   /// );
   /// ```
   static AnnouncementService getInstance({
     required FirebaseRemoteConfig remoteConfig,
     required StoycoEnvironment environment,
+    required ActiveSubscriptionService activeSubscriptionService,
   }) {
     _instance ??= AnnouncementService._(
       remoteConfig: remoteConfig,
       environment: environment,
+      activeSubscriptionService: activeSubscriptionService,
     );
     return _instance!;
   }
@@ -200,38 +218,48 @@ class AnnouncementService {
     }
   }
 
-  /// Fetches an announcement by its ID.
+  /// Fetches an announcement by its ID with subscription validation.
   ///
   /// Parameters:
   /// - [announcementId]: The ID of the announcement to fetch.
+  /// - [partnerId]: Optional partner ID for subscription validation.
   ///
-  /// Returns an [Either] containing either a [Failure] or the [AnnouncementModel].
+  /// Returns an [Either] containing either a [Failure] or the [AnnouncementModel]
+  /// with `hasAccessWithSubscription` field properly set.
   ///
   /// Example:
   /// ```dart
-  /// final result = await announcementService.getAnnouncementById('ann123');
+  /// final result = await announcementService.getAnnouncementById(
+  ///   'ann123',
+  ///   partnerId: 'partner123',
+  /// );
   /// result.fold(
   ///   (failure) => print('Error: ${failure.message}'),
-  ///   (announcement) => print('Announcement title: ${announcement.title}')
+  ///   (announcement) {
+  ///     print('Announcement title: ${announcement.title}');
+  ///     print('Has access: ${announcement.hasAccessWithSubscription}');
+  ///   }
   /// );
   /// ```
   Future<Either<Failure, AnnouncementModel>> getAnnouncementById(
-    String announcementId,
-  ) async =>
-      _announcementRepository!.getAnnouncementById(announcementId);
+    String announcementId, {
+    String? partnerId,
+  }) async =>
+      _announcementRepository!.getAnnouncementById(
+        announcementId,
+        partnerId: partnerId,
+      );
 
   /// Marks an announcement as viewed.
-  ///
-  /// This is a placeholder method that currently throws [UnimplementedError].
   ///
   /// Parameters:
   /// - [announcementId]: The ID of the announcement to mark as viewed.
   ///
-  /// Returns an [Either] that would contain either a [Failure] or a boolean.
+  /// Returns an [Either] containing either a [Failure] or a boolean.
   ///
-  /// Example of future usage:
+  /// Example:
   /// ```dart
-  /// final result = await AnnouncementService.markAsViewed('ann123');
+  /// final result = await announcementService.markAsViewed('ann123');
   /// result.fold(
   ///   (failure) => print('Error: ${failure.message}'),
   ///   (success) => print('Marked as viewed: $success')
@@ -240,26 +268,40 @@ class AnnouncementService {
   Future<Either<Failure, bool>> markAsViewed(String announcementId) async =>
       _announcementRepository!.markAsViewed(announcementId);
 
-  /// Gets a paginated list of announcements based on the provided filters.
+  /// Gets a paginated list of announcements based on the provided filters with subscription validation.
   ///
   /// Parameters:
   /// - [filters]: The filter criteria for the announcements.
+  /// - [partnerId]: Optional partner ID for subscription validation.
   ///
-  /// Returns an [Either] containing either a [Failure] or a [PageResult] of [AnnouncementModel].
+  /// Returns an [Either] containing either a [Failure] or a [PageResult] of [AnnouncementModel]
+  /// with each announcement having `hasAccessWithSubscription` properly set.
   ///
   /// Example:
   /// ```dart
-  /// final filters = FilterRequest(page: 1, limit: 10);
-  /// final result = await announcementService.getAnnouncementPaginated(filters);
+  /// final filters = FilterRequest(page: 1, pageSize: 10);
+  /// final result = await announcementService.getAnnouncementPaginated(
+  ///   filters,
+  ///   partnerId: 'partner123',
+  /// );
   /// result.fold(
   ///   (failure) => print('Error: ${failure.message}'),
-  ///   (pageResult) => print('Total announcements: ${pageResult.total}')
+  ///   (pageResult) {
+  ///     print('Total announcements: ${pageResult.totalItems}');
+  ///     pageResult.items?.forEach((announcement) {
+  ///       print('${announcement.title} - Has access: ${announcement.hasAccessWithSubscription}');
+  ///     });
+  ///   }
   /// );
   /// ```
   Future<Either<Failure, PageResult<AnnouncementModel>>>
-      getAnnouncementPaginated(FilterRequest filters) async =>
+      getAnnouncementPaginated(
+    FilterRequest filters, {
+    String? partnerId,
+  }) async =>
           _instance!._announcementRepository!.getAnnouncementsPaginated(
             filters,
+            partnerId: partnerId,
           );
 
   /// Submits a participation for a TikTok announcement.
@@ -296,7 +338,6 @@ class AnnouncementService {
           );
 
   /// Gets the leadership board for a specific announcement.
-
   ///
   /// Parameters:
   /// - [announcementId]: The ID of the announcement
@@ -314,7 +355,7 @@ class AnnouncementService {
   /// );
   /// result.fold(
   ///   (failure) => print('Error: ${failure.message}'),
-  ///   (pageResult) => print('Total participants: ${pageResult.total}')
+  ///   (pageResult) => print('Total participants: ${pageResult.totalItems}')
   /// );
   /// ```
   Future<Either<Failure, PageResult<UserAnnouncement>>> getLeadershipBoard({
@@ -333,13 +374,18 @@ class AnnouncementService {
   /// This method reads the 'enable_announcement_v2' flag from Firebase Remote Config
   /// to determine if there are active announcements in the system.
   ///
+  /// Parameters:
+  /// - [platform]: Optional platform identifier to check specific platform flags.
+  ///
   /// Returns a [Future] containing a [bool]:
   /// - `true` if there are active announcements.
   /// - `false` if there are no active announcements or an error occurs.
   ///
   /// Example:
   /// ```dart
-  /// final hasActive = await announcementService.hasActiveAnnouncements();
+  /// final hasActive = await announcementService.hasActiveAnnouncements(
+  ///   platform: 'web',
+  /// );
   /// if (hasActive) {
   ///   print('There are active announcements.');
   /// } else {
@@ -357,6 +403,16 @@ class AnnouncementService {
     }
   }
 
+  /// Checks if TikTok authentication is enabled.
+  ///
+  /// Returns `true` if TikTok auth is enabled, `false` otherwise.
+  ///
+  /// Example:
+  /// ```dart
+  /// if (announcementService.isTiktokAuthEnabled()) {
+  ///   // Show TikTok auth option
+  /// }
+  /// ```
   bool isTiktokAuthEnabled() {
     try {
       final bool enableTiktokAuth = remoteConfig.getBool('enable_tiktok_auth');

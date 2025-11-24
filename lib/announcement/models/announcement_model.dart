@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:stoyco_shared/announcement/models/announcement_dto/content.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/access_content.dart';
 
 part 'announcement_model.g.dart';
 
@@ -26,9 +27,11 @@ class AnnouncementModel {
     this.createdBy,
     this.createdAt,
     this.communityOwnerId,
-    this.isSubscriberOnly,
-    bool? hasAccess,
-  }) : hasAccess = hasAccess ?? !(isSubscriberOnly ?? false);
+    this.isSubscriberOnly = false,
+    bool? hasAccessWithSubscription,
+    this.accessContent,
+  }) : hasAccessWithSubscription =
+            hasAccessWithSubscription ?? !isSubscriberOnly;
 
   factory AnnouncementModel.fromJson(Map<String, dynamic> json) =>
       _$AnnouncementModelFromJson(json);
@@ -52,14 +55,18 @@ class AnnouncementModel {
   final String? createdBy;
   final String? createdAt;
   final String? communityOwnerId;
-  final bool? isSubscriberOnly;
-  final bool hasAccess;
+  final bool isSubscriberOnly;
+
+  /// This value is constructed in the frontend and is not mapped from backend JSON.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final bool hasAccessWithSubscription;
+  final AccessContent? accessContent;
 
   bool get isActive => isPublished ?? false;
 
   @override
   String toString() =>
-      'AnnouncementModel(id: $id, title: $title, mainImage: $mainImage, images: $images, content: $content, shortDescription: $shortDescription, isDraft: $isDraft, isPublished: $isPublished, isDeleted: $isDeleted, viewCount: $viewCount, startDate: $startDate, endDate: $endDate, draftCreationDate: $draftCreationDate, lastUpdatedDate: $lastUpdatedDate, deletionDate: $deletionDate, cronJobId: $cronJobId, createdBy: $createdBy, createdAt: $createdAt, communityOwnerId: $communityOwnerId, isSubscriberOnly: $isSubscriberOnly, hasAccess: $hasAccess)';
+      'AnnouncementModel(id: $id, title: $title, mainImage: $mainImage, images: $images, content: $content, shortDescription: $shortDescription, isDraft: $isDraft, isPublished: $isPublished, isDeleted: $isDeleted, viewCount: $viewCount, startDate: $startDate, endDate: $endDate, draftCreationDate: $draftCreationDate, lastUpdatedDate: $lastUpdatedDate, deletionDate: $deletionDate, cronJobId: $cronJobId, createdBy: $createdBy, createdAt: $createdAt, communityOwnerId: $communityOwnerId, isSubscriberOnly: $isSubscriberOnly, hasAccessWithSubscription: $hasAccessWithSubscription, accessContent: $accessContent)';
 
   Map<String, dynamic> toJson() => _$AnnouncementModelToJson(this);
 
@@ -84,7 +91,8 @@ class AnnouncementModel {
     String? createdAt,
     String? communityOwnerId,
     bool? isSubscriberOnly,
-    bool? hasAccess,
+    bool? hasAccessWithSubscription,
+    AccessContent? accessContent,
   }) =>
       AnnouncementModel(
         id: id ?? this.id,
@@ -107,7 +115,9 @@ class AnnouncementModel {
         createdAt: createdAt ?? this.createdAt,
         communityOwnerId: communityOwnerId ?? this.communityOwnerId,
         isSubscriberOnly: isSubscriberOnly ?? this.isSubscriberOnly,
-        hasAccess: hasAccess ?? this.hasAccess,
+        hasAccessWithSubscription:
+            hasAccessWithSubscription ?? this.hasAccessWithSubscription,
+        accessContent: accessContent ?? this.accessContent,
       );
 
   @override
@@ -140,5 +150,6 @@ class AnnouncementModel {
       createdAt.hashCode ^
       communityOwnerId.hashCode ^
       isSubscriberOnly.hashCode ^
-      hasAccess.hashCode;
+      hasAccessWithSubscription.hashCode ^
+      accessContent.hashCode;
 }

@@ -1,3 +1,13 @@
+## 21.5.16
+
+- Added ActiveSubscriptionService to VideoPlayerService for subscription validation.
+- Updated persistent_cache_example.dart to initialize VideoPlayerService with ActiveSubscriptionService.
+- Modified prefetching_example.dart to utilize ActiveSubscriptionService and improved UI feedback for prefetching status.
+- Refactored code for better readability and maintainability in prefetching_example.dart.
+- Adjusted pubspec.yaml to switch from git to local path for stoyco_subscription dependency.
+- Updated video_player_service_cache_test.dart to include ActiveSubscriptionService in test setup.
+- Adjusted news model and others to receive accessContent.
+
 ## 21.5.15
 
 **fix(InteractiveContent):** update Desing events
