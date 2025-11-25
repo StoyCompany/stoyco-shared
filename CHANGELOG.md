@@ -1,3 +1,11 @@
+## 21.5.18
+
+**fix(video):** improve null safety in video reaction handling
+
+- Modified `_handleReaction` method to receive `videoId` as parameter instead of relying on nullable `reaction.videoId`
+- Updated `likeVideo` and `dislikeVideo` methods to pass `videoId` explicitly to `_handleReaction`
+- Prevents potential null reference exceptions when handling video reactions
+
 ## 21.5.17
 
 **fix(InteractiveContent):** update Desing logic PARTICIPATE BUTTON
