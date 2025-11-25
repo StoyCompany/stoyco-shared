@@ -329,7 +329,7 @@ class VideoPlayerService {
         videoId,
         userId,
       );
-      final reaction = await _handleReaction(result);
+      final reaction = await _handleReaction(result, videoId);
 
       // Invalidate video cache (don't await - fire and forget)
       // Next fetch will get fresh data from backend
@@ -361,7 +361,7 @@ class VideoPlayerService {
         videoId,
         userId,
       );
-      final reaction = await _handleReaction(result);
+      final reaction = await _handleReaction(result, videoId);
 
       // Invalidate video cache (don't await - fire and forget)
       // Next fetch will get fresh data from backend
@@ -385,11 +385,12 @@ class VideoPlayerService {
   /// Returns an [Either] containing a [Failure] or a [VideoInteraction].
   Future<Either<Failure, VideoInteraction>> _handleReaction(
     Either<Failure, UserVideoReaction> result,
+    String videoId,
   ) async =>
       result.fold(
         (left) => Left(left),
         (reaction) => getVideoReactionsById(
-          reaction.videoId!,
+          videoId,
           force: true,
         ),
       );
