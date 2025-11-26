@@ -218,21 +218,11 @@ class VideoPlayerService {
           ttl: videoCacheTTL,
         );
         _cacheManager = VideoCacheManager.instance;
-        if (_cacheManager != null) {
-          StoyCoLogger.info(
-              '[VIDEO_CACHE_INIT] ✅ Cache manager initialized successfully');
-        } else {
-          StoyCoLogger.warning(
-              '[VIDEO_CACHE_INIT] ⚠️ Cache manager initialized but instance is null');
-        }
       } catch (e) {
         StoyCoLogger.error(
             '[VIDEO_CACHE_INIT] ❌ Failed to initialize cache manager: $e');
         // Continue without cache
       }
-    } else {
-      StoyCoLogger.warning(
-          '[VIDEO_CACHE_INIT] ⚠️ Cache manager not available and already attempted initialization');
     }
 
     return _cacheManager;
@@ -331,12 +321,16 @@ class VideoPlayerService {
       );
       final reaction = await _handleReaction(result, videoId);
 
-      // Invalidate video cache (don't await - fire and forget)
-      // Next fetch will get fresh data from backend
+      // Update video in cache with new reaction data instead of removing it
+      // This prevents the video from disappearing from the list
       // ignore: unawaited_futures
       reaction.fold(
         (failure) => null,
-        (videoInteraction) => invalidateVideoCacheForVideo(videoId),
+        (videoInteraction) => _updateVideoReactionInCache(
+          videoId: videoId,
+          likes: videoInteraction.likes,
+          isLiked: true,
+        ),
       );
 
       return reaction;
@@ -363,12 +357,16 @@ class VideoPlayerService {
       );
       final reaction = await _handleReaction(result, videoId);
 
-      // Invalidate video cache (don't await - fire and forget)
-      // Next fetch will get fresh data from backend
+      // Update video in cache with new reaction data instead of removing it
+      // This prevents the video from disappearing from the list
       // ignore: unawaited_futures
       reaction.fold(
         (failure) => null,
-        (videoInteraction) => invalidateVideoCacheForVideo(videoId),
+        (videoInteraction) => _updateVideoReactionInCache(
+          videoId: videoId,
+          likes: videoInteraction.likes,
+          isLiked: false,
+        ),
       );
 
       return reaction;
@@ -511,12 +509,8 @@ class VideoPlayerService {
       // Check cache first (if cache manager is initialized)
       final cacheManager = await _getCacheManager();
       if (!forceRefresh && cacheManager != null) {
-        StoyCoLogger.info('[VIDEO_CACHE] 🔍 Checking cache for key: $cacheKey');
         final cached = await cacheManager.get(cacheKey);
         if (cached != null && cached.isNotEmpty) {
-          StoyCoLogger.info(
-              '[VIDEO_CACHE] ✅ Cache HIT: Found ${cached.length} videos for key: $cacheKey');
-          // Prefetch next page in background if enabled
           if (enablePrefetching) {
             _prefetchNextPage(
               filterMode: filterMode,
@@ -528,19 +522,11 @@ class VideoPlayerService {
             );
           }
           return Right(cached);
-        } else {
-          StoyCoLogger.info(
-              '[VIDEO_CACHE] ❌ Cache MISS: No cached data for key: $cacheKey');
         }
-      } else if (cacheManager == null) {
-        StoyCoLogger.warning(
-            '[VIDEO_CACHE] ⚠️ Cache manager not available - fetching from backend');
       }
 
       // Check if there's already an active request for this key
       if (_activeRequests.containsKey(cacheKey)) {
-        StoyCoLogger.info(
-            '[VIDEO_CACHE] ⏳ Request already in progress for key: $cacheKey, waiting...');
         return await _activeRequests[cacheKey]!;
       }
 
@@ -595,12 +581,8 @@ class VideoPlayerService {
       // Check cache first (if cache manager is initialized)
       final cacheManager = await _getCacheManager();
       if (!forceRefresh && cacheManager != null) {
-        StoyCoLogger.info(
-            '[VIDEO_CACHE] 🔍 Checking cache for featured videos key: $cacheKey');
         final cached = await cacheManager.get(cacheKey);
         if (cached != null && cached.isNotEmpty) {
-          StoyCoLogger.info(
-              '[VIDEO_CACHE] ✅ Cache HIT: Found ${cached.length} featured videos for key: $cacheKey');
           // Prefetch next page in background if enabled
           if (enablePrefetching) {
             _prefetchNextPage(
@@ -613,19 +595,11 @@ class VideoPlayerService {
             );
           }
           return Right(cached);
-        } else {
-          StoyCoLogger.info(
-              '[VIDEO_CACHE] ❌ Cache MISS: No cached featured videos for key: $cacheKey');
         }
-      } else if (cacheManager == null) {
-        StoyCoLogger.warning(
-            '[VIDEO_CACHE] ⚠️ Cache manager not available - fetching featured videos from backend');
       }
 
       // Check if there's already an active request for this key
       if (_activeRequests.containsKey(cacheKey)) {
-        StoyCoLogger.info(
-            '[VIDEO_CACHE] ⏳ Request already in progress for key: $cacheKey, waiting...');
         return await _activeRequests[cacheKey]!;
       }
 
@@ -718,8 +692,6 @@ class VideoPlayerService {
         (videos) async {
           final cacheManager = await _getCacheManager();
           if (cacheManager != null) {
-            StoyCoLogger.info(
-                '[VIDEO_CACHE] 💾 Caching ${videos.length} videos for key: $cacheKey');
             await cacheManager.put(cacheKey, videos);
 
             // Prefetch next page after successful fetch if enabled and has results
@@ -733,9 +705,6 @@ class VideoPlayerService {
                 partnerId: partnerId,
               );
             }
-          } else {
-            StoyCoLogger.warning(
-                '[VIDEO_CACHE] ⚠️ Cannot cache videos - cache manager not available');
           }
         },
       );
@@ -874,6 +843,37 @@ class VideoPlayerService {
     if (cacheManager == null) return;
 
     await cacheManager.removeVideoFromCache(videoId);
+  }
+
+  /// Updates the reaction (like/dislike) status for a video in the cache.
+  ///
+  /// This method updates the video's `likes` count and `likeThisVideo` status
+  /// in all cache entries where the video appears, without removing it from the list.
+  ///
+  /// [videoId] The ID of the video to update.
+  /// [likes] The new likes count from the backend response.
+  /// [isLiked] Whether the user liked (true) or disliked/unliked (false) the video.
+  Future<void> _updateVideoReactionInCache({
+    required String videoId,
+    int? likes,
+    required bool isLiked,
+  }) async {
+    final cacheManager = await _getCacheManager();
+    if (cacheManager == null) return;
+
+    try {
+      await cacheManager.updateVideoInCache(
+        videoId: videoId,
+        updater: (video) => video.copyWith(
+          likes: likes ?? video.likes,
+          likeThisVideo: isLiked,
+        ),
+      );
+    } catch (e) {
+      StoyCoLogger.error(
+        '[VIDEO_CACHE] ❌ Failed to update video $videoId reaction in cache: $e',
+      );
+    }
   }
 
   /// Updates the following status for all videos from a specific partner in the cache.

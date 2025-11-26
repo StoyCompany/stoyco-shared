@@ -1,3 +1,7 @@
+## 21.5.19
+
+**fix(VideoPlayerService):** update video reactions in cache instead of invalidating
+
 ## 21.5.18
 
 **fix(video):** improve null safety in video reaction handling
