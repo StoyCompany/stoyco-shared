@@ -26,11 +26,12 @@ import 'package:stoyco_subscription/pages/subscription_plans/data/active_subscri
 ///
 /// ## Cache Update Strategies
 ///
-/// When video metadata changes (likes, shares, following status), update the cache
-/// instead of invalidating to avoid unnecessary backend calls:
+/// When video metadata changes (likes, shares, following status), the cache is
+/// updated in-place to avoid unnecessary backend calls and prevent videos from
+/// disappearing from lists:
 ///
-/// - **Like/Dislike**: Automatically invalidates the specific video cache entry
-/// - **Share**: Automatically invalidates the specific video cache entry
+/// - **Like/Dislike**: Automatically updates `likes` count and `likeThisVideo` status
+/// - **Share**: Automatically increments the `shared` count
 /// - **Follow/Unfollow Partner**: Call `updatePartnerFollowingInCache()` to update
 ///   the `followingCO` field in all videos from that partner
 ///
@@ -409,13 +410,14 @@ class VideoPlayerService {
         !isWeb ? getPlatform() : 'web',
       );
 
-      // Invalidate video cache (don't await - fire and forget)
-      // Next fetch will get fresh data from backend
+      // Update video share count in cache instead of removing it
+      // This prevents the video from disappearing from the list
+      // ignore: unawaited_futures
       result.fold(
         (failure) => null,
         (success) {
           if (success) {
-            invalidateVideoCacheForVideo(videoId);
+            _updateVideoShareInCache(videoId: videoId);
           }
         },
       );
@@ -872,6 +874,30 @@ class VideoPlayerService {
     } catch (e) {
       StoyCoLogger.error(
         '[VIDEO_CACHE] ❌ Failed to update video $videoId reaction in cache: $e',
+      );
+    }
+  }
+
+  /// Updates the share count for a video in the cache.
+  ///
+  /// This method increments the video's `shared` count in all cache entries
+  /// where the video appears, without removing it from the list.
+  ///
+  /// [videoId] The ID of the video to update.
+  Future<void> _updateVideoShareInCache({required String videoId}) async {
+    final cacheManager = await _getCacheManager();
+    if (cacheManager == null) return;
+
+    try {
+      await cacheManager.updateVideoInCache(
+        videoId: videoId,
+        updater: (video) => video.copyWith(
+          shared: (video.shared ?? 0) + 1,
+        ),
+      );
+    } catch (e) {
+      StoyCoLogger.error(
+        '[VIDEO_CACHE] ❌ Failed to update video $videoId share count in cache: $e',
       );
     }
   }
