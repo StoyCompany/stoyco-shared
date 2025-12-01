@@ -1,3 +1,7 @@
+## 21.5.22
+
+**fix(VideoPlayerService):** update cache strategy for video shares and improve documentation
+
 ## 21.5.21
 
 **fix(UrlTiktok):** update url enviroment
