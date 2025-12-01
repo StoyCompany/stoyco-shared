@@ -1,3 +1,7 @@
+## 21.5.23
+
+**feat(ReactiveSocialButtones):** update buttons and desing interactive Content 
+
 ## 21.5.22
 
 **fix(VideoPlayerService):** update cache strategy for video shares and improve documentation
