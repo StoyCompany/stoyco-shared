@@ -8,25 +8,28 @@ class MoEngageMobilePlatform implements MoEngagePlatform {
   late final MoEngageGeofence _moEngageGeofence;
   final MoEInitConfig _initConfig = MoEInitConfig(
     pushConfig: PushConfig(shouldDeliverCallbackOnForegroundClick: true),
-      analyticsConfig:
-          AnalyticsConfig(shouldTrackUserAttributeBooleanAsNumber: true),);
+    analyticsConfig:
+        AnalyticsConfig(shouldTrackUserAttributeBooleanAsNumber: true),
+  );
 
   @override
   void initialize({required String appId, String? pushToken}) {
     if (appId.isEmpty) {
-      StoyCoLogger.info('MoEngage Mobile: App ID es crucial para la inicialización y no fue proporcionado.');
+      StoyCoLogger.info(
+          'MoEngage Mobile: App ID es crucial para la inicialización y no fue proporcionado.');
     }
 
     _moengagePlugin = MoEngageFlutter(appId, moEInitConfig: _initConfig);
     _moEngageGeofence = MoEngageGeofence(appId);
     _moengagePlugin.initialise();
-    
+
     // Only pass the push token if provided
     if (pushToken != null && pushToken.isNotEmpty) {
       _moengagePlugin.passFCMPushToken(pushToken);
-      StoyCoLogger.info('MoEngage Mobile: Push token registered for AppID: $appId');
+      StoyCoLogger.info(
+          'MoEngage Mobile: Push token registered for AppID: $appId');
     }
-    
+
     _moengagePlugin.registerForPushNotification();
     _setupInAppCallbacks();
   }
@@ -88,7 +91,6 @@ class MoEngageMobilePlatform implements MoEngagePlatform {
     _moengagePlugin.setSelfHandledInAppHandler(_onInAppSelfHandled);
   }
 
-
   void startGeofenceMonitoring() {
     _moEngageGeofence.startGeofenceMonitoring();
   }
@@ -99,7 +101,8 @@ class MoEngageMobilePlatform implements MoEngagePlatform {
 
   ///TODO METODOS DE INAPP A IMPLEMENTAR SEGUN NECESIDADES
   void _onInAppClick(ClickData message) {
-    StoyCoLogger.info('MoEngage Mobile: InApp Clicked. Payload: ${message.toString()}');
+    StoyCoLogger.info(
+        'MoEngage Mobile: InApp Clicked. Payload: ${message.toString()}');
     final action = message.action;
     if (action is NavigationAction) {
       if (action.navigationType == NavigationType.screenName) {

@@ -6,18 +6,11 @@ abstract class MoEngagePlatform {
   /// This method must be called before any other MoEngage SDK methods
   /// to ensure proper functionality and tracking.
   ///
-  /// The [pushToken] is optional and only required if you're using push notifications.
-  /// For web applications without push notifications, you can omit this parameter.
-  ///
   /// Example:
   /// ```dart
-  ///  // With push token (mobile or web with FCM)
-  ///  MoEngagePlatform.instance.initialize(appId: "YOUR_MOENGAGE_APP_ID", pushToken: "TOKEN");
-  ///  
-  ///  // Without push token (web without notifications)
   ///  MoEngagePlatform.instance.initialize(appId: "YOUR_MOENGAGE_APP_ID");
   /// ```
-  void initialize({required String appId, String? pushToken});
+  void initialize({required String appId,required String pushToken});
 
   /// Identifies the user with a unique ID.
   ///

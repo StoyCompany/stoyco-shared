@@ -434,7 +434,7 @@ class _AnnouncementLeaderShipDialogState
                     return const SizedBox.shrink();
                   }
 
-                  return _buildLeaderboardItem(item, index);
+                  return _buildLeaderboardItem(item, index + 1);
                 },
               ),
             ),
@@ -460,7 +460,7 @@ class _AnnouncementLeaderShipDialogState
           Row(
             children: [
               Text(
-                '${item.position < 10 ? '0' : ''}${item.position}.',
+                '$index',
                 style: TextStyle(
                   fontSize: widget.positionFontSize ??
                       _getCachedValue<double>(

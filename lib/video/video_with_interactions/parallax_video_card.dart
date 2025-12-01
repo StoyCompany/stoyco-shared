@@ -301,12 +301,11 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
       StoyCoLogger.error('Error sharing video: $e');
     } finally {
       if (widget.play) {
-        await _controller?.play();
+        unawaited(_controller?.play());
       }
-      await _deleteTempFile(tempFile);
-      if (mounted && !isDisposed) {
-        _isSharing.value = false;
-      }
+      unawaited(_deleteTempFile(tempFile));
+
+      _isSharing.value = false;
     }
   }
 

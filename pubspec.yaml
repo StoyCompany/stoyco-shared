@@ -20,11 +20,10 @@ dependencies:
   vph_common_widgets: ^0.0.2
   equatable: ^2.0.5
   hive: ^2.2.3
-  firebase_messaging: ^15.0.4
+  firebase_messaging: ^16.0.4
   cached_network_image: ^3.3.0
   json_annotation: ^4.8.1
   logger: ^2.2.0
-  firebase_core_platform_interface: ^6.0.0
   glassmorphism: ^3.0.0
   gradient_borders: ^1.0.1
   dio: ^5.7.0
@@ -41,7 +40,7 @@ dependencies:
   carousel_slider: ^5.0.0
   get_thumbnail_video: ^0.7.3
   visibility_detector: ^0.4.0+2
-  firebase_remote_config: ^5.4.2
+  firebase_remote_config: ^6.1.2
   outline_gradient_button: ^2.0.1+1
   flutter_widget_from_html: ^0.17.0
   moengage_flutter: ^10.1.0
