@@ -1,6 +1,10 @@
+## 21.5.24
+
+feat(pubspec): update dependencies and switch to local paths for interaction content and subscription
+
 ## 21.5.23
 
-**feat(ReactiveSocialButtones):** update buttons and desing interactive Content 
+**feat(ReactiveSocialButtones):** update buttons and desing interactive Content
 
 ## 21.5.22
 
