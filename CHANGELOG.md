@@ -1,3 +1,7 @@
+## 21.0.2
+
+chore: Update package versions in pubspec.yaml for improved compatibility
+
 ## 21.0.1
 
 fix: Adjust leaderboard item index display for correct ranking
