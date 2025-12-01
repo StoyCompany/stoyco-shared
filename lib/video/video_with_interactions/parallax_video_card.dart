@@ -100,6 +100,7 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
   double _currentTime = 0;
   bool isDisposed = false;
   String? _cachedGifPath; // New variable for caching GIF path
+  Offset? _lastSharePosition;
 
   /// Gets the video base URL based on the current environment
   String _getVideoBaseUrl() => widget.env.videoBaseUrl;
@@ -214,10 +215,7 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
 
     final filePath = await compute(
       downloadAndSaveFile,
-      DownloadFileParams(
-        videoUrl: videoUrl,
-        filePath: tempFilePath,
-      ),
+      DownloadFileParams(videoUrl: videoUrl, filePath: tempFilePath),
     );
 
     return File(filePath);
@@ -241,24 +239,69 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
 
         await _controller?.pause();
 
-        await Share.shareXFiles([XFile(tempFile.path)], text: shareText);
+        // Provide a non-zero sharePositionOrigin for iPad/iOS popover.
+        // iOS requires a rect with non-zero width and height within the source view's coordinate space.
+        // Use 44x44 (iOS minimum tap target size) to ensure proper popover placement.
+        Rect sharePositionOrigin;
+        try {
+          if (_lastSharePosition != null &&
+              _lastSharePosition!.dx > 0 &&
+              _lastSharePosition!.dy > 0) {
+            // Use the captured tap position if valid, with 44x44 size
+            // Adjust to center the rect on the tap position
+            sharePositionOrigin = Rect.fromLTWH(
+              _lastSharePosition!.dx - 22,
+              _lastSharePosition!.dy - 22,
+              44,
+              44,
+            );
+            StoyCoLogger.info(
+              'Using tap position for share: $sharePositionOrigin',
+            );
+          } else {
+            // Fallback: Use a safe position in the middle-right of the screen
+            // where the share button typically appears
+            final mq = MediaQuery.maybeOf(context);
+            final screenWidth = mq?.size.width ?? 440;
+            final screenHeight = mq?.size.height ?? 956;
+            // Position in the right side, middle-bottom area where share icon is
+            sharePositionOrigin = Rect.fromLTWH(
+              screenWidth - 72,
+              screenHeight * 0.7 - 22,
+              44,
+              44,
+            );
+            StoyCoLogger.info(
+              'Using fallback position for share: $sharePositionOrigin',
+            );
+          }
+        } catch (e) {
+          // Ultimate fallback: hardcoded safe position with proper size
+          sharePositionOrigin = const Rect.fromLTWH(368, 648, 44, 44);
+          StoyCoLogger.error(
+            'Error computing sharePositionOrigin, using hardcoded fallback: $e',
+          );
+        }
+
+        await Share.shareXFiles(
+          [XFile(tempFile.path)],
+          text: shareText,
+          sharePositionOrigin: sharePositionOrigin,
+        );
 
         if (widget.onShare != null) {
           widget.onShare!();
         }
       }
     } catch (e) {
-      StoyCoLogger.error(
-        'Error sharing video: $e',
-      );
+      StoyCoLogger.error('Error sharing video: $e');
     } finally {
       if (widget.play) {
-        await _controller?.play();
+        unawaited(_controller?.play());
       }
-      await _deleteTempFile(tempFile);
-      if (mounted && !isDisposed) {
-        _isSharing.value = false;
-      }
+      unawaited(_deleteTempFile(tempFile));
+
+      _isSharing.value = false;
     }
   }
 
@@ -269,9 +312,7 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
         await tempFile.delete();
       }
     } catch (e) {
-      StoyCoLogger.error(
-        'Error deleting temporary file: $e',
-      );
+      StoyCoLogger.error('Error deleting temporary file: $e');
     }
   }
 
@@ -522,40 +563,47 @@ class _ParallaxVideoCardState extends State<ParallaxVideoCard> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    InkWell(
-                                      onTap: _isSharing.value
-                                          ? null
-                                          : _handleShare,
-                                      child: ValueListenableBuilder<bool>(
-                                        valueListenable: _isSharing,
-                                        builder: (context, isSharing, child) =>
-                                            isSharing
-                                                ? SizedBox(
-                                                    width:
-                                                        StoycoScreenSize.width(
-                                                      context,
-                                                      20,
-                                                    ),
-                                                    height:
-                                                        StoycoScreenSize.width(
-                                                      context,
-                                                      20,
-                                                    ),
-                                                    child:
-                                                        const CircularProgressIndicator(
-                                                      strokeWidth: 2,
+                                    GestureDetector(
+                                      onTapDown: (details) {
+                                        _lastSharePosition =
+                                            details.globalPosition;
+                                      },
+                                      child: InkWell(
+                                        onTap: _isSharing.value
+                                            ? null
+                                            : _handleShare,
+                                        child: ValueListenableBuilder<bool>(
+                                          valueListenable: _isSharing,
+                                          builder: (context, isSharing,
+                                                  child) =>
+                                              isSharing
+                                                  ? SizedBox(
+                                                      width: StoycoScreenSize
+                                                          .width(
+                                                        context,
+                                                        20,
+                                                      ),
+                                                      height: StoycoScreenSize
+                                                          .width(
+                                                        context,
+                                                        20,
+                                                      ),
+                                                      child:
+                                                          const CircularProgressIndicator(
+                                                        strokeWidth: 2,
+                                                        color: Colors.white,
+                                                      ),
+                                                    )
+                                                  : SvgPicture.asset(
+                                                      'packages/stoyco_shared/lib/assets/icons/share_outlined_icon.svg',
+                                                      width: StoycoScreenSize
+                                                          .width(
+                                                        context,
+                                                        20,
+                                                      ),
                                                       color: Colors.white,
                                                     ),
-                                                  )
-                                                : SvgPicture.asset(
-                                                    'packages/stoyco_shared/lib/assets/icons/share_outlined_icon.svg',
-                                                    width:
-                                                        StoycoScreenSize.width(
-                                                      context,
-                                                      20,
-                                                    ),
-                                                    color: Colors.white,
-                                                  ),
+                                        ),
                                       ),
                                     ),
                                     Gap(StoycoScreenSize.width(context, 8.05)),

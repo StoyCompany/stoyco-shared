@@ -1,3 +1,26 @@
+## 21.0.2
+
+chore: Update package versions in pubspec.yaml for improved compatibility
+
+## 21.0.1
+
+fix: Adjust leaderboard item index display for correct ranking
+
+## 21.0.0
+
+**feat(notification):** Adding push notificacion with moengage sdk
+
+- **refactor:** Simplify video playback and sharing logic in ParallaxVideoCard
+
+## 19.0.1
+
+- **fix:** Correct MoEngage SDK initialization to ensure proper setup and functionality
+-
+
+## 19.0.0
+
+- **feat:** Add MoEngage SDK integration for advanced user engagement and analytics
+
 ## 18.0.3
 
 - **fix:** Update hasActiveAnnouncements method to accept platform parameter for dynamic configuration
