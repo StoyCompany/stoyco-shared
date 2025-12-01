@@ -267,7 +267,7 @@ class InteractiveContentCard extends StatefulWidget {
     this.isLoading = false,
     this.enableLike = true,
     this.enableShare = true,
-    this.enableViews = false,
+    this.enableComments = false,
     this.customDateFormatter,
     this.controller,
   });
@@ -306,7 +306,8 @@ class InteractiveContentCard extends StatefulWidget {
   /// Feature toggles.
   final bool enableLike;
   final bool enableShare;
-  final bool enableViews;
+  final bool enableComments;
+
 
   /// Optional custom date formatter.
   final String Function(DateTime)? customDateFormatter;
@@ -678,6 +679,7 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
                 onAuthenticationRequired: widget.onAuthenticationRequired,
                 enableLike: widget.enableLike,
                 enableShare: widget.enableShare,
+                enableComments: widget.enableComments,
                 textColor: textColor,
               ),
             ],
@@ -729,119 +731,8 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
         ),
       );
 
-  Widget _buildSocialActions(
-    BuildContext context,
-    Color baseColor,
-    InteractionViewState vState,
-  ) => Row(
-        children: [
-          if (widget.enableLike)
-            _SocialButton(
-              icon: vState.isLiked ? Icons.favorite : Icons.favorite_border,
-              count: vState.likeCount,
-              color: vState.isLiked
-                  ? (widget.config.likedIconColor ?? StoycoColors.white)
-                  : (widget.config.unlikedIconColor ?? baseColor),
-              onPressed: _handleLike,
-              isProcessing: vState.processingLike,
-              animation: vState.isLiked ? _likeScaleAnim : null,
-              config: widget.config,
-            ),
-          if (widget.enableLike && widget.enableShare)
-            Gap(StoycoScreenSize.width(context, 15)),
-          if (widget.enableShare)
-            _SocialButton(
-              svgAsset: 'packages/stoyco_shared/lib/assets/icons/share_outlined_icon.svg',
-              count: vState.shareCount,
-              color: widget.config.shareIconColor ?? baseColor,
-              onPressed: _handleShare,
-              isProcessing: vState.processingShare,
-              config: widget.config,
-            ),
-        ],
-      );
 }
 
-// Private widget for social buttons.
-class _SocialButton extends StatelessWidget {
-  const _SocialButton({
-    this.icon,
-    this.svgAsset,
-    required this.count,
-    required this.color,
-    required this.onPressed,
-    required this.isProcessing,
-    required this.config,
-    this.animation,
-  }) : assert(icon != null || svgAsset != null, 'Either icon or svgAsset must be provided');
-  final IconData? icon;
-  final String? svgAsset;
-  final int count;
-  final Color color;
-  final VoidCallback onPressed;
-  final bool isProcessing;
-  final Animation<double>? animation;
-  final InteractiveCardConfig config;
-
-  @override
-  Widget build(BuildContext context) {
-    Widget iconWidget;
-    if (svgAsset != null) {
-      iconWidget = SvgPicture.asset(
-        svgAsset!,
-        width: StoycoScreenSize.width(context, config.iconSize),
-        colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
-      );
-    } else {
-      iconWidget = Icon(
-        icon!,
-        size: StoycoScreenSize.width(context, config.iconSize),
-        color: color,
-      );
-    }
-    if (animation != null) {
-      iconWidget = AnimatedBuilder(
-        animation: animation!,
-        builder: (_, child) => Transform.scale(
-          scale: animation!.value,
-          child: child,
-        ),
-        child: iconWidget,
-      );
-    }
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: (isProcessing ? null : onPressed),
-        borderRadius: BorderRadius.circular(8),
-        child: Padding(
-          padding: const EdgeInsets.all(4),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              iconWidget,
-              Gap(StoycoScreenSize.width(context, 8)),
-              Text(
-                _formatCount(count),
-                style: TextStyle(
-                  color: color,
-                  fontSize: StoycoScreenSize.fontSize(context, config.counterFontSize),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  String _formatCount(int count) {
-    if (count >= 1000000) return '${(count / 1000000).toStringAsFixed(1)}M';
-    if (count >= 1000) return '${(count / 1000).toStringAsFixed(1)}K';
-    return count.toString();
-  }
-}
 
 // Loading state widget shown while data is fetched.
 class _InteractiveContentCardLoading extends StatelessWidget {

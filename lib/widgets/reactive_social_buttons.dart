@@ -17,6 +17,7 @@ typedef OnSocialShareCallback = Future<void> Function({
 typedef OnLoadSocialCountsCallback = Future<InteractionCounts> Function(String contentId);
 typedef OnCheckSocialIsLikedCallback = Future<bool> Function(String contentId);
 typedef OnAuthenticationRequiredCallback = void Function();
+typedef  OnTapCallback = void Function(String contentId);
 
 /// Configuration for social buttons appearance.
 class SocialButtonsConfig {
@@ -45,6 +46,7 @@ class SocialInteractionState {
     this.isLiked = false,
     this.likeCount = 0,
     this.shareCount = 0,
+    this.commentCount = 0,
     this.viewCount = 0,
     this.isLoading = false,
     this.processingLike = false,
@@ -54,6 +56,7 @@ class SocialInteractionState {
   final bool isLiked;
   final int likeCount;
   final int shareCount;
+  final int commentCount;
   final int viewCount;
   final bool isLoading;
   final bool processingLike;
@@ -63,7 +66,7 @@ class SocialInteractionState {
     bool? isLiked,
     int? likeCount,
     int? shareCount,
-    int? viewCount,
+    int? commentCount,
     bool? isLoading,
     bool? processingLike,
     bool? processingShare,
@@ -72,7 +75,6 @@ class SocialInteractionState {
         isLiked: isLiked ?? this.isLiked,
         likeCount: likeCount ?? this.likeCount,
         shareCount: shareCount ?? this.shareCount,
-        viewCount: viewCount ?? this.viewCount,
         isLoading: isLoading ?? this.isLoading,
         processingLike: processingLike ?? this.processingLike,
         processingShare: processingShare ?? this.processingShare,
@@ -102,7 +104,7 @@ class SocialButtonsController extends ChangeNotifier {
     bool? isLiked,
     int? likeCount,
     int? shareCount,
-    int? viewCount,
+    int? commentCount,
     bool? isLoading,
     bool? processingLike,
     bool? processingShare,
@@ -112,7 +114,7 @@ class SocialButtonsController extends ChangeNotifier {
         isLiked: isLiked,
         likeCount: likeCount,
         shareCount: shareCount,
-        viewCount: viewCount,
+        commentCount: commentCount,
         isLoading: isLoading,
         processingLike: processingLike,
         processingShare: processingShare,
@@ -156,10 +158,12 @@ class ReactiveSocialButtons extends StatefulWidget {
     this.onCheckIsLiked,
     this.onLike,
     this.onShare,
+    this.onCommentTap,
     this.onAuthenticationRequired,
     this.controller,
     this.enableLike = true,
     this.enableShare = true,
+    this.enableComments =false,
     this.textColor,
     this.autoLoadOnInit = true,
   });
@@ -188,6 +192,9 @@ class ReactiveSocialButtons extends StatefulWidget {
   /// Callback when share button is pressed.
   final OnSocialShareCallback? onShare;
 
+  /// Callback when comment button is pressed.
+  final OnTapCallback? onCommentTap;
+
   /// Callback when authentication is required (user not logged in).
   /// Use this to redirect the user to login screen.
   final OnAuthenticationRequiredCallback? onAuthenticationRequired;
@@ -198,6 +205,8 @@ class ReactiveSocialButtons extends StatefulWidget {
   /// Feature toggles.
   final bool enableLike;
   final bool enableShare;
+  final bool enableComments;
+  /// Text color for buttons.
 
   /// Base text color for buttons.
   final Color? textColor;
@@ -282,6 +291,7 @@ class _ReactiveSocialButtonsState extends State<ReactiveSocialButtons>
           likeCount: counts.likes,
           shareCount: counts.shares,
           viewCount: counts.views,
+          commentCount: counts.comments,
           isLiked: isLiked,
           isLoading: false,
         ),
@@ -368,6 +378,20 @@ class _ReactiveSocialButtonsState extends State<ReactiveSocialButtons>
     }
   }
 
+  void _handleCommentTap() {
+    if (!mounted) {
+      return;
+    }
+    // Check authentication before processing
+    if (!SocialInteractionService.instance.isAuthenticated) {
+      StoyCoLogger.info('User not authenticated, triggering authentication required callback');
+      widget.onAuthenticationRequired?.call();
+      return;
+    }
+
+    widget.onCommentTap?.call(widget.contentId);
+  }
+
   @override
   void didUpdateWidget(ReactiveSocialButtons oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -414,6 +438,17 @@ class _ReactiveSocialButtonsState extends State<ReactiveSocialButtons>
                 animation: state.isLiked ? _likeScaleAnim : null,
                 config: widget.config,
               ),
+            if (widget.enableComments) ...[
+              Gap(StoycoScreenSize.width(context, widget.config.spacing)),
+              _SocialActionButton(
+                svgAsset: 'packages/stoyco_shared/lib/assets/icons/bubble-chat.svg',
+                count: state.commentCount,
+                color: baseColor,
+                onPressed: _handleCommentTap,
+                isProcessing: false,
+                config: widget.config,
+              ),
+            ],
             if (widget.enableLike && widget.enableShare)
               Gap(StoycoScreenSize.width(context, widget.config.spacing)),
             if (widget.enableShare)
@@ -553,4 +588,3 @@ class _SocialActionButton extends StatelessWidget {
     return count.toString();
   }
 }
-
