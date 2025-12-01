@@ -53,7 +53,7 @@ class MoEngageService {
   }) {
     final service = _instance ?? MoEngageService._internal(platform);
     try {
-      service._platform.initialize(appId: appId, pushToken: pushToken);
+      service._platform.initialize(appId: appId, pushToken: pushToken ?? '');
       if (service._platform is MoEngageMobilePlatform) {
         service._moEngageGeofence ??= MoEngageGeofence(appId);
       }
