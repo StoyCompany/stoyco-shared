@@ -1,3 +1,7 @@
+## 21.5.25
+
+**feat(ReactiveSocialButtones):** update models and remove dead code
+
 ## 21.5.24
 
 feat(pubspec): update dependencies and switch to local paths for interaction content and subscription

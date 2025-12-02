@@ -436,60 +436,6 @@ class _InteractiveContentCardState extends State<InteractiveContentCard>
     return timeString;
   }
 
-  Future<void> _handleLike() async {
-    if (!mounted || !widget.enableLike || _state.value.processingLike) return;
-
-    _state.value = _state.value.copyWith(processingLike: true);
-    final newLikedState = !_state.value.isLiked;
-
-    try {
-      await widget.onLike?.call(widget.data.id, newLikedState);
-      if (!mounted) return; // Salir si se desmontó durante la operación.
-
-      final updatedLikeCount = _state.value.likeCount + (newLikedState ? 1 : -1);
-      _state.value = _state.value.copyWith(
-        isLiked: newLikedState,
-        likeCount: updatedLikeCount < 0 ? 0 : updatedLikeCount,
-      );
-
-      if (newLikedState && mounted) {
-        await _likeAnimController.forward();
-        if (!mounted) return;
-        await _likeAnimController.reverse();
-      }
-    } catch (e) {
-      if (mounted) {
-        StoyCoLogger.error('Error handling like: $e');
-      }
-    } finally {
-      if (mounted) {
-        _state.value = _state.value.copyWith(processingLike: false);
-      }
-    }
-  }
-
-  Future<void> _handleShare() async {
-    if (!mounted || !widget.enableShare || _state.value.processingShare) return;
-
-    _state.value = _state.value.copyWith(processingShare: true);
-    try {
-      await widget.onShare?.call(
-        contentId: widget.data.id,
-        title: widget.data.title,
-        imageUrl: widget.data.mainImage,
-      );
-      if (!mounted) return;
-      _state.value = _state.value.copyWith(shareCount: _state.value.shareCount + 1);
-    } catch (e) {
-      if (mounted) {
-        StoyCoLogger.error('Error sharing: $e');
-      }
-    } finally {
-      if (mounted) {
-        _state.value = _state.value.copyWith(processingShare: false);
-      }
-    }
-  }
 
   /// Calculates the number of lines the title will occupy at runtime.
   int _getTitleLineCount(BuildContext context) {
