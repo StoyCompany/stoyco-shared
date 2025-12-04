@@ -38,4 +38,9 @@ class StoycoColors {
 
   static Color whiteLavender = ColorUtils.fromHex('F7F6FA');
 
+  /// Dark slate blue - used for card backgrounds
+  static Color darkSlateBlue = ColorUtils.fromHex('202532');
+
+  /// Dark charcoal gray - used for icons on light backgrounds
+  static Color charcoalGray = ColorUtils.fromHex('333333');
 }
