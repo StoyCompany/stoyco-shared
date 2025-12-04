@@ -1,3 +1,15 @@
+## 21.6.0
+
+**feat(radio):** add radio streaming module
+
+### Added
+- `RadioModel`: Data model for radios from Firestore with streaming URLs and tracking fields
+- `RadioRepository`: Read-only repository for accessing the 'radios' collection in Firestore
+- `RadioTrackingService`: Real-time listener tracking service for radios
+- `OnlineMembersTrackingService`: Generic service for tracking online members count
+- `RadioPlayerWidget`: Widget for radio audio playback with loading, playing, paused, and error states
+- `RadioPlayerEmptyWidget`, `RadioPlayerLoadingWidget`, `RadioPlayerErrorWidget`: Supporting widgets
+
 ## 21.5.25
 
 **feat(ReactiveSocialButtones):** update models and remove dead code
