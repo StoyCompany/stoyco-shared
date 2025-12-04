@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stoyco_shared/design/colors.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/models/radio_model.dart';
 
@@ -49,7 +50,7 @@ class RadioPlayerWidget extends StatelessWidget {
           left: StoycoScreenSize.width(context, 15),
         ),
         decoration: BoxDecoration(
-          color: const Color(0xFF202532),
+          color: StoycoColors.darkSlateBlue,
           borderRadius: BorderRadius.circular(
             StoycoScreenSize.radius(context, 5),
           ),
@@ -68,7 +69,7 @@ class RadioPlayerWidget extends StatelessWidget {
 
   Widget _buildPlayPauseButton(BuildContext context) => CircleAvatar(
       radius: StoycoScreenSize.width(context, 16.5),
-      backgroundColor: Colors.white,
+      backgroundColor: StoycoColors.white2,
       child: _buildButtonContent(context),
     );
 
@@ -78,16 +79,16 @@ class RadioPlayerWidget extends StatelessWidget {
       return SizedBox(
         width: StoycoScreenSize.width(context, 16),
         height: StoycoScreenSize.width(context, 16),
-        child: const CircularProgressIndicator(
+        child: CircularProgressIndicator(
           strokeWidth: 2,
-          color: Color(0xFF333333),
+          color: StoycoColors.charcoalGray,
         ),
       );
     }
 
     return Icon(
       state == RadioPlayerState.playing ? Icons.pause : Icons.play_arrow_rounded,
-      color: const Color(0xFF333333),
+      color: StoycoColors.charcoalGray,
       size: StoycoScreenSize.width(context, 24),
     );
   }
@@ -99,7 +100,7 @@ class RadioPlayerWidget extends StatelessWidget {
         Text(
           radio.title,
           style: TextStyle(
-            color: Colors.white,
+            color: StoycoColors.white2,
             fontWeight: FontWeight.bold,
             fontSize: StoycoScreenSize.fontSize(context, 14),
             fontFamily: fontFamily,
@@ -111,7 +112,7 @@ class RadioPlayerWidget extends StatelessWidget {
         Text(
           radio.description ?? 'Now Playing',
           style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.7),
+            color: StoycoColors.white2.withValues(alpha: 0.7),
             fontSize: StoycoScreenSize.fontSize(context, 12),
             fontFamily: fontFamily,
           ),
@@ -138,7 +139,7 @@ class RadioPlayerEmptyWidget extends StatelessWidget {
       child: Text(
         message,
         style: TextStyle(
-          color: Colors.white70,
+          color: StoycoColors.white2.withValues(alpha: 0.7),
           fontSize: StoycoScreenSize.fontSize(context, 14),
           fontFamily: fontFamily,
         ),
@@ -151,8 +152,8 @@ class RadioPlayerLoadingWidget extends StatelessWidget {
   const RadioPlayerLoadingWidget({super.key});
 
   @override
-  Widget build(BuildContext context) => const Center(
-      child: CircularProgressIndicator(color: Colors.white),
+  Widget build(BuildContext context) => Center(
+      child: CircularProgressIndicator(color: StoycoColors.white2),
     );
 }
 
@@ -174,7 +175,7 @@ class RadioPlayerErrorWidget extends StatelessWidget {
         child: Text(
           errorMessage,
           style: TextStyle(
-            color: Colors.white70,
+            color: StoycoColors.white2.withValues(alpha: 0.7),
             fontSize: StoycoScreenSize.fontSize(context, 14),
             fontFamily: fontFamily,
           ),
