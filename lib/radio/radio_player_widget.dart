@@ -69,7 +69,7 @@ class RadioPlayerWidget extends StatelessWidget {
 
   Widget _buildPlayPauseButton(BuildContext context) => CircleAvatar(
       radius: StoycoScreenSize.width(context, 16.5),
-      backgroundColor: StoycoColors.white2,
+      backgroundColor: StoycoColors.whiteLavender,
       child: _buildButtonContent(context),
     );
 
@@ -100,7 +100,7 @@ class RadioPlayerWidget extends StatelessWidget {
         Text(
           radio.title,
           style: TextStyle(
-            color: StoycoColors.white2,
+            color: StoycoColors.whiteLavender,
             fontWeight: FontWeight.bold,
             fontSize: StoycoScreenSize.fontSize(context, 14),
             fontFamily: fontFamily,
@@ -112,7 +112,7 @@ class RadioPlayerWidget extends StatelessWidget {
         Text(
           radio.description ?? 'Now Playing',
           style: TextStyle(
-            color: StoycoColors.white2.withValues(alpha: 0.7),
+            color: StoycoColors.whiteLavender.withValues(alpha: 0.7),
             fontSize: StoycoScreenSize.fontSize(context, 12),
             fontFamily: fontFamily,
           ),
@@ -139,7 +139,7 @@ class RadioPlayerEmptyWidget extends StatelessWidget {
       child: Text(
         message,
         style: TextStyle(
-          color: StoycoColors.white2.withValues(alpha: 0.7),
+          color: StoycoColors.whiteLavender.withValues(alpha: 0.7),
           fontSize: StoycoScreenSize.fontSize(context, 14),
           fontFamily: fontFamily,
         ),
@@ -153,7 +153,7 @@ class RadioPlayerLoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Center(
-      child: CircularProgressIndicator(color: StoycoColors.white2),
+      child: CircularProgressIndicator(color: StoycoColors.whiteLavender),
     );
 }
 
@@ -175,7 +175,7 @@ class RadioPlayerErrorWidget extends StatelessWidget {
         child: Text(
           errorMessage,
           style: TextStyle(
-            color: StoycoColors.white2.withValues(alpha: 0.7),
+            color: StoycoColors.whiteLavender.withValues(alpha: 0.7),
             fontSize: StoycoScreenSize.fontSize(context, 14),
             fontFamily: fontFamily,
           ),
