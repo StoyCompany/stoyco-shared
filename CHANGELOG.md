@@ -1,6 +1,21 @@
+
 ## 21.7.0
 
 **feat(StoyCoins):** add radio streaming module
+
+## 21.6.1
+
+**feat(radio):** add RadioTabWidget and RadioTabController for CO profiles
+
+### Added
+- `RadioTabWidget`: Complete widget for radio tab in CO profiles with play/pause and listener count
+- `RadioTabController`: Controller with ValueNotifier pattern for granular UI updates
+- `RadioTabConfig`: Configuration object for flexible radio tab setup
+- `RadioTabState`: Immutable state class for radio tab data
+
+### Changed
+- Updated `StoycoColors`: removed duplicate `whiteLavander`, using `whiteLavender` consistently
+- Updated `RadioPlayerWidget` to use `StoycoColors.whiteLavender` instead of hardcoded colors
 
 ## 21.6.0
 

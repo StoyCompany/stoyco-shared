@@ -1,30 +1,61 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// Radio model according to Firestore specification.
+/// Model representing a radio station from Firestore.
+///
 /// Compatible with the existing StationInfo architecture.
 class RadioModel {
+  /// Unique Firestore document ID.
   final String id;
+
+  /// Radio station title.
   final String title;
+
+  /// Optional description of the radio.
   final String? description;
+
+  /// Optional cover image URL.
   final String? imageUrl;
+
+  /// Community owner/partner ID.
   final String partnerId;
+
+  /// AzuraCast station identifier.
   final int? azuraCastStationId;
+
+  /// MP3 streaming URL.
   final String? radioUrlMp3;
+
+  /// HLS streaming URL.
   final String? radioUrlHls;
+
+  /// Status of the radio (active/inactive).
   final String status;
+
+  /// Number of tracks in the station.
   final int trackCount;
+
+  /// Timestamp when the radio was created.
   final DateTime? createdAt;
+
+  /// Timestamp of the last update.
   final DateTime? updatedAt;
 
-  // Activity tracking fields (updated by the app)
+  /// Timestamp of the last listener decrement from app.
   final DateTime? appLastDecrement;
+
+  /// Timestamp of the last listener increment from app.
   final DateTime? appLastIncrement;
+
+  /// Timestamp of the last app activity.
   final DateTime? lastAppActivity;
+
+  /// Current number of online listeners.
   final int membersOnlineCount;
 
-  // Total donated StoyCoins
+  /// Total StoyCoins donated to this radio.
   final int totalDonatedStoyCoins;
 
+  /// Creates a [RadioModel] instance.
   RadioModel({
     required this.id,
     required this.title,
@@ -45,7 +76,7 @@ class RadioModel {
     this.totalDonatedStoyCoins = 0,
   });
 
-  /// Creates an instance from a Firestore document.
+  /// Creates a [RadioModel] from a Firestore document snapshot.
   factory RadioModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return RadioModel(
@@ -69,7 +100,7 @@ class RadioModel {
     );
   }
 
-  /// Creates an instance from a map.
+  /// Creates a [RadioModel] from a map and document ID.
   factory RadioModel.fromMap(Map<String, dynamic> data, String documentId) => RadioModel(
       id: documentId,
       title: data['title'] ?? '',
@@ -90,15 +121,16 @@ class RadioModel {
       totalDonatedStoyCoins: data['totalDonatedStoyCoins'] ?? 0,
     );
 
-  /// Returns the preferred streaming URL (HLS has priority).
+  /// Returns the preferred streaming URL (HLS or MP3).
   String? get streamingUrl => radioUrlHls ?? radioUrlMp3;
 
-  /// Checks if the radio is active.
+  /// Whether the radio is active.
   bool get isActive => status == 'active';
 
-  /// Checks if a streaming URL is available.
+  /// Whether the radio has a valid streaming URL.
   bool get hasStreamUrl => streamingUrl != null && streamingUrl!.isNotEmpty;
 
+  /// Creates a copy with optional field modifications.
   RadioModel copyWith({
     String? id,
     String? title,
@@ -137,7 +169,7 @@ class RadioModel {
       totalDonatedStoyCoins: totalDonatedStoyCoins ?? this.totalDonatedStoyCoins,
     );
 
-  /// Converts to JSON.
+  /// Converts this model to a JSON map.
   Map<String, dynamic> toJson() => {
       'id': id,
       'title': title,
