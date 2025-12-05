@@ -167,9 +167,7 @@ class RadioPlayerController extends ChangeNotifier {
         (radioId) {
           final previousRadioId = _stateNotifier.value.currentPlayingRadioId;
 
-          if (previousRadioId != null &&
-              previousRadioId.isNotEmpty &&
-              radioId != previousRadioId) {
+          if (previousRadioId != null && radioId != previousRadioId) {
             config.trackingService.stopListening(previousRadioId).catchError((e) {
               StoyCoLogger.error(
                 '[RadioPlayerController] Error stopping tracking for previous radio',
@@ -233,6 +231,12 @@ class RadioPlayerController extends ChangeNotifier {
     notifyListeners();
 
     unawaited(
+      config.trackingService.startListening(radio.id).catchError((e) {
+        StoyCoLogger.error('[RadioPlayerController] Error starting tracking', error: e);
+      }),
+    );
+
+    unawaited(
       config.onPlayRadio!(radio, isFromCOProfile: true).catchError((e) {
         StoyCoLogger.error('[RadioPlayerController] Error playing radio', error: e);
       }),
@@ -256,23 +260,33 @@ class RadioPlayerController extends ChangeNotifier {
   }
 
   /// Stops radio playback.
-  Future<void> stopRadio() async {
+  void stopRadio() {
     if (config.onStopRadio == null) {
       return;
     }
 
-    try {
-      await config.onStopRadio!();
-      _stateNotifier.value = _stateNotifier.value.copyWith(clearCurrentRadio: true);
-      _isPlayingNotifier.value = false;
-      notifyListeners();
-    } catch (e) {
-      StoyCoLogger.error('[RadioPlayerController] Error stopping radio', error: e);
+    final currentRadioId = _stateNotifier.value.currentPlayingRadioId;
+    if (currentRadioId != null) {
+      unawaited(
+        config.trackingService.stopListening(currentRadioId).catchError((e) {
+          StoyCoLogger.error('[RadioPlayerController] Error stopping tracking', error: e);
+        }),
+      );
     }
+
+    _stateNotifier.value = _stateNotifier.value.copyWith(clearCurrentRadio: true);
+    _isPlayingNotifier.value = false;
+    notifyListeners();
+
+    unawaited(
+      config.onStopRadio!().catchError((e) {
+        StoyCoLogger.error('[RadioPlayerController] Error stopping radio', error: e);
+      }),
+    );
   }
 
   Stream<int> getListenerCount(String radioId) =>
-      config.radioRepository.watchListenerCount(radioId);
+      config.trackingService.watchListenerCount(radioId);
 
   bool isRadioPlaying(String radioId) {
     final currentId = _stateNotifier.value.currentPlayingRadioId;
@@ -280,16 +294,16 @@ class RadioPlayerController extends ChangeNotifier {
   }
 
   /// Shares a radio station.
-  Future<void> shareRadio(RadioModel radio) async {
+  void shareRadio(RadioModel radio) {
     if (config.onShareRadio == null) {
       return;
     }
 
-    try {
-      await config.onShareRadio!(radio);
-    } catch (e) {
-      StoyCoLogger.error('[RadioPlayerController] Error sharing radio', error: e);
-    }
+    unawaited(
+      config.onShareRadio!(radio).catchError((e) {
+        StoyCoLogger.error('[RadioPlayerController] Error sharing radio', error: e);
+      }),
+    );
   }
 
   void refreshPlaybackState() {

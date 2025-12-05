@@ -49,13 +49,6 @@ class RadioRepository {
         .snapshots()
         .map((doc) => doc.exists ? RadioModel.fromFirestore(doc) : null);
 
-  /// Gets the real-time listener count stream.
-  Stream<int> watchListenerCount(String radioId) => _firestore
-        .collection(_collection)
-        .doc(radioId)
-        .snapshots()
-        .map((doc) => doc.data()?['members_online_count'] ?? 0);
-
   /// Gets all radios (no status filter) - useful for admin.
   Stream<List<RadioModel>> getAllRadios() => _firestore
         .collection(_collection)
