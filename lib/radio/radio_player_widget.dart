@@ -4,8 +4,6 @@ import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/models/radio_model.dart';
 import 'package:stoyco_shared/radio/radio_service.dart';
 
-/// A compact radio player widget.
-///
 /// Displays the radio player controls and listener count for a single radio station.
 class RadioPlayerWidget extends StatefulWidget {
   const RadioPlayerWidget({
@@ -97,7 +95,6 @@ class RadioPlayerContent extends StatelessWidget {
       );
 }
 
-/// Radio player button with play/pause functionality
 class _RadioPlayer extends StatelessWidget {
   const _RadioPlayer({
     required this.radio,

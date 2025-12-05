@@ -6,29 +6,6 @@ import 'package:stoyco_shared/models/radio_model.dart';
 import 'package:stoyco_shared/utils/logger.dart';
 
 /// Centralized service for radio functionality.
-///
-/// This service acts as an orchestrator that handles:
-/// - Fetching radios from Firestore
-/// - Real-time listener tracking (increment/decrement)
-/// - Playback state management
-///
-/// Example usage:
-/// ```dart
-/// final radioService = RadioService();
-///
-/// // Get radios stream
-/// radioService.getActiveRadios().listen((radios) {
-///   print('Active radios: ${radios.length}');
-/// });
-///
-/// // Start listening to a radio
-/// await radioService.startListening('radio123');
-///
-/// // Watch listener count
-/// radioService.watchListenerCount('radio123').listen((count) {
-///   print('Listeners: $count');
-/// });
-/// ```
 class RadioService {
   RadioService({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance;
@@ -36,11 +13,6 @@ class RadioService {
   final FirebaseFirestore _firestore;
   static const String _collection = 'radios';
 
-  // ══════════════════════════════════════════════════════════════════════════
-  // RADIO DATA OPERATIONS
-  // ══════════════════════════════════════════════════════════════════════════
-
-  /// Gets all active radios ordered by creation date.
   Stream<List<RadioModel>> getActiveRadios() => _firestore
       .collection(_collection)
       .where('status', isEqualTo: 'active')
@@ -51,7 +23,6 @@ class RadioService {
             snapshot.docs.map((doc) => RadioModel.fromFirestore(doc)).toList(),
       );
 
-  /// Gets radios by partner/community owner.
   Stream<List<RadioModel>> getRadiosByPartner(String partnerId) => _firestore
       .collection(_collection)
       .where('communityOwnerId', isEqualTo: partnerId)
@@ -62,26 +33,17 @@ class RadioService {
             snapshot.docs.map((doc) => RadioModel.fromFirestore(doc)).toList(),
       );
 
-  /// Gets a single radio by ID.
   Future<RadioModel?> getRadioById(String radioId) async {
     final doc = await _firestore.collection(_collection).doc(radioId).get();
     return doc.exists ? RadioModel.fromFirestore(doc) : null;
   }
 
-  /// Watches changes to a specific radio.
   Stream<RadioModel?> watchRadio(String radioId) => _firestore
       .collection(_collection)
       .doc(radioId)
       .snapshots()
       .map((doc) => doc.exists ? RadioModel.fromFirestore(doc) : null);
 
-  // ══════════════════════════════════════════════════════════════════════════
-  // LISTENER TRACKING
-  // ══════════════════════════════════════════════════════════════════════════
-
-  /// Increments the listener count when a user starts listening.
-  ///
-  /// Call this when playback starts for a radio.
   Future<void> startListening(String radioId) async {
     try {
       final now = FieldValue.serverTimestamp();
@@ -98,9 +60,6 @@ class RadioService {
     }
   }
 
-  /// Decrements the listener count when a user stops listening.
-  ///
-  /// Call this when playback stops or the user switches to another radio.
   Future<void> stopListening(String radioId) async {
     try {
       final now = FieldValue.serverTimestamp();
@@ -122,7 +81,6 @@ class RadioService {
     }
   }
 
-  /// Watches the real-time listener count for a radio.
   Stream<int> watchListenerCount(String radioId) => _firestore
       .collection(_collection)
       .doc(radioId)
@@ -147,35 +105,25 @@ class RadioPlayerConfig {
     this.isPlayingStream,
   });
 
-  /// Filter radios by partner/community owner ID.
   final String? partnerId;
 
-  /// Callback when a radio should start playing.
   final Future<void> Function(RadioModel radio)? onPlayRadio;
 
-  /// Callback to toggle play/pause.
   final Future<void> Function(String radioId)? onTogglePlayPause;
 
-  /// Callback to stop playback.
   final Future<void> Function()? onStopRadio;
 
-  /// Callback to share a radio.
   final Future<void> Function(RadioModel radio)? onShareRadio;
 
-  /// Returns the currently playing radio ID (sync).
   final String? Function()? getCurrentPlayingRadioId;
 
-  /// Returns whether audio is currently playing (sync).
   final bool Function()? isAudioPlaying;
 
-  /// Stream of currently playing radio ID changes.
   final Stream<String?>? playingRadioStream;
 
-  /// Stream of play/pause state changes.
   final Stream<bool>? isPlayingStream;
 }
 
-/// State for the radio player UI.
 @immutable
 class RadioPlayerState {
   const RadioPlayerState({
@@ -213,17 +161,6 @@ class RadioPlayerState {
 /// Controller for the radio player widget.
 ///
 /// Manages playback state and provides reactive updates via ValueNotifiers.
-/// Uses [RadioService] internally for all data operations and tracking.
-///
-/// Example:
-/// ```dart
-/// final controller = RadioPlayerController(
-///   config: RadioPlayerConfig(
-///     onPlayRadio: (radio) => audioPlayer.play(radio.streamingUrl!),
-///     onStopRadio: () => audioPlayer.stop(),
-///   ),
-/// );
-/// ```
 class RadioPlayerController extends ChangeNotifier {
   RadioPlayerController({
     required this.config,
@@ -244,13 +181,10 @@ class RadioPlayerController extends ChangeNotifier {
   StreamSubscription<String?>? _playbackSubscription;
   StreamSubscription<bool>? _isPlayingSubscription;
 
-  /// Listenable for loading state.
   ValueListenable<bool> get isLoadingListenable => _isLoadingNotifier;
 
-  /// Listenable for player state (radios list, current radio).
   ValueListenable<RadioPlayerState> get stateListenable => _stateNotifier;
 
-  /// Listenable for play/pause state.
   ValueListenable<bool> get isPlayingListenable => _isPlayingNotifier;
 
   bool get isLoading => _isLoadingNotifier.value;
@@ -343,7 +277,6 @@ class RadioPlayerController extends ChangeNotifier {
     _isPlayingNotifier.value = config.isAudioPlaying?.call() ?? false;
   }
 
-  /// Plays a radio station.
   void playRadio(RadioModel radio) {
     if (config.onPlayRadio == null) return;
 
@@ -364,7 +297,6 @@ class RadioPlayerController extends ChangeNotifier {
     );
   }
 
-  /// Toggles play/pause for a radio station.
   void togglePlayPause(String radioId) {
     if (config.onTogglePlayPause == null) return;
 
@@ -375,7 +307,6 @@ class RadioPlayerController extends ChangeNotifier {
     );
   }
 
-  /// Stops radio playback.
   void stopRadio() {
     if (config.onStopRadio == null) return;
 
@@ -394,17 +325,14 @@ class RadioPlayerController extends ChangeNotifier {
     );
   }
 
-  /// Gets the listener count stream for a radio.
   Stream<int> getListenerCount(String radioId) =>
       _radioService.watchListenerCount(radioId);
 
-  /// Checks if a specific radio is currently playing.
   bool isRadioPlaying(String radioId) {
     final currentId = _stateNotifier.value.currentPlayingRadioId;
     return currentId == radioId && _isPlayingNotifier.value;
   }
 
-  /// Shares a radio station.
   void shareRadio(RadioModel radio) {
     if (config.onShareRadio == null) return;
 
@@ -415,7 +343,6 @@ class RadioPlayerController extends ChangeNotifier {
     );
   }
 
-  /// Refreshes the current playback state from external source.
   void refreshPlaybackState() {
     _syncCurrentPlaybackState();
   }

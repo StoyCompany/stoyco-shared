@@ -16,13 +16,13 @@ class RadioModel {
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
-  // Activity tracking fields (updated by the app)
+
   final DateTime? appLastDecrement;
   final DateTime? appLastIncrement;
   final DateTime? lastAppActivity;
   final int membersOnlineCount;
 
-  // Total donated StoyCoins
+
   final int totalDonatedStoyCoins;
 
   RadioModel({
@@ -45,7 +45,6 @@ class RadioModel {
     this.totalDonatedStoyCoins = 0,
   });
 
-  /// Creates an instance from a Firestore document.
   factory RadioModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return RadioModel(
@@ -69,7 +68,6 @@ class RadioModel {
     );
   }
 
-  /// Creates an instance from a map.
   factory RadioModel.fromMap(Map<String, dynamic> data, String documentId) => RadioModel(
       id: documentId,
       title: data['title'] ?? '',
@@ -90,13 +88,10 @@ class RadioModel {
       totalDonatedStoyCoins: data['totalDonatedStoyCoins'] ?? 0,
     );
 
-  /// Returns the preferred streaming URL (HLS has priority).
   String? get streamingUrl => radioUrlHls ?? radioUrlMp3;
 
-  /// Checks if the radio is active.
   bool get isActive => status == 'active';
 
-  /// Checks if a streaming URL is available.
   bool get hasStreamUrl => streamingUrl != null && streamingUrl!.isNotEmpty;
 
   RadioModel copyWith({
@@ -137,7 +132,6 @@ class RadioModel {
       totalDonatedStoyCoins: totalDonatedStoyCoins ?? this.totalDonatedStoyCoins,
     );
 
-  /// Converts to JSON.
   Map<String, dynamic> toJson() => {
       'id': id,
       'title': title,
