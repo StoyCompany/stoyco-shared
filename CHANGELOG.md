@@ -1,3 +1,7 @@
+## 21.7.0
+
+**feat(StoyCoins):** add radio streaming module
+
 ## 21.6.0
 
 **feat(radio):** add radio streaming module
