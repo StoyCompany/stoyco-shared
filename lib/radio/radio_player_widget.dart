@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stoyco_shared/design/colors.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/models/radio_model.dart';
-import 'package:stoyco_shared/radio/radio_service.dart';
+import 'package:stoyco_shared/radio/radio_player_controller.dart';
 
 /// Displays the radio player controls and listener count for a single radio station.
 class RadioPlayerWidget extends StatefulWidget {
