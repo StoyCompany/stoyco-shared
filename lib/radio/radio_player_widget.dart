@@ -107,7 +107,7 @@ class RadioPlayerContent extends StatelessWidget {
             controller: controller,
             fontFamily: fontFamily,
           ),
-          SizedBox(height: StoycoScreenSize.height(context, 16)),
+          SizedBox(height: StoycoScreenSize.height(context, 15)),
           _ListenerCount(
             radioId: radio.id,
             initialCount: radio.membersOnlineCount,
@@ -169,7 +169,7 @@ class _PlayerButton extends StatelessWidget {
           padding: StoycoScreenSize.symmetric(
             context,
             horizontal: 15,
-            vertical: 10,
+            vertical: 10.5,
           ),
           decoration: BoxDecoration(
             color: StoycoColors.darkSlateBlue,
@@ -247,7 +247,7 @@ class _RadioInfo extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          SizedBox(height: StoycoScreenSize.height(context, 4)),
+          SizedBox(height: StoycoScreenSize.height(context, 8)),
           Text(
             radio.description ?? 'Reproduciendo radio en vivo',
             style: TextStyle(
