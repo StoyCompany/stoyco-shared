@@ -76,6 +76,9 @@ class $LibAssetsIconsGen {
   /// File path: lib/assets/icons/arrow_forward_icon.svg
   String get arrowForwardIcon => 'lib/assets/icons/arrow_forward_icon.svg';
 
+  /// File path: lib/assets/icons/bubble-chat.svg
+  String get bubbleChat => 'lib/assets/icons/bubble-chat.svg';
+
   /// File path: lib/assets/icons/calendar.svg
   String get calendar => 'lib/assets/icons/calendar.svg';
 
@@ -164,6 +167,7 @@ class $LibAssetsIconsGen {
         arrowUp,
         arrowBack,
         arrowForwardIcon,
+        bubbleChat,
         calendar,
         calendarIcon,
         camera,
