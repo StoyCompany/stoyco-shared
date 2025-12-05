@@ -6,6 +6,8 @@
 /// - RadioTrackingService: Real-time listener tracking
 /// - OnlineMembersTrackingService: Generic tracking service
 /// - RadioPlayerWidget: Widget for radio playback
+/// - RadioTabWidget: Complete widget for radio tab in CO profiles
+/// - RadioTabController: Controller for radio tab
 ///
 library;
 export '../models/radio_model.dart';
@@ -13,3 +15,5 @@ export 'radio_repository.dart';
 export 'radio_tracking_service.dart';
 export 'online_members_tracking_service.dart';
 export 'radio_player_widget.dart';
+export 'radio_tab_widget.dart';
+export 'radio_tab_controller.dart';
