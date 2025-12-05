@@ -2,6 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stoyco_shared/models/radio_model.dart';
 import 'package:stoyco_shared/utils/logger.dart';
 
+/// Centralized service for radio functionality.
+///
+/// Handles fetching radios from Firestore and real-time listener tracking.
+///
+/// Example:
+/// ```dart
+/// final service = RadioService();
+/// final radios = await service.getActiveRadios();
+/// await service.startListening('radioId');
+/// ```
 class RadioService {
   RadioService({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance;
@@ -9,6 +19,9 @@ class RadioService {
   final FirebaseFirestore _firestore;
   static const String _collection = 'radios';
 
+  /// Gets all active radios ordered by creation date.
+  ///
+  /// Returns a list of [RadioModel] with status 'active'.
   Future<List<RadioModel>> getActiveRadios() async {
     final snapshot = await _firestore
         .collection(_collection)
@@ -18,6 +31,10 @@ class RadioService {
     return snapshot.docs.map((doc) => RadioModel.fromFirestore(doc)).toList();
   }
 
+  /// Gets radios filtered by partner/community owner.
+  ///
+  /// [partnerId] The community owner ID to filter by.
+  /// Returns a list of active [RadioModel] for the specified partner.
   Future<List<RadioModel>> getRadiosByPartner(String partnerId) async {
     final snapshot = await _firestore
         .collection(_collection)
@@ -27,11 +44,19 @@ class RadioService {
     return snapshot.docs.map((doc) => RadioModel.fromFirestore(doc)).toList();
   }
 
+  /// Gets a single radio by its ID.
+  ///
+  /// [radioId] The Firestore document ID of the radio.
+  /// Returns the [RadioModel] if found, or `null` if not exists.
   Future<RadioModel?> getRadioById(String radioId) async {
     final doc = await _firestore.collection(_collection).doc(radioId).get();
     return doc.exists ? RadioModel.fromFirestore(doc) : null;
   }
 
+  /// Increments the listener count when a user starts listening.
+  ///
+  /// [radioId] The radio document ID.
+  /// Updates `members_online_count`, `app_last_increment`, and `last_app_activity`.
   Future<void> startListening(String radioId) async {
     try {
       final now = FieldValue.serverTimestamp();
@@ -48,6 +73,10 @@ class RadioService {
     }
   }
 
+  /// Decrements the listener count when a user stops listening.
+  ///
+  /// [radioId] The radio document ID.
+  /// Only decrements if the current count is greater than 0.
   Future<void> stopListening(String radioId) async {
     try {
       final now = FieldValue.serverTimestamp();
@@ -69,6 +98,10 @@ class RadioService {
     }
   }
 
+  /// Watches the real-time listener count for a radio.
+  ///
+  /// [radioId] The radio document ID.
+  /// Returns a [Stream] that emits the current listener count.
   Stream<int> watchListenerCount(String radioId) => _firestore
       .collection(_collection)
       .doc(radioId)

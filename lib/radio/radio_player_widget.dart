@@ -2,18 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:stoyco_shared/design/colors.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/models/radio_model.dart';
+import 'package:stoyco_shared/radio/radio_player_config.dart';
 import 'package:stoyco_shared/radio/radio_player_controller.dart';
+import 'package:stoyco_shared/radio/radio_player_state.dart';
 
 /// Displays the radio player controls and listener count for a single radio station.
+///
+/// Uses [RadioPlayerController] internally to manage playback state.
+///
+/// Example:
+/// ```dart
+/// RadioPlayerWidget(
+///   config: RadioPlayerConfig(onPlayRadio: (radio) async => ...),
+/// )
+/// ```
 class RadioPlayerWidget extends StatefulWidget {
+  /// Creates a radio player widget.
   const RadioPlayerWidget({
     super.key,
     required this.config,
     this.fontFamily,
   });
 
+  /// Configuration with callbacks for playback events.
   final RadioPlayerConfig config;
 
+  /// Optional font family for text styling.
   final String? fontFamily;
 
   @override
@@ -63,7 +77,11 @@ class _RadioPlayerWidgetState extends State<RadioPlayerWidget> {
       );
 }
 
+/// Content layout for the radio player.
+///
+/// Displays the player controls and listener count in a column.
 class RadioPlayerContent extends StatelessWidget {
+  /// Creates radio player content.
   const RadioPlayerContent({
     super.key,
     required this.radio,
@@ -71,8 +89,13 @@ class RadioPlayerContent extends StatelessWidget {
     this.fontFamily,
   });
 
+  /// The radio station to display.
   final RadioModel radio;
+
+  /// Controller managing playback state.
   final RadioPlayerController controller;
+
+  /// Optional font family for text styling.
   final String? fontFamily;
 
   @override

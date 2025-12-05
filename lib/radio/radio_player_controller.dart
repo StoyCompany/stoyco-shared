@@ -2,93 +2,27 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:stoyco_shared/models/radio_model.dart';
+import 'package:stoyco_shared/radio/radio_player_config.dart';
+import 'package:stoyco_shared/radio/radio_player_state.dart';
 import 'package:stoyco_shared/radio/radio_service.dart';
 import 'package:stoyco_shared/utils/logger.dart';
 
-/// Configuration for [RadioPlayerController].
-///
-/// Provides callbacks for audio playback integration.
-/// The controller uses [RadioService] internally for data and tracking.
-class RadioPlayerConfig {
-  const RadioPlayerConfig({
-    this.partnerId,
-    this.onPlayRadio,
-    this.onTogglePlayPause,
-    this.onStopRadio,
-    this.onShareRadio,
-    this.getCurrentPlayingRadioId,
-    this.isAudioPlaying,
-    this.playingRadioStream,
-    this.isPlayingStream,
-  });
-
-  /// Filter radios by partner/community owner ID.
-  final String? partnerId;
-
-  /// Callback when a radio should start playing.
-  final Future<void> Function(RadioModel radio)? onPlayRadio;
-
-  /// Callback to toggle play/pause.
-  final Future<void> Function(String radioId)? onTogglePlayPause;
-
-  /// Callback to stop playback.
-  final Future<void> Function()? onStopRadio;
-
-  /// Callback to share a radio.
-  final Future<void> Function(RadioModel radio)? onShareRadio;
-
-  /// Returns the currently playing radio ID (sync).
-  final String? Function()? getCurrentPlayingRadioId;
-
-  /// Returns whether audio is currently playing (sync).
-  final bool Function()? isAudioPlaying;
-
-  /// Stream of currently playing radio ID changes.
-  final Stream<String?>? playingRadioStream;
-
-  /// Stream of play/pause state changes.
-  final Stream<bool>? isPlayingStream;
-}
-
-/// State for the radio player UI.
-@immutable
-class RadioPlayerState {
-  const RadioPlayerState({
-    this.radios = const [],
-    this.currentPlayingRadioId,
-  });
-
-  final List<RadioModel> radios;
-  final String? currentPlayingRadioId;
-
-  RadioPlayerState copyWith({
-    List<RadioModel>? radios,
-    String? currentPlayingRadioId,
-    bool clearCurrentRadio = false,
-  }) =>
-      RadioPlayerState(
-        radios: radios ?? this.radios,
-        currentPlayingRadioId: clearCurrentRadio
-            ? null
-            : (currentPlayingRadioId ?? this.currentPlayingRadioId),
-      );
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is RadioPlayerState &&
-          runtimeType == other.runtimeType &&
-          listEquals(radios, other.radios) &&
-          currentPlayingRadioId == other.currentPlayingRadioId;
-
-  @override
-  int get hashCode => Object.hash(Object.hashAll(radios), currentPlayingRadioId);
-}
-
 /// Controller for the radio player widget.
 ///
-/// Manages playback state and provides reactive updates via ValueNotifiers.
+/// Manages playback state and provides reactive updates via [ValueNotifier]s.
+///
+/// Example:
+/// ```dart
+/// final controller = RadioPlayerController(
+///   config: RadioPlayerConfig(onPlayRadio: (radio) async => ...),
+/// );
+/// controller.playRadio(radio);
+/// ```
 class RadioPlayerController extends ChangeNotifier {
+  /// Creates a radio player controller.
+  ///
+  /// [config] Configuration with callbacks for playback events.
+  /// [radioService] Optional service instance for testing.
   RadioPlayerController({
     required this.config,
     RadioService? radioService,
@@ -96,6 +30,7 @@ class RadioPlayerController extends ChangeNotifier {
     _init();
   }
 
+  /// Configuration for callbacks and streams.
   final RadioPlayerConfig config;
   final RadioService _radioService;
 
@@ -107,18 +42,25 @@ class RadioPlayerController extends ChangeNotifier {
   StreamSubscription<String?>? _playbackSubscription;
   StreamSubscription<bool>? _isPlayingSubscription;
 
-  /// Listenable for loading state.
+  /// Listenable for loading state changes.
   ValueListenable<bool> get isLoadingListenable => _isLoadingNotifier;
 
-  /// Listenable for player state (radios list, current radio).
+  /// Listenable for player state changes.
   ValueListenable<RadioPlayerState> get stateListenable => _stateNotifier;
 
-  /// Listenable for play/pause state.
+  /// Listenable for play/pause state changes.
   ValueListenable<bool> get isPlayingListenable => _isPlayingNotifier;
 
+  /// Whether radios are currently loading.
   bool get isLoading => _isLoadingNotifier.value;
+
+  /// Current player state.
   RadioPlayerState get state => _stateNotifier.value;
+
+  /// List of available radios.
   List<RadioModel> get radios => _stateNotifier.value.radios;
+
+  /// ID of the currently playing radio, or `null` if stopped.
   String? get currentPlayingRadioId => _stateNotifier.value.currentPlayingRadioId;
 
   void _init() {
@@ -202,6 +144,9 @@ class RadioPlayerController extends ChangeNotifier {
   }
 
   /// Plays a radio station.
+  ///
+  /// [radio] The radio to play.
+  /// Starts listener tracking and invokes `onPlayRadio` callback.
   void playRadio(RadioModel radio) {
     if (config.onPlayRadio == null) return;
 
@@ -223,6 +168,8 @@ class RadioPlayerController extends ChangeNotifier {
   }
 
   /// Toggles play/pause for a radio station.
+  ///
+  /// [radioId] The ID of the radio to toggle.
   void togglePlayPause(String radioId) {
     if (config.onTogglePlayPause == null) return;
 
@@ -234,6 +181,8 @@ class RadioPlayerController extends ChangeNotifier {
   }
 
   /// Stops radio playback.
+  ///
+  /// Decrements listener count and invokes `onStopRadio` callback.
   void stopRadio() {
     if (config.onStopRadio == null) return;
 
@@ -253,16 +202,25 @@ class RadioPlayerController extends ChangeNotifier {
   }
 
   /// Gets the listener count stream for a radio.
+  ///
+  /// [radioId] The radio document ID.
+  /// Returns a [Stream] emitting the current listener count.
   Stream<int> getListenerCount(String radioId) =>
       _radioService.watchListenerCount(radioId);
 
   /// Checks if a specific radio is currently playing.
+  ///
+  /// [radioId] The ID of the radio to check.
+  /// Returns `true` if the radio is playing.
   bool isRadioPlaying(String radioId) {
     final currentId = _stateNotifier.value.currentPlayingRadioId;
     return currentId == radioId && _isPlayingNotifier.value;
   }
 
   /// Shares a radio station.
+  ///
+  /// [radio] The radio to share.
+  /// Invokes `onShareRadio` callback.
   void shareRadio(RadioModel radio) {
     if (config.onShareRadio == null) return;
 
@@ -274,6 +232,8 @@ class RadioPlayerController extends ChangeNotifier {
   }
 
   /// Refreshes the current playback state from external source.
+  ///
+  /// Re-syncs the controller state with `getCurrentPlayingRadioId`.
   void refreshPlaybackState() {
     _syncCurrentPlaybackState();
   }
