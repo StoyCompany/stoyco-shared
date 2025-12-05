@@ -2,10 +2,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:stoyco_shared/stoyco_shared.dart';
 
-/// Configuration object for RadioTabController
-/// This is what the app needs to provide to configure the radio tab
-class RadioTabConfig {
-  const RadioTabConfig({
+/// Configuration for the [RadioPlayerController].
+///
+/// Provides the necessary dependencies and callbacks to control radio playback.
+class RadioPlayerConfig {
+  const RadioPlayerConfig({
     this.partnerId,
     required this.radioRepository,
     required this.trackingService,
@@ -32,50 +33,40 @@ class RadioTabConfig {
   final Stream<bool>? isPlayingStream;
 }
 
-/// Radio tab state that holds all the data needed by the UI
+/// State object for the radio player.
+///
+/// Holds all the data needed by the UI to display the current playback state.
 @immutable
-class RadioTabState {
-  const RadioTabState({
+class RadioPlayerState {
+  const RadioPlayerState({
     this.radios = const [],
     this.currentPlayingRadioId,
-    this.error,
-    this.isChangingStation = false,
   });
 
   final List<RadioModel> radios;
   final String? currentPlayingRadioId;
-  final String? error;
-  final bool isChangingStation;
 
-  RadioTabState copyWith({
+  RadioPlayerState copyWith({
     List<RadioModel>? radios,
     String? currentPlayingRadioId,
-    String? error,
-    bool? isChangingStation,
     bool clearCurrentRadio = false,
-    bool clearError = false,
   }) =>
-      RadioTabState(
+      RadioPlayerState(
         radios: radios ?? this.radios,
         currentPlayingRadioId:
             clearCurrentRadio ? null : (currentPlayingRadioId ?? this.currentPlayingRadioId),
-        error: clearError ? null : (error ?? this.error),
-        isChangingStation: isChangingStation ?? this.isChangingStation,
       );
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is RadioTabState &&
+      other is RadioPlayerState &&
           runtimeType == other.runtimeType &&
           _listEquals(radios, other.radios) &&
-          currentPlayingRadioId == other.currentPlayingRadioId &&
-          error == other.error &&
-          isChangingStation == other.isChangingStation;
+          currentPlayingRadioId == other.currentPlayingRadioId;
 
   @override
-  int get hashCode =>
-      Object.hash(Object.hashAll(radios), currentPlayingRadioId, error, isChangingStation);
+  int get hashCode => Object.hash(Object.hashAll(radios), currentPlayingRadioId);
 
   static bool _listEquals<T>(List<T> a, List<T> b) {
     if (identical(a, b)) return true;
@@ -87,7 +78,9 @@ class RadioTabState {
   }
 }
 
-/// Controller for the radio tab in the CO profile
+/// Controller for the radio player.
+///
+/// Manages radio playback state and provides reactive updates via ValueNotifiers.
 ///
 /// Uses ValueNotifier pattern for granular UI updates:
 /// - [isLoadingListenable] for loading state
@@ -96,18 +89,18 @@ class RadioTabState {
 ///
 /// This allows widgets to listen only to what they need,
 /// minimizing unnecessary rebuilds.
-class RadioTabController extends ChangeNotifier {
-  RadioTabController({
+class RadioPlayerController extends ChangeNotifier {
+  RadioPlayerController({
     required this.config,
   }) {
     _init();
   }
 
-  final RadioTabConfig config;
+  final RadioPlayerConfig config;
 
   final ValueNotifier<bool> _isLoadingNotifier = ValueNotifier<bool>(true);
-  final ValueNotifier<RadioTabState> _stateNotifier =
-      ValueNotifier<RadioTabState>(const RadioTabState());
+  final ValueNotifier<RadioPlayerState> _stateNotifier =
+      ValueNotifier<RadioPlayerState>(const RadioPlayerState());
   final ValueNotifier<bool> _isPlayingNotifier = ValueNotifier<bool>(false);
 
   StreamSubscription<List<RadioModel>>? _radiosSubscription;
@@ -116,21 +109,17 @@ class RadioTabController extends ChangeNotifier {
 
   ValueListenable<bool> get isLoadingListenable => _isLoadingNotifier;
 
-  ValueListenable<RadioTabState> get stateListenable => _stateNotifier;
+  ValueListenable<RadioPlayerState> get stateListenable => _stateNotifier;
 
   ValueListenable<bool> get isPlayingListenable => _isPlayingNotifier;
 
   bool get isLoading => _isLoadingNotifier.value;
 
-  RadioTabState get state => _stateNotifier.value;
+  RadioPlayerState get state => _stateNotifier.value;
 
   List<RadioModel> get radios => _stateNotifier.value.radios;
 
   String? get currentPlayingRadioId => _stateNotifier.value.currentPlayingRadioId;
-
-  String? get error => _stateNotifier.value.error;
-
-  bool get isChangingStation => _stateNotifier.value.isChangingStation;
 
   void _init() {
     _loadRadios();
@@ -139,24 +128,19 @@ class RadioTabController extends ChangeNotifier {
   }
 
   void _syncCurrentPlaybackState() {
-    if (config.getCurrentPlayingRadioId != null) {
-      try {
-        final currentRadioId = config.getCurrentPlayingRadioId!();
-        if (currentRadioId != null) {
-          _stateNotifier.value = _stateNotifier.value.copyWith(
-            currentPlayingRadioId: currentRadioId,
-          );
-        }
-        _updateIsPlaying();
-      } catch (e) {
-        StoyCoLogger.error('Error syncing playback state', error: e);
-      }
+    if (config.getCurrentPlayingRadioId == null) return;
+
+    final currentRadioId = config.getCurrentPlayingRadioId!();
+    if (currentRadioId != null) {
+      _stateNotifier.value = _stateNotifier.value.copyWith(
+        currentPlayingRadioId: currentRadioId,
+      );
     }
+    _updateIsPlaying();
   }
 
   void _loadRadios() {
     _isLoadingNotifier.value = true;
-    _stateNotifier.value = _stateNotifier.value.copyWith(clearError: true);
     notifyListeners();
 
     final radiosStream = config.partnerId != null
@@ -170,10 +154,8 @@ class RadioTabController extends ChangeNotifier {
         notifyListeners();
       },
       onError: (e) {
-        _stateNotifier.value = _stateNotifier.value.copyWith(
-          error: 'Error loading radios: $e',
-        );
         _isLoadingNotifier.value = false;
+        StoyCoLogger.error('[RadioPlayerController] Error loading radios', error: e);
         notifyListeners();
       },
     );
@@ -190,7 +172,7 @@ class RadioTabController extends ChangeNotifier {
               radioId != previousRadioId) {
             config.trackingService.stopListening(previousRadioId).catchError((e) {
               StoyCoLogger.error(
-                '[RadioTabController] Error stopping tracking for previous radio',
+                '[RadioPlayerController] Error stopping tracking for previous radio',
                 error: e,
               );
             });
@@ -205,7 +187,7 @@ class RadioTabController extends ChangeNotifier {
         },
         onError: (e) {
           StoyCoLogger.error(
-            '[RadioTabController] Error listening to playback stream',
+            '[RadioPlayerController] Error listening to playback stream',
             error: e,
           );
         },
@@ -221,7 +203,7 @@ class RadioTabController extends ChangeNotifier {
         },
         onError: (e) {
           StoyCoLogger.error(
-            '[RadioTabController] Error listening to isPlaying stream',
+            '[RadioPlayerController] Error listening to isPlaying stream',
             error: e,
           );
         },
@@ -234,85 +216,46 @@ class RadioTabController extends ChangeNotifier {
     _isPlayingNotifier.value = config.isAudioPlaying?.call() ?? false;
   }
 
-
-  Future<void> playRadio(RadioModel radio) async {
-    if (_stateNotifier.value.isChangingStation || config.onPlayRadio == null) {
+  /// Plays a radio station.
+  void playRadio(RadioModel radio) {
+    if (config.onPlayRadio == null) {
       return;
     }
 
-    try {
-      _stateNotifier.value = _stateNotifier.value.copyWith(
-        isChangingStation: true,
-        clearError: true,
-      );
-      notifyListeners();
+    if (!radio.hasStreamUrl) {
+      StoyCoLogger.error('[RadioPlayerController] Radio has no stream URL: ${radio.id}');
+      return;
+    }
 
-      if (!radio.hasStreamUrl) {
-        _stateNotifier.value = _stateNotifier.value.copyWith(
-          error: 'Esta radio no tiene URL de streaming disponible',
-          isChangingStation: false,
+    _stateNotifier.value = _stateNotifier.value.copyWith(
+      currentPlayingRadioId: radio.id,
+    );
+    notifyListeners();
+
+    unawaited(
+      config.onPlayRadio!(radio, isFromCOProfile: true).catchError((e) {
+        StoyCoLogger.error('[RadioPlayerController] Error playing radio', error: e);
+      }),
+    );
+  }
+
+  /// Toggles play/pause for a radio station.
+  void togglePlayPause(String radioId) {
+    if (config.onTogglePlayPause == null) {
+      return;
+    }
+
+    unawaited(
+      config.onTogglePlayPause!(radioId).catchError((e) {
+        StoyCoLogger.error(
+          '[RadioPlayerController] Error toggling play/pause',
+          error: e,
         );
-        notifyListeners();
-        return;
-      }
-
-      _stateNotifier.value = _stateNotifier.value.copyWith(
-        currentPlayingRadioId: radio.id,
-        isChangingStation: false,
-      );
-      notifyListeners();
-
-      unawaited(
-        config.onPlayRadio!(radio, isFromCOProfile: true).catchError((e) {
-          _stateNotifier.value = _stateNotifier.value.copyWith(
-            error: 'Error al reproducir: $e',
-          );
-          StoyCoLogger.error('[RadioTabController] Error playing radio', error: e);
-          notifyListeners();
-        }),
-      );
-    } catch (e) {
-      _stateNotifier.value = _stateNotifier.value.copyWith(
-        error: 'Error al reproducir: $e',
-        isChangingStation: false,
-      );
-      StoyCoLogger.error('[RadioTabController] Error playing radio', error: e);
-      notifyListeners();
-    }
+      }),
+    );
   }
 
-  /// Toggles play/pause for a radio station
-  Future<void> togglePlayPause(String radioId) async {
-    if (_stateNotifier.value.isChangingStation || config.onTogglePlayPause == null) {
-      return;
-    }
-
-    try {
-      unawaited(
-        config.onTogglePlayPause!(radioId).catchError((e) {
-          _stateNotifier.value = _stateNotifier.value.copyWith(
-            error: 'Error al pausar/reproducir: $e',
-          );
-          StoyCoLogger.error(
-            '[RadioTabController] Error toggling play/pause',
-            error: e,
-          );
-          notifyListeners();
-        }),
-      );
-    } catch (e) {
-      _stateNotifier.value = _stateNotifier.value.copyWith(
-        error: 'Error al pausar/reproducir: $e',
-      );
-      StoyCoLogger.error(
-        '[RadioTabController] Error toggling play/pause',
-        error: e,
-      );
-      notifyListeners();
-    }
-  }
-
-  /// Stops radio playback
+  /// Stops radio playback.
   Future<void> stopRadio() async {
     if (config.onStopRadio == null) {
       return;
@@ -324,11 +267,7 @@ class RadioTabController extends ChangeNotifier {
       _isPlayingNotifier.value = false;
       notifyListeners();
     } catch (e) {
-      _stateNotifier.value = _stateNotifier.value.copyWith(
-        error: 'Error al detener: $e',
-      );
-      StoyCoLogger.error('[RadioTabController] Error stopping radio', error: e);
-      notifyListeners();
+      StoyCoLogger.error('[RadioPlayerController] Error stopping radio', error: e);
     }
   }
 
@@ -340,6 +279,7 @@ class RadioTabController extends ChangeNotifier {
     return currentId == radioId && _isPlayingNotifier.value;
   }
 
+  /// Shares a radio station.
   Future<void> shareRadio(RadioModel radio) async {
     if (config.onShareRadio == null) {
       return;
@@ -348,23 +288,12 @@ class RadioTabController extends ChangeNotifier {
     try {
       await config.onShareRadio!(radio);
     } catch (e) {
-      _stateNotifier.value = _stateNotifier.value.copyWith(
-        error: 'Error al compartir: $e',
-      );
-      StoyCoLogger.error('[RadioTabController] Error sharing radio', error: e);
-      notifyListeners();
+      StoyCoLogger.error('[RadioPlayerController] Error sharing radio', error: e);
     }
   }
 
   void refreshPlaybackState() {
     _syncCurrentPlaybackState();
-  }
-
-  void clearError() {
-    if (_stateNotifier.value.error != null) {
-      _stateNotifier.value = _stateNotifier.value.copyWith(clearError: true);
-      notifyListeners();
-    }
   }
 
   @override

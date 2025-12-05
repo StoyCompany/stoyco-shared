@@ -6,11 +6,11 @@ import 'package:stoyco_shared/models/radio_model.dart';
 /// Read-only - The app should NOT modify radio data,
 /// only tracking fields.
 class RadioRepository {
-  final FirebaseFirestore _firestore;
-  static const String _collection = 'radios';
-
   RadioRepository({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance;
+
+  final FirebaseFirestore _firestore;
+  static const String _collection = 'radios';
 
   /// Gets all active radios ordered by creation date.
   Stream<List<RadioModel>> getActiveRadios() => _firestore
@@ -18,9 +18,11 @@ class RadioRepository {
         .where('status', isEqualTo: 'active')
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => RadioModel.fromFirestore(doc))
-            .toList());
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => RadioModel.fromFirestore(doc))
+              .toList(),
+        );
 
   /// Gets radios by partner.
   Stream<List<RadioModel>> getRadiosByPartner(String partnerId) => _firestore
@@ -28,9 +30,11 @@ class RadioRepository {
         .where('communityOwnerId', isEqualTo: partnerId)
         .where('status', isEqualTo: 'active')
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => RadioModel.fromFirestore(doc))
-            .toList());
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => RadioModel.fromFirestore(doc))
+              .toList(),
+        );
 
   /// Gets a radio by ID (single snapshot).
   Future<RadioModel?> getRadioById(String radioId) async {
@@ -57,7 +61,9 @@ class RadioRepository {
         .collection(_collection)
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => RadioModel.fromFirestore(doc))
-            .toList());
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => RadioModel.fromFirestore(doc))
+              .toList(),
+        );
 }

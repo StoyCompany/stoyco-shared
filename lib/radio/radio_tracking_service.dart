@@ -1,4 +1,4 @@
-import 'online_members_tracking_service.dart';
+import 'package:stoyco_shared/radio/online_members_tracking_service.dart';
 
 /// Service for tracking radio listeners.
 ///
@@ -11,11 +11,11 @@ import 'online_members_tracking_service.dart';
 /// - updateActivity: Updates last activity
 /// - watchListenerCount: Watches counter in real-time
 class RadioTrackingService {
-  static const String _collection = 'radios';
-  final OnlineMembersTrackingService _trackingService;
-
   RadioTrackingService({OnlineMembersTrackingService? trackingService})
       : _trackingService = trackingService ?? OnlineMembersTrackingService();
+
+  static const String _collection = 'radios';
+  final OnlineMembersTrackingService _trackingService;
 
   /// Increments the counter when a user starts listening.
   ///
