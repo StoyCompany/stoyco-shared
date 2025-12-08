@@ -1,3 +1,8 @@
+
+## 21.7.0
+
+**feat(StoyCoins):** add radio streaming module
+
 ## 21.6.1
 
 **feat(radio):** add RadioTabWidget and RadioTabController for CO profiles
