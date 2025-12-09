@@ -206,14 +206,14 @@ class StoycoinsService {
   ///
   /// Cancels the authentication subscription and closes the balance stream.
   /// Should be called when the service is no longer needed.
-  void dispose() {
+  void clearSession() {
     _authSubscription?.cancel();
     _balanceStreamController.close();
   }
 
   /// Resets the singleton instance for testing purposes.
   static void resetInstance() {
-    _instance?.dispose();
+    _instance?.clearSession();
     _instance = null;
   }
 }

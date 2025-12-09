@@ -1,3 +1,7 @@
+## 21.7.2
+
+**feat(StoyCoins):** renameMethods
+
 ## 21.7.1
 
 **feat(StoyCoins):** add bearer token in stoycoins
