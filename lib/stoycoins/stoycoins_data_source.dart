@@ -4,10 +4,24 @@ import 'package:stoyco_shared/stoycoins/models/donate.dart';
 
 /// Data source for Stoycoins operations: balance and donation.
 class StoycoinsDataSource {
-  StoycoinsDataSource({required this.environment});
+  StoycoinsDataSource({required this.environment, required Dio dio})
+      : _dio = dio;
 
-  final Dio _dio = Dio();
+  final Dio _dio;
   final StoycoEnvironment environment;
+
+  /// User token for authenticated requests
+  late String userToken;
+
+  /// Update user token used in Authorization header
+  void updateUserToken(String newUserToken) {
+    userToken = newUserToken;
+  }
+
+  /// Headers for authenticated requests
+  Map<String, String> _getHeaders() => {
+        'Authorization': 'Bearer $userToken',
+      };
 
   /// Fetches the user's Stoycoins balance.
   ///
@@ -24,6 +38,7 @@ class StoycoinsDataSource {
         'userId': userId,
       },
       cancelToken: cancelToken,
+      options: Options(headers: _getHeaders()),
     );
     return response;
   }
@@ -42,6 +57,7 @@ class StoycoinsDataSource {
       '${environment.baseUrl()}stoycoins/donate',
       data: donateModel.toJson(),
       cancelToken: cancelToken,
+      options: Options(headers: _getHeaders()),
     );
     return response;
   }
@@ -73,6 +89,7 @@ class StoycoinsDataSource {
       '${environment.baseUrl()}stoycoins/transactions',
       queryParameters: queryParameters,
       cancelToken: cancelToken,
+      options: Options(headers: _getHeaders()),
     );
     return response;
   }

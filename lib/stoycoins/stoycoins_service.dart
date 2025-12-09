@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stoyco_shared/envs/envs.dart';
@@ -12,6 +13,8 @@ import 'package:stoyco_shared/stoycoins/models/donate_result.dart';
 import 'package:stoyco_shared/stoycoins/models/transactions.dart';
 import 'package:stoyco_shared/stoycoins/stoycoins_data_source.dart';
 import 'package:stoyco_shared/stoycoins/stoycoins_repository.dart';
+import 'package:stoyco_shared/utils/dio_auth_interceptor.dart';
+import 'package:stoyco_shared/utils/logger.dart';
 
 /// Service for Stoycoins operations: balance, donation, and transactions.
 class StoycoinsService {
@@ -24,7 +27,18 @@ class StoycoinsService {
 
   StoycoinsService._({required this.environment, FirebaseAuth? firebaseAuth})
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance {
-    _dataSource = StoycoinsDataSource(environment: environment);
+
+    final dio = Dio();
+    _dio = dio;
+
+    dio.interceptors.add(
+      DioAuthInterceptor(
+        getToken: () => _userToken,
+        refreshToken: _refreshFirebaseToken,
+      ),
+    );
+
+    _dataSource = StoycoinsDataSource(environment: environment, dio: dio);
     _repository = StoycoinsRepository(dataSource: _dataSource!);
     _instance = this;
     _initializeBalanceStream();
@@ -38,6 +52,12 @@ class StoycoinsService {
   StoycoinsDataSource? _dataSource;
   StoycoinsRepository? _repository;
   final FirebaseAuth _firebaseAuth;
+
+  /// Dio instance for HTTP requests
+  Dio? _dio;
+
+  /// Current user authentication token
+  String _userToken = '';
 
   /// Cached current balance model
   BalanceModel? _currentBalance;
@@ -68,11 +88,46 @@ class StoycoinsService {
   void _initializeBalanceStream() {
     _authSubscription = authStateChanges.listen((user) async {
       if (user != null) {
+        // Get Firebase ID token
+        final token = await user.getIdToken();
+        if (token != null) {
+          _updateToken(token);
+        }
         await _fetchAndEmitBalance();
       } else {
         _currentBalance = null;
+        _userToken = '';
       }
     });
+  }
+
+  /// Updates the authentication token in the service and datasource.
+  void _updateToken(String token) {
+    _userToken = token;
+    _dataSource?.updateUserToken(token);
+    // Update Dio default headers for consistency
+    if (_dio != null) {
+      _dio!.options.headers['Authorization'] = 'Bearer $token';
+    }
+  }
+
+  /// Refreshes the Firebase authentication token.
+  /// Returns the new token or null if refresh fails.
+  Future<String?> _refreshFirebaseToken() async {
+    try {
+      final user = _firebaseAuth.currentUser;
+      if (user == null) return null;
+
+      final newToken = await user.getIdToken(true); // Force refresh
+      if (newToken != null && newToken.isNotEmpty) {
+        _updateToken(newToken);
+        return newToken;
+      }
+      return null;
+    } catch (e) {
+      StoyCoLogger.error('Failed to refresh Firebase token: $e');
+      return null;
+    }
   }
 
   /// Fetches the balance and emits it to the stream if availableBalance > 0.
@@ -80,7 +135,7 @@ class StoycoinsService {
     final result = await getCurrentUserBalance();
     result.fold(
       (failure) {
-
+        StoyCoLogger.error('Failed to fetch balance: ${failure.message}');
       },
       (balance) {
         _currentBalance = balance;
