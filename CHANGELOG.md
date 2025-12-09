@@ -1,3 +1,6 @@
+## 21.7.1
+
+**feat(StoyCoins):** add bearer token in stoycoins
 
 ## 21.7.0
 
