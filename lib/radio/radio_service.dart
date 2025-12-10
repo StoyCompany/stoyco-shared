@@ -107,4 +107,28 @@ class RadioService {
       .doc(radioId)
       .snapshots()
       .map((doc) => doc.data()?['members_online_count'] ?? 0);
+
+  /// Increments the total donated StoyCoins for a radio.
+  ///
+  /// [radioId] The radio document ID.
+  /// [amount] The number of StoyCoins to increment.
+  /// Updates `totalDonatedStoyCoins` field using atomic increment.
+  ///
+  /// Example:
+  /// ```dart
+  /// await radioService.incrementDonatedStoyCoins('radio123', 1);
+  /// ```
+  Future<void> incrementDonatedStoyCoins(String radioId, int amount) async {
+    try {
+      await _firestore.collection(_collection).doc(radioId).update({
+        'totalDonatedStoyCoins': FieldValue.increment(amount),
+      });
+    } catch (e) {
+      StoyCoLogger.error(
+        '[RadioService] Error incrementing donated StoyCoins',
+        error: e,
+      );
+      rethrow;
+    }
+  }
 }

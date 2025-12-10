@@ -1,5 +1,10 @@
 ## 21.7.5
 
+**feat(radio):** add incrementDonatedStoyCoins method to RadioService
+
+### Added
+- `RadioService.incrementDonatedStoyCoins`: Method to atomically increment StoyCoins donations for a radio station
+
 **feat(StoyCoins):** serializable model for stoycoins generic
 
 ## 21.7.4
