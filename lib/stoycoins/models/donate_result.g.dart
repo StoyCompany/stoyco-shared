@@ -9,7 +9,7 @@ part of 'donate_result.dart';
 DonateResultModel _$DonateResultModelFromJson(Map<String, dynamic> json) =>
     DonateResultModel(
       transactionId: json['transactionId'] as String?,
-      newBalance: (json['newBalance'] as num?)?.toInt(),
+      newBalance: json['newBalance'] as String?,
       transactionState: json['transactionState'] as String?,
       currentLevelName: json['currentLevelName'] as String?,
       pointsToNextLevel: (json['pointsToNextLevel'] as num?)?.toInt(),

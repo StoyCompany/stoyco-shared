@@ -24,7 +24,7 @@ class DonateResultModel {
   Map<String, dynamic> toJson() => _$DonateResultModelToJson(this);
 
   final String? transactionId;
-  final int? newBalance;
+  final String? newBalance;
   final String? transactionState;
   final String? currentLevelName;
   final int? pointsToNextLevel;
@@ -32,7 +32,7 @@ class DonateResultModel {
 
   DonateResultModel copyWith({
     String? transactionId,
-    int? newBalance,
+    String? newBalance,
     String? transactionState,
     String? currentLevelName,
     int? pointsToNextLevel,

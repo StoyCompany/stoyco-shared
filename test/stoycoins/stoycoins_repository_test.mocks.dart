@@ -3,12 +3,13 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i5;
+import 'dart:async' as _i6;
 
 import 'package:dio/dio.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:mockito/src/dummies.dart' as _i5;
 import 'package:stoyco_shared/envs/envs.dart' as _i4;
-import 'package:stoyco_shared/stoycoins/models/donate.dart' as _i6;
+import 'package:stoyco_shared/stoycoins/models/donate.dart' as _i7;
 import 'package:stoyco_shared/stoycoins/stoycoins_data_source.dart' as _i3;
 
 // ignore_for_file: type=lint
@@ -52,7 +53,34 @@ class MockStoycoinsDataSource extends _i1.Mock
       ) as _i4.StoycoEnvironment);
 
   @override
-  _i5.Future<_i2.Response<dynamic>> getBalance({required String? userId}) =>
+  String get userToken => (super.noSuchMethod(
+        Invocation.getter(#userToken),
+        returnValue: _i5.dummyValue<String>(
+          this,
+          Invocation.getter(#userToken),
+        ),
+      ) as String);
+
+  @override
+  set userToken(String? value) => super.noSuchMethod(
+        Invocation.setter(
+          #userToken,
+          value,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void updateUserToken(String? newUserToken) => super.noSuchMethod(
+        Invocation.method(
+          #updateUserToken,
+          [newUserToken],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i6.Future<_i2.Response<dynamic>> getBalance({required String? userId}) =>
       (super.noSuchMethod(
         Invocation.method(
           #getBalance,
@@ -60,7 +88,7 @@ class MockStoycoinsDataSource extends _i1.Mock
           {#userId: userId},
         ),
         returnValue:
-            _i5.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
+            _i6.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
           this,
           Invocation.method(
             #getBalance,
@@ -68,27 +96,27 @@ class MockStoycoinsDataSource extends _i1.Mock
             {#userId: userId},
           ),
         )),
-      ) as _i5.Future<_i2.Response<dynamic>>);
+      ) as _i6.Future<_i2.Response<dynamic>>);
 
   @override
-  _i5.Future<_i2.Response<dynamic>> donate(_i6.DonateModel? donateModel) =>
+  _i6.Future<_i2.Response<dynamic>> donate(_i7.DonateModel? donateModel) =>
       (super.noSuchMethod(
         Invocation.method(
           #donate,
           [donateModel],
         ),
         returnValue:
-            _i5.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
+            _i6.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
           this,
           Invocation.method(
             #donate,
             [donateModel],
           ),
         )),
-      ) as _i5.Future<_i2.Response<dynamic>>);
+      ) as _i6.Future<_i2.Response<dynamic>>);
 
   @override
-  _i5.Future<_i2.Response<dynamic>> getTransactionDetails({
+  _i6.Future<_i2.Response<dynamic>> getTransactionDetails({
     required String? userId,
     String? state,
     String? source,
@@ -108,7 +136,7 @@ class MockStoycoinsDataSource extends _i1.Mock
           },
         ),
         returnValue:
-            _i5.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
+            _i6.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
           this,
           Invocation.method(
             #getTransactionDetails,
@@ -122,5 +150,5 @@ class MockStoycoinsDataSource extends _i1.Mock
             },
           ),
         )),
-      ) as _i5.Future<_i2.Response<dynamic>>);
+      ) as _i6.Future<_i2.Response<dynamic>>);
 }

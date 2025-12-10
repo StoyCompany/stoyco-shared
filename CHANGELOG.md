@@ -1,3 +1,7 @@
+## 21.7.3
+
+**feat(StoyCoins):** serializable model for stoycoins transactions
+
 ## 21.7.2
 
 **feat(StoyCoins):** renameMethods
