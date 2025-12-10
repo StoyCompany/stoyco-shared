@@ -4,10 +4,10 @@ import 'package:stoyco_shared/cache/repository_cache_mixin.dart';
 import 'package:stoyco_shared/errors/error_handling/failure/error.dart';
 import 'package:stoyco_shared/errors/error_handling/failure/exception.dart';
 import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
+import 'package:stoyco_shared/models/api_response.dart';
 import 'package:stoyco_shared/models/page_result/page_result.dart';
 import 'package:stoyco_shared/stoycoins/models/balance.dart';
 import 'package:stoyco_shared/stoycoins/models/donate.dart';
-import 'package:stoyco_shared/stoycoins/models/donate_response.dart';
 import 'package:stoyco_shared/stoycoins/models/donate_result.dart';
 import 'package:stoyco_shared/stoycoins/models/transactions.dart';
 import 'package:stoyco_shared/stoycoins/stoycoins_data_source.dart';
@@ -26,7 +26,14 @@ class StoycoinsRepository with RepositoryCacheMixin {
         fetcher: () async {
           try {
             final response = await _dataSource.getBalance(userId: userId);
-            final balance = BalanceModel.fromJson(response.data as Map<String, dynamic>);
+            final apiResponse = ApiResponse<BalanceModel>.fromJson(
+              response.data as Map<String, dynamic>,
+              (obj) => BalanceModel.fromJson(obj as Map<String, dynamic>),
+            );
+            final balance = apiResponse.data;
+            if (balance == null) {
+              return Left(ExceptionFailure.decode(Exception('No data in balance response')));
+            }
             return Right(balance);
           } on DioException catch (error) {
             return Left(DioFailure.decode(error));
@@ -48,8 +55,11 @@ class StoycoinsRepository with RepositoryCacheMixin {
   Future<Either<Failure, DonateResultModel>> donate(DonateModel donateModel) async {
     try {
       final response = await _dataSource.donate(donateModel);
-      final donateResponse = DonateResponse.fromJson(response.data as Map<String, dynamic>);
-      final result = donateResponse.data;
+      final apiResponse = ApiResponse<DonateResultModel>.fromJson(
+        response.data as Map<String, dynamic>,
+        (obj) => DonateResultModel.fromJson(obj as Map<String, dynamic>),
+      );
+      final result = apiResponse.data;
       if (result == null) {
         return Left(ExceptionFailure.decode(Exception('No data in donate response')));
       }
