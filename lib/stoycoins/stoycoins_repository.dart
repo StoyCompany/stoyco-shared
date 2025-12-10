@@ -7,6 +7,7 @@ import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
 import 'package:stoyco_shared/models/page_result/page_result.dart';
 import 'package:stoyco_shared/stoycoins/models/balance.dart';
 import 'package:stoyco_shared/stoycoins/models/donate.dart';
+import 'package:stoyco_shared/stoycoins/models/donate_response.dart';
 import 'package:stoyco_shared/stoycoins/models/donate_result.dart';
 import 'package:stoyco_shared/stoycoins/models/transactions.dart';
 import 'package:stoyco_shared/stoycoins/stoycoins_data_source.dart';
@@ -47,7 +48,11 @@ class StoycoinsRepository with RepositoryCacheMixin {
   Future<Either<Failure, DonateResultModel>> donate(DonateModel donateModel) async {
     try {
       final response = await _dataSource.donate(donateModel);
-      final result = DonateResultModel.fromJson(response.data as Map<String, dynamic>);
+      final donateResponse = DonateResponse.fromJson(response.data as Map<String, dynamic>);
+      final result = donateResponse.data;
+      if (result == null) {
+        return Left(ExceptionFailure.decode(Exception('No data in donate response')));
+      }
       return Right(result);
     } on DioException catch (error) {
       return Left(DioFailure.decode(error));
