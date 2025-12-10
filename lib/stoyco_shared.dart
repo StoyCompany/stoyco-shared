@@ -25,4 +25,5 @@ export 'package:stoyco_shared/widgets/social_button.dart';
 export 'package:stoyco_shared/widgets/shared_like.dart';
 export 'package:stoyco_shared/widgets/loop_video_player.dart';
 export 'package:stoyco_shared/services/social_interaction_service.dart';
+export 'package:stoyco_shared/services/collective_fund_service.dart';
 export 'package:stoyco_shared/radio/radio.dart';
