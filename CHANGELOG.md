@@ -1,3 +1,7 @@
+## 21.7.5
+
+**feat(StoyCoins):** serializable model for stoycoins generic
+
 ## 21.7.4
 
 **feat(StoyCoins):** serializable model for stoycoins transactionsv2
