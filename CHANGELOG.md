@@ -1,3 +1,6 @@
+## 21.7.7
+**fix(announcement):** change design modals and structure views
+
 ## 21.7.6
 
 **fix(collective_fund_service):** remove unused export for collective_fund_service

@@ -43,6 +43,7 @@ class InteractiveGradientPanel extends StatefulWidget {
     this.isButton = false,
     this.onTap,
     this.disableOpacityAnimation = false,
+    this.viewShadow = true,
   });
 
   /// The widget to be displayed inside the gradient container.
@@ -86,6 +87,8 @@ class InteractiveGradientPanel extends StatefulWidget {
   ///
   /// When true, the opacity will always be 1.0 regardless of hover state.
   final bool disableOpacityAnimation;
+
+  final bool viewShadow;
 
   @override
   State<InteractiveGradientPanel> createState() =>
@@ -178,7 +181,7 @@ class _InteractiveGradientPanelState extends State<InteractiveGradientPanel>
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 150),
                   decoration: BoxDecoration(
-                    boxShadow: _isPressed
+                    boxShadow: _isPressed || !widget.viewShadow
                         ? []
                         : [
                             BoxShadow(
@@ -217,7 +220,7 @@ class _InteractiveGradientPanelState extends State<InteractiveGradientPanel>
                   transform: GradientRotation(0.23),
                 ),
             borderRadius: BorderRadius.circular(widget.borderRadiusValue ?? 0),
-            boxShadow: widget.isButton
+            boxShadow: widget.isButton || !widget.viewShadow
                 ? []
                 : (widget.boxShadow ??
                     const [
