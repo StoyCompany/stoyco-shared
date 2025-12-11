@@ -1,3 +1,7 @@
+## 21.7.7
+
+**fix(video):** reduce default cache TTL from 300 to 60 seconds in video cache manager and player service
+
 ## 21.7.6
 
 **fix(collective_fund_service):** remove unused export for collective_fund_service

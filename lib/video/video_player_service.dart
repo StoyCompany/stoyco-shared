@@ -75,7 +75,7 @@ class VideoPlayerService {
     this.environment = StoycoEnvironment.development,
     this.userToken = '',
     this.functionToUpdateToken,
-    this.videoCacheTTL = 300,
+    this.videoCacheTTL = 60,
   }) {
     _dataSource = VideoPlayerDataSourceV2(environment);
     _repository = VideoPlayerRepositoryV2(
@@ -109,7 +109,7 @@ class VideoPlayerService {
     StoycoEnvironment environment = StoycoEnvironment.development,
     String userToken = '',
     Future<String?>? functionToUpdateToken,
-    int videoCacheTTL = 300,
+    int videoCacheTTL = 60,
   }) {
     _instance = VideoPlayerService._(
       activeSubscriptionService: activeSubscriptionService,
@@ -189,7 +189,7 @@ class VideoPlayerService {
   /// await VideoPlayerService.initializeCache(ttl: 600);
   /// ```
   static Future<void> initializeCache({
-    int ttl = 300,
+    int ttl = 60,
     int maxCacheSize = 1500,
     String? cachePath,
   }) async {

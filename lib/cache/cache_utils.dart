@@ -63,9 +63,8 @@ class CacheUtils {
   /// final count = CacheUtils.invalidateKey('user_123');
   /// print('Updated cache in $count repositories');
   /// ```
-  static int invalidateKey(String key) {
-    return GlobalCacheManager.invalidateKeyGlobally(key);
-  }
+  static int invalidateKey(String key) =>
+      GlobalCacheManager.invalidateKeyGlobally(key);
 
   /// Invalidates all keys matching a pattern across all repository caches.
   ///
@@ -85,9 +84,8 @@ class CacheUtils {
   /// // Clear all event caches
   /// CacheUtils.invalidatePattern('event_');
   /// ```
-  static int invalidatePattern(String pattern) {
-    return GlobalCacheManager.invalidatePatternGlobally(pattern);
-  }
+  static int invalidatePattern(String pattern) =>
+      GlobalCacheManager.invalidatePatternGlobally(pattern);
 
   /// Returns the number of currently registered cache managers.
   ///
