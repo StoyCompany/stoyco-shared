@@ -1,5 +1,9 @@
-## 21.7.7
+## 21.7.8
 **fix(announcement):** change design modals and structure views
+
+## 21.7.7
+
+**fix(video):** reduce default cache TTL from 300 to 60 seconds in video cache manager and player service
 
 ## 21.7.6
 
