@@ -27,6 +27,7 @@ class DialogContainer extends StatelessWidget {
     required this.children,
     this.maxWidth = 500,
     this.minHeight = 300,
+    this.radius = 0
   });
 
   /// The widgets to display in the dialog content.
@@ -53,6 +54,8 @@ class DialogContainer extends StatelessWidget {
   /// The minimum height of the dialog container.
   final double minHeight;
 
+  final double radius;
+
   @override
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: Colors.transparent,
@@ -61,7 +64,7 @@ class DialogContainer extends StatelessWidget {
           child: GlassmorphicContainer(
             width: double.infinity,
             height: double.infinity,
-            borderRadius: 0,
+            borderRadius: radius,
             blur: 10,
             border: 0,
             linearGradient: LinearGradient(

@@ -53,13 +53,13 @@ class VideoCacheManager {
 
   /// Initializes the video cache manager.
   ///
-  /// [ttl] Cache time to live in seconds (default: 300 = 5 minutes).
+  /// [ttl] Cache time to live in seconds (default: 60 = 1 minute).
   /// [maxCacheSize] Maximum number of cache entries (default: 100).
   /// [cachePath] Optional custom path for Hive storage.
   ///
   /// Returns the initialized singleton instance.
   static Future<VideoCacheManager> initialize({
-    int ttl = 300,
+    int ttl = 60,
     int maxCacheSize = 1500,
     String? cachePath,
   }) async {

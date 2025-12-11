@@ -1,8 +1,20 @@
+## 21.7.8
+**fix(announcement):** change design modals and structure views
+
+## 21.7.7
+
+**fix(video):** reduce default cache TTL from 300 to 60 seconds in video cache manager and player service
+
+## 21.7.6
+
+**fix(collective_fund_service):** remove unused export for collective_fund_service
+
 ## 21.7.5
 
 **feat(radio):** add incrementDonatedStoyCoins method to RadioService
 
 ### Added
+
 - `RadioService.incrementDonatedStoyCoins`: Method to atomically increment StoyCoins donations for a radio station
 
 **feat(StoyCoins):** serializable model for stoycoins generic
@@ -32,12 +44,14 @@
 **feat(radio):** add RadioTabWidget and RadioTabController for CO profiles
 
 ### Added
+
 - `RadioTabWidget`: Complete widget for radio tab in CO profiles with play/pause and listener count
 - `RadioTabController`: Controller with ValueNotifier pattern for granular UI updates
 - `RadioTabConfig`: Configuration object for flexible radio tab setup
 - `RadioTabState`: Immutable state class for radio tab data
 
 ### Changed
+
 - Updated `StoycoColors`: removed duplicate `whiteLavander`, using `whiteLavender` consistently
 - Updated `RadioPlayerWidget` to use `StoycoColors.whiteLavender` instead of hardcoded colors
 
@@ -46,6 +60,7 @@
 **feat(radio):** add radio streaming module
 
 ### Added
+
 - `RadioModel`: Data model for radios from Firestore with streaming URLs and tracking fields
 - `RadioRepository`: Read-only repository for accessing the 'radios' collection in Firestore
 - `RadioTrackingService`: Real-time listener tracking service for radios
