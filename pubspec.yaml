@@ -29,6 +29,7 @@ dependencies:
   dio: ^5.7.0
   either_dart: ^1.0.0
   tutorial_coach_mark: ^1.2.11
+  uuid: ^4.5.1
   rxdart: ^0.28.0
   shimmer: ^3.0.0
   map_launcher: ^3.5.0

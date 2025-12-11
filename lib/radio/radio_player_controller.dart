@@ -22,11 +22,10 @@ class RadioPlayerController extends ChangeNotifier {
   /// Creates a radio player controller.
   ///
   /// [config] Configuration with callbacks for playback events.
-  /// [radioService] Optional service instance for testing.
+  /// Uses [config.radioService] if provided, otherwise creates a new instance.
   RadioPlayerController({
     required this.config,
-    RadioService? radioService,
-  }) : _radioService = radioService ?? RadioService() {
+  }) : _radioService = config.radioService ?? RadioService() {
     _init();
   }
 
@@ -101,12 +100,6 @@ class RadioPlayerController extends ChangeNotifier {
     if (config.playingRadioStream != null) {
       _playbackSubscription = config.playingRadioStream!.listen(
         (radioId) {
-          final previousRadioId = _stateNotifier.value.currentPlayingRadioId;
-
-          if (previousRadioId != null && radioId != previousRadioId) {
-            unawaited(_radioService.stopListening(previousRadioId));
-          }
-
           _stateNotifier.value = radioId != null
               ? _stateNotifier.value.copyWith(currentPlayingRadioId: radioId)
               : _stateNotifier.value.copyWith(clearCurrentRadio: true);
@@ -146,7 +139,7 @@ class RadioPlayerController extends ChangeNotifier {
   /// Plays a radio station.
   ///
   /// [radio] The radio to play.
-  /// Starts listener tracking and invokes `onPlayRadio` callback.
+  /// Invokes `onPlayRadio` callback. Listener tracking is handled by the app's audio service.
   void playRadio(RadioModel radio) {
     if (config.onPlayRadio == null) return;
 
@@ -159,7 +152,6 @@ class RadioPlayerController extends ChangeNotifier {
       currentPlayingRadioId: radio.id,
     );
 
-    unawaited(_radioService.startListening(radio.id));
     unawaited(
       config.onPlayRadio!(radio).catchError((e) {
         StoyCoLogger.error('[RadioPlayerController] Error playing radio', error: e);
@@ -170,6 +162,7 @@ class RadioPlayerController extends ChangeNotifier {
   /// Toggles play/pause for a radio station.
   ///
   /// [radioId] The ID of the radio to toggle.
+  /// Invokes `onTogglePlayPause` callback. Listener tracking is handled by the app's audio service.
   void togglePlayPause(String radioId) {
     if (config.onTogglePlayPause == null) return;
 
@@ -182,14 +175,9 @@ class RadioPlayerController extends ChangeNotifier {
 
   /// Stops radio playback.
   ///
-  /// Decrements listener count and invokes `onStopRadio` callback.
+  /// Invokes `onStopRadio` callback. Listener tracking is handled by the app's audio service.
   void stopRadio() {
     if (config.onStopRadio == null) return;
-
-    final currentRadioId = _stateNotifier.value.currentPlayingRadioId;
-    if (currentRadioId != null) {
-      unawaited(_radioService.stopListening(currentRadioId));
-    }
 
     _stateNotifier.value = _stateNotifier.value.copyWith(clearCurrentRadio: true);
     _isPlayingNotifier.value = false;
