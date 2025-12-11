@@ -84,7 +84,7 @@ class _AnnouncementPrizePanelState extends State<AnnouncementPrizePanel> {
             borderRadius: BorderRadius.circular(
               _responsiveRadius(
                 AnnouncementPrizePanel._defaultBorderRadius,
-                phone: 15,
+                phone: 5,
                 tablet: 18,
                 desktopLarge: 24,
               ),

@@ -40,6 +40,7 @@ class TextButtonStoyco extends StatelessWidget {
     this.boxShadow,
     this.loadingIndicatorSize = 24.0,
     this.textStyle,
+    this.radius = 16
   });
 
   final String text;
@@ -53,6 +54,7 @@ class TextButtonStoyco extends StatelessWidget {
   final List<BoxShadow>? boxShadow;
   final double loadingIndicatorSize;
   final TextStyle? textStyle;
+  final double radius;
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +92,7 @@ class TextButtonStoyco extends StatelessWidget {
           onTap: onTap,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(radius),
               color: backgroundColor,
               gradient: backgroundColor == null
                   ? const LinearGradient(

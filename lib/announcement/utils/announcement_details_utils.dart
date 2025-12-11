@@ -54,7 +54,7 @@ class AnnouncementDetailsUtils {
       final String period = localDate.hour >= 12 ? 'pm' : 'am';
       final String minute = localDate.minute.toString().padLeft(2, '0');
 
-      return '$month $day, $hour:$minute $period';
+      return '$month $day';
     } catch (e) {
       return dateString;
     }
