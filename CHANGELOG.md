@@ -1,3 +1,15 @@
+## 21.7.9
+
+**feat(radio):** add anonymous listener tracking and pause/resume support
+
+### Added
+- Support for anonymous users in radio listener tracking using temporary session IDs
+- Listener tracking on pause/resume: removes listener on pause, adds back on resume
+
+### Changed
+- `RadioService.startListening` and `stopListening` now support both authenticated and anonymous users
+- `RadioPlayerController.togglePlayPause` now updates listener count on pause/resume
+
 ## 21.7.8
 **fix(announcement):** change design modals and structure views
 
