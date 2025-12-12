@@ -29,7 +29,7 @@ extension StoycoEnvironmentExtension on StoycoEnvironment {
       case StoycoEnvironment.development:
         return 'https://yebse2h4e4obpsy25hn5naclaq0qkbos.lambda-url.us-east-1.on.aws';
       case StoycoEnvironment.production:
-        return 'https://yebse2h4e4obpsy25hn5naclaq0qkbos.lambda-url.us-east-1.on.aws';
+        return 'https://9timlwcu82.execute-api.us-east-1.amazonaws.com';
       case StoycoEnvironment.testing:
         return 'https://yebse2h4e4obpsy25hn5naclaq0qkbos.lambda-url.us-east-1.on.aws';
     }
@@ -112,7 +112,7 @@ extension StoycoEnvironmentExtension on StoycoEnvironment {
       case StoycoEnvironment.development:
         return 'https://zc1kknd34g.execute-api.us-east-1.amazonaws.com/dev/api/stoyco/$version/';
       case StoycoEnvironment.production:
-        return 'https://zc1kknd34g.execute-api.us-east-1.amazonaws.com/prod/api/stoyco/$version/';
+        return 'https://zc1kknd34g.execute-api.us-east-1.amazonaws.com/Prod/api/stoyco/$version/';
       case StoycoEnvironment.testing:
         return 'https://zc1kknd34g.execute-api.us-east-1.amazonaws.com/QA/api/stoyco/$version/';
     }
