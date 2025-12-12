@@ -179,7 +179,7 @@ class _AnnouncementLeaderShipDialogState
   String get endDateText {
     final dateToFormat =
         _updatedAt ?? DateTime.now(); // Use current date if null.
-    return 'Ultima actualización: ${AnnouncementDetailsUtils.formatDate(dateToFormat.toIso8601String())}';
+    return 'Actualizada:  ${AnnouncementDetailsUtils.formatDate(dateToFormat.toIso8601String())}';
   }
 
   /// Cache to store commonly used responsive values to optimize performance.
@@ -294,6 +294,7 @@ class _AnnouncementLeaderShipDialogState
 
   @override
   Widget build(BuildContext context) => DialogContainer(
+        radius: StoycoScreenSize.radius(context, 5),
         padding: widget.dialogPadding ??
             StoycoScreenSize.all(
               context,
@@ -383,13 +384,10 @@ class _AnnouncementLeaderShipDialogState
                 : MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: LayoutBuilder(
-                  builder: (context, constraints) => _buildActionButton(
-                    text: endDateText,
-                    iconPath:
-                        'packages/stoyco_shared/lib/assets/icons/rounded_calendar_icon.svg',
-                    maxWidth: constraints.maxWidth,
-                  ),
+                child: _buildActionButton(
+                  text: endDateText,
+                  iconPath:
+                      'packages/stoyco_shared/lib/assets/icons/rounded_calendar_icon.svg',
                 ),
               ),
             ],
@@ -460,7 +458,7 @@ class _AnnouncementLeaderShipDialogState
           Row(
             children: [
               Text(
-                '$index',
+                ' ${index < 10 ? '0' : ''}$index.',
                 style: TextStyle(
                   fontSize: widget.positionFontSize ??
                       _getCachedValue<double>(
@@ -487,7 +485,7 @@ class _AnnouncementLeaderShipDialogState
               ),
             ],
           ),
-          Gap(widget.itemSpacing ?? _responsiveWidth(16)),
+          Gap(widget.itemSpacing ?? _responsiveWidth(12)),
           Expanded(
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
@@ -511,9 +509,9 @@ class _AnnouncementLeaderShipDialogState
                     SvgPicture.asset(
                       'packages/stoyco_shared/lib/assets/icons/titok_circle_icon.svg',
                       width: widget.dateIconSize ??
-                          _responsiveWidth(32, phone: 24, tablet: 28),
+                          _responsiveWidth(32, phone: 18.5, tablet: 28),
                       height: widget.dateIconSize ??
-                          _responsiveWidth(32, phone: 24, tablet: 28),
+                          _responsiveWidth(32, phone: 18.5, tablet: 28),
                     ),
                     Gap(
                       widget.itemSpacing ??
@@ -544,7 +542,7 @@ class _AnnouncementLeaderShipDialogState
               ),
             ),
           ),
-          Gap(_responsiveWidth(16)),
+          Gap(_responsiveWidth(12)),
           if (!isPhone)
             SizedBox(
               width:
@@ -568,7 +566,38 @@ class _AnnouncementLeaderShipDialogState
                 ),
               ),
             ),
-          Flexible(
+          Gap(_responsiveWidth(12)),
+          Text(
+            '${item.totalPost} Posts',
+            style: TextStyle(
+              fontSize: widget.countersFontSize ??
+                  _getCachedValue<double>(
+                    'small_counters_font_size',
+                    () => StoycoScreenSize.fontSize(context, 11),
+                  ),
+              fontWeight: widget.countersFontWeight,
+              color: widget.dateTextColor ?? StoycoColors.text,
+            ),
+          ),
+          Gap(_responsiveWidth(12)),
+          Text(
+            '${item.totalLikes} Likes',
+            style: TextStyle(
+              fontSize: widget.countersFontSize ??
+                  _getCachedValue<double>(
+                    'counters_font_size',
+                    () => StoycoScreenSize.fontSize(
+                      context,
+                      14,
+                      phone: 11,
+                      tablet: 12,
+                    ),
+                  ),
+              fontWeight: widget.countersFontWeight,
+              color: widget.dateTextColor ?? StoycoColors.text,
+            ),
+          ),
+          /*Flexible(
             child: SizedBox(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -608,7 +637,7 @@ class _AnnouncementLeaderShipDialogState
                 ],
               ),
             ),
-          ),
+          ),*/
         ],
       ),
     );
@@ -618,7 +647,6 @@ class _AnnouncementLeaderShipDialogState
     required String text,
     required String iconPath,
     bool isPrimary = false,
-    double maxWidth = 360,
   }) {
     final iconSize = widget.dateIconSize ??
         _responsiveWidth(
@@ -628,58 +656,55 @@ class _AnnouncementLeaderShipDialogState
           desktopLarge: 24,
         );
 
-    return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxWidth: _responsiveWidth(
-          maxWidth,
-          phone: maxWidth,
-          tablet: maxWidth * 0.9,
-          desktopLarge: maxWidth * 1.08,
-        ),
+    return InteractiveGradientPanel(
+      viewShadow: false,
+      gradient: LinearGradient(
+        colors: [
+          Color(0xFF253341),
+          Color(0xFF253341),
+        ],
       ),
-      child: InteractiveGradientPanel(
-        padding: widget.dateButtonPadding ??
-            StoycoScreenSize.symmetric(
-              context,
-              vertical: 8.84,
-              horizontal: 28.34,
-            ),
-        borderRadiusValue: widget.dateButtonBorderRadius ??
-            _responsiveRadius(100, phone: 80, tablet: 90, desktopLarge: 120),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              iconPath,
-              color: widget.dateTextColor ?? StoycoColors.text,
-              width: iconSize,
-              height: iconSize,
-            ),
-            Gap(_responsiveWidth(10, phone: 10, tablet: 9, desktopLarge: 12)),
-            Expanded(
-              child: Text(
-                text,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: widget.dateFontSize ??
-                      _getCachedValue<double>(
-                        'date_font_size',
-                        () => StoycoScreenSize.fontSize(
-                          context,
-                          14,
-                          phone: 10,
-                          tablet: 12,
-                          desktopLarge: 16,
-                        ),
+      padding: widget.dateButtonPadding ??
+          StoycoScreenSize.symmetric(
+            context,
+            vertical: 8.84,
+            horizontal: 28.34,
+          ),
+      borderRadiusValue: widget.dateButtonBorderRadius ??
+          _responsiveRadius(100, phone: 80, tablet: 90, desktopLarge: 120),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset(
+            iconPath,
+            color: widget.dateTextColor ?? StoycoColors.text,
+            width: iconSize,
+            height: iconSize,
+          ),
+          Gap(_responsiveWidth(10, phone: 10, tablet: 9, desktopLarge: 12)),
+          Expanded(
+            child: Text(
+              text,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: widget.dateFontSize ??
+                    _getCachedValue<double>(
+                      'date_font_size',
+                      () => StoycoScreenSize.fontSize(
+                        context,
+                        14,
+                        phone: 10,
+                        tablet: 12,
+                        desktopLarge: 16,
                       ),
-                  fontWeight: widget.dateFontWeight,
-                  color: widget.dateTextColor ?? StoycoColors.text,
-                ),
+                    ),
+                fontWeight: widget.dateFontWeight,
+                color: widget.dateTextColor ?? StoycoColors.text,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -25,6 +25,12 @@ NewModel _$NewModelFromJson(Map<String, dynamic> json) => NewModel(
       cronJobId: json['cronJobId'],
       createdBy: json['createdBy'] as String?,
       createdAt: json['createdAt'] as String?,
+      communityOwnerId: json['communityOwnerId'] as String?,
+      isSubscriberOnly: json['isSubscriberOnly'] as bool? ?? false,
+      accessContent: json['accessContent'] == null
+          ? null
+          : AccessContent.fromJson(
+              json['accessContent'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$NewModelToJson(NewModel instance) => <String, dynamic>{
@@ -45,4 +51,7 @@ Map<String, dynamic> _$NewModelToJson(NewModel instance) => <String, dynamic>{
       'cronJobId': instance.cronJobId,
       'createdBy': instance.createdBy,
       'createdAt': instance.createdAt,
+      'communityOwnerId': instance.communityOwnerId,
+      'isSubscriberOnly': instance.isSubscriberOnly,
+      'accessContent': instance.accessContent,
     };

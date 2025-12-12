@@ -10,6 +10,8 @@ import 'package:stoyco_shared/errors/errors.dart';
 import 'package:stoyco_shared/models/page_result/page_result.dart';
 import 'package:stoyco_shared/utils/filter_request.dart';
 import 'package:stoyco_shared/announcement/models/user_announcement/user_announcement.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/active_subscription_service.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/mixins/content_access_validator_mixin.dart';
 
 /// Repository for managing announcements.
 ///
@@ -21,34 +23,50 @@ import 'package:stoyco_shared/announcement/models/user_announcement/user_announc
 /// ```dart
 /// final announcementRepo = AnnouncementRepository(
 ///   announcementDataSource: AnnouncementDataSource(dio),
+///   activeSubscriptionService: ActiveSubscriptionService(...),
 /// );
 /// ```
-class AnnouncementRepository {
+class AnnouncementRepository with MultiContentAccessValidatorMixin {
   AnnouncementRepository({
     required AnnouncementDataSource announcementDataSource,
-  }) : _announcementDataSource = announcementDataSource;
+    required ActiveSubscriptionService activeSubscriptionService,
+  })  : _announcementDataSource = announcementDataSource,
+        _activeSubscriptionService = activeSubscriptionService;
 
   final AnnouncementDataSource _announcementDataSource;
+  final ActiveSubscriptionService _activeSubscriptionService;
 
   /// Retrieves a paginated list of announcements based on the provided filters.
   ///
   /// Returns an [Either] containing either a [Failure] or a [PageResult] of [AnnouncementModel]s.
   ///
+  /// This method automatically validates access to each announcement based on the user's
+  /// active subscriptions and updates the `hasAccessWithSubscription` field accordingly.
+  ///
   /// Parameters:
   /// - [filters]: The filter parameters for the query
+  /// - [partnerId]: Optional partner ID to filter announcements by partner
   ///
   /// Example:
   /// ```dart
   /// final filterRequest = FilterRequest(page: 1, pageSize: 10);
-  /// final result = await announcementRepo.getAnnouncementsPaginated(filterRequest);
+  /// final result = await announcementRepo.getAnnouncementsPaginated(
+  ///   filterRequest,
+  ///   partnerId: 'partner123',
+  /// );
   ///
   /// result.fold(
   ///   (failure) => print('Error: ${failure.message}'),
-  ///   (pageResult) => pageResult.items.forEach((announcement) => print(announcement.title)),
+  ///   (pageResult) => pageResult.items.forEach((announcement) {
+  ///     print('${announcement.title} - Has access: ${announcement.hasAccessWithSubscription}');
+  ///   }),
   /// );
   /// ```
   Future<Either<Failure, PageResult<AnnouncementModel>>>
-      getAnnouncementsPaginated(FilterRequest filters) async {
+      getAnnouncementsPaginated(
+    FilterRequest filters, {
+    String? partnerId,
+  }) async {
     try {
       final response = await _announcementDataSource.getPaged(filters: filters);
 
@@ -59,6 +77,25 @@ class AnnouncementRepository {
           AnnouncementDto.fromJson(item as Map<String, dynamic>),
         ),
       );
+
+      // Validate access for all announcements
+      if (pageResult.items != null && pageResult.items!.isNotEmpty) {
+        final validatedAnnouncements =
+            await validateMultipleAccess<AnnouncementModel>(
+          service: _activeSubscriptionService,
+          forceRefresh: true,
+          contents: pageResult.items!,
+          getAccessContent: (announcement) => announcement.accessContent,
+          hasAccessToContent: (announcement, hasAccess) =>
+              announcement.copyWith(hasAccessWithSubscription: hasAccess),
+          getIsSubscriptionOnly: (announcement) =>
+              announcement.isSubscriberOnly,
+          partnerId: partnerId,
+        );
+
+        return Right(pageResult.copyWith(items: validatedAnnouncements));
+      }
+
       return Right(pageResult);
     } on DioException catch (error) {
       return Left(DioFailure.decode(error));
@@ -73,22 +110,32 @@ class AnnouncementRepository {
   ///
   /// Returns an [Either] containing either a [Failure] or an [AnnouncementModel].
   ///
+  /// This method automatically validates access to the announcement based on the user's
+  /// active subscriptions and updates the `hasAccessWithSubscription` field accordingly.
+  ///
   /// Parameters:
   /// - [announcementId]: The unique identifier of the announcement to retrieve
+  /// - [partnerId]: Optional partner ID for subscription validation
   ///
   /// Example:
   /// ```dart
   /// final announcementId = 'announcement123';
-  /// final result = await announcementRepo.getAnnouncementById(announcementId);
+  /// final result = await announcementRepo.getAnnouncementById(
+  ///   announcementId,
+  ///   partnerId: 'partner123',
+  /// );
   ///
   /// result.fold(
   ///   (failure) => print('Error: ${failure.message}'),
-  ///   (announcement) => print('Found announcement: ${announcement.title}'),
+  ///   (announcement) => print(
+  ///     'Found announcement: ${announcement.title} - Has access: ${announcement.hasAccessWithSubscription}',
+  ///   ),
   /// );
   /// ```
   Future<Either<Failure, AnnouncementModel>> getAnnouncementById(
-    String announcementId,
-  ) async {
+    String announcementId, {
+    String? partnerId,
+  }) async {
     try {
       final response = await _announcementDataSource.getById(
         announcementId: announcementId,
@@ -97,7 +144,21 @@ class AnnouncementRepository {
       final AnnouncementModel announcement = AnnouncementMapper.fromDto(
         AnnouncementDto.fromJson(response.data as Map<String, dynamic>),
       );
-      return Right(announcement);
+
+      // Validate access for the announcement
+      final validatedAnnouncements =
+          await validateMultipleAccess<AnnouncementModel>(
+        service: _activeSubscriptionService,
+        forceRefresh: true,
+        contents: [announcement],
+        getAccessContent: (ann) => ann.accessContent,
+        hasAccessToContent: (ann, hasAccess) =>
+            ann.copyWith(hasAccessWithSubscription: hasAccess),
+        getIsSubscriptionOnly: (ann) => ann.isSubscriberOnly,
+        partnerId: partnerId,
+      );
+
+      return Right(validatedAnnouncements.first);
     } on DioException catch (error) {
       return Left(DioFailure.decode(error));
     } on Error catch (error) {

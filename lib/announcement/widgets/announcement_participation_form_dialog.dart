@@ -218,6 +218,7 @@ class _ParticipationFormDialogState<T>
 
   @override
   Widget build(BuildContext context) => DialogContainer(
+    radius: StoycoScreenSize.radius(context, 20),
         padding: widget.dialogPadding ??
             StoycoScreenSize.all(
               context,
@@ -246,7 +247,7 @@ class _ParticipationFormDialogState<T>
                 ),
               ],
             ),
-          Gap(widget.gapSize ?? StoycoScreenSize.height(context, 40)),
+          Gap(widget.gapSize ?? StoycoScreenSize.height(context, 20)),
           ReactiveForm(
             formGroup: form,
             child: Column(
@@ -260,16 +261,16 @@ class _ParticipationFormDialogState<T>
                           StoycoScreenSize.width(
                             context,
                             20,
-                            phone: 14,
+                            phone: 32,
                           ),
                       height: widget.titleIconSize ??
                           StoycoScreenSize.height(
                             context,
                             20,
-                            phone: 14,
+                            phone: 32,
                           ),
                     ),
-                    Gap(StoycoScreenSize.width(context, 8)),
+                    Gap(StoycoScreenSize.width(context, 20)),
                     Text(
                       widget.config.dialogTitle,
                       style: TextStyle(
@@ -277,7 +278,7 @@ class _ParticipationFormDialogState<T>
                             StoycoScreenSize.width(
                               context,
                               20,
-                              phone: 14,
+                              phone: 20,
                             ),
                         fontWeight: widget.titleFontWeight,
                       ),
@@ -286,7 +287,7 @@ class _ParticipationFormDialogState<T>
                 ),
                 Gap(
                   widget.formFieldSpacing ??
-                      StoycoScreenSize.height(context, 16),
+                      StoycoScreenSize.height(context, 20),
                 ),
                 StoyCoTextFormField(
                   formControlName: 'tiktok_username',
@@ -328,7 +329,7 @@ class _ParticipationFormDialogState<T>
                 ),
                 Gap(
                   widget.formFieldSpacing ??
-                      StoycoScreenSize.height(context, 16),
+                      StoycoScreenSize.height(context, 20),
                 ),
                 StoyCoTextFormField(
                   formControlName: 'post_url',
@@ -368,29 +369,29 @@ class _ParticipationFormDialogState<T>
                     ),
                   ),
                 ),
-                Padding(
-                  padding: widget.termsTextPadding ??
-                      StoycoScreenSize.symmetric(
-                        context,
-                        horizontal: 31,
-                        vertical: 24,
-                      ),
-                  child: Text(
-                    widget.config.termsText,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: widget.termsFontSize ??
-                          StoycoScreenSize.width(
-                            context,
-                            12,
-                            phone: 10,
-                          ),
-                      fontWeight: widget.termsFontWeight,
-                    ),
+                Gap(
+                  widget.formFieldSpacing ??
+                      StoycoScreenSize.height(context, 20),
+                ),
+                Text(
+                  widget.config.termsText,
+                  style: TextStyle(
+                    fontSize: widget.termsFontSize ??
+                        StoycoScreenSize.width(
+                          context,
+                          12,
+                          phone: 10,
+                        ),
+                    fontWeight: widget.termsFontWeight,
                   ),
+                ),
+                Gap(
+                  widget.formFieldSpacing ??
+                      StoycoScreenSize.height(context, 20),
                 ),
                 ReactiveFormConsumer(
                   builder: (context, form, child) => TextButtonStoyco(
+                    radius: StoycoScreenSize.radius(context, 100),
                     width: widget.buttonWidth ??
                         StoycoScreenSize.width(
                           context,
@@ -417,7 +418,7 @@ class _ParticipationFormDialogState<T>
                     isLoading: _isLoading,
                     onTap: form.valid ? _handleSubmit : () {},
                     backgroundColor: form.valid && !_isLoading
-                        ? null
+                        ? const Color(0xFF6C61FF)
                         : const Color(0xFF92929D),
                     loadingIndicatorSize: widget.loadingIndicatorSize ??
                         StoycoScreenSize.width(

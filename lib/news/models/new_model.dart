@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/access_content.dart';
 
 part 'new_model.g.dart';
 
@@ -23,7 +24,12 @@ class NewModel {
     this.cronJobId,
     this.createdBy,
     this.createdAt,
-  });
+    this.communityOwnerId,
+    this.isSubscriberOnly = false,
+    bool? hasAccessWithSubscription,
+    this.accessContent,
+  }) : hasAccessWithSubscription =
+            hasAccessWithSubscription ?? !isSubscriberOnly;
 
   factory NewModel.fromJson(Map<String, dynamic> json) =>
       _$NewModelFromJson(json);
@@ -45,10 +51,17 @@ class NewModel {
   final dynamic cronJobId;
   final String? createdBy;
   final String? createdAt;
+  final String? communityOwnerId;
+  final bool isSubscriberOnly;
+
+  /// This value is constructed in the frontend and is not mapped from backend JSON.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final bool hasAccessWithSubscription;
+  final AccessContent? accessContent;
 
   @override
   String toString() =>
-      'NewModel(id: $id, title: $title, mainImage: $mainImage, images: $images, content: $content, shortDescription: $shortDescription, isDraft: $isDraft, isPublished: $isPublished, isDeleted: $isDeleted, viewCount: $viewCount, scheduledPublishDate: $scheduledPublishDate, draftCreationDate: $draftCreationDate, lastUpdatedDate: $lastUpdatedDate, deletionDate: $deletionDate, cronJobId: $cronJobId, createdBy: $createdBy, createdAt: $createdAt)';
+      'NewModel(id: $id, title: $title, mainImage: $mainImage, images: $images, content: $content, shortDescription: $shortDescription, isDraft: $isDraft, isPublished: $isPublished, isDeleted: $isDeleted, viewCount: $viewCount, scheduledPublishDate: $scheduledPublishDate, draftCreationDate: $draftCreationDate, lastUpdatedDate: $lastUpdatedDate, deletionDate: $deletionDate, cronJobId: $cronJobId, createdBy: $createdBy, createdAt: $createdAt, communityOwnerId: $communityOwnerId, isSubscriberOnly: $isSubscriberOnly, )';
 
   Map<String, dynamic> toJson() => _$NewModelToJson(this);
 
@@ -70,6 +83,9 @@ class NewModel {
     dynamic cronJobId,
     String? createdBy,
     String? createdAt,
+    bool? isSubscriberOnly,
+    bool? hasAccessWithSubscription,
+    AccessContent? accessContent,
   }) =>
       NewModel(
         id: id ?? this.id,
@@ -89,6 +105,10 @@ class NewModel {
         cronJobId: cronJobId ?? this.cronJobId,
         createdBy: createdBy ?? this.createdBy,
         createdAt: createdAt ?? this.createdAt,
+        isSubscriberOnly: isSubscriberOnly ?? this.isSubscriberOnly,
+        hasAccessWithSubscription:
+            hasAccessWithSubscription ?? this.hasAccessWithSubscription,
+        accessContent: accessContent ?? this.accessContent,
       );
 
   @override
@@ -117,5 +137,8 @@ class NewModel {
       deletionDate.hashCode ^
       cronJobId.hashCode ^
       createdBy.hashCode ^
-      createdAt.hashCode;
+      createdAt.hashCode ^
+      isSubscriberOnly.hashCode ^
+      hasAccessWithSubscription.hashCode ^
+      accessContent.hashCode;
 }

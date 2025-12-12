@@ -1,16 +1,334 @@
-## 21.0.2
+## 21.7.9
+**fix(tag version to main):** change version tag to main branch for pub.dev publishing
 
-chore: Update package versions in pubspec.yaml for improved compatibility
+## 21.7.8
+**fix(announcement):** change design modals and structure views
 
-## 21.0.1
+## 21.7.7
 
-fix: Adjust leaderboard item index display for correct ranking
+**fix(video):** reduce default cache TTL from 300 to 60 seconds in video cache manager and player service
+
+## 21.7.6
+
+**fix(collective_fund_service):** remove unused export for collective_fund_service
+
+## 21.7.5
+
+**feat(radio):** add incrementDonatedStoyCoins method to RadioService
+
+### Added
+
+- `RadioService.incrementDonatedStoyCoins`: Method to atomically increment StoyCoins donations for a radio station
+
+**feat(StoyCoins):** serializable model for stoycoins generic
+
+## 21.7.4
+
+**feat(StoyCoins):** serializable model for stoycoins transactionsv2
+
+## 21.7.3
+
+**feat(StoyCoins):** serializable model for stoycoins transactions
+
+## 21.7.2
+
+**feat(StoyCoins):** renameMethods
+
+## 21.7.1
+
+**feat(StoyCoins):** add bearer token in stoycoins
+
+## 21.7.0
+
+**feat(StoyCoins):** add radio streaming module
+
+## 21.6.1
+
+**feat(radio):** add RadioTabWidget and RadioTabController for CO profiles
+
+### Added
+
+- `RadioTabWidget`: Complete widget for radio tab in CO profiles with play/pause and listener count
+- `RadioTabController`: Controller with ValueNotifier pattern for granular UI updates
+- `RadioTabConfig`: Configuration object for flexible radio tab setup
+- `RadioTabState`: Immutable state class for radio tab data
+
+### Changed
+
+- Updated `StoycoColors`: removed duplicate `whiteLavander`, using `whiteLavender` consistently
+- Updated `RadioPlayerWidget` to use `StoycoColors.whiteLavender` instead of hardcoded colors
+
+## 21.6.0
+
+**feat(radio):** add radio streaming module
+
+### Added
+
+- `RadioModel`: Data model for radios from Firestore with streaming URLs and tracking fields
+- `RadioRepository`: Read-only repository for accessing the 'radios' collection in Firestore
+- `RadioTrackingService`: Real-time listener tracking service for radios
+- `OnlineMembersTrackingService`: Generic service for tracking online members count
+- `RadioPlayerWidget`: Widget for radio audio playback with loading, playing, paused, and error states
+- `RadioPlayerEmptyWidget`, `RadioPlayerLoadingWidget`, `RadioPlayerErrorWidget`: Supporting widgets
+
+## 21.5.25
+
+**feat(ReactiveSocialButtones):** update models and remove dead code
+
+## 21.5.24
+
+feat(pubspec): update dependencies and switch to local paths for interaction content and subscription
+
+## 21.5.23
+
+**feat(ReactiveSocialButtones):** update buttons and desing interactive Content
+
+## 21.5.22
+
+**fix(VideoPlayerService):** update cache strategy for video shares and improve documentation
+
+## 21.5.21
+
+**fix(UrlTiktok):** update url enviroment
+
+## 21.5.19
+
+**fix(VideoPlayerService):** update video reactions in cache instead of invalidating
+
+## 21.5.18
+
+**fix(video):** improve null safety in video reaction handling
+
+- Modified `_handleReaction` method to receive `videoId` as parameter instead of relying on nullable `reaction.videoId`
+- Updated `likeVideo` and `dislikeVideo` methods to pass `videoId` explicitly to `_handleReaction`
+- Prevents potential null reference exceptions when handling video reactions
+
+## 21.5.17
+
+**fix(InteractiveContent):** update Desing logic PARTICIPATE BUTTON
+
+## 21.5.16
+
+- Added ActiveSubscriptionService to VideoPlayerService for subscription validation.
+- Updated persistent_cache_example.dart to initialize VideoPlayerService with ActiveSubscriptionService.
+- Modified prefetching_example.dart to utilize ActiveSubscriptionService and improved UI feedback for prefetching status.
+- Refactored code for better readability and maintainability in prefetching_example.dart.
+- Adjusted pubspec.yaml to switch from git to local path for stoyco_subscription dependency.
+- Updated video_player_service_cache_test.dart to include ActiveSubscriptionService in test setup.
+- Adjusted news model and others to receive accessContent.
+
+## 21.5.15
+
+**fix(InteractiveContent):** update Desing events
+
+## 21.5.14
+
+**fix(InteractiveContent):** update Desing events
+
+## 21.5.13
+
+**fix(InteractiveContent):** update Desing events
+
+## 21.5.12
+
+**feat(partner):** enable force refresh for cached partner data retrieval
+
+## 21.5.10
+
+**feat(video):** integrate active subscription validation in video player repository and service
+
+## 21.5.9
+
+**fix(Events):** implements correct type for free events
+
+## 21.5.6
+
+**feat(Logic):** implements auxiliar methods for Interactions
+
+## 21.5.5
+
+**feat(cache):** implement global cache management and invalidation features
+
+- Added GlobalCacheManager to track all cache managers and provide global operations.
+- Introduced CacheUtils for easy access to cache operations from any application layer.
+- Enhanced RepositoryCacheMixin with static methods for global cache invalidation.
+- Updated InMemoryCacheManager and PersistentCacheManager to register with GlobalCacheManager upon creation.
+- Added tests for CacheUtils and GlobalCacheManager to ensure functionality and reliability.
+- Updated README.md to document new features and usage examples for global cache management.
+  **feat:** add cache invalidation methods to PartnerService and update version in pubspec.yaml
+
+## 21.5.0
+
+**feat(feed):** Refactor FeedContentItem and NewsRepository for improved access validation
+
+- Refactored FeedContentItem model to enhance access control logic and support for subscription-based access.
+- Updated NewsRepository to validate access for feed items before mapping to FeedContentAdapter, ensuring correct access flags and types.
+- Improved consistency in access validation across paginated feed and event endpoints.
+
+**refactor:** FeedContentItem and VideoWithMetadata models for improved access control
+
+- Refactored FeedContentItem and VideoWithMetadata models to centralize and clarify access control logic.
+- Enhanced model structure for better maintainability and future feature expansion.
+
+**feat(feed):** Add AccessContent class and refactor FeedContentItem model
+
+- Introduced AccessContent class to encapsulate access-related properties for feed items.
+- Refactored FeedContentItem to use AccessContent, improving code clarity and separation of concerns.
+
+**merge:** Synced with latest changes from 'test' branch
+
+- Merged updates from 'test' branch to keep QA branch up to date.
+
+## 21.4.3
+
+**-fix(dependencies):** update package route
+
+## 21.4.0
+
+feat: Add PartnerContentAvailabilityResponse model and related serialization logic
+
+- Implemented PartnerContentAvailabilityResponse and PartnerContentAvailabilityData classes for handling content availability responses from the API.
+- Added JSON serialization and deserialization methods using json_annotation.
+- Included unit tests for cache management in InMemoryCacheManager and PersistentCacheManager.
+- Developed tests for the NewsRepository to ensure correct caching behavior and error handling.
+- Created mock classes for testing with Mockito to simulate data source interactions.
+
+## 21.3.11
+
+**feat(cache):** enhance video cache management with partner following updates and tests
+
+## 21.3.10
+
+**feat(cache):** add generic caching system for repositories
+
+- Implemented generic `CacheEntry<T>` model with TTL and expiration tracking
+- Created abstract `CacheManager` interface for flexible cache implementations
+- Added `InMemoryCacheManager` singleton for in-memory caching
+- Introduced `RepositoryCacheMixin` to easily add caching to any repository
+- Features include:
+  - Automatic cache expiration based on TTL
+  - Force refresh capability
+  - Pattern-based cache invalidation
+  - Support for `Either<Failure, T>` return types
+  - Full test coverage with unit tests
+- Comprehensive documentation and usage examples included
+
+## 21.3.9
+
+**feat(video):** add examples for persistent caching and prefetching
+
+- Implemented `persistent_cache_example.dart` demonstrating initialization, usage, and cache management in a video feed application.
+- Created `prefetching_example.dart` to showcase automatic prefetching of video pages for seamless pagination.
+- Added tests for video cache interactions in `video_cache_interaction_test.dart` to ensure proper updates and removals of cached videos.
+- Developed `video_cache_manager_test.dart` to validate cache manager functionalities including storage, retrieval, and expiration of cached videos.
+- Introduced `video_player_service_cache_test.dart` to verify caching behavior in the video player service, ensuring efficient data retrieval and cache management.
+- A component update Interactive Content
+
+## 21.3.8
+
+**-fix(dependencies):** update share_plus to version 12.0.1
+
+## 21.3.7
+
+**-feat(announcements):** update Models Announcements
+
+## 21.3.6
+
+### Added
+
+- **feat (LoopVideoPlayer widget):** A component has been added to view videos in an infinite loop.
+
+- **feat (SharedLike widget):** A component has been added to display sharing and liking.
+- **feat (SocialButton widget):** A component is added to render the icon and text for like and share.
+
+## 21.3.6
+
+### Added
+
+- **feat (VideoExclusiveBlur widget):** Introduced a new molecule widget for exclusive video content overlays, including blur, lock/tag indicator, and customizable UI for premium/locked content.
+- **fix (NewModel fields):** Added `communityOwnerId`, `isSubscriberOnly`, and `hasAccess` fields to `NewModel`, with updated JSON serialization.
+- **fix (AnnouncementModel fields):** Added `communityOwnerId`, `isSubscriberOnly`, and `hasAccess` fields to `AnnouncementModel`.
+
+## 21.3.5
+
+**-feat(announcements):** update design Fo rAnnouncements
+
+## 21.3.4
+
+**-fix(moengage):** update import statement and clean up comments in MoEngageService
+
+## 21.3.3
+
+- **feat(video):** add partnerId parameter to getVideosWithFilter and getFeaturedVideos methods for filtering videos by specific partner
+
+## 21.3.1
+
+- **feat(news):** Updated news item models and services param requirements
+- **fix(moEngage)** Updated moengage service param requirements, making the pushToken optional in order to use it in web
+
+## 21.3.0
+
+- **feat(notification):** Add InteractiveContent Data for announcements,news,feedtype3
+
+## 21.2.6
+
+- **fix(env):** update URL endpoints for announcement service in StoycoEnvironmentExtension
+
+## 21.2.5
+
+- **fix(video):** update query parameters to use 'pageSize' and 'pageNumber' in getVideosWithFilter
+
+## 21.2.4
+
+- **fix(video):** rename 'page' to 'pageNumber' in getVideosWithFilter query parameters
+
+## 21.2.3
+
+- **feat(video):** add description field to video metadata in VideoPlayerRepositoryV2
+
+## 21.2.2
+
+- **feat(video):** add description field to video metadata
+
+## 21.2.1
+
+- **feat(filter):** add communityOwnerId to query parameters in FilterRequestHelper
+
+## 21.2.0
+
+- **feat(video):** enhance video fetching with userId and pagination support
+
+## 21.1.0
+
+- **feat(video):** Add StreamingData model for comprehensive video metadata handling
+- **feat(video):** Enhance video player service with viewVideo and getVideosWithFilter methods
+- **feat(video):** Add userId parameter to likeVideo and dislikeVideo methods for better user tracking
+- **feat(video):** Improve VideoPlayerService reset method to clear datasource token
+- **feat(video):** Update VideoWithMetadata model to include StreamingData
 
 ## 21.0.0
 
 **feat(notification):** Adding push notificacion with moengage sdk
 
-- **refactor:** Simplify video playback and sharing logic in ParallaxVideoCard
+## 20.0.2
+
+- **feat(announcement):** Adding a community owner filter to the announcement service using the ID and adjusting the models
+
+- **feat(news):** Adding a community owner filter to the news service using the ID and adjusting the models
+
+## 20.0.1
+
+- **feat(notification):** add isStoyCoinsNotification getter to identify StoyCoins-related notifications
+
+## 20.0.0
+
+- **feat(activity):** implement ActivityRepository and ActivityService for notifications and messages
+
+- Added ActivityRepository to handle data operations for notifications and messages.
+- Implemented ActivityService to manage business logic and token handling for activity-related API calls.
+- Created models for ActivitySummary, Message, NotificationStats, MessageStats, and UserUnifiedStats with JSON serialization.
+- Introduced JSON:API helpers for parsing API responses.
+- Updated environment configurations to include Activity service URLs. (See <attachments> above for file contents. You may not need to search or read the file again.)
 
 ## 19.0.1
 

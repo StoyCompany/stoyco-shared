@@ -30,4 +30,17 @@ class StoycoColors {
   static Color softWhite = ColorUtils.fromHex('F8F9FA');
 
   static Color shadowColor = ColorUtils.fromHex('494949');
+
+  static Color whiteLavander = ColorUtils.fromHex('F7F6FA');
+  static Color lightViolet = ColorUtils.fromHex('6C61FF');
+
+  static Color darkBackground = ColorUtils.fromHex('0F151A');
+
+  static Color whiteLavender = ColorUtils.fromHex('F7F6FA');
+
+  /// Dark slate blue - used for card backgrounds
+  static Color darkSlateBlue = ColorUtils.fromHex('202532');
+
+  /// Dark charcoal gray - used for icons on light backgrounds
+  static Color charcoalGray = ColorUtils.fromHex('333333');
 }

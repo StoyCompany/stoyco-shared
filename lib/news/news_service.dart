@@ -1,10 +1,12 @@
 import 'package:either_dart/either.dart';
 import 'package:stoyco_shared/envs/envs.dart';
-import 'package:stoyco_shared/news/news_repository.dart';
+import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
+import 'package:stoyco_shared/models/page_result/page_result.dart';
 import 'package:stoyco_shared/news/models/new_model.dart';
 import 'package:stoyco_shared/news/news_data_source.dart';
-import 'package:stoyco_shared/models/page_result/page_result.dart';
-import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
+import 'package:stoyco_shared/news/news_repository.dart';
+import 'package:stoyco_shared/widgets/interactive_content_card.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/active_subscription_service.dart';
 
 /// A service that handles all operations related to news, including
 /// fetching paginated news, searching for news, retrieving a specific
@@ -14,16 +16,24 @@ class NewsService {
   ///
   /// The [environment] is required to initialize the service with
   /// the necessary configurations.
-  factory NewsService({required StoycoEnvironment environment}) =>
-      _instance ??= NewsService._(environment: environment);
+  factory NewsService(
+          {required StoycoEnvironment environment,
+          required ActiveSubscriptionService activeSubscriptionService}) =>
+      _instance ??= NewsService._(
+          environment: environment,
+          activeSubscriptionService: activeSubscriptionService);
 
   /// Private constructor for internal initialization of the [NewsService].
   ///
   /// This initializes the [_newsDataSource] and [_newsRepository] with
   /// the provided [environment].
-  NewsService._({required this.environment}) {
+  NewsService._(
+      {required this.environment, required this.activeSubscriptionService}) {
     _newsDataSource = NewsDataSource(environment: environment);
-    _newsRepository = NewsRepository(newsDataSource: _newsDataSource!);
+    _newsRepository = NewsRepository(
+      newsDataSource: _newsDataSource!,
+      activeSubscriptionService: activeSubscriptionService,
+    );
 
     _instance = this;
   }
@@ -36,6 +46,8 @@ class NewsService {
 
   /// Environment configuration used for initializing data sources and repositories.
   StoycoEnvironment environment;
+
+  ActiveSubscriptionService activeSubscriptionService;
 
   /// Repository responsible for handling news operations.
   NewsRepository? _newsRepository;
@@ -50,14 +62,20 @@ class NewsService {
   ///
   /// * [pageNumber] is the page index to fetch.
   /// * [pageSize] is the number of news items to return in each page.
+  /// * [communityOwnerId] is an optional filter to get news by community owner.
   ///
   /// Returns:
   /// - [Either] containing either a [Failure] or a [PageResult] of [NewModel].
   Future<Either<Failure, PageResult<NewModel>>> getNewsPaginated(
     int pageNumber,
-    int pageSize,
-  ) =>
-      _newsRepository!.getNewsPaginated(pageNumber, pageSize);
+    int pageSize, {
+    String? communityOwnerId,
+  }) =>
+      _newsRepository!.getNewsPaginated(
+        pageNumber,
+        pageSize,
+        communityOwnerId: communityOwnerId,
+      );
 
   /// Retrieves a paginated list of news articles based on a search term.
   ///
@@ -99,4 +117,83 @@ class NewsService {
   /// - [Either] containing either a [Failure] or [void] if the operation is successful.
   Future<Either<Failure, void>> markAsViewed(String id) =>
       _newsRepository!.markAsViewed(id);
+
+  /// Retrieves a paginated list of feed content items.
+  ///
+  /// This method returns a [PageResult] containing [FeedContentAdapter] objects,
+  /// wrapped in an [Either] to handle possible [Failure] errors.
+  ///
+  /// * [pageNumber] is the page index to fetch.
+  /// * [pageSize] is the number of feed items to return in each page.
+  /// * [partnerId] optional filter by partner ID.
+  /// * [userId] optional filter by user ID.
+  /// * [partnerProfile] optional filter by partner profile.
+  /// * [onlyNew] optional flag to fetch only new items.
+  /// * [newDays] optional number of days to consider for new items (default 30).
+  /// * [hideSubscriberOnlyIfNotSubscribed] optional flag to hide subscriber-only content.
+  /// * [ct] optional continuation token.
+  ///
+  /// Returns:
+  /// - [Either] containing either a [Failure] or a [PageResult] of [FeedContentAdapter].
+  ///
+  /// Example:
+  /// ```dart
+  /// final result = await NewsService(environment: env).getFeedPaginated(
+  ///   1,
+  ///   20,
+  ///   partnerId: 'partner123',
+  ///   onlyNew: true,
+  /// );
+  /// ```
+  Future<Either<Failure, PageResult<FeedContentAdapter>>> getFeedPaginated(
+    int pageNumber,
+    int pageSize, {
+    String? partnerId,
+    String? userId,
+    String? partnerProfile,
+    bool? onlyNew,
+    int? newDays,
+    bool? hideSubscriberOnlyIfNotSubscribed,
+    String? ct,
+    required String feedType,
+  }) =>
+      _newsRepository!.getFeedPaginated(
+        pageNumber,
+        pageSize,
+        partnerId: partnerId,
+        userId: userId,
+        partnerProfile: partnerProfile,
+        onlyNew: onlyNew,
+        newDays: newDays,
+        hideSubscriberOnlyIfNotSubscribed: hideSubscriberOnlyIfNotSubscribed,
+        ct: ct,
+        feedType: feedType,
+      );
+
+  Future<Either<Failure, PageResult<FeedContentAdapter>>>
+      getFeedEventsPaginated(
+    int pageNumber,
+    int pageSize, {
+    String? partnerId,
+    String? userId,
+    String? partnerProfile,
+    bool? onlyNew,
+    int? newDays,
+    bool? hideSubscriberOnlyIfNotSubscribed,
+    String? ct,
+    required String feedType,
+  }) =>
+          _newsRepository!.getFeedEventsPaginated(
+            pageNumber,
+            pageSize,
+            partnerId: partnerId,
+            userId: userId,
+            partnerProfile: partnerProfile,
+            onlyNew: onlyNew,
+            newDays: newDays,
+            hideSubscriberOnlyIfNotSubscribed:
+                hideSubscriberOnlyIfNotSubscribed,
+            ct: ct,
+            feedType: feedType,
+          );
 }

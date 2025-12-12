@@ -54,7 +54,7 @@ class AnnouncementDetailsUtils {
       final String period = localDate.hour >= 12 ? 'pm' : 'am';
       final String minute = localDate.minute.toString().padLeft(2, '0');
 
-      return '$month $day, $hour:$minute $period';
+      return '$month $day';
     } catch (e) {
       return dateString;
     }
@@ -264,7 +264,7 @@ class AnnouncementDetailsUtils {
   }
 
   static const List<Color> primaryGradientColors = [
-    Color(0xFF1f1c86),
-    Color(0xFF4236df),
+    Color(0xFF6C61FF),
+    Color(0xFF6C61FF),
   ];
 }

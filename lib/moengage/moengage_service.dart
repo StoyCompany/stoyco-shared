@@ -6,11 +6,13 @@ import 'package:stoyco_shared/moengage/moengage_platform.dart';
 import 'package:stoyco_shared/moengage/platform_locator.dart'
     if (dart.library.io) 'platform_locator_mobile.dart'
     if (dart.library.html) 'platform_locator_web.dart';
+import 'package:stoyco_shared/utils/logger.dart';
 
 class MoEngageService {
   MoEngageService._internal([MoEngagePlatform? platform]) {
     _platform = platform ?? getMoEngagePlatform();
-    debugPrint('MoEngageService: Plataforma seleccionada por el compilador es ${_platform.runtimeType}');
+    StoyCoLogger.info(
+        'MoEngageService: Plataforma seleccionada por el compilador es ${_platform.runtimeType}');
   }
 
   static MoEngageService? _instance;
@@ -22,14 +24,48 @@ class MoEngageService {
     return _instance!;
   }
 
-  static MoEngageService init(
-      {required String appId,required String pushToken, MoEngagePlatform? platform}) {
-    _instance = MoEngageService._internal(platform);
-    _instance!._platform.initialize(appId: appId, pushToken: pushToken);
-    if (_instance!._platform is MoEngageMobilePlatform) {
-      _instance!._moEngageGeofence = MoEngageGeofence(appId);
+  /// Initializes the MoEngage service with the provided configuration.
+  ///
+  /// The [appId] is required to identify the MoEngage application.
+  /// The [pushToken] is optional and only needed for push notifications.
+  /// For web applications without push notifications, you can omit this parameter.
+  /// An optional [platform] implementation can be injected for testing purposes.
+  ///
+  /// Returns the initialized [MoEngageService] instance.
+  ///
+  /// Example:
+  /// ```dart
+  /// // With push token (mobile or web with FCM)
+  /// final service = MoEngageService.init(
+  ///   appId: 'your-app-id',
+  ///   pushToken: 'your-push-token',
+  /// );
+  ///
+  /// // Without push token (web without notifications)
+  /// final service = MoEngageService.init(
+  ///   appId: 'your-app-id',
+  /// );
+  /// ```
+  static MoEngageService init({
+    required String appId,
+    String? pushToken,
+    MoEngagePlatform? platform,
+  }) {
+    final service = _instance ?? MoEngageService._internal(platform);
+    try {
+      service._platform.initialize(appId: appId, pushToken: pushToken ?? '');
+      if (service._platform is MoEngageMobilePlatform) {
+        service._moEngageGeofence ??= MoEngageGeofence(appId);
+      }
+
+      StoyCoLogger.info('MoEngageService: Initialization successful.');
+    } catch (e, st) {
+      StoyCoLogger.error(
+          'MoEngageService: Error initializing platform/geofence: $e');
+      StoyCoLogger.info('MoEngageService: StackTrace: $st');
     }
-    return _instance!;
+    _instance = service;
+    return service;
   }
 
   void setUniqueId(String uniqueId) => _platform.identifyUser(uniqueId);
@@ -44,7 +80,7 @@ class MoEngageService {
 
   void showNudge() => _platform.showNudge();
 
-  void logout()  {
+  void logout() {
     if (_platform is MoEngageMobilePlatform && _moEngageGeofence != null) {
       _moEngageGeofence!.stopGeofenceMonitoring();
     }
@@ -80,17 +116,17 @@ class MoEngageService {
     }
   }
 
-
   void startGeofenceMonitoring() {
     if (_platform is MoEngageMobilePlatform) {
       if (_moEngageGeofence == null) {
-        debugPrint('MoEngageService: Geofence no está inicializado.');
+        StoyCoLogger.info('MoEngageService: Geofence no está inicializado.');
         return;
       }
       _moEngageGeofence!.startGeofenceMonitoring();
-      debugPrint('MoEngageService: Geofence iniciado.');
+      StoyCoLogger.info('MoEngageService: Geofence iniciado.');
     } else {
-      debugPrint('MoEngageService: Geofence solo está disponible en plataformas móviles.');
+      StoyCoLogger.info(
+          'MoEngageService: Geofence solo está disponible en plataformas móviles.');
     }
   }
 
@@ -99,5 +135,11 @@ class MoEngageService {
       final mobilePlatform = _platform as MoEngageMobilePlatform;
       mobilePlatform.setPushClickCallbackHandler(handler);
     }
+  }
+
+  /// Resets the singleton instance for testing purposes
+  @visibleForTesting
+  static void resetInstance() {
+    _instance = null;
   }
 }

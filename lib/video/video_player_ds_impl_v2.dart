@@ -17,9 +17,14 @@ class VideoPlayerDataSourceV2 {
   final Dio _dio = Dio();
 
   /// Gets the headers for authenticated requests, including the Authorization header
-  Map<String, String> _getHeaders() => {
-        'Authorization': 'Bearer $userToken',
-      };
+  Map<String, String> _getHeaders() {
+    final headers = <String, String>{};
+    if (userToken.isNotEmpty) {
+      headers['Authorization'] = 'Bearer $userToken';
+    }
+    headers['Content-Type'] = 'application/json';
+    return headers;
+  }
 
   late String baseUrl;
 
@@ -52,19 +57,45 @@ class VideoPlayerDataSourceV2 {
     );
   }
 
-  Future<Response> dislikeVideo(String videoId) async {
-    final uri = _buildUri('video-interaction/dislike', {'videoId': videoId});
+  Future<Response> dislikeVideo(String videoId, String userId) async {
+    final urlVideoPlayer = environment.videoPlayerUrl(version: 'v2');
+
+    final uri = '$urlVideoPlayer/dislike';
+
     return _dio.post(
       uri,
+      data: {
+        'VideoId': videoId,
+        'UserId': userId,
+      },
       cancelToken: cancelToken,
       options: Options(headers: _getHeaders()),
     );
   }
 
-  Future<Response> likeVideo(String videoId) async {
-    final uri = _buildUri('video-interaction/like', {'videoId': videoId});
+  Future<Response> likeVideo(String videoId, String userId) async {
+    final urlVideoPlayer = environment.videoPlayerUrl(version: 'v2');
+
+    final uri = '$urlVideoPlayer/like';
+
     return _dio.post(
       uri,
+      data: {
+        'VideoId': videoId,
+        'UserId': userId,
+      },
+      cancelToken: cancelToken,
+      options: Options(headers: _getHeaders()),
+    );
+  }
+
+  Future<Response> viewVideo(String videoId) async {
+    final urlVideoPlayer = environment.videoPlayerUrl(version: 'v2');
+    final uri = '$urlVideoPlayer/viewed';
+
+    return _dio.post(
+      uri,
+      data: {'VideoId': videoId},
       cancelToken: cancelToken,
       options: Options(headers: _getHeaders()),
     );
@@ -90,12 +121,16 @@ class VideoPlayerDataSourceV2 {
   }
 
   Future<Response> shareVideo(String videoId, String platform) async {
-    final uri = _buildUri(
-      'video-interaction/share',
-      {'videoId': videoId, 'platform': platform},
-    );
+    final urlVideoPlayer = environment.videoPlayerUrl(version: 'v2');
+
+    final uri = '$urlVideoPlayer/shared';
+
     return _dio.post(
       uri,
+      data: {
+        'VideoId': videoId,
+        'Platform': platform,
+      },
       cancelToken: cancelToken,
       options: Options(headers: _getHeaders()),
     );
@@ -105,6 +140,91 @@ class VideoPlayerDataSourceV2 {
     final String uri = _buildUri('short-video/list');
     return _dio.get(
       uri,
+      options: Options(headers: _getHeaders()),
+    );
+  }
+
+  /// Gets videos with filter mode, pagination, and optional userId
+  /// Calls the v3/short-video/videos endpoint
+  Future<Response> getVideosWithFilter({
+    required String filterMode,
+    int page = 1,
+    int pageSize = 20,
+    String? userId,
+    String? partnerProfile,
+    String? partnerId,
+  }) async {
+    // The feed endpoint expects userId and limit (pageSize). Keep filterMode if provided.
+    final queryParams = <String, dynamic>{
+      'pageSize': pageSize.toString(),
+      'pageNumber': page.toString(),
+    };
+
+    if (userId != null && userId.isNotEmpty) {
+      queryParams['userId'] = userId;
+    }
+
+    if (filterMode.isNotEmpty) {
+      queryParams['filterMode'] = filterMode;
+    }
+
+    if (partnerProfile != null && partnerProfile.isNotEmpty) {
+      queryParams['partnerProfile'] = partnerProfile;
+    }
+
+    if (partnerId != null && partnerId.isNotEmpty) {
+      queryParams['partnerId'] = partnerId;
+    }
+
+    // Use feed endpoint (example: /api/stoyco/feed/user/videos)
+    final base = environment.baseUrl();
+    final uri = '${base}feed/user/videos';
+
+    final queryString =
+        queryParams.entries.map((e) => '${e.key}=${e.value}').join('&');
+    final fullUri = queryString.isNotEmpty ? '$uri?$queryString' : uri;
+
+    return _dio.get(
+      fullUri,
+      cancelToken: cancelToken,
+      options: Options(headers: _getHeaders()),
+    );
+  }
+
+  /// Fetch featured/explore videos (optional userId, pageSize)
+  Future<Response> getFeaturedVideos({
+    String? userId,
+    int pageSize = 10,
+    int page = 1,
+    String? partnerProfile,
+    String? partnerId,
+  }) async {
+    final queryParams = <String, dynamic>{
+      'pageSize': pageSize.toString(),
+      'pageNumber': page.toString(),
+    };
+
+    if (userId != null && userId.isNotEmpty) {
+      queryParams['userId'] = userId;
+    }
+
+    if (partnerProfile != null && partnerProfile.isNotEmpty) {
+      queryParams['partnerProfile'] = partnerProfile;
+    }
+
+    if (partnerId != null && partnerId.isNotEmpty) {
+      queryParams['partnerId'] = partnerId;
+    }
+
+    final base = environment.baseUrl();
+    final uri = '${base}feed/explore/videos';
+
+    final queryString =
+        queryParams.entries.map((e) => '${e.key}=${e.value}').join('&');
+    final fullUri = queryString.isNotEmpty ? '$uri?$queryString' : uri;
+
+    return _dio.get(
+      fullUri,
       cancelToken: cancelToken,
       options: Options(headers: _getHeaders()),
     );

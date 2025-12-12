@@ -237,6 +237,7 @@ class _ParticipationFormDialogState<T>
           ),
           Gap(widget.descriptionGap ?? StoycoScreenSize.height(context, 40)),
           TextButtonStoyco(
+            radius: StoycoScreenSize.radius(context, 100),
             width: widget.buttonWidth ??
                 StoycoScreenSize.width(
                   context,

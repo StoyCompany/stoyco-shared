@@ -1,7 +1,7 @@
 import 'package:stoyco_shared/form/data/countries.dart';
 
 String getFullPhoneNumber(String? countryCode, String? phoneNumber) {
-  if (countryCode == null || countryCode.isEmpty || phoneNumber == null || phoneNumber.isEmpty) {
+ if ((countryCode?.isEmpty ?? true) || (phoneNumber?.isEmpty ?? true)) {
     return '';
   }
   try {

@@ -3,6 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'package:stoyco_shared/announcement/models/announcement_dto/configuration.dart';
 import 'package:stoyco_shared/announcement/models/announcement_dto/content.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/access_content.dart';
 
 part 'announcement_dto.g.dart';
 
@@ -56,6 +57,11 @@ class AnnouncementDto {
     this.endDate,
     this.configuration,
     this.views,
+    this.communityOwnerId,
+    this.communityOwnerName,
+    this.communityOwnerProfile,
+    this.isSubscriberOnly,
+    this.accessContent,
   });
 
   factory AnnouncementDto.fromJson(Map<String, dynamic> json) =>
@@ -81,10 +87,20 @@ class AnnouncementDto {
   final Configuration? configuration;
   @JsonKey(name: 'views')
   final int? views;
+  @JsonKey(name: 'community_owner_id')
+  final String? communityOwnerId;
+  @JsonKey(name: 'community_owner_name')
+  final String? communityOwnerName;
+  @JsonKey(name: 'community_owner_profile')
+  final String? communityOwnerProfile;
+  @JsonKey(name: 'is_subscriber_only')
+  final bool? isSubscriberOnly;
+  @JsonKey(name: 'access_content')
+  final AccessContent? accessContent;
 
   @override
   String toString() =>
-      'AnnouncementDto(id: $id, contentType: $contentType, title: $title, shortDescription: $shortDescription, content: $content, createdBy: $createdBy, urlPrincipalImage: $urlPrincipalImage, state: $state, isClosedCampaign: $isClosedCampaign, publishedDate: $publishedDate, endDate: $endDate, configuration: $configuration, views: $views)';
+      'AnnouncementDto(id: $id, contentType: $contentType, title: $title, shortDescription: $shortDescription, content: $content, createdBy: $createdBy, urlPrincipalImage: $urlPrincipalImage, state: $state, isClosedCampaign: $isClosedCampaign, publishedDate: $publishedDate, endDate: $endDate, configuration: $configuration, views: $views, communityOwnerId: $communityOwnerId, communityOwnerName: $communityOwnerName, communityOwnerProfile: $communityOwnerProfile, isSubscriberOnly: $isSubscriberOnly, accessContent: $accessContent)';
 
   Map<String, dynamic> toJson() => _$AnnouncementDtoToJson(this);
 
@@ -102,6 +118,11 @@ class AnnouncementDto {
     String? endDate,
     Configuration? configuration,
     int? views,
+    String? communityOwnerId,
+    String? communityOwnerName,
+    String? communityOwnerProfile,
+    bool? isSubscriberOnly,
+    AccessContent? accessContent,
   }) =>
       AnnouncementDto(
         id: id ?? this.id,
@@ -117,6 +138,12 @@ class AnnouncementDto {
         endDate: endDate ?? this.endDate,
         configuration: configuration ?? this.configuration,
         views: views ?? this.views,
+        communityOwnerId: communityOwnerId ?? this.communityOwnerId,
+        communityOwnerName: communityOwnerName ?? this.communityOwnerName,
+        communityOwnerProfile:
+            communityOwnerProfile ?? this.communityOwnerProfile,
+        isSubscriberOnly: isSubscriberOnly ?? this.isSubscriberOnly,
+        accessContent: accessContent ?? this.accessContent,
       );
 
   @override
@@ -141,5 +168,10 @@ class AnnouncementDto {
       publishedDate.hashCode ^
       endDate.hashCode ^
       configuration.hashCode ^
-      views.hashCode;
+      views.hashCode ^
+      communityOwnerId.hashCode ^
+      communityOwnerName.hashCode ^
+      communityOwnerProfile.hashCode ^
+      isSubscriberOnly.hashCode ^
+      accessContent.hashCode;
 }

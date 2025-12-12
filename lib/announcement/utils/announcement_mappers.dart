@@ -41,7 +41,7 @@ class AnnouncementMapper {
         id: dto.id,
         title: dto.title,
         mainImage: dto.urlPrincipalImage,
-        content: dto.content, // Assuming Content has a text property
+        content: dto.content,
         shortDescription: dto.shortDescription,
         isDraft: AnnouncementState.isDraft(dto.state),
         isPublished: AnnouncementState.isPublished(dto.state),
@@ -51,6 +51,9 @@ class AnnouncementMapper {
         createdBy: dto.createdBy,
         viewCount: dto.views,
         images: [],
+        communityOwnerId: dto.communityOwnerId,
+        isSubscriberOnly: dto.isSubscriberOnly ?? false,
+        accessContent: dto.accessContent,
       );
 
   /// Converts an [AnnouncementModel] to an [AnnouncementDto].

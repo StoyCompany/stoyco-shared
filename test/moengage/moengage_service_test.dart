@@ -14,40 +14,52 @@ void main() {
     mockPlatform = MockMoEngagePlatform();
   });
 
-  test('init calls initialize on platform', ()  {
-    when(mockPlatform.initialize(appId: 'testAppId')).thenAnswer((_)  async {});
-     MoEngageService.init(appId: 'testAppId', platform: mockPlatform, pushToken: '');
-    verify(mockPlatform.initialize(appId: 'testAppId')).called(1);
+  tearDown(() {
+    MoEngageService.resetInstance();
   });
 
+  test('init calls initialize on platform', () {
+    when(mockPlatform.initialize(appId: 'testAppId', pushToken: 'test-token'))
+        .thenAnswer((_) async {});
+    MoEngageService.init(
+        appId: 'testAppId', platform: mockPlatform, pushToken: 'test-token');
+    verify(mockPlatform.initialize(appId: 'testAppId', pushToken: 'test-token'))
+        .called(1);
+  });
 
-  test('setUniqueId delegates to platform', ()  {
-     MoEngageService.init(appId: 'testAppId', platform: mockPlatform, pushToken: '');
+  test('setUniqueId delegates to platform', () {
+    MoEngageService.init(
+        appId: 'testAppId', platform: mockPlatform, pushToken: 'test-token');
     when(mockPlatform.identifyUser('user123')).thenAnswer((_) async {});
-     MoEngageService.instance.setUniqueId('user123');
+    MoEngageService.instance.setUniqueId('user123');
     verify(mockPlatform.identifyUser('user123')).called(1);
   });
 
-  test('trackCustomEvent delegates to platform', ()  {
+  test('trackCustomEvent delegates to platform', () {
     final eventName = 'event';
     final attributes = {'key': 'value'};
-    when(mockPlatform.trackCustomEvent(eventName, attributes)).thenAnswer((_) async {});
-     MoEngageService.init(appId: 'testAppId', platform: mockPlatform, pushToken: '');
-     MoEngageService.instance.trackCustomEvent(eventName, attributes: attributes);
+    when(mockPlatform.trackCustomEvent(eventName, attributes))
+        .thenAnswer((_) async {});
+    MoEngageService.init(
+        appId: 'testAppId', platform: mockPlatform, pushToken: 'test-token');
+    MoEngageService.instance
+        .trackCustomEvent(eventName, attributes: attributes);
     verify(mockPlatform.trackCustomEvent(eventName, attributes)).called(1);
   });
 
-  test('setUserAttribute delegates to platform', ()  {
+  test('setUserAttribute delegates to platform', () {
     when(mockPlatform.setUserAttribute('attr', 'val')).thenAnswer((_) async {});
-     MoEngageService.init(appId: 'testAppId', platform: mockPlatform, pushToken: '');
-     MoEngageService.instance.setUserAttribute('attr', 'val');
+    MoEngageService.init(
+        appId: 'testAppId', platform: mockPlatform, pushToken: 'test-token');
+    MoEngageService.instance.setUserAttribute('attr', 'val');
     verify(mockPlatform.setUserAttribute('attr', 'val')).called(1);
   });
 
-  test('logout delegates to platform', ()  {
+  test('logout delegates to platform', () {
     when(mockPlatform.logout()).thenAnswer((_) async {});
-     MoEngageService.init(appId: 'testAppId', platform: mockPlatform, pushToken: '');
-     MoEngageService.instance.logout();
+    MoEngageService.init(
+        appId: 'testAppId', platform: mockPlatform, pushToken: 'test-token');
+    MoEngageService.instance.logout();
     verify(mockPlatform.logout()).called(1);
   });
 }

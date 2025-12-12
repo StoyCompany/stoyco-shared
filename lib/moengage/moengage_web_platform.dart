@@ -6,10 +6,16 @@ class MoEngageWebPlatform implements MoEngagePlatform {
   late MoEngageFlutter _moengagePlugin;
 
   @override
-  void initialize({required String appId , required String pushToken}) {
+  void initialize({required String appId, String? pushToken}) {
     _moengagePlugin = MoEngageFlutter(appId);
     _moengagePlugin.initialise();
-    _moengagePlugin.passFCMPushToken(pushToken);
+    
+    // Only pass the push token if provided (for FCM web push notifications)
+    if (pushToken != null && pushToken.isNotEmpty) {
+      _moengagePlugin.passFCMPushToken(pushToken);
+      debugPrint('WebMoEngagePlatform: Push token registered for AppID: $appId');
+    }
+    
     debugPrint(
         'WebMoEngagePlatform: MoEngageFlutter CREADO e INICIALIZADO con AppID: $appId. Plugin hash: ${_moengagePlugin.hashCode}');
   }

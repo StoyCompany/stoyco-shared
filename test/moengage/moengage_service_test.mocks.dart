@@ -3,9 +3,8 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i3;
-
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:moengage_flutter/moengage_flutter.dart' as _i3;
 import 'package:stoyco_shared/moengage/moengage_platform.dart' as _i2;
 
 // ignore_for_file: type=lint
@@ -21,6 +20,7 @@ import 'package:stoyco_shared/moengage/moengage_platform.dart' as _i2;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
+// ignore_for_file: invalid_use_of_internal_member
 
 /// A class which mocks [MoEngagePlatform].
 ///
@@ -31,32 +31,37 @@ class MockMoEngagePlatform extends _i1.Mock implements _i2.MoEngagePlatform {
   }
 
   @override
-  _i3.Future<void> initialize({required String? appId}) => (super.noSuchMethod(
+  void initialize({
+    required String? appId,
+    String? pushToken,
+  }) =>
+      super.noSuchMethod(
         Invocation.method(
           #initialize,
           [],
-          {#appId: appId},
+          {
+            #appId: appId,
+            #pushToken: pushToken,
+          },
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValueForMissingStub: null,
+      );
 
   @override
-  _i3.Future<void> identifyUser(String? uniqueId) => (super.noSuchMethod(
+  void identifyUser(String? uniqueId) => super.noSuchMethod(
         Invocation.method(
           #identifyUser,
           [uniqueId],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValueForMissingStub: null,
+      );
 
   @override
-  _i3.Future<void> trackCustomEvent(
+  void trackCustomEvent(
     String? eventName,
     Map<String, Object>? eventAttributes,
   ) =>
-      (super.noSuchMethod(
+      super.noSuchMethod(
         Invocation.method(
           #trackCustomEvent,
           [
@@ -64,16 +69,15 @@ class MockMoEngagePlatform extends _i1.Mock implements _i2.MoEngagePlatform {
             eventAttributes,
           ],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValueForMissingStub: null,
+      );
 
   @override
-  _i3.Future<void> setUserAttribute(
+  void setUserAttribute(
     String? attributeName,
     dynamic attributeValue,
   ) =>
-      (super.noSuchMethod(
+      super.noSuchMethod(
         Invocation.method(
           #setUserAttribute,
           [
@@ -81,17 +85,87 @@ class MockMoEngagePlatform extends _i1.Mock implements _i2.MoEngagePlatform {
             attributeValue,
           ],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValueForMissingStub: null,
+      );
 
   @override
-  _i3.Future<void> logout() => (super.noSuchMethod(
+  void logout() => super.noSuchMethod(
         Invocation.method(
           #logout,
           [],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void showInAppMessage() => super.noSuchMethod(
+        Invocation.method(
+          #showInAppMessage,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void showNudge() => super.noSuchMethod(
+        Invocation.method(
+          #showNudge,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void setUserName(String? userName) => super.noSuchMethod(
+        Invocation.method(
+          #setUserName,
+          [userName],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void setUserEmail(String? email) => super.noSuchMethod(
+        Invocation.method(
+          #setUserEmail,
+          [email],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void setGender(_i3.MoEGender? gender) => super.noSuchMethod(
+        Invocation.method(
+          #setGender,
+          [gender],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void setPhoneNumber(String? phoneNumber) => super.noSuchMethod(
+        Invocation.method(
+          #setPhoneNumber,
+          [phoneNumber],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void setLastName(String? lastName) => super.noSuchMethod(
+        Invocation.method(
+          #setLastName,
+          [lastName],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void setFirstName(String? firstName) => super.noSuchMethod(
+        Invocation.method(
+          #setFirstName,
+          [firstName],
+        ),
+        returnValueForMissingStub: null,
+      );
 }
