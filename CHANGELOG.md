@@ -1,3 +1,6 @@
+## 21.7.9
+**fix(tag version to main):** change version tag to main branch for pub.dev publishing
+
 ## 21.7.8
 **fix(announcement):** change design modals and structure views
 
