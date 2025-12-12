@@ -49,12 +49,12 @@ dependencies:
   stoyco_interaction_content:
     git:
       url: https://github.com/StoyCompany/StoycoInteractionContent_Package.git
-      ref: main
+      ref: 1.0.0+1
   stoyco_subscription:
     #path: ../stoyco_subscription
     git:
       url: https://github.com/StoyCompany/stoyco_subscription.git
-      ref: main
+      ref: 2.0.25
 
 dev_dependencies:
   flutter_test:
