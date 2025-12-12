@@ -1,4 +1,4 @@
-## 21.7.9
+## 21.7.10
 
 **feat(radio):** add anonymous listener tracking and pause/resume support
 
@@ -9,6 +9,8 @@
 ### Changed
 - `RadioService.startListening` and `stopListening` now support both authenticated and anonymous users
 - `RadioPlayerController.togglePlayPause` now updates listener count on pause/resume
+
+## 21.7.9
 
 **fix(tag version to main):** change version tag to main branch for pub.dev publishing
 
