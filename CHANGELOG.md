@@ -1,7 +1,10 @@
 ## 21.7.9
 **fix(tag version to main):** change version tag to main branch for pub.dev publishing
 
+**fix(videos):**update production video player URL in StoycoEnvironmentExtension
+
 ## 21.7.8
+
 **fix(announcement):** change design modals and structure views
 
 ## 21.7.7
