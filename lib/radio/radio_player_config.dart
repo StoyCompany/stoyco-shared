@@ -1,4 +1,5 @@
 import 'package:stoyco_shared/models/radio_model.dart';
+import 'package:stoyco_shared/radio/radio_service.dart';
 
 /// Configuration for [RadioPlayerController].
 ///
@@ -14,6 +15,7 @@ class RadioPlayerConfig {
     this.isAudioPlaying,
     this.playingRadioStream,
     this.isPlayingStream,
+    this.radioService,
   });
 
   /// Filter radios by partner/community owner ID.
@@ -42,4 +44,7 @@ class RadioPlayerConfig {
 
   /// Stream of play/pause state changes.
   final Stream<bool>? isPlayingStream;
+
+  /// Optional RadioService instance for listener tracking.
+  final RadioService? radioService;
 }
