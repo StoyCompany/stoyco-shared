@@ -1,3 +1,7 @@
+## 21.7.12
+
+**fix(announcement):** center title leadership board modal
+
 ## 21.7.11
 
 **feat(radio):** add buffering state support to radio player
