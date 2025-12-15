@@ -313,41 +313,47 @@ class _AnnouncementLeaderShipDialogState
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              SvgPicture.asset(
-                'packages/stoyco_shared/lib/assets/icons/champion_icon.svg',
-                width: widget.titleIconSize ??
-                    StoycoScreenSize.width(
-                      context,
-                      21.32,
-                      phone: 18,
-                      tablet: 20,
-                      desktopLarge: 24,
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      'packages/stoyco_shared/lib/assets/icons/champion_icon.svg',
+                      width: widget.titleIconSize ??
+                          StoycoScreenSize.width(
+                            context,
+                            21.32,
+                            phone: 18,
+                            tablet: 20,
+                            desktopLarge: 24,
+                          ),
+                      height: widget.titleIconSize ??
+                          StoycoScreenSize.height(
+                            context,
+                            21.32,
+                            phone: 18,
+                            tablet: 20,
+                            desktopLarge: 24,
+                          ),
                     ),
-                height: widget.titleIconSize ??
-                    StoycoScreenSize.height(
-                      context,
-                      21.32,
-                      phone: 18,
-                      tablet: 20,
-                      desktopLarge: 24,
-                    ),
-              ),
-              Gap(StoycoScreenSize.width(context, 7)),
-              Text(
-                'Leadership Board',
-                style: TextStyle(
-                  fontSize: widget.titleFontSize ??
-                      StoycoScreenSize.fontSize(
-                        context,
-                        22,
-                        phone: 12,
-                        tablet: 14,
+                    Gap(StoycoScreenSize.width(context, 7)),
+                    Text(
+                      'Leadership Board',
+                      style: TextStyle(
+                        fontSize: widget.titleFontSize ??
+                            StoycoScreenSize.fontSize(
+                              context,
+                              22,
+                              phone: 12,
+                              tablet: 14,
+                            ),
+                        fontWeight: widget.titleFontWeight,
+                        color: widget.titleColor,
                       ),
-                  fontWeight: widget.titleFontWeight,
-                  color: widget.titleColor,
+                    ),
+                  ],
                 ),
               ),
-              const Spacer(),
               if (!_isLoading)
                 MouseRegion(
                   cursor: SystemMouseCursors.click,
@@ -683,25 +689,23 @@ class _AnnouncementLeaderShipDialogState
             height: iconSize,
           ),
           Gap(_responsiveWidth(10, phone: 10, tablet: 9, desktopLarge: 12)),
-          Expanded(
-            child: Text(
-              text,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: widget.dateFontSize ??
-                    _getCachedValue<double>(
-                      'date_font_size',
-                      () => StoycoScreenSize.fontSize(
-                        context,
-                        14,
-                        phone: 10,
-                        tablet: 12,
-                        desktopLarge: 16,
-                      ),
+          Text(
+            text,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: widget.dateFontSize ??
+                  _getCachedValue<double>(
+                    'date_font_size',
+                    () => StoycoScreenSize.fontSize(
+                      context,
+                      14,
+                      phone: 10,
+                      tablet: 12,
+                      desktopLarge: 16,
                     ),
-                fontWeight: widget.dateFontWeight,
-                color: widget.dateTextColor ?? StoycoColors.text,
-              ),
+                  ),
+              fontWeight: widget.dateFontWeight,
+              color: widget.dateTextColor ?? StoycoColors.text,
             ),
           ),
         ],
