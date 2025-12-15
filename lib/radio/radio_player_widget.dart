@@ -132,18 +132,22 @@ class _RadioPlayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ValueListenableBuilder<bool>(
         valueListenable: controller.isPlayingListenable,
-        builder: (context, isPlaying, _) {
-          final isThisRadioPlaying = controller.isRadioPlaying(radio.id);
-          final isCurrentRadio = controller.currentPlayingRadioId == radio.id;
+        builder: (context, isPlaying, _) => ValueListenableBuilder<bool>(
+          valueListenable: controller.isBufferingListenable,
+          builder: (context, isBuffering, _) {
+            final isThisRadioPlaying = controller.isRadioPlaying(radio.id);
+            final isCurrentRadio = controller.currentPlayingRadioId == radio.id;
 
-          return _PlayerButton(
-            radio: radio,
-            isPlaying: isThisRadioPlaying,
-            isCurrentRadio: isCurrentRadio,
-            controller: controller,
-            fontFamily: fontFamily,
-          );
-        },
+            return _PlayerButton(
+              radio: radio,
+              isPlaying: isThisRadioPlaying,
+              isBuffering: isBuffering && isCurrentRadio,
+              isCurrentRadio: isCurrentRadio,
+              controller: controller,
+              fontFamily: fontFamily,
+            );
+          },
+        ),
       );
 }
 
@@ -151,6 +155,7 @@ class _PlayerButton extends StatelessWidget {
   const _PlayerButton({
     required this.radio,
     required this.isPlaying,
+    required this.isBuffering,
     required this.isCurrentRadio,
     required this.controller,
     this.fontFamily,
@@ -158,13 +163,14 @@ class _PlayerButton extends StatelessWidget {
 
   final RadioModel radio;
   final bool isPlaying;
+  final bool isBuffering;
   final bool isCurrentRadio;
   final RadioPlayerController controller;
   final String? fontFamily;
 
   @override
   Widget build(BuildContext context) => GestureDetector(
-        onTap: _handleTap,
+        onTap: isBuffering ? null : _handleTap,
         child: Container(
           padding: StoycoScreenSize.symmetric(
             context,
@@ -181,6 +187,7 @@ class _PlayerButton extends StatelessWidget {
             children: [
               _PlayPauseIcon(
                 isPlaying: isPlaying,
+                isBuffering: isBuffering,
               ),
               SizedBox(width: StoycoScreenSize.width(context, 20)),
               Expanded(
@@ -206,19 +213,30 @@ class _PlayerButton extends StatelessWidget {
 class _PlayPauseIcon extends StatelessWidget {
   const _PlayPauseIcon({
     required this.isPlaying,
+    required this.isBuffering,
   });
 
   final bool isPlaying;
+  final bool isBuffering;
 
   @override
   Widget build(BuildContext context) => CircleAvatar(
         radius: StoycoScreenSize.width(context, 16.5),
         backgroundColor: StoycoColors.whiteLavender,
-        child: Icon(
-          isPlaying ? Icons.pause : Icons.play_arrow_rounded,
-          color: StoycoColors.charcoalGray,
-          size: StoycoScreenSize.width(context, 24),
-        ),
+        child: isBuffering
+            ? SizedBox(
+                width: StoycoScreenSize.width(context, 18),
+                height: StoycoScreenSize.width(context, 18),
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.5,
+                  color: StoycoColors.charcoalGray,
+                ),
+              )
+            : Icon(
+                isPlaying ? Icons.pause : Icons.play_arrow_rounded,
+                color: StoycoColors.charcoalGray,
+                size: StoycoScreenSize.width(context, 24),
+              ),
       );
 }
 
