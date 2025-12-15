@@ -13,8 +13,10 @@ class RadioPlayerConfig {
     this.onShareRadio,
     this.getCurrentPlayingRadioId,
     this.isAudioPlaying,
+    this.isAudioBuffering,
     this.playingRadioStream,
     this.isPlayingStream,
+    this.isBufferingStream,
     this.radioService,
   });
 
@@ -39,11 +41,17 @@ class RadioPlayerConfig {
   /// Returns whether audio is currently playing (sync).
   final bool Function()? isAudioPlaying;
 
+  /// Returns whether audio is currently buffering/loading (sync).
+  final bool Function()? isAudioBuffering;
+
   /// Stream of currently playing radio ID changes.
   final Stream<String?>? playingRadioStream;
 
   /// Stream of play/pause state changes.
   final Stream<bool>? isPlayingStream;
+
+  /// Stream of buffering state changes.
+  final Stream<bool>? isBufferingStream;
 
   /// Optional RadioService instance for listener tracking.
   final RadioService? radioService;

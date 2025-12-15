@@ -1,3 +1,18 @@
+## 21.7.11
+
+**feat(radio):** add buffering state support to radio player
+
+### Added
+- `RadioPlayerConfig.isAudioBuffering`: Sync callback for buffering state
+- `RadioPlayerConfig.isBufferingStream`: Stream for buffering state changes
+- `RadioPlayerController.isBufferingListenable`: ValueListenable for UI updates
+- `RadioPlayerController.isBuffering`: Getter for current buffering state
+- Loading spinner in play button while audio is buffering
+
+### Changed
+- Play button disabled during buffering to prevent multiple taps
+- Buffering state automatically clears when playback starts or on error
+
 ## 21.7.10
 
 **feat(radio):** add anonymous listener tracking and pause/resume support

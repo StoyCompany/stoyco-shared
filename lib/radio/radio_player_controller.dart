@@ -37,9 +37,11 @@ class RadioPlayerController extends ChangeNotifier {
   final ValueNotifier<RadioPlayerState> _stateNotifier =
       ValueNotifier<RadioPlayerState>(const RadioPlayerState());
   final ValueNotifier<bool> _isPlayingNotifier = ValueNotifier<bool>(false);
+  final ValueNotifier<bool> _isBufferingNotifier = ValueNotifier<bool>(false);
 
   StreamSubscription<String?>? _playbackSubscription;
   StreamSubscription<bool>? _isPlayingSubscription;
+  StreamSubscription<bool>? _isBufferingSubscription;
 
   /// Listenable for loading state changes.
   ValueListenable<bool> get isLoadingListenable => _isLoadingNotifier;
@@ -49,6 +51,9 @@ class RadioPlayerController extends ChangeNotifier {
 
   /// Listenable for play/pause state changes.
   ValueListenable<bool> get isPlayingListenable => _isPlayingNotifier;
+
+  /// Listenable for buffering state changes.
+  ValueListenable<bool> get isBufferingListenable => _isBufferingNotifier;
 
   /// Whether radios are currently loading.
   bool get isLoading => _isLoadingNotifier.value;
@@ -61,6 +66,9 @@ class RadioPlayerController extends ChangeNotifier {
 
   /// ID of the currently playing radio, or `null` if stopped.
   String? get currentPlayingRadioId => _stateNotifier.value.currentPlayingRadioId;
+
+  /// Whether audio is currently buffering.
+  bool get isBuffering => _isBufferingNotifier.value;
 
   void _init() {
     _loadRadios();
@@ -78,6 +86,7 @@ class RadioPlayerController extends ChangeNotifier {
       );
     }
     _updateIsPlaying();
+    _updateIsBuffering();
   }
 
   Future<void> _loadRadios() async {
@@ -120,6 +129,9 @@ class RadioPlayerController extends ChangeNotifier {
       _isPlayingSubscription = config.isPlayingStream!.listen(
         (isPlaying) {
           _isPlayingNotifier.value = isPlaying;
+          if (isPlaying) {
+            _isBufferingNotifier.value = false;
+          }
         },
         onError: (e) {
           StoyCoLogger.error(
@@ -130,10 +142,29 @@ class RadioPlayerController extends ChangeNotifier {
         cancelOnError: false,
       );
     }
+
+    if (config.isBufferingStream != null) {
+      _isBufferingSubscription = config.isBufferingStream!.listen(
+        (isBuffering) {
+          _isBufferingNotifier.value = isBuffering;
+        },
+        onError: (e) {
+          StoyCoLogger.error(
+            '[RadioPlayerController] Error listening to isBuffering stream',
+            error: e,
+          );
+        },
+        cancelOnError: false,
+      );
+    }
   }
 
   void _updateIsPlaying() {
     _isPlayingNotifier.value = config.isAudioPlaying?.call() ?? false;
+  }
+
+  void _updateIsBuffering() {
+    _isBufferingNotifier.value = config.isAudioBuffering?.call() ?? false;
   }
 
   /// Plays a radio station.
@@ -148,12 +179,15 @@ class RadioPlayerController extends ChangeNotifier {
       return;
     }
 
+    _isBufferingNotifier.value = true;
+
     _stateNotifier.value = _stateNotifier.value.copyWith(
       currentPlayingRadioId: radio.id,
     );
 
     unawaited(
       config.onPlayRadio!(radio).catchError((e) {
+        _isBufferingNotifier.value = false;
         StoyCoLogger.error('[RadioPlayerController] Error playing radio', error: e);
       }),
     );
@@ -166,8 +200,13 @@ class RadioPlayerController extends ChangeNotifier {
   void togglePlayPause(String radioId) {
     if (config.onTogglePlayPause == null) return;
 
+    if (!_isPlayingNotifier.value) {
+      _isBufferingNotifier.value = true;
+    }
+
     unawaited(
       config.onTogglePlayPause!(radioId).catchError((e) {
+        _isBufferingNotifier.value = false;
         StoyCoLogger.error('[RadioPlayerController] Error toggling play/pause', error: e);
       }),
     );
@@ -181,6 +220,7 @@ class RadioPlayerController extends ChangeNotifier {
 
     _stateNotifier.value = _stateNotifier.value.copyWith(clearCurrentRadio: true);
     _isPlayingNotifier.value = false;
+    _isBufferingNotifier.value = false;
 
     unawaited(
       config.onStopRadio!().catchError((e) {
@@ -230,9 +270,11 @@ class RadioPlayerController extends ChangeNotifier {
   void dispose() {
     _playbackSubscription?.cancel();
     _isPlayingSubscription?.cancel();
+    _isBufferingSubscription?.cancel();
     _isLoadingNotifier.dispose();
     _stateNotifier.dispose();
     _isPlayingNotifier.dispose();
+    _isBufferingNotifier.dispose();
     super.dispose();
   }
 }
