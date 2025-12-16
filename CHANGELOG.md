@@ -1,3 +1,12 @@
+## 21.7.13
+
+**feat(widgets):** add radio integration to LoopVideoPlayer
+
+### Added
+- `LoopVideoPlayer.isRadioPlaying`: Optional callback to check if radio is currently playing
+- `LoopVideoPlayer.radioPlayingStream`: Optional stream to listen for radio state changes
+- Video automatically pauses when radio starts playing and resumes when radio stops
+
 ## 21.7.12
 
 **fix(announcement):** center title leadership board modal
