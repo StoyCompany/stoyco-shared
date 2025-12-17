@@ -1,5 +1,9 @@
 ## 21.7.13
 
+**feat(Stoycoins):** reset collective fund balance to 0 when user logs out 
+
+## 21.7.13
+
 **feat(widgets):** add radio integration to LoopVideoPlayer
 
 ### Added

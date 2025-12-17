@@ -207,13 +207,42 @@ class StoycoinsService {
   /// Cancels the authentication subscription and closes the balance stream.
   /// Should be called when the service is no longer needed.
   void clearSession() {
-    _authSubscription?.cancel();
-    _balanceStreamController.close();
+
+    final userId = _firebaseAuth.currentUser?.uid;
+
+
+    if (userId != null && _repository != null) {
+      _repository!.invalidateCache('stoycoins_balance_$userId');
+    }
+
+
+    if (!_balanceStreamController.isClosed) {
+      _balanceStreamController.add(BalanceModel(availableBalance: 0));
+    }
+
+    // Reset internal state
+    _currentBalance = BalanceModel(availableBalance: 0);
+    _userToken = '';
+
+    if (_dio != null) {
+      _dio!.options.headers.remove('Authorization');
+    }
   }
 
-  /// Resets the singleton instance for testing purposes.
+  /// Resets the singleton instance.
+  ///
+  /// This method is primarily for testing purposes. It:
+  /// - Cancels the auth subscription
+  /// - Closes the balance stream controller
+  /// - Destroys the singleton instance
+  ///
+  /// **Warning**: Use with caution. After calling this, you must create
+  /// a new instance via the factory constructor before using the service again.
   static void resetInstance() {
-    _instance?.clearSession();
-    _instance = null;
+    if (_instance != null) {
+      _instance!._authSubscription?.cancel();
+      _instance!._balanceStreamController.close();
+      _instance = null;
+    }
   }
 }
