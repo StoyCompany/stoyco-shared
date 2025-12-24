@@ -1,3 +1,7 @@
+## 21.8.0
+
+**feat(RevenueCat):** add revenuecat integration for subscription management
+
 ## 21.7.13
 
 **feat(Stoycoins):** reset collective fund balance to 0 when user logs out 
