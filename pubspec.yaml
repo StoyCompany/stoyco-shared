@@ -1,6 +1,6 @@
 name: stoyco_shared
 description: A set of shared components for Stoyco Flutter projects.
-version: 21.8.0
+version: 21.8.1
 publish_to: "none"
 
 environment:
@@ -47,7 +47,6 @@ dependencies:
   moengage_flutter: ^10.1.0
   moengage_geofence: ^6.1.0
   firebase_auth: ^6.1.2
-  purchases_flutter: ^9.10.1
   stoyco_interaction_content:
     git:
       url: https://github.com/StoyCompany/StoycoInteractionContent_Package.git
