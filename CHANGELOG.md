@@ -1,3 +1,7 @@
+## 21.8.1
+
+**fix(RevenueCat):** remove revenuecat integration for subscription management
+
 ## 21.8.0
 
 **feat(RevenueCat):** add revenuecat integration for subscription management
