@@ -33,6 +33,7 @@ class VideoWithMetadata with ContentAccessValidatorMixin {
     this.likes,
     this.isSubscriberOnly = false,
     this.accessContent,
+    this.thumbnail,
     bool? hasAccessWithSubscription,
   }) : hasAccessWithSubscription = hasAccessWithSubscription ?? !isSubscriberOnly;
 
@@ -57,10 +58,11 @@ class VideoWithMetadata with ContentAccessValidatorMixin {
   final bool isSubscriberOnly;
   final AccessContent? accessContent;
   final bool hasAccessWithSubscription;
+  final String? thumbnail;
 
   @override
   String toString() =>
-      'VideoWithMetadata(videoMetadata: $videoMetadata, id: $id, videoUrl: $videoUrl, appUrl: $appUrl, name: $name, description: $description, partnerId: $partnerId, order: $order, active: $active, createAt: $createAt, partnerId: $partnerId, isSubscriberOnly: $isSubscriberOnly, streamingData: $streamingData, isSubscriberOnly: $isSubscriberOnly, isFeaturedContent: $isFeaturedContent, partnerName: $partnerName, shared: $shared, followingCO: $followingCO, likeThisVideo: $likeThisVideo, views: $views, likes: $likes)';
+      'VideoWithMetadata(videoMetadata: $videoMetadata, id: $id, videoUrl: $videoUrl, appUrl: $appUrl, name: $name, description: $description, partnerId: $partnerId, order: $order, active: $active, createAt: $createAt, partnerId: $partnerId, isSubscriberOnly: $isSubscriberOnly, streamingData: $streamingData, isSubscriberOnly: $isSubscriberOnly, isFeaturedContent: $isFeaturedContent, partnerName: $partnerName, shared: $shared, followingCO: $followingCO, likeThisVideo: $likeThisVideo, views: $views, likes: $likes, thumbnail: $thumbnail)';
 
   Map<String, dynamic> toJson() => _$VideoWithMetadataToJson(this);
 
@@ -85,6 +87,7 @@ class VideoWithMetadata with ContentAccessValidatorMixin {
     int? likes,
     bool? isSubscriberOnly,
     bool? hasAccessWithSubscription,
+    String? thumbnail,
   }) =>
       VideoWithMetadata(
         videoMetadata: videoMetadata ?? this.videoMetadata,
@@ -108,6 +111,7 @@ class VideoWithMetadata with ContentAccessValidatorMixin {
         isSubscriberOnly: isSubscriberOnly ?? this.isSubscriberOnly,
         hasAccessWithSubscription:
             hasAccessWithSubscription ?? this.hasAccessWithSubscription,
+        thumbnail: thumbnail ?? this.thumbnail,
       );
 
   @override
@@ -140,7 +144,8 @@ class VideoWithMetadata with ContentAccessValidatorMixin {
       likeThisVideo.hashCode ^
       views.hashCode ^
       likes.hashCode ^
-      hasAccessWithSubscription.hashCode;
+      hasAccessWithSubscription.hashCode ^
+      thumbnail.hashCode;
 
   /// Gets the best available video URL, preferring streaming URL if available
   String? get bestVideoUrl {

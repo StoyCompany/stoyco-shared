@@ -33,7 +33,7 @@ class MockMoEngagePlatform extends _i1.Mock implements _i2.MoEngagePlatform {
   @override
   void initialize({
     required String? appId,
-    String? pushToken,
+    required String? pushToken,
   }) =>
       super.noSuchMethod(
         Invocation.method(

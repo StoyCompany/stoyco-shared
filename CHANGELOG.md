@@ -1,3 +1,22 @@
+## 21.9.0
+
+**feat(video):** add thumbnail property to VideoWithMetadata model
+
+- Added a new optional `thumbnail` property to the `VideoWithMetadata` class.
+- Updated the `toString` method to include the `thumbnail` in its output.
+- Modified the `fromJson` and `toJson` methods to handle the new `thumbnail` property.
+- Updated the copyWith method to allow modification of the `thumbnail`.
+
+**fix(moengage):** require pushToken in initialize method
+
+- Changed the `pushToken` parameter in the `initialize` method of `MockMoEngagePlatform` to be required.
+
+**refactor(news):** update mock classes and imports
+
+- Updated imports in `news_repository_test.mocks.dart` to reflect changes in the project structure.
+- Adjusted mock classes to ensure proper functionality and type consistency across methods.
+- Added a new fake class for `ServerTime` to facilitate testing.
+
 ## 21.8.1
 
 **fix(RevenueCat):** remove revenuecat integration for subscription management
@@ -8,13 +27,14 @@
 
 ## 21.7.13
 
-**feat(Stoycoins):** reset collective fund balance to 0 when user logs out 
+**feat(Stoycoins):** reset collective fund balance to 0 when user logs out
 
 ## 21.7.13
 
 **feat(widgets):** add radio integration to LoopVideoPlayer
 
 ### Added
+
 - `LoopVideoPlayer.isRadioPlaying`: Optional callback to check if radio is currently playing
 - `LoopVideoPlayer.radioPlayingStream`: Optional stream to listen for radio state changes
 - Video automatically pauses when radio starts playing and resumes when radio stops
@@ -28,6 +48,7 @@
 **feat(radio):** add buffering state support to radio player
 
 ### Added
+
 - `RadioPlayerConfig.isAudioBuffering`: Sync callback for buffering state
 - `RadioPlayerConfig.isBufferingStream`: Stream for buffering state changes
 - `RadioPlayerController.isBufferingListenable`: ValueListenable for UI updates
@@ -35,6 +56,7 @@
 - Loading spinner in play button while audio is buffering
 
 ### Changed
+
 - Play button disabled during buffering to prevent multiple taps
 - Buffering state automatically clears when playback starts or on error
 
@@ -43,10 +65,12 @@
 **feat(radio):** add anonymous listener tracking and pause/resume support
 
 ### Added
+
 - Support for anonymous users in radio listener tracking using temporary session IDs
 - Listener tracking on pause/resume: removes listener on pause, adds back on resume
 
 ### Changed
+
 - `RadioService.startListening` and `stopListening` now support both authenticated and anonymous users
 - `RadioPlayerController.togglePlayPause` now updates listener count on pause/resume
 

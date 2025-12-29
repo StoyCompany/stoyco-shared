@@ -39,6 +39,7 @@ VideoWithMetadata _$VideoWithMetadataFromJson(Map<String, dynamic> json) =>
           ? null
           : AccessContent.fromJson(
               json['accessContent'] as Map<String, dynamic>),
+      thumbnail: json['thumbnail'] as String?,
       hasAccessWithSubscription: json['hasAccessWithSubscription'] as bool?,
     );
 
@@ -65,4 +66,5 @@ Map<String, dynamic> _$VideoWithMetadataToJson(VideoWithMetadata instance) =>
       'isSubscriberOnly': instance.isSubscriberOnly,
       'accessContent': instance.accessContent?.toJson(),
       'hasAccessWithSubscription': instance.hasAccessWithSubscription,
+      'thumbnail': instance.thumbnail,
     };
