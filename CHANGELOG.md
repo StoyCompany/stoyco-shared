@@ -1,3 +1,7 @@
+## 21.9.1
+
+**feat(video):** add thumbnail handling in video player repository
+
 ## 21.9.0
 
 **feat(video):** add thumbnail property to VideoWithMetadata model

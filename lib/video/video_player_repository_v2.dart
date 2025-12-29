@@ -239,6 +239,8 @@ class VideoPlayerRepositoryV2 with MultiContentAccessValidatorMixin {
                     m['accessContent'] as Map<String, dynamic>,
                   )
                 : null,
+            thumbnail:
+                m.containsKey('thumbnail') ? m['thumbnail'] as String? : null,
           );
         }).toList(),
         'Error getting videos with filter',
@@ -335,6 +337,8 @@ class VideoPlayerRepositoryV2 with MultiContentAccessValidatorMixin {
                     m['accessContent'] as Map<String, dynamic>,
                   )
                 : null,
+            thumbnail:
+                m.containsKey('thumbnail') ? m['thumbnail'] as String? : null,
           );
         }).toList(),
         'Error getting featured videos',
