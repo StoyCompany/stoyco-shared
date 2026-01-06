@@ -1,3 +1,14 @@
+## 21.10.1
+
+**feat(radio):** add idempotent playback recording with recordPlaybackIfNew
+
+- Added `RadioService.recordPlaybackIfNew()` method to record playback sessions idempotently.
+- Uses `userId_radioId` composite key to ensure each user's first playback is recorded only once.
+- Automatically increments `playback_count` when a new playback session is created.
+- Creates documents in `radio_playback_sessions` collection with timestamp tracking.
+- Returns `true` if playback was recorded, `false` if already existed.
+- Includes comprehensive logging for playback tracking.
+
 ## 21.10.0
 
 **refactor(radio):** replace listener tracking with playback count
