@@ -1,3 +1,14 @@
+## 21.10.0
+
+**refactor(radio):** replace listener tracking with playback count
+
+- Changed `RadioModel.membersOnlineCount` to `RadioModel.playbackCount` to track cumulative playbacks instead of real-time listeners.
+- Removed `RadioService.startListening()` and `RadioService.stopListening()` methods.
+- Added `RadioService.getPlaybackCount()` and `RadioService.watchPlaybackCount()` to read playback statistics.
+- Updated `RadioPlayerController.getListenerCount()` to use `watchPlaybackCount()`.
+- Changed UI text from "LISTENING X" to "REPRODUCCIONES X" in `RadioPlayerWidget`.
+- This change simplifies listener tracking by moving real-time listener management to the backend while displaying cumulative playback counts in the app.
+
 ## 21.9.1
 
 **feat(video):** add thumbnail handling in video player repository

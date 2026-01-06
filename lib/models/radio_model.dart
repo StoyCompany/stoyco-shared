@@ -49,8 +49,10 @@ class RadioModel {
   /// Timestamp of the last app activity.
   final DateTime? lastAppActivity;
 
-  /// Current number of online listeners.
-  final int membersOnlineCount;
+
+  /// Total number of playbacks (users who listened ≥ 1 minute).
+  /// This is a cumulative counter that only increments, never decrements.
+  final int playbackCount;
 
   /// Total StoyCoins donated to this radio.
   final int totalDonatedStoyCoins;
@@ -72,7 +74,7 @@ class RadioModel {
     this.appLastDecrement,
     this.appLastIncrement,
     this.lastAppActivity,
-    this.membersOnlineCount = 0,
+    this.playbackCount = 0,
     this.totalDonatedStoyCoins = 0,
   });
 
@@ -95,7 +97,7 @@ class RadioModel {
       appLastDecrement: (data['app_last_decrement'] as Timestamp?)?.toDate(),
       appLastIncrement: (data['app_last_increment'] as Timestamp?)?.toDate(),
       lastAppActivity: (data['last_app_activity'] as Timestamp?)?.toDate(),
-      membersOnlineCount: data['members_online_count'] ?? 0,
+      playbackCount: data['playback_count'] ?? 0,
       totalDonatedStoyCoins: data['totalDonatedStoyCoins'] ?? 0,
     );
   }
@@ -117,7 +119,7 @@ class RadioModel {
       appLastDecrement: (data['app_last_decrement'] as Timestamp?)?.toDate(),
       appLastIncrement: (data['app_last_increment'] as Timestamp?)?.toDate(),
       lastAppActivity: (data['last_app_activity'] as Timestamp?)?.toDate(),
-      membersOnlineCount: data['members_online_count'] ?? 0,
+      playbackCount: data['playback_count'] ?? 0,
       totalDonatedStoyCoins: data['totalDonatedStoyCoins'] ?? 0,
     );
 
@@ -147,7 +149,7 @@ class RadioModel {
     DateTime? appLastDecrement,
     DateTime? appLastIncrement,
     DateTime? lastAppActivity,
-    int? membersOnlineCount,
+    int? playbackCount,
     int? totalDonatedStoyCoins,
   }) => RadioModel(
       id: id ?? this.id,
@@ -165,7 +167,7 @@ class RadioModel {
       appLastDecrement: appLastDecrement ?? this.appLastDecrement,
       appLastIncrement: appLastIncrement ?? this.appLastIncrement,
       lastAppActivity: lastAppActivity ?? this.lastAppActivity,
-      membersOnlineCount: membersOnlineCount ?? this.membersOnlineCount,
+      playbackCount: playbackCount ?? this.playbackCount,
       totalDonatedStoyCoins: totalDonatedStoyCoins ?? this.totalDonatedStoyCoins,
     );
 
@@ -186,7 +188,7 @@ class RadioModel {
       'app_last_decrement': appLastDecrement?.toIso8601String(),
       'app_last_increment': appLastIncrement?.toIso8601String(),
       'last_app_activity': lastAppActivity?.toIso8601String(),
-      'members_online_count': membersOnlineCount,
+      'playback_count': playbackCount,
       'totalDonatedStoyCoins': totalDonatedStoyCoins,
     };
 }
