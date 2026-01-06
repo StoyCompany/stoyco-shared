@@ -103,4 +103,58 @@ class RadioService {
       rethrow;
     }
   }
+
+  /// Records a playback for a user on a radio (idempotent).
+  ///
+  /// Only records if this is the first time this user plays this radio.
+  /// Uses `userId_radioId` as document ID for idempotency.
+  ///
+  /// [radioId] The radio being played.
+  /// [userId] The user listening.
+  /// Returns `true` if playback was recorded, `false` if already existed.
+  Future<bool> recordPlaybackIfNew(String radioId, String userId) async {
+    try {
+      final recordId = '${userId}_$radioId';
+
+      final recordDoc = await _firestore
+          .collection('radio_playback_sessions')
+          .doc(recordId)
+          .get();
+
+      if (recordDoc.exists) {
+        StoyCoLogger.info(
+          '[RadioService] Playback already recorded for user $userId on radio $radioId',
+        );
+        return false;
+      }
+
+      await _firestore.collection(_collection).doc(radioId).update({
+        'playback_count': FieldValue.increment(1),
+      });
+
+      await _firestore
+          .collection('radio_playback_sessions')
+          .doc(recordId)
+          .set({
+        'radioId': radioId,
+        'listenerId': userId,
+        'startTime': FieldValue.serverTimestamp(),
+        'lastActivity': FieldValue.serverTimestamp(),
+        'hasRecordedPlayback': false,
+        'recordedAt': FieldValue.serverTimestamp(),
+      });
+
+      StoyCoLogger.info(
+        '[RadioService] ✅ Playback recorded for user $userId on radio $radioId',
+      );
+
+      return true;
+    } catch (e) {
+      StoyCoLogger.error(
+        '[RadioService] Error recording playback',
+        error: e,
+      );
+      rethrow;
+    }
+  }
 }
