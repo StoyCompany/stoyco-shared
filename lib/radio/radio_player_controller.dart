@@ -229,12 +229,12 @@ class RadioPlayerController extends ChangeNotifier {
     );
   }
 
-  /// Gets the listener count stream for a radio.
+  /// Gets the playback count stream for a radio.
   ///
   /// [radioId] The radio document ID.
-  /// Returns a [Stream] emitting the current listener count.
+  /// Returns a [Stream] emitting the current playback count.
   Stream<int> getListenerCount(String radioId) =>
-      _radioService.watchListenerCount(radioId);
+      _radioService.watchPlaybackCount(radioId);
 
   /// Checks if a specific radio is currently playing.
   ///

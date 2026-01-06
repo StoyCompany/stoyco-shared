@@ -110,7 +110,7 @@ class RadioPlayerContent extends StatelessWidget {
           SizedBox(height: StoycoScreenSize.height(context, 15)),
           _ListenerCount(
             radioId: radio.id,
-            initialCount: radio.membersOnlineCount,
+            initialCount: radio.playbackCount,
             controller: controller,
             fontFamily: fontFamily,
           ),
@@ -302,7 +302,7 @@ class _ListenerCount extends StatelessWidget {
           return Align(
             alignment: Alignment.centerRight,
             child: Text(
-              'LISTENING X $count',
+              'REPRODUCCIONES X $count',
               style: TextStyle(
                 color: StoycoColors.whiteLavender,
                 fontSize: StoycoScreenSize.fontSize(context, 10),
