@@ -17,14 +17,6 @@ class MessageCommunityModel {
 
 @JsonSerializable()
 class CommunityAttributes {
-  factory CommunityAttributes.fromJson(Map<String, dynamic> json) =>
-      CommunityAttributes(
-        name: json['name'] as String?,
-        partnerId: json['partnerId'] as String?,
-        partnerName: json['partnerName'] as String?,
-        partnerType: json['partnerType'] as String?,
-      );
-
   CommunityAttributes({
     this.name,
     this.partnerId,
