@@ -22,6 +22,7 @@ class MessageModel {
     String? linkUrl,
     String? route,
     String? type,
+    Map<String, dynamic>? data,
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? readAt,
@@ -37,6 +38,7 @@ class MessageModel {
         _linkUrl = linkUrl,
         _route = route,
         _type = type,
+        _data = data,
         _createdAt = createdAt,
         _updatedAt = updatedAt,
         _readAt = readAt;
@@ -60,6 +62,7 @@ class MessageModel {
       linkUrl: json['linkUrl'] as String?,
       route: json['route'] as String?,
       type: json['type'] as String?,
+      data: json['data'] as Map<String, dynamic>?,
       updatedAt: json['updatedAt'] == null
           ? null
           : DateTime.tryParse(json['updatedAt'] as String),
@@ -84,6 +87,7 @@ class MessageModel {
   final String? _linkUrl;
   final String? _route;
   final String? _type;
+  final Map<String, dynamic>? _data;
   final DateTime? _createdAt;
   final DateTime? _updatedAt;
   final DateTime? _readAt;
@@ -123,6 +127,9 @@ class MessageModel {
 
   /// The message type (as string). It may represent an integer code.
   String? get type => _type;
+
+  /// Additional data associated with the message.
+  Map<String, dynamic>? get data => _data;
 
   /// The creation timestamp of the message.
   DateTime? get createdAt => _createdAt;
