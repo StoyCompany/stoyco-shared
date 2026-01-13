@@ -4,6 +4,9 @@ part 'message_community_model.g.dart';
 
 @JsonSerializable()
 class MessageCommunityModel {
+  factory MessageCommunityModel.fromJson(Map<String, dynamic> json) =>
+      _$MessageCommunityModelFromJson(json);
+
   MessageCommunityModel({
     required this.id,
     required this.type,
@@ -17,6 +20,9 @@ class MessageCommunityModel {
 
 @JsonSerializable()
 class CommunityAttributes {
+  factory CommunityAttributes.fromJson(Map<String, dynamic> json) =>
+      _$CommunityAttributesFromJson(json);
+
   CommunityAttributes({
     this.name,
     this.partnerId,
