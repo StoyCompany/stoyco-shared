@@ -19,6 +19,7 @@ MessageModel _$MessageModelFromJson(Map<String, dynamic> json) => MessageModel(
       linkUrl: json['linkUrl'] as String?,
       route: json['route'] as String?,
       type: json['type'] as String?,
+      data: json['data'] as Map<String, dynamic>?,
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
@@ -44,6 +45,7 @@ Map<String, dynamic> _$MessageModelToJson(MessageModel instance) =>
       'linkUrl': instance.linkUrl,
       'route': instance.route,
       'type': instance.type,
+      'data': instance.data,
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
       'readAt': instance.readAt?.toIso8601String(),

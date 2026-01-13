@@ -1,18 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
+part 'message_community_model.g.dart';
+
 @JsonSerializable()
 class MessageCommunityModel {
-  factory MessageCommunityModel.fromJson(Map<String, dynamic> json) =>
-      MessageCommunityModel(
-        id: json['id'] as String?,
-        type: json['type'] as String,
-        attributes: json['attributes'] == null
-            ? null
-            : CommunityAttributes.fromJson(
-                json['attributes'] as Map<String, dynamic>,
-              ),
-      );
-
   MessageCommunityModel({
     required this.id,
     required this.type,
@@ -20,7 +11,7 @@ class MessageCommunityModel {
   });
 
   final String? id;
-  final String type;
+  final String? type;
   final CommunityAttributes? attributes;
 }
 

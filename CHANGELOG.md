@@ -1,3 +1,9 @@
+## 21.11.0
+**feat(community-model):** new model to use like data on message_model 
+
+- new file generated to use on data field message model
+- modified existing message_model.g.dart to include new data field.
+
 ## 21.10.1
 
 **feat(radio):** add idempotent playback recording with recordPlaybackIfNew
