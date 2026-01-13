@@ -1,4 +1,4 @@
-## 21.11.0
+## 21.11.1
 **feat(community-model):** new model to use like data on message_model 
 
 - new file generated to use on data field message model
