@@ -1,3 +1,8 @@
+## 21.11.2
+**feat(experience):** new enum to experience
+
+- new enum option to experience
+
 ## 21.11.1
 **feat(community-model):** new model to use like data on message_model 
 
