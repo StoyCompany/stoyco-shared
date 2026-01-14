@@ -106,6 +106,9 @@ enum NotificationType {
   /// StoyCoins earned by sharing a video notifications
   stoyCoinsEarnedBySharedVideo(34),
 
+  /// Experience notifications messages
+  experience(35),
+
   /// Generic notifications
   generic(99);
 
@@ -154,5 +157,4 @@ enum NotificationType {
         return false;
     }
   }
-  
 }
