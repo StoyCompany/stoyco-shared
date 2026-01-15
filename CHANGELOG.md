@@ -1,3 +1,9 @@
+## 21.11.3
+**refactor(modal): redesign glass modal**
+
+- new widget to reuse on app
+- modal glass component redesign
+
 ## 21.11.2
 **feat(experience):** new enum to experience
 
