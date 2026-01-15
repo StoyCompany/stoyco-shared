@@ -107,7 +107,7 @@ class DialogContainer extends StatelessWidget {
                       borderRadius: BorderRadius.circular(radius),
                       color: backgroundColor ??
                           (gradient == null
-                              ? const Color.fromRGBO(32, 37, 50, 0.8)
+                              ? const Color.fromRGBO(32, 37, 50, 0.4)
                               : null),
                       gradient: gradient,
                     ),
