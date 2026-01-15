@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:glassmorphism/glassmorphism.dart';
+import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/utils/gradient_painter.dart';
 
 /// A customizable dialog container widget with glassmorphism effect.
@@ -17,17 +18,19 @@ class DialogContainer extends StatelessWidget {
   /// * [containerWidth] - The width of the dialog container. Defaults to 90% of screen width.
   /// * [maxWidth] - The maximum width of the dialog container. Defaults to 500.
   /// * [minHeight] - The minimum height of the dialog container. Defaults to 300.
-  const DialogContainer(
-      {super.key,
-      this.padding,
-      this.gradient,
-      this.containerWidth,
-      this.backgroundColor,
-      this.canClose = false,
-      required this.children,
-      this.maxWidth = 500,
-      this.minHeight = 300,
-      this.radius = 0});
+  /// * [radius] - The border radius of the dialog container. Defaults to 0.
+  const DialogContainer({
+    super.key,
+    this.padding,
+    this.gradient,
+    this.containerWidth,
+    this.backgroundColor,
+    this.canClose = false,
+    required this.children,
+    this.maxWidth = 500,
+    this.minHeight = 300,
+    this.radius = 0,
+  });
 
   /// The widgets to display in the dialog content.
   final List<Widget> children;
@@ -53,6 +56,7 @@ class DialogContainer extends StatelessWidget {
   /// The minimum height of the dialog container.
   final double minHeight;
 
+  /// The border radius of the dialog container.
   final double radius;
 
   @override
@@ -125,7 +129,7 @@ class DialogContainer extends StatelessWidget {
                         ),
                       ),
                       child: Padding(
-                        padding: padding ?? const EdgeInsets.all(15.0),
+                        padding: padding ?? StoycoScreenSize.all(context, 15.0),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.center,

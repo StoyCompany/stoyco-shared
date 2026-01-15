@@ -358,7 +358,6 @@ class _ParticipationFormDialogState<T>
                   },
                   keyboardType: TextInputType.url,
                   decoration: InputDecoration(
-                    // label: widget.config.urlLabel,
                     hintText: widget.config.urlHint,
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                     enabledBorder: OutlineInputBorder(
