@@ -218,7 +218,7 @@ class _ParticipationFormDialogState<T>
 
   @override
   Widget build(BuildContext context) => DialogContainer(
-    radius: StoycoScreenSize.radius(context, 20),
+        radius: StoycoScreenSize.radius(context, 5),
         padding: widget.dialogPadding ??
             StoycoScreenSize.all(
               context,
