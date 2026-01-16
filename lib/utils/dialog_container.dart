@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:glassmorphism/glassmorphism.dart';
+import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/utils/gradient_painter.dart';
 
 /// A customizable dialog container widget with glassmorphism effect.
@@ -17,6 +18,7 @@ class DialogContainer extends StatelessWidget {
   /// * [containerWidth] - The width of the dialog container. Defaults to 90% of screen width.
   /// * [maxWidth] - The maximum width of the dialog container. Defaults to 500.
   /// * [minHeight] - The minimum height of the dialog container. Defaults to 300.
+  /// * [radius] - The border radius of the dialog container. Defaults to 0.
   const DialogContainer({
     super.key,
     this.padding,
@@ -27,7 +29,7 @@ class DialogContainer extends StatelessWidget {
     required this.children,
     this.maxWidth = 500,
     this.minHeight = 300,
-    this.radius = 0
+    this.radius = 0,
   });
 
   /// The widgets to display in the dialog content.
@@ -54,6 +56,7 @@ class DialogContainer extends StatelessWidget {
   /// The minimum height of the dialog container.
   final double minHeight;
 
+  /// The border radius of the dialog container.
   final double radius;
 
   @override
@@ -89,46 +92,49 @@ class DialogContainer extends StatelessWidget {
                 0,
               ],
             ),
-            child: Center(
-              child: GestureDetector(
-                onTap: () {
-                  // Prevents propagation of the tap event to the parent GestureDetector
-                  // This allows the dialog to remain open when tapping inside the Center widget
-                },
-                child: Container(
-                  width:
-                      containerWidth ?? MediaQuery.of(context).size.width * 0.9,
-                  constraints: BoxConstraints(
-                    maxWidth: maxWidth,
-                    minHeight: minHeight,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(0),
-                    color: backgroundColor ??
-                        (gradient == null
-                            ? const  Color.fromRGBO(32, 37, 50, 0.8)
-                            : null),
-                    gradient: gradient,
-                  ),
-                  child: CustomPaint(
-                    painter: GradientPainter(
-                      strokeWidth: 0,
-                      radius: 8,
-                      gradient: const LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Color.fromRGBO(32, 37, 50, 0.8),
-                          Color.fromRGBO(32, 37, 50, 0.8)
-                        ],
-                      ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(radius),
+              child: Center(
+                child: GestureDetector(
+                  onTap: () {
+                    // Prevents propagation of the tap event to the parent GestureDetector
+                    // This allows the dialog to remain open when tapping inside the Center widget
+                  },
+                  child: Container(
+                    width: containerWidth ??
+                        MediaQuery.of(context).size.width * 0.9,
+                    constraints: BoxConstraints(
+                      maxWidth: maxWidth,
+                      minHeight: minHeight,
                     ),
-                    child: Padding(
-                      padding: padding ?? const EdgeInsets.all(15.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: children,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(radius),
+                      color: backgroundColor ??
+                          (gradient == null
+                              ? const Color.fromRGBO(32, 37, 50, 0.4)
+                              : null),
+                      gradient: gradient,
+                    ),
+                    child: CustomPaint(
+                      painter: GradientPainter(
+                        strokeWidth: 0,
+                        radius: 8,
+                        gradient: const LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Color.fromRGBO(32, 37, 50, 0.8),
+                            Color.fromRGBO(32, 37, 50, 0.8),
+                          ],
+                        ),
+                      ),
+                      child: Padding(
+                        padding: padding ?? StoycoScreenSize.all(context, 15.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: children,
+                        ),
                       ),
                     ),
                   ),
