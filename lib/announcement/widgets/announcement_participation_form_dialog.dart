@@ -310,7 +310,6 @@ class _ParticipationFormDialogState<T>
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                     prefixText: '@',
-                    // labelText: widget.config.usernameLabel,
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
