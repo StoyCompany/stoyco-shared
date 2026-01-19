@@ -32,7 +32,13 @@ class CounterSection extends StatefulWidget {
 }
 
 class _CounterSectionState extends State<CounterSection> {
-  int currentValue = 0;
+  late int currentValue;
+
+  @override
+  void initState() {
+    super.initState();
+    currentValue = widget.minValue;
+  }
 
   void _decrement() {
     if (currentValue > widget.minValue) {
