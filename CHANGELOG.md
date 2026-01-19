@@ -1,3 +1,8 @@
+## 21.11.4
+**refactor(MessageModel): copywith function added**
+
+- added copywith function to MessageModel
+
 ## 21.11.3
 **refactor(modal): redesign glass modal**
 
