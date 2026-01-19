@@ -43,7 +43,7 @@ class AnnouncementParticipationViewConfig {
         dialogTitle: json['dialogTitle'] ?? 'Envia tu publicación',
         usernameLabel: json['usernameLabel'] ?? 'Tiktok Username',
         usernameHint: json['usernameHint'] ?? '@',
-        urlLabel: json['urlLabel'] ?? 'Post URL',
+        urlLabel: json['urlLabel'] ?? 'Post Url',
         urlHint: json['urlHint'] ?? 'wwww',
         successDialog: json['successDialog'] != null
             ? AnnouncementInfoBasicDialog.fromJson(json['successDialog'])

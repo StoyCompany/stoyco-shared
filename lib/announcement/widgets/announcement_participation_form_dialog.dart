@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 import 'package:stoyco_shared/announcement/models/announcement_form_config.dart';
+import 'package:stoyco_shared/core/ui/atoms/atoms.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/form/fields/text_field.dart';
 import 'package:stoyco_shared/utils/dialog_container.dart';
@@ -218,7 +219,7 @@ class _ParticipationFormDialogState<T>
 
   @override
   Widget build(BuildContext context) => DialogContainer(
-    radius: StoycoScreenSize.radius(context, 20),
+        radius: StoycoScreenSize.radius(context, 5),
         padding: widget.dialogPadding ??
             StoycoScreenSize.all(
               context,
@@ -289,6 +290,13 @@ class _ParticipationFormDialogState<T>
                   widget.formFieldSpacing ??
                       StoycoScreenSize.height(context, 20),
                 ),
+                Row(
+                  children: [
+                    CustomText(
+                      widget.config.usernameLabel,
+                    ),
+                  ],
+                ),
                 StoyCoTextFormField(
                   formControlName: 'tiktok_username',
                   labelText: widget.config.usernameLabel,
@@ -302,7 +310,6 @@ class _ParticipationFormDialogState<T>
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                     prefixText: '@',
-                    labelText: widget.config.usernameLabel,
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -331,6 +338,13 @@ class _ParticipationFormDialogState<T>
                   widget.formFieldSpacing ??
                       StoycoScreenSize.height(context, 20),
                 ),
+                Row(
+                  children: [
+                    CustomText(
+                      widget.config.urlLabel,
+                    ),
+                  ],
+                ),
                 StoyCoTextFormField(
                   formControlName: 'post_url',
                   labelText: widget.config.urlLabel,
@@ -343,7 +357,6 @@ class _ParticipationFormDialogState<T>
                   },
                   keyboardType: TextInputType.url,
                   decoration: InputDecoration(
-                    labelText: widget.config.urlLabel,
                     hintText: widget.config.urlHint,
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                     enabledBorder: OutlineInputBorder(

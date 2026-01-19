@@ -1,3 +1,25 @@
+21.11.5
+**refactor(Scroll Announcement): fix**
+
+- added  scroll height to announcement modal
+- fix scroll on leadership board modal
+
+## 21.11.4
+**refactor(MessageModel): copywith function added**
+
+- added copywith function to MessageModel
+
+## 21.11.3
+**refactor(modal): redesign glass modal**
+
+- new widget to reuse on app
+- modal glass component redesign
+
+## 21.11.2
+**feat(experience):** new enum to experience
+
+- new enum option to experience
+
 ## 21.11.1
 **feat(community-model):** new model to use like data on message_model 
 
