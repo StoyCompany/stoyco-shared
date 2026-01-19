@@ -201,10 +201,18 @@ class _AnnouncementLeaderShipDialogState
   }
 
   void _scrollListener() {
-    if (!_scrollController.hasClients) return;
+    if (!_scrollController.hasClients) {
+      return;
+    }
 
-    final threshold = _scrollController.position.maxScrollExtent * 0.8;
-    if (_scrollController.position.pixels >= threshold &&
+    final position = _scrollController.position;
+
+    if (position.maxScrollExtent == 0) {
+      return;
+    }
+
+    final threshold = position.maxScrollExtent * 0.7;
+    if (position.pixels >= threshold &&
         !_isLoadingMore &&
         _hasMoreData) {
       unawaited(_loadMoreData());
@@ -224,11 +232,13 @@ class _AnnouncementLeaderShipDialogState
       if (mounted) {
         setState(() {
           _leaderboardPage = pageResult;
-          _updatedAt =
-              pageResult.updatedAt; // Set updatedAt from the first call.
+          _updatedAt = pageResult.updatedAt;
           _currentPage = pageResult.pageNumber ?? 1;
           _hasMoreData = (pageResult.items?.isNotEmpty ?? false) &&
               (_currentPage < (pageResult.totalPages ?? 1));
+        });
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _checkIfNeedsMoreData();
         });
       }
     } catch (e) {
@@ -239,6 +249,18 @@ class _AnnouncementLeaderShipDialogState
           _isLoading = false;
         });
       }
+    }
+  }
+
+  void _checkIfNeedsMoreData() {
+    if (!_scrollController.hasClients || !_hasMoreData || _isLoadingMore) {
+      return;
+    }
+
+    final position = _scrollController.position;
+
+    if (position.maxScrollExtent == 0 || position.maxScrollExtent < 100) {
+      unawaited(_loadMoreData());
     }
   }
 
@@ -272,9 +294,17 @@ class _AnnouncementLeaderShipDialogState
           _currentPage = pageResult.pageNumber ?? nextPage;
           _hasMoreData = _currentPage < (pageResult.totalPages ?? 1);
         });
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _checkIfNeedsMoreData();
+        });
       }
     } catch (e) {
       debugPrint('Error loading more leaderboard data: $e');
+      if (mounted) {
+        setState(() {
+          _hasMoreData = false;
+        });
+      }
     } finally {
       if (mounted) {
         setState(() {

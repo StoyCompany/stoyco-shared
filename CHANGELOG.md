@@ -1,3 +1,9 @@
+21.11.5
+**refactor(Scroll Announcement): fix**
+
+- added  scroll height to announcement modal
+- fix scroll on leadership board modal
+
 ## 21.11.4
 **refactor(MessageModel): copywith function added**
 
