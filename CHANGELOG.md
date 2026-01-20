@@ -1,3 +1,11 @@
+## 21.11.6
+**feat(StoyShop): new module**
+
+- Added `StoyShopService` to fetch products from the new StoyShop endpoints.
+- Implemented `getOptimizedProducts` to retrieve paginated and filtered products.
+- Added `getNftMetadata` to fetch detailed information about NFTs from a metadata URI.
+- Included unit tests for the new service, repository, and models.
+
 21.11.5
 **refactor(Scroll Announcement): fix**
 
