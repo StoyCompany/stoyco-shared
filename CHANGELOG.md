@@ -1,4 +1,11 @@
-21.11.5
+## 21.11.6
+**feat(merch):** add merch detail components
+
+- Added LabelValueModel
+- Added MerchDetailVariantItem, ListVariant, VariantSection
+- Added CounterItem, CounterValue, CounterSection
+
+## 21.11.5
 **refactor(Scroll Announcement): fix**
 
 - added  scroll height to announcement modal
