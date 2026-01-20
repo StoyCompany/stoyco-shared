@@ -6,7 +6,13 @@
 - Added `getNftMetadata` to fetch detailed information about NFTs from a metadata URI.
 - Included unit tests for the new service, repository, and models.
 
-21.11.5
+**feat(merch):** add merch detail components
+
+- Added LabelValueModel
+- Added MerchDetailVariantItem, ListVariant, VariantSection
+- Added CounterItem, CounterValue, CounterSection
+
+## 21.11.5
 **refactor(Scroll Announcement): fix**
 
 - added  scroll height to announcement modal
