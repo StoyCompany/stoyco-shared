@@ -1,0 +1,115 @@
+import 'package:dio/dio.dart';
+import 'package:either_dart/either.dart';
+import 'package:stoyco_shared/cache/repository_cache_mixin.dart';
+import 'package:stoyco_shared/errors/error_handling/failure/error.dart';
+import 'package:stoyco_shared/errors/error_handling/failure/exception.dart';
+import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
+import 'package:stoyco_shared/models/page_result/page_result.dart';
+import 'package:stoyco_shared/stoy_shop/models/nft_metadata_model.dart';
+import 'package:stoyco_shared/stoy_shop/models/stoy_shop_category.dart';
+import 'package:stoyco_shared/stoy_shop/models/stoy_shop_product_model.dart';
+import 'package:stoyco_shared/stoy_shop/stoy_shop_data_source.dart';
+
+/// Repository for StoyShop operations.
+///
+/// Provides data mapping, caching, and error handling for store operations.
+/// Uses [RepositoryCacheMixin] for automatic caching.
+class StoyShopRepository with RepositoryCacheMixin {
+  StoyShopRepository({required StoyShopDataSource dataSource})
+      : _dataSource = dataSource;
+
+  final StoyShopDataSource _dataSource;
+
+  /// Fetches optimized paginated products for a Community Owner with 3-minute cache.
+  ///
+  /// Returns [Either] with [Failure] on left or [PageResult<StoyShopProductModel>] on right.
+  ///
+  /// [page] Page number (1-based).
+  /// [pageSize] Number of items per page.
+  /// [category] Category filter for products.
+  /// [coId] Community Owner ID to filter products.
+  ///
+  /// Example:
+  /// ```dart
+  /// final result = await repository.getOptimizedProducts(
+  ///   page: 1,
+  ///   pageSize: 100,
+  ///   category: StoyShopCategory.culturalAssets,
+  ///   coId: '66f5bb96fd46e726edae494d',
+  /// );
+  /// result.fold(
+  ///   (failure) => handleError(failure),
+  ///   (pageResult) => displayProducts(pageResult.items),
+  /// );
+  /// ```
+  Future<Either<Failure, PageResult<StoyShopProductModel>>> getOptimizedProducts({
+    int page = 1,
+    int pageSize = 100,
+    StoyShopCategory? category,
+    String? coId,
+  }) async =>
+      cachedCall<PageResult<StoyShopProductModel>>(
+        key: 'stoy_shop_optimized_${page}_${pageSize}_${category?.value}_$coId',
+        ttl: const Duration(minutes: 3),
+        fetcher: () async {
+          try {
+            final response = await _dataSource.getOptimizedProducts(
+              page: page,
+              pageSize: pageSize,
+              category: category,
+              coId: coId,
+            );
+
+            final pageResult = PageResult<StoyShopProductModel>.fromJson(
+              response.data,
+              (item) =>
+                  StoyShopProductModel.fromJson(item as Map<String, dynamic>),
+            );
+            return Right(pageResult);
+          } on DioException catch (error) {
+            return Left(DioFailure.decode(error));
+          } on Error catch (error) {
+            return Left(ErrorFailure.decode(error));
+          } on Exception catch (error) {
+            return Left(ExceptionFailure.decode(error));
+          }
+        },
+      );
+
+  /// Fetches NFT metadata from the provided URI with 10-minute cache.
+  ///
+  /// Returns [Either] with [Failure] on left or [NftMetadataModel] on right.
+  ///
+  /// [metadataUri] Full URL to the metadata JSON file.
+  ///
+  /// Example:
+  /// ```dart
+  /// final result = await repository.getNftMetadata(
+  ///   'https://qa.nft.stoyco.io/metadata/collection/367',
+  /// );
+  /// result.fold(
+  ///   (failure) => handleError(failure),
+  ///   (metadata) => displayMetadata(metadata),
+  /// );
+  /// ```
+  Future<Either<Failure, NftMetadataModel>> getNftMetadata(
+    String metadataUri,
+  ) async =>
+      cachedCall<NftMetadataModel>(
+        key: 'nft_metadata_${metadataUri.hashCode}',
+        ttl: const Duration(minutes: 10),
+        fetcher: () async {
+          try {
+            final response = await _dataSource.getNftMetadata(metadataUri);
+            final metadata = NftMetadataModel.fromJson(response.data);
+            return Right(metadata);
+          } on DioException catch (error) {
+            return Left(DioFailure.decode(error));
+          } on Error catch (error) {
+            return Left(ErrorFailure.decode(error));
+          } on Exception catch (error) {
+            return Left(ExceptionFailure.decode(error));
+          }
+        },
+      );
+}
