@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
 
+/// A circular button displaying text.
+///
+/// Used as increment/decrement buttons in [CounterSection].
 class CounterItem extends StatelessWidget {
+  /// Creates a [CounterItem].
   const CounterItem({
     required this.text,
     required this.width,
@@ -12,11 +16,22 @@ class CounterItem extends StatelessWidget {
     super.key,
   });
 
+  /// The text displayed in the center (e.g., '+' or '-').
   final String text;
+
+  /// The width of the circular container.
   final double width;
+
+  /// The height of the circular container.
   final double height;
+
+  /// The color of the text.
   final Color textColor;
+
+  /// The background color of the circle.
   final Color backgroundColor;
+
+  /// The font size of the text.
   final double fontSize;
 
   @override

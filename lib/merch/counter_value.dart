@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
 
+/// A circular text field for displaying and editing counter values.
+///
+/// Used as the central value display in [CounterSection].
+/// Allows manual text input and maintains focus state properly.
 class CounterValue extends StatefulWidget {
+  /// Creates a [CounterValue].
   const CounterValue({
     required this.value,
     required this.width,
@@ -13,12 +18,25 @@ class CounterValue extends StatefulWidget {
     super.key,
   });
 
+  /// The current value displayed in the text field.
   final String value;
+
+  /// The width of the circular container.
   final double width;
+
+  /// The height of the circular container.
   final double height;
+
+  /// The color of the text.
   final Color textColor;
+
+  /// The background color of the circle.
   final Color backgroundColor;
+
+  /// The font size of the text.
   final double fontSize;
+
+  /// Callback triggered when the text value changes.
   final void Function(String) onChanged;
 
   @override
@@ -26,6 +44,7 @@ class CounterValue extends StatefulWidget {
 }
 
 class _CounterValueState extends State<CounterValue> {
+  /// Controller for the text field to maintain focus and value.
   late TextEditingController _controller;
 
   @override
@@ -34,6 +53,10 @@ class _CounterValueState extends State<CounterValue> {
     _controller = TextEditingController(text: widget.value);
   }
 
+  /// Updates the text field when the widget value changes externally.
+  ///
+  /// Only updates if the new value differs from both the old widget
+  /// value and the current controller text.
   @override
   void didUpdateWidget(CounterValue oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -42,6 +65,7 @@ class _CounterValueState extends State<CounterValue> {
     }
   }
 
+  /// Disposes the text editing controller.
   @override
   void dispose() {
     _controller.dispose();
