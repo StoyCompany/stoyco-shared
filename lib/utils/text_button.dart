@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 
 /// A custom text button widget for StoyCo app.
 ///
@@ -75,7 +76,7 @@ class TextButtonStoyco extends StatelessWidget {
                     fontWeight: fontWeight,
                     height: 1.19,
                     letterSpacing: 0,
-                    color: const Color(0xFFF2F2FA),
+                    color: StoycoColors.text,
                     decoration: TextDecoration.none,
                   ),
             ),
