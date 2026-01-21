@@ -1,3 +1,10 @@
+## 21.11.7
+**fix(StoyShop): remove caching for product lists**
+
+- Removed caching from `getOptimizedProducts` method due to volatile stock information
+- Stock changes frequently with purchases/redemptions, requiring real-time data
+- Kept caching for `getNftMetadata` as NFT metadata is immutable
+
 ## 21.11.6
 **feat(StoyShop): new module**
 

@@ -12,15 +12,18 @@ import 'package:stoyco_shared/stoy_shop/stoy_shop_data_source.dart';
 
 /// Repository for StoyShop operations.
 ///
-/// Provides data mapping, caching, and error handling for store operations.
-/// Uses [RepositoryCacheMixin] for automatic caching.
+/// Provides data mapping and error handling for store operations.
+/// No caching for product lists due to volatile stock information.
 class StoyShopRepository with RepositoryCacheMixin {
   StoyShopRepository({required StoyShopDataSource dataSource})
       : _dataSource = dataSource;
 
   final StoyShopDataSource _dataSource;
 
-  /// Fetches optimized paginated products for a Community Owner with 3-minute cache.
+  /// Fetches optimized paginated products for a Community Owner.
+  ///
+  /// No caching is applied because stock information is volatile
+  /// and changes frequently with purchases/redemptions.
   ///
   /// Returns [Either] with [Failure] on left or [PageResult<StoyShopProductModel>] on right.
   ///
@@ -42,39 +45,34 @@ class StoyShopRepository with RepositoryCacheMixin {
   ///   (pageResult) => displayProducts(pageResult.items),
   /// );
   /// ```
-  Future<Either<Failure, PageResult<StoyShopProductModel>>> getOptimizedProducts({
+  Future<Either<Failure, PageResult<StoyShopProductModel>>>
+      getOptimizedProducts({
     int page = 1,
     int pageSize = 100,
     StoyShopCategory? category,
     String? coId,
-  }) async =>
-      cachedCall<PageResult<StoyShopProductModel>>(
-        key: 'stoy_shop_optimized_${page}_${pageSize}_${category?.value}_$coId',
-        ttl: const Duration(minutes: 3),
-        fetcher: () async {
-          try {
-            final response = await _dataSource.getOptimizedProducts(
-              page: page,
-              pageSize: pageSize,
-              category: category,
-              coId: coId,
-            );
-
-            final pageResult = PageResult<StoyShopProductModel>.fromJson(
-              response.data,
-              (item) =>
-                  StoyShopProductModel.fromJson(item as Map<String, dynamic>),
-            );
-            return Right(pageResult);
-          } on DioException catch (error) {
-            return Left(DioFailure.decode(error));
-          } on Error catch (error) {
-            return Left(ErrorFailure.decode(error));
-          } on Exception catch (error) {
-            return Left(ExceptionFailure.decode(error));
-          }
-        },
+  }) async {
+    try {
+      final response = await _dataSource.getOptimizedProducts(
+        page: page,
+        pageSize: pageSize,
+        category: category,
+        coId: coId,
       );
+
+      final pageResult = PageResult<StoyShopProductModel>.fromJson(
+        response.data,
+        (item) => StoyShopProductModel.fromJson(item as Map<String, dynamic>),
+      );
+      return Right(pageResult);
+    } on DioException catch (error) {
+      return Left(DioFailure.decode(error));
+    } on Error catch (error) {
+      return Left(ErrorFailure.decode(error));
+    } on Exception catch (error) {
+      return Left(ExceptionFailure.decode(error));
+    }
+  }
 
   /// Fetches NFT metadata from the provided URI with 10-minute cache.
   ///
