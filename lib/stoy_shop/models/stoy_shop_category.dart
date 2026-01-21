@@ -6,14 +6,14 @@ enum StoyShopCategory {
   /// Cultural assets including NFTs, collectibles, and digital art.
   culturalAssets('CulturalAssets'),
 
-  /// Physical or digital merchandise.
-  merchandise('Merchandise'),
-
-  /// Event tickets and passes.
-  tickets('Tickets'),
+  /// General products (merchandise, digital goods, etc.).
+  products('Products'),
 
   /// Exclusive experiences and access.
-  experiences('Experiences');
+  experiences('Experiences'),
+
+  /// Recently added products.
+  recent('Recent');
 
   const StoyShopCategory(this.value);
 
