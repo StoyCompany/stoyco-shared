@@ -142,4 +142,41 @@ class MessageModel {
 
   /// Converts this [MessageModel] into a JSON-compatible map.
   Map<String, dynamic> toJson() => _$MessageModelToJson(this);
+
+  MessageModel copyWith({
+    String? id,
+    String? userId,
+    String? messageId,
+    String? title,
+    String? content,
+    String? category,
+    bool? isRead,
+    bool? seen,
+    String? linkText,
+    String? linkUrl,
+    String? route,
+    String? type,
+    Map<String, dynamic>? data,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    DateTime? readAt,
+  }) =>
+      MessageModel(
+        id: id ?? this.id,
+        userId: userId ?? this.userId,
+        messageId: messageId ?? this.messageId,
+        title: title ?? this.title,
+        content: content ?? this.content,
+        category: category ?? this.category,
+        isRead: isRead ?? this.isRead,
+        seen: seen ?? this.seen,
+        linkText: linkText ?? this.linkText,
+        linkUrl: linkUrl ?? this.linkUrl,
+        route: route ?? this.route,
+        type: type ?? this.type,
+        data: data ?? this.data,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+        readAt: readAt ?? this.readAt,
+      );
 }

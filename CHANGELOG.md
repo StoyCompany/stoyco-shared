@@ -1,3 +1,21 @@
+## 21.11.6
+**feat(merch):** add merch detail components
+
+- Added LabelValueModel
+- Added MerchDetailVariantItem, ListVariant, VariantSection
+- Added CounterItem, CounterValue, CounterSection
+
+## 21.11.5
+**refactor(Scroll Announcement): fix**
+
+- added  scroll height to announcement modal
+- fix scroll on leadership board modal
+
+## 21.11.4
+**refactor(MessageModel): copywith function added**
+
+- added copywith function to MessageModel
+
 ## 21.11.3
 **refactor(modal): redesign glass modal**
 
