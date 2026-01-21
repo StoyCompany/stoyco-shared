@@ -1,3 +1,9 @@
+## 21.11.7
+**fix(announcements):** fix announcements details screen
+
+- fix announcements details screen
+- new parameter to show time remaining to end of announcement
+
 ## 21.11.6
 **feat(merch):** add merch detail components
 
