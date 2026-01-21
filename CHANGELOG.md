@@ -1,3 +1,9 @@
+## 21.11.8
+**fix(announcements):** fix announcements details screen
+
+- fix announcements details screen
+- new parameter to show time remaining to end of announcement
+
 ## 21.11.7
 **fix(StoyShop): remove caching for product lists**
 
