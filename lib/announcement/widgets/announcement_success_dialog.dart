@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:stoyco_shared/announcement/models/announcement_form_config.dart';
+import 'package:stoyco_shared/design/colors.dart';
 
 import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_shared/utils/dialog_container.dart';
@@ -265,7 +266,7 @@ class _ParticipationFormDialogState<T>
             isLoading: _isLoading,
             onTap: !_isLoading ? _handleSubmit : () {},
             backgroundColor: !_isLoading
-                ? null
+                ? StoycoColors.lightViolet
                 : (widget.buttonDisabledColor ?? const Color(0xFF92929D)),
             loadingIndicatorSize: widget.loadingIndicatorSize ??
                 StoycoScreenSize.width(

@@ -179,7 +179,7 @@ class _AnnouncementLeaderShipDialogState
   String get endDateText {
     final dateToFormat =
         _updatedAt ?? DateTime.now(); // Use current date if null.
-    return 'Actualizada:  ${AnnouncementDetailsUtils.formatDate(dateToFormat.toIso8601String())}';
+    return 'Actualizada:  ${AnnouncementDetailsUtils.formatDate(dateToFormat.toIso8601String(), showTime: false)}';
   }
 
   /// Cache to store commonly used responsive values to optimize performance.

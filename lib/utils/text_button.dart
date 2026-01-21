@@ -27,21 +27,20 @@ import 'package:flutter/material.dart';
 /// shown when `isLoading` is true.
 
 class TextButtonStoyco extends StatelessWidget {
-  const TextButtonStoyco({
-    super.key,
-    required this.text,
-    required this.onTap,
-    this.height = 50,
-    this.width = 115,
-    this.isLoading = false,
-    this.backgroundColor,
-    this.fontSize = 16,
-    this.fontWeight = FontWeight.w400,
-    this.boxShadow,
-    this.loadingIndicatorSize = 24.0,
-    this.textStyle,
-    this.radius = 16
-  });
+  const TextButtonStoyco(
+      {super.key,
+      required this.text,
+      required this.onTap,
+      this.height = 50,
+      this.width = 115,
+      this.isLoading = false,
+      this.backgroundColor,
+      this.fontSize = 16,
+      this.fontWeight = FontWeight.w400,
+      this.boxShadow,
+      this.loadingIndicatorSize = 24.0,
+      this.textStyle,
+      this.radius = 16});
 
   final String text;
   final VoidCallback onTap;
@@ -76,7 +75,7 @@ class TextButtonStoyco extends StatelessWidget {
                     fontWeight: fontWeight,
                     height: 1.19,
                     letterSpacing: 0,
-                    color: const Color(0xFFFAFAFA),
+                    color: const Color(0xFFF2F2FA),
                     decoration: TextDecoration.none,
                   ),
             ),

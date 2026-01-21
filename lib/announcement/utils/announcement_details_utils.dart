@@ -17,7 +17,7 @@ class AnnouncementDetailsUtils {
   /// // Returns "Sep 15th, 10:30 am" (adjusted to local timezone)
   /// final formattedDate = AnnouncementDetailsUtils.formatDate("2023-09-15T10:30:00Z");
   /// ```
-  static String formatDate(String dateString) {
+  static String formatDate(String dateString, {bool showTime = true}) {
     if (dateString.isEmpty) return '';
 
     try {
@@ -54,7 +54,7 @@ class AnnouncementDetailsUtils {
       final String period = localDate.hour >= 12 ? 'PM' : 'AM';
       final String minute = localDate.minute.toString().padLeft(2, '0');
 
-      return '$month $day, $hour:$minute $period';
+      return '$month $day${showTime ? ', $hour:$minute $period' : ''}';
     } catch (e) {
       return dateString;
     }

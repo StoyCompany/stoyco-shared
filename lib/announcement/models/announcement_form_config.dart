@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 class AnnouncementParticipationViewConfig {
   const AnnouncementParticipationViewConfig({
     this.usernamePattern,
@@ -9,6 +11,7 @@ class AnnouncementParticipationViewConfig {
     this.urlRequiredMessage = 'Este campo es requerido',
     this.urlPatternMessage = 'La URL no es válida',
     this.buttonText = 'Participar',
+    this.buttonFontWeight = FontWeight.bold,
     this.buttonTextNotLogged = 'Registrarse',
     this.termsText =
         'Al presionar enviar, aceptas los Términos de Servicio y confirmas haber leído y seguido las Directrices.',
@@ -60,6 +63,7 @@ class AnnouncementParticipationViewConfig {
   final String urlRequiredMessage;
   final String urlPatternMessage;
   final String buttonText;
+  final FontWeight buttonFontWeight;
   final String buttonTextNotLogged;
   final String termsText;
   final String dialogTitle;
@@ -80,6 +84,7 @@ class AnnouncementParticipationViewConfig {
     String? urlRequiredMessage,
     String? urlPatternMessage,
     String? buttonText,
+    FontWeight? buttonFontWeight,
     String? buttonTextNotLogged,
     String? termsText,
     String? dialogTitle,
@@ -104,6 +109,7 @@ class AnnouncementParticipationViewConfig {
         urlRequiredMessage: urlRequiredMessage ?? this.urlRequiredMessage,
         urlPatternMessage: urlPatternMessage ?? this.urlPatternMessage,
         buttonText: buttonText ?? this.buttonText,
+        buttonFontWeight: buttonFontWeight ?? this.buttonFontWeight,
         buttonTextNotLogged: buttonTextNotLogged ?? this.buttonTextNotLogged,
         termsText: termsText ?? this.termsText,
         dialogTitle: dialogTitle ?? this.dialogTitle,
