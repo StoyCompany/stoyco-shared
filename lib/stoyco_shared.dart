@@ -26,3 +26,10 @@ export 'package:stoyco_shared/widgets/shared_like.dart';
 export 'package:stoyco_shared/widgets/loop_video_player.dart';
 export 'package:stoyco_shared/services/social_interaction_service.dart';
 export 'package:stoyco_shared/radio/radio.dart';
+
+// StoyShop module
+export 'package:stoyco_shared/stoy_shop/stoy_shop_service.dart';
+export 'package:stoyco_shared/stoy_shop/models/stoy_shop_product_model.dart';
+export 'package:stoyco_shared/stoy_shop/models/stoy_shop_product_data_model.dart';
+export 'package:stoyco_shared/stoy_shop/models/stoy_shop_category.dart';
+export 'package:stoyco_shared/stoy_shop/models/nft_metadata_model.dart';
