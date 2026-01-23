@@ -1,3 +1,11 @@
+## 21.11.9
+**fix(merch):** fix counter value text alignment and scrolling
+
+- Changed CounterValue to use hidden TextField with visible Text overlay
+- Added horizontal scroll support for long numbers
+- Fixed text centering issues in circular container
+- Added ScrollController to manage text overflow
+
 ## 21.11.8
 **fix(announcements):** fix announcements details screen
 
