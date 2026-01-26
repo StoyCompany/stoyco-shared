@@ -92,4 +92,33 @@ class StoyShopDataSource {
     );
     return response;
   }
+
+  /// Fetches minted NFTs for a user in a specific collection.
+  ///
+  /// **Endpoint**: `GET /api/stoycoweb3/v1/mint/collection/{collectionId}/user/{userId}`
+  ///
+  /// [collectionId] Collection ID to query.
+  /// [userId] User ID (Firebase UID).
+  ///
+  /// Returns a [Response] with minted NFTs owned by the user.
+  ///
+  /// Example:
+  /// ```dart
+  /// final response = await dataSource.getMintedNftsByUser(
+  ///   collectionId: 367,
+  ///   userId: 'bxBh1AUyXFODRA36fAdc5xATTgR2',
+  /// );
+  /// ```
+  Future<Response> getMintedNftsByUser({
+    required int collectionId,
+    required String userId,
+  }) async {
+    final cancelToken = CancelToken();
+    final response = await _dio.get(
+      '${environment.web3BaseUrl()}mint/collection/$collectionId/user/$userId',
+      cancelToken: cancelToken,
+      options: Options(headers: _getHeaders()),
+    );
+    return response;
+  }
 }

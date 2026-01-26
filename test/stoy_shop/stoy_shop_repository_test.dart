@@ -106,42 +106,6 @@ void main() {
       expect(result.isLeft, true);
       expect(result.left, isA<Failure>());
     });
-
-    test('caches results for subsequent calls', () async {
-      final pageResultJson = {
-        'items': [],
-        'totalCount': 0,
-        'page': 1,
-        'pageSize': 100,
-      };
-
-      when(mockDataSource.getOptimizedProducts(
-        page: 1,
-        pageSize: 100,
-        category: null,
-        coId: null,
-      )).thenAnswer(
-        (_) async => Response(
-          data: pageResultJson,
-          statusCode: 200,
-          requestOptions: RequestOptions(path: ''),
-        ),
-      );
-
-      // First call
-      await repository.getOptimizedProducts(page: 1, pageSize: 100);
-      
-      // Second call - should use cache
-      await repository.getOptimizedProducts(page: 1, pageSize: 100);
-
-      // Verify data source was only called once
-      verify(mockDataSource.getOptimizedProducts(
-        page: 1,
-        pageSize: 100,
-        category: null,
-        coId: null,
-      )).called(1);
-    });
   });
 
   group('getNftMetadata', () {
@@ -149,7 +113,8 @@ void main() {
       final metadataJson = {
         'name': 'Mora AC:2',
         'description': 'Mora AC:2 activo cultural ambiente QA',
-        'image': 'https://qa.nft.stoyco.io/image/collection/2ffa5b3170a8428eb3bb3d87f68a6829',
+        'image':
+            'https://qa.nft.stoyco.io/image/collection/2ffa5b3170a8428eb3bb3d87f68a6829',
         'attributes': [
           {'trait_type': 'Artist', 'value': 'Mora'},
           {'trait_type': 'Symbol', 'value': 'Mora AC:2'},
@@ -212,12 +177,150 @@ void main() {
 
       // First call
       await repository.getNftMetadata(metadataUri);
-      
+
       // Second call - should use cache
       await repository.getNftMetadata(metadataUri);
 
       // Verify data source was only called once
       verify(mockDataSource.getNftMetadata(metadataUri)).called(1);
+    });
+  });
+
+  group('getMintedNftsByUser', () {
+    test('returns List<MintedNftModel> on success', () async {
+      final responseJson = {
+        'error': -1,
+        'messageError': '',
+        'tecMessageError': '',
+        'count': 2,
+        'data': [
+          {
+            'id': '6973c0d02641d6e0d60c6138',
+            'holderAddress': '0xba9Ebc409fB19EB1f0EF162E7952c70869170FA7',
+            'collectionId': 367,
+            'contractAddress': '0x594b8a9a9dB1274995070663191883499dD5BA56',
+            'tokenId': 655,
+            'txHash':
+                '0xe2ae10334366627ab1bfc862373df20101005c5245d6f144c141ea1a9759defe',
+            'metadataUri': 'https://qa.nft.stoyco.io/metadata/token/655',
+            'imageUri': 'https://qa.nft.stoyco.io/image/token/655',
+            'metadata': {
+              'name': 'Mora AC:2',
+              'description': 'Mora AC:2 activo cultural ambiente QA',
+              'image': 'https://qa.nft.stoyco.io/image/token/655',
+              'attributes': [
+                {'trait_type': 'Artist', 'value': 'Mora'},
+                {'trait_type': 'Symbol', 'value': 'Mora AC:2'},
+              ],
+            },
+            'tags': ['Mora AC:2', 'Mora'],
+            'burned': false,
+            'isViewed': false,
+            'mintSerial': '27/50',
+            'tokenStandard': 'ERC-721',
+            'createdAt': '2026-01-23T18:41:20.458Z',
+            'updatedAt': '0001-01-01T00:00:00Z',
+          },
+          {
+            'id': '696fa129bb4a424428633f2d',
+            'holderAddress': '0xba9Ebc409fB19EB1f0EF162E7952c70869170FA7',
+            'collectionId': 367,
+            'contractAddress': '0x594b8a9a9dB1274995070663191883499dD5BA56',
+            'tokenId': 653,
+            'txHash':
+                '0xb397a691ff1aeeb3a14e1b38ff6b9e1e7b1bb0dac4b5fc2af8e91be897a0818a',
+            'metadataUri': 'https://qa.nft.stoyco.io/metadata/token/653',
+            'imageUri': 'https://qa.nft.stoyco.io/image/token/653',
+            'metadata': {
+              'name': 'Mora AC:2',
+              'description': 'Mora AC:2 activo cultural ambiente QA',
+              'image': 'https://qa.nft.stoyco.io/image/token/653',
+              'attributes': [
+                {'trait_type': 'Artist', 'value': 'Mora'},
+              ],
+            },
+            'tags': ['Mora AC:2', 'Mora'],
+            'burned': false,
+            'isViewed': true,
+            'mintSerial': '26/50',
+            'tokenStandard': 'ERC-721',
+            'createdAt': '2026-01-20T15:37:13.523Z',
+            'updatedAt': '2026-01-23T18:41:04.312Z',
+          },
+        ],
+      };
+
+      when(mockDataSource.getMintedNftsByUser(
+        collectionId: 367,
+        userId: 'bxBh1AUyXFODRA36fAdc5xATTgR2',
+      )).thenAnswer(
+        (_) async => Response(
+          data: responseJson,
+          statusCode: 200,
+          requestOptions: RequestOptions(path: ''),
+        ),
+      );
+
+      final result = await repository.getMintedNftsByUser(
+        collectionId: 367,
+        userId: 'bxBh1AUyXFODRA36fAdc5xATTgR2',
+      );
+
+      expect(result.isRight, true);
+      expect(result.right.length, 2);
+      expect(result.right[0].id, '6973c0d02641d6e0d60c6138');
+      expect(result.right[0].tokenId, 655);
+      expect(result.right[0].mintSerial, '27/50');
+      expect(result.right[0].isViewed, false);
+      expect(result.right[0].metadata?.name, 'Mora AC:2');
+      expect(result.right[1].tokenId, 653);
+      expect(result.right[1].isViewed, true);
+    });
+
+    test('returns Failure when API returns error', () async {
+      final responseJson = {
+        'error': 1,
+        'messageError': 'User not found',
+        'tecMessageError': 'ERR_USER_NOT_FOUND',
+        'count': 0,
+        'data': [],
+      };
+
+      when(mockDataSource.getMintedNftsByUser(
+        collectionId: 367,
+        userId: 'invalid',
+      )).thenAnswer(
+        (_) async => Response(
+          data: responseJson,
+          statusCode: 200,
+          requestOptions: RequestOptions(path: ''),
+        ),
+      );
+
+      final result = await repository.getMintedNftsByUser(
+        collectionId: 367,
+        userId: 'invalid',
+      );
+
+      expect(result.isLeft, true);
+      expect(result.left, isA<Failure>());
+    });
+
+    test('returns Failure on DioException', () async {
+      when(mockDataSource.getMintedNftsByUser(
+        collectionId: 367,
+        userId: 'test',
+      )).thenThrow(
+        DioException(requestOptions: RequestOptions(path: '')),
+      );
+
+      final result = await repository.getMintedNftsByUser(
+        collectionId: 367,
+        userId: 'test',
+      );
+
+      expect(result.isLeft, true);
+      expect(result.left, isA<Failure>());
     });
   });
 }

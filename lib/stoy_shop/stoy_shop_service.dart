@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stoyco_shared/envs/envs.dart';
 import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
 import 'package:stoyco_shared/models/page_result/page_result.dart';
+import 'package:stoyco_shared/stoy_shop/models/minted_nft_model.dart';
 import 'package:stoyco_shared/stoy_shop/models/nft_metadata_model.dart';
 import 'package:stoyco_shared/stoy_shop/models/stoy_shop_category.dart';
 import 'package:stoyco_shared/stoy_shop/models/stoy_shop_product_model.dart';
@@ -139,18 +140,19 @@ class StoyShopService {
   ///   coId: '66f5bb96fd46e726edae494d',
   /// );
   /// ```
-  Future<Either<Failure, PageResult<StoyShopProductModel>>> getOptimizedProducts({
+  Future<Either<Failure, PageResult<StoyShopProductModel>>>
+      getOptimizedProducts({
     int page = 1,
     int pageSize = 100,
     StoyShopCategory? category,
     String? coId,
   }) =>
-      _repository!.getOptimizedProducts(
-        page: page,
-        pageSize: pageSize,
-        category: category,
-        coId: coId,
-      );
+          _repository!.getOptimizedProducts(
+            page: page,
+            pageSize: pageSize,
+            category: category,
+            coId: coId,
+          );
 
   /// Fetches all cultural assets for a Community Owner.
   ///
@@ -199,4 +201,39 @@ class StoyShopService {
     String metadataUri,
   ) =>
       _repository!.getNftMetadata(metadataUri);
+
+  /// Fetches minted NFTs owned by a user in a specific collection.
+  ///
+  /// Returns [Either] with [Failure] on left or [List<MintedNftModel>] on right.
+  ///
+  /// [collectionId] Collection ID to query.
+  /// [userId] User ID (Firebase UID).
+  ///
+  /// Example:
+  /// ```dart
+  /// final result = await stoyShopService.getMintedNftsByUser(
+  ///   collectionId: 367,
+  ///   userId: 'bxBh1AUyXFODRA36fAdc5xATTgR2',
+  /// );
+  ///
+  /// result.fold(
+  ///   (failure) => print('Error: ${failure.message}'),
+  ///   (nfts) {
+  ///     print('User has ${nfts.length} NFTs');
+  ///     for (var nft in nfts) {
+  ///       print('Token #${nft.tokenId} - ${nft.metadata?.name}');
+  ///       print('Serial: ${nft.mintSerial}');
+  ///       print('Viewed: ${nft.isViewed}');
+  ///     }
+  ///   },
+  /// );
+  /// ```
+  Future<Either<Failure, List<MintedNftModel>>> getMintedNftsByUser({
+    required int collectionId,
+    required String userId,
+  }) =>
+      _repository!.getMintedNftsByUser(
+        collectionId: collectionId,
+        userId: userId,
+      );
 }

@@ -117,4 +117,16 @@ extension StoycoEnvironmentExtension on StoycoEnvironment {
         return 'https://zc1kknd34g.execute-api.us-east-1.amazonaws.com/QA/api/stoyco/$version/';
     }
   }
+
+  /// Base URL for Web3/NFT minting operations.
+  String web3BaseUrl({String version = 'v1'}) {
+    switch (this) {
+      case StoycoEnvironment.development:
+        return 'https://dev.api.stoyco.io/api/stoycoweb3/$version/';
+      case StoycoEnvironment.production:
+        return 'https://api.stoyco.io/api/stoycoweb3/$version/';
+      case StoycoEnvironment.testing:
+        return 'https://qa.api.stoyco.io/api/stoycoweb3/$version/';
+    }
+  }
 }

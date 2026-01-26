@@ -1,3 +1,15 @@
+## 21.12.0
+**feat(StoyShop): add getMintedNftsByUser endpoint**
+
+- Added `getMintedNftsByUser` method to fetch NFTs owned by a user in a specific collection
+- Endpoint: `GET /api/stoycoweb3/v1/mint/collection/{collectionId}/user/{userId}`
+- Created `MintedNftModel` with blockchain information (tokenId, txHash, contractAddress)
+- Created `MintedNftResponseModel` for custom API response wrapper
+- Added `web3BaseUrl()` helper in `StoycoEnvironment` for Web3 endpoints
+- No caching applied to ensure fresh data on each request
+- Embedded NFT metadata in response (reuses `NftMetadataModel`)
+- Added comprehensive unit tests for new models and repository methods
+- Helper methods: `isErc721`, `isActive`, `mintNumber`, `maxSupply`
 ## 21.11.9
 **fix(merch):** fix counter value text alignment and scrolling
 

@@ -129,4 +129,32 @@ class MockStoyShopDataSource extends _i1.Mock
           ),
         )),
       ) as _i6.Future<_i2.Response<dynamic>>);
+
+  @override
+  _i6.Future<_i2.Response<dynamic>> getMintedNftsByUser({
+    required int? collectionId,
+    required String? userId,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getMintedNftsByUser,
+          [],
+          {
+            #collectionId: collectionId,
+            #userId: userId,
+          },
+        ),
+        returnValue:
+            _i6.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
+          this,
+          Invocation.method(
+            #getMintedNftsByUser,
+            [],
+            {
+              #collectionId: collectionId,
+              #userId: userId,
+            },
+          ),
+        )),
+      ) as _i6.Future<_i2.Response<dynamic>>);
 }
