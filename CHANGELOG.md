@@ -1,4 +1,4 @@
-## 21.11.10
+## 21.12.0
 **feat(StoyShop): add getMintedNftsByUser endpoint**
 
 - Added `getMintedNftsByUser` method to fetch NFTs owned by a user in a specific collection
