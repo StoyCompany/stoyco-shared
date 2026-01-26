@@ -10,15 +10,16 @@ import 'package:either_dart/either.dart' as _i6;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i11;
 import 'package:stoyco_shared/cache/cache_manager.dart' as _i2;
-import 'package:stoyco_shared/envs/envs.dart' as _i14;
+import 'package:stoyco_shared/envs/envs.dart' as _i15;
 import 'package:stoyco_shared/errors/error_handling/failure/failure.dart'
     as _i7;
 import 'package:stoyco_shared/models/page_result/page_result.dart' as _i8;
+import 'package:stoyco_shared/stoy_shop/models/minted_nft_model.dart' as _i13;
 import 'package:stoyco_shared/stoy_shop/models/nft_metadata_model.dart' as _i12;
 import 'package:stoyco_shared/stoy_shop/models/stoy_shop_category.dart' as _i10;
 import 'package:stoyco_shared/stoy_shop/models/stoy_shop_product_model.dart'
     as _i9;
-import 'package:stoyco_shared/stoy_shop/stoy_shop_data_source.dart' as _i13;
+import 'package:stoyco_shared/stoy_shop/stoy_shop_data_source.dart' as _i14;
 import 'package:stoyco_shared/stoy_shop/stoy_shop_repository.dart' as _i4;
 
 // ignore_for_file: type=lint
@@ -144,6 +145,36 @@ class MockStoyShopRepository extends _i1.Mock
       ) as _i5.Future<_i6.Either<_i7.Failure, _i12.NftMetadataModel>>);
 
   @override
+  _i5.Future<
+      _i6.Either<_i7.Failure, List<_i13.MintedNftModel>>> getMintedNftsByUser({
+    required int? collectionId,
+    required String? userId,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getMintedNftsByUser,
+          [],
+          {
+            #collectionId: collectionId,
+            #userId: userId,
+          },
+        ),
+        returnValue: _i5
+            .Future<_i6.Either<_i7.Failure, List<_i13.MintedNftModel>>>.value(
+            _i11.dummyValue<_i6.Either<_i7.Failure, List<_i13.MintedNftModel>>>(
+          this,
+          Invocation.method(
+            #getMintedNftsByUser,
+            [],
+            {
+              #collectionId: collectionId,
+              #userId: userId,
+            },
+          ),
+        )),
+      ) as _i5.Future<_i6.Either<_i7.Failure, List<_i13.MintedNftModel>>>);
+
+  @override
   _i5.Future<_i6.Either<_i7.Failure, T>> cachedCall<T>({
     required String? key,
     required Duration? ttl,
@@ -218,16 +249,16 @@ class MockStoyShopRepository extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockStoyShopDataSource extends _i1.Mock
-    implements _i13.StoyShopDataSource {
+    implements _i14.StoyShopDataSource {
   MockStoyShopDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i14.StoycoEnvironment get environment => (super.noSuchMethod(
+  _i15.StoycoEnvironment get environment => (super.noSuchMethod(
         Invocation.getter(#environment),
-        returnValue: _i14.StoycoEnvironment.development,
-      ) as _i14.StoycoEnvironment);
+        returnValue: _i15.StoycoEnvironment.development,
+      ) as _i15.StoycoEnvironment);
 
   @override
   String get userToken => (super.noSuchMethod(
@@ -303,6 +334,34 @@ class MockStoyShopDataSource extends _i1.Mock
           Invocation.method(
             #getNftMetadata,
             [metadataUri],
+          ),
+        )),
+      ) as _i5.Future<_i3.Response<dynamic>>);
+
+  @override
+  _i5.Future<_i3.Response<dynamic>> getMintedNftsByUser({
+    required int? collectionId,
+    required String? userId,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getMintedNftsByUser,
+          [],
+          {
+            #collectionId: collectionId,
+            #userId: userId,
+          },
+        ),
+        returnValue:
+            _i5.Future<_i3.Response<dynamic>>.value(_FakeResponse_1<dynamic>(
+          this,
+          Invocation.method(
+            #getMintedNftsByUser,
+            [],
+            {
+              #collectionId: collectionId,
+              #userId: userId,
+            },
           ),
         )),
       ) as _i5.Future<_i3.Response<dynamic>>);

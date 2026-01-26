@@ -1,4 +1,4 @@
-## [Unreleased]
+## 21.11.10
 **feat(StoyShop): add getMintedNftsByUser endpoint**
 
 - Added `getMintedNftsByUser` method to fetch NFTs owned by a user in a specific collection
@@ -10,6 +10,19 @@
 - Embedded NFT metadata in response (reuses `NftMetadataModel`)
 - Added comprehensive unit tests for new models and repository methods
 - Helper methods: `isErc721`, `isActive`, `mintNumber`, `maxSupply`
+## 21.11.9
+**fix(merch):** fix counter value text alignment and scrolling
+
+- Changed CounterValue to use hidden TextField with visible Text overlay
+- Added horizontal scroll support for long numbers
+- Fixed text centering issues in circular container
+- Added ScrollController to manage text overflow
+
+## 21.11.8
+**fix(announcements):** fix announcements details screen
+
+- fix announcements details screen
+- new parameter to show time remaining to end of announcement
 
 ## 21.11.7
 **fix(StoyShop): remove caching for product lists**

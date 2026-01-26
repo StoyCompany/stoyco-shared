@@ -47,12 +47,14 @@ class MerchDetailVariantItem extends StatelessWidget {
             borderRadius:
                 BorderRadius.circular(StoycoScreenSize.radius(context, 100)),
           ),
-          child: Text(
-            item.label,
-            style: TextStyle(
-              color: textColor,
-              fontSize: StoycoScreenSize.fontSize(context, fontSize),
-              fontWeight: FontWeight.bold,
+          child: Center(
+            child: Text(
+              item.label,
+              style: TextStyle(
+                color: textColor,
+                fontSize: StoycoScreenSize.fontSize(context, fontSize),
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),

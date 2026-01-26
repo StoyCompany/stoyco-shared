@@ -5,6 +5,8 @@ import 'package:stoyco_shared/errors/error_handling/failure/error.dart';
 import 'package:stoyco_shared/errors/error_handling/failure/exception.dart';
 import 'package:stoyco_shared/errors/error_handling/failure/failure.dart';
 import 'package:stoyco_shared/models/page_result/page_result.dart';
+import 'package:stoyco_shared/stoy_shop/models/minted_nft_model.dart';
+import 'package:stoyco_shared/stoy_shop/models/minted_nft_response_model.dart';
 import 'package:stoyco_shared/stoy_shop/models/nft_metadata_model.dart';
 import 'package:stoyco_shared/stoy_shop/models/stoy_shop_category.dart';
 import 'package:stoyco_shared/stoy_shop/models/stoy_shop_product_model.dart';
@@ -110,4 +112,57 @@ class StoyShopRepository with RepositoryCacheMixin {
           }
         },
       );
+
+  /// Fetches minted NFTs for a user in a specific collection.
+  ///
+  /// No caching is applied to ensure fresh data on each request.
+  ///
+  /// Returns [Either] with [Failure] on left or [List<MintedNftModel>] on right.
+  ///
+  /// [collectionId] Collection ID to query.
+  /// [userId] User ID (Firebase UID).
+  ///
+  /// Example:
+  /// ```dart
+  /// final result = await repository.getMintedNftsByUser(
+  ///   collectionId: 367,
+  ///   userId: 'bxBh1AUyXFODRA36fAdc5xATTgR2',
+  /// );
+  /// result.fold(
+  ///   (failure) => handleError(failure),
+  ///   (nfts) => displayNfts(nfts),
+  /// );
+  /// ```
+  Future<Either<Failure, List<MintedNftModel>>> getMintedNftsByUser({
+    required int collectionId,
+    required String userId,
+  }) async {
+    try {
+      final response = await _dataSource.getMintedNftsByUser(
+        collectionId: collectionId,
+        userId: userId,
+      );
+
+      final responseWrapper = MintedNftResponseModel.fromJson(response.data);
+
+      if (responseWrapper.hasError) {
+        return Left(
+          ExceptionFailure.decode(
+            Exception(
+              responseWrapper.messageError ??
+                  'Unknown error fetching minted NFTs',
+            ),
+          ),
+        );
+      }
+
+      return Right(responseWrapper.data ?? []);
+    } on DioException catch (error) {
+      return Left(DioFailure.decode(error));
+    } on Error catch (error) {
+      return Left(ErrorFailure.decode(error));
+    } on Exception catch (error) {
+      return Left(ExceptionFailure.decode(error));
+    }
+  }
 }

@@ -427,6 +427,7 @@ class _ParticipationFormDialogState<T>
                           tablet: 13,
                           desktopLarge: 16,
                         ),
+                    fontWeight: widget.config.buttonFontWeight,
                     text: widget.config.buttonText,
                     isLoading: _isLoading,
                     onTap: form.valid ? _handleSubmit : () {},

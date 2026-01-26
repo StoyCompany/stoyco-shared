@@ -33,3 +33,5 @@ export 'package:stoyco_shared/stoy_shop/models/stoy_shop_product_model.dart';
 export 'package:stoyco_shared/stoy_shop/models/stoy_shop_product_data_model.dart';
 export 'package:stoyco_shared/stoy_shop/models/stoy_shop_category.dart';
 export 'package:stoyco_shared/stoy_shop/models/nft_metadata_model.dart';
+export 'package:stoyco_shared/stoy_shop/models/minted_nft_model.dart';
+export 'package:stoyco_shared/stoy_shop/models/minted_nft_response_model.dart';
