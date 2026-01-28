@@ -1,3 +1,7 @@
+## 21.12.2
+
+**refactor(announcement):** add html style parameter to announcement prize panel
+
 ## 21.12.1
 
 **fix:(VideoService)** update video cache manager to return deep copies of cached objects
