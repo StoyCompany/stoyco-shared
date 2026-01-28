@@ -24,7 +24,8 @@ StoyShopProductDataModel _$StoyShopProductDataModelFromJson(
       communityId: json['communityId'] as String?,
       experienceOrProductName: json['experienceOrProductName'] as String?,
       categories: (json['categories'] as List<dynamic>?)
-          ?.map((e) => e as String)
+          ?.map(
+              (e) => StoyShopCategoryModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       isExclusive: json['isExclusive'] as bool?,
     );

@@ -1,3 +1,11 @@
+## 21.12.3
+**feat(StoyShop): add category models for products**
+
+- Created `StoyShopCategoryModel` with full category structure (benefits and brands)
+- Created `CategoryBenefitModel` for category benefit types
+- Created `CategoryBrandModel` for brands associated with categories
+- Updated `StoyShopProductDataModel.categories` from `List<String>?` to `List<StoyShopCategoryModel>?`
+- All models include json_serializable support
 ## 21.12.2
 
 **refactor(announcement):** add html style parameter to announcement prize panel

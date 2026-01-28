@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:stoyco_shared/stoy_shop/models/stoy_shop_category_model.dart';
 
 part 'stoy_shop_product_data_model.g.dart';
 
@@ -43,7 +44,7 @@ class StoyShopProductDataModel {
   final String? artistOrBrandName;
   final String? communityId;
   final String? experienceOrProductName;
-  final List<String>? categories;
+  final List<StoyShopCategoryModel>? categories;
   final bool? isExclusive;
 
   Map<String, dynamic> toJson() => _$StoyShopProductDataModelToJson(this);
@@ -63,7 +64,7 @@ class StoyShopProductDataModel {
     String? artistOrBrandName,
     String? communityId,
     String? experienceOrProductName,
-    List<String>? categories,
+    List<StoyShopCategoryModel>? categories,
     bool? isExclusive,
   }) =>
       StoyShopProductDataModel(
