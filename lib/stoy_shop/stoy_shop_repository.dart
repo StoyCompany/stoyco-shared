@@ -55,17 +55,19 @@ class StoyShopRepository with RepositoryCacheMixin {
     String? coId,
   }) async {
     try {
+
       final response = await _dataSource.getOptimizedProducts(
         page: page,
         pageSize: pageSize,
         category: category,
         coId: coId,
       );
-
+  
       final pageResult = PageResult<StoyShopProductModel>.fromJson(
         response.data,
         (item) => StoyShopProductModel.fromJson(item as Map<String, dynamic>),
       );
+
       return Right(pageResult);
     } on DioException catch (error) {
       return Left(DioFailure.decode(error));
