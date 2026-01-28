@@ -18,6 +18,7 @@ class AnnouncementPrizePanel extends StatefulWidget {
     this.padding,
     this.showScrollbar = false,
     this.paddingScrollBar,
+    this.htmlStyle,
   });
 
   final String prizeText;
@@ -52,6 +53,8 @@ class AnnouncementPrizePanel extends StatefulWidget {
   /// paddingScrollBar: EdgeInsetsDirectional.only(end: 8.0)
   /// ```
   final EdgeInsetsGeometry? paddingScrollBar;
+
+  final CustomStylesBuilder? htmlStyle;
 
   static const double _defaultBorderRadius = 20.0;
 
@@ -99,7 +102,8 @@ class _AnnouncementPrizePanelState extends State<AnnouncementPrizePanel> {
                   AnnouncementDetailsUtils.removeBackgroundColors(
                     widget.prizeText,
                   ),
-                  customStylesBuilder: _buildHtmlCustomStyles,
+                  customStylesBuilder:
+                      widget.htmlStyle ?? _buildHtmlCustomStyles,
                   onTapUrl: _handleUrlTap,
                 ),
         ),
@@ -117,7 +121,7 @@ class _AnnouncementPrizePanelState extends State<AnnouncementPrizePanel> {
       padding: widget.padding,
       child: HtmlWidget(
         AnnouncementDetailsUtils.removeBackgroundColors(widget.prizeText),
-        customStylesBuilder: _buildHtmlCustomStyles,
+        customStylesBuilder: widget.htmlStyle ?? _buildHtmlCustomStyles,
         onTapUrl: _handleUrlTap,
       ),
     );
