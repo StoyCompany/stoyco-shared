@@ -20,8 +20,6 @@ void _provideMocks() {
     Right(
       PageResult<StoyShopProductModel>(
         items: [],
-        totalCount: 0,
-        page: 1,
         pageSize: 100,
       ),
     ),
@@ -70,9 +68,9 @@ void main() {
       final service1 = StoyShopService(
         environment: StoycoEnvironment.testing,
       );
-      
+
       StoyShopService.resetInstance();
-      
+
       final service2 = StoyShopService(
         environment: StoycoEnvironment.testing,
       );
@@ -112,8 +110,6 @@ void main() {
 
       final pageResult = PageResult<StoyShopProductModel>(
         items: [product],
-        totalCount: 1,
-        page: 1,
         pageSize: 100,
       );
 
@@ -180,8 +176,6 @@ void main() {
         (_) async => Right(
           PageResult<StoyShopProductModel>(
             items: [],
-            totalCount: 0,
-            page: 2,
             pageSize: 50,
           ),
         ),
@@ -219,8 +213,6 @@ void main() {
         (_) async => Right(
           PageResult<StoyShopProductModel>(
             items: [],
-            totalCount: 0,
-            page: 1,
             pageSize: 100,
           ),
         ),
