@@ -139,16 +139,21 @@ class VideoCacheManager {
   /// [key] The cache key.
   ///
   /// Returns the cached list if valid, null if expired or not found.
+  ///
+  /// NOTE: Returns a deep copy of the cached objects to prevent shared references.
+  /// This ensures that updates to cached data don't affect objects already in use in the UI.
   Future<List<VideoWithMetadata>?> get(String key) async {
     // Check memory cache first
     if (_memoryCache.containsKey(key)) {
       final isValid = await _isValid(key);
-      print('[VIDEO_CACHE_DEBUG] 📦 Found in memory: $key, valid: $isValid');
       if (isValid) {
         await _updateAccessTime(key);
-        return _memoryCache[key];
+        // Return a deep copy to prevent shared references
+        final cachedVideos = _memoryCache[key]!;
+        return cachedVideos
+            .map((video) => VideoWithMetadata.fromJson(video.toJson()))
+            .toList();
       } else {
-        print('[VIDEO_CACHE_DEBUG] ⏰ Entry expired, removing: $key');
         // Expired, remove from memory
         _memoryCache.remove(key);
       }
@@ -181,7 +186,10 @@ class VideoCacheManager {
       _memoryCache[key] = videos;
       await _updateAccessTime(key);
 
-      return videos;
+      // Return a deep copy to prevent shared references
+      return videos
+          .map((video) => VideoWithMetadata.fromJson(video.toJson()))
+          .toList();
     } catch (e) {
       // Remove corrupted entry
       await remove(key);
@@ -197,8 +205,6 @@ class VideoCacheManager {
   /// Each cache key stores its complete video list independently.
   /// No global deduplication is performed to ensure each page caches correctly.
   Future<void> put(String key, List<VideoWithMetadata> videos) async {
-    print(
-        '[VIDEO_CACHE_DEBUG] 💾 Storing in cache: $key (${videos.length} videos, total entries: ${_memoryCache.length + 1})');
     // Store in memory first (always succeeds)
     _memoryCache[key] = videos;
 
@@ -231,7 +237,6 @@ class VideoCacheManager {
         await _evictIfNeeded();
       } catch (e) {
         // If disk write fails, at least we have memory cache
-        print('[VIDEO_CACHE] ⚠️ Failed to write to disk cache: $e');
       }
     }
   }
@@ -240,7 +245,6 @@ class VideoCacheManager {
   ///
   /// [key] The cache key to remove.
   Future<void> remove(String key) async {
-    print('[VIDEO_CACHE_DEBUG] 🗑️ Removing cache entry: $key');
     // Remove from memory
     final videos = _memoryCache.remove(key);
 
@@ -263,10 +267,6 @@ class VideoCacheManager {
 
   /// Clears all cache entries.
   Future<void> clear() async {
-    print(
-        '[VIDEO_CACHE_DEBUG] 🧹 Clearing ALL cache (${_memoryCache.length} entries)');
-    print('[VIDEO_CACHE_DEBUG] 📍 Stack trace:');
-    print(StackTrace.current);
     _memoryCache.clear();
     _cachedVideoIds.clear();
 

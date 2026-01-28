@@ -1,4 +1,4 @@
-## 21.12.1
+## 21.12.3
 **feat(StoyShop): add category models for products**
 
 - Created `StoyShopCategoryModel` with full category structure (benefits and brands)
@@ -6,8 +6,16 @@
 - Created `CategoryBrandModel` for brands associated with categories
 - Updated `StoyShopProductDataModel.categories` from `List<String>?` to `List<StoyShopCategoryModel>?`
 - All models include json_serializable support
+## 21.12.2
+
+**refactor(announcement):** add html style parameter to announcement prize panel
+
+## 21.12.1
+
+**fix:(VideoService)** update video cache manager to return deep copies of cached objects
 
 ## 21.12.0
+
 **feat(StoyShop): add getMintedNftsByUser endpoint**
 
 - Added `getMintedNftsByUser` method to fetch NFTs owned by a user in a specific collection
@@ -19,7 +27,9 @@
 - Embedded NFT metadata in response (reuses `NftMetadataModel`)
 - Added comprehensive unit tests for new models and repository methods
 - Helper methods: `isErc721`, `isActive`, `mintNumber`, `maxSupply`
+
 ## 21.11.9
+
 **fix(merch):** fix counter value text alignment and scrolling
 
 - Changed CounterValue to use hidden TextField with visible Text overlay
@@ -28,12 +38,14 @@
 - Added ScrollController to manage text overflow
 
 ## 21.11.8
+
 **fix(announcements):** fix announcements details screen
 
 - fix announcements details screen
 - new parameter to show time remaining to end of announcement
 
 ## 21.11.7
+
 **fix(StoyShop): remove caching for product lists**
 
 - Removed caching from `getOptimizedProducts` method due to volatile stock information
@@ -41,6 +53,7 @@
 - Kept caching for `getNftMetadata` as NFT metadata is immutable
 
 ## 21.11.6
+
 **feat(StoyShop): new module**
 
 - Added `StoyShopService` to fetch products from the new StoyShop endpoints.
@@ -55,29 +68,34 @@
 - Added CounterItem, CounterValue, CounterSection
 
 ## 21.11.5
+
 **refactor(Scroll Announcement): fix**
 
-- added  scroll height to announcement modal
+- added scroll height to announcement modal
 - fix scroll on leadership board modal
 
 ## 21.11.4
+
 **refactor(MessageModel): copywith function added**
 
 - added copywith function to MessageModel
 
 ## 21.11.3
+
 **refactor(modal): redesign glass modal**
 
 - new widget to reuse on app
 - modal glass component redesign
 
 ## 21.11.2
+
 **feat(experience):** new enum to experience
 
 - new enum option to experience
 
 ## 21.11.1
-**feat(community-model):** new model to use like data on message_model 
+
+**feat(community-model):** new model to use like data on message_model
 
 - new file generated to use on data field message model
 - modified existing message_model.g.dart to include new data field.
@@ -989,69 +1007,54 @@ feat: Add PartnerContentAvailabilityResponse model and related serialization log
 ## 8.0.0
 
 - feat: Add new dependencies and update existing ones
-
   - Added glassmorphism, gradient_borders, dio, and either_dart dependencies
   - Updated intl and url_launcher dependencies to latest versions
   - Updated firebase_core_platform_interface and maps_launcher dependencies
 
   ### Refactor the Failure class
-
   - Moved the Failure class to a separate file
   - Added the Equatable mixin to the Failure class
 
   ### Add CoachMark module
-
   - Created the CoachMark module with various components and error handling classes
   - Added CoachMark, CoachMarksContent, CoachMarkData, and Onboarding classes
   - Generated code for JSON serialization and deserialization
 
   ### Add SVG icon file
-
   - Added the check_icon_coach_mark.svg file to the assets/icons directory
 
   ### Update errors module
-
   - Added exports for various error handling classes in the errors module
 
   ### Update pubspec.yaml
-
   - Added tutorial_coach_mark dependency
 
   ### Update errors.dart
-
   - Added exports for various error handling classes in the errors.dart file
 
   ### Update coach_mark.dart
-
   - Added exports for various coach mark related classes in the coach_mark.dart file
 
   ### Update coach_marks_content.dart
-
   - Added exports for various coach marks content related classes in the coach_marks_content.dart file
 
   ### Update exception.dart
-
   - Added various exception classes for error handling in the exception.dart file
 
   ### Update coach_marks_content.g.dart
-
   - Generated code for JSON serialization and deserialization in the coach_marks_content.g.dart file
 
   ### Update coach_mark.g.dart
-
   - Generated code for JSON serialization and deserialization in the coach_mark.g.dart file
 
   ### Update onboarding.dart
-
   - Added the Onboarding class for managing onboarding data
   - Added the OnboardingType enum for different types of onboarding
 
   ### Refactor error handling in error.dart
-
   - Refactored the ErrorFailure and HiveFailure classes for error handling
 
   ### Refactor error handling in failure.dart
-
   - Refactored the ErrorFailure and HiveFailure classes for error handling
 
 ## 7.1.4
@@ -1081,9 +1084,7 @@ feat: Add PartnerContentAvailabilityResponse model and related serialization log
 ## 6.2.0
 
 - feat: Introduce `BorderGradientStoyco` and `StoycoOutlinedButton` widgets.
-
   - **`BorderGradientStoyco`**: A new widget that allows creating a custom border with a gradient around a child `Widget`. It uses a `CustomPainter` to draw the border, providing an attractive and customizable visual effect.
-
     - Adds support for configuring the border thickness (`strokeWidth`), corner radius (`radius`), and a gradient (`gradient`) to style the border.
 
   - **`StoycoOutlinedButton`**: A stylized button that includes a gradient border and custom shadows, designed to stand out in the user interface. This button is highly configurable, allowing customization of its size, text style, and click behavior.
@@ -1174,9 +1175,7 @@ chore: Update intl dependency to version 0.18.1
 ## 1.0.3
 
 - Added imports for text buttons and expandable buttons in `utils.dart`: This update enhances the utility file by incorporating additional imports specifically for text buttons and expandable buttons. This inclusion broadens the scope of readily available UI components for developers, facilitating easier access and implementation of these common interactive elements within their applications.
-
   - Key Enhancements:
-
     - **Text Buttons**: Now more accessible for implementation, text buttons are essential for simple, text-based user interactions within the UI.
     - **Expandable Buttons**: Catering to more dynamic UI requirements, the addition of expandable buttons allows for a richer, more engaging user experience with collapsible and expandable content.
 
